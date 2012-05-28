@@ -1,0 +1,3 @@
+[submodule "kxtools"]
+	path = kxtools
+	url = git@github.com:kolyvan/kxtools.git

@@ -15,6 +15,17 @@
 		872D944415737B0400BCB4EC /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D944315737B0400BCB4EC /* AppDelegate.m */; };
 		872D944715737B0400BCB4EC /* AuthorsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D944615737B0400BCB4EC /* AuthorsViewController.m */; };
 		872D944D15737B0400BCB4EC /* AuthorsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 872D944B15737B0400BCB4EC /* AuthorsViewController.xib */; };
+		872D947515737E7900BCB4EC /* KxCast.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D945F15737E7900BCB4EC /* KxCast.m */; };
+		872D947615737E7900BCB4EC /* KxConsole.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D946115737E7900BCB4EC /* KxConsole.m */; };
+		872D947715737E7900BCB4EC /* KxList.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D946315737E7900BCB4EC /* KxList.m */; };
+		872D947815737E7900BCB4EC /* KxTuple2.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D946615737E7900BCB4EC /* KxTuple2.m */; };
+		872D947915737E7900BCB4EC /* KxUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D946815737E7900BCB4EC /* KxUtils.m */; };
+		872D947A15737E7900BCB4EC /* NSArray+Kolyvan.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D946A15737E7900BCB4EC /* NSArray+Kolyvan.m */; };
+		872D947B15737E7900BCB4EC /* NSData+Kolyvan.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D946C15737E7900BCB4EC /* NSData+Kolyvan.m */; };
+		872D947C15737E7900BCB4EC /* NSDate+Kolyvan.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D946E15737E7900BCB4EC /* NSDate+Kolyvan.m */; };
+		872D947D15737E7900BCB4EC /* NSDictionary+Kolyvan.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D947015737E7900BCB4EC /* NSDictionary+Kolyvan.m */; };
+		872D947E15737E7900BCB4EC /* NSObject+Kolyvan.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D947215737E7900BCB4EC /* NSObject+Kolyvan.m */; };
+		872D947F15737E7900BCB4EC /* NSString+Kolyvan.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D947415737E7900BCB4EC /* NSString+Kolyvan.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +42,30 @@
 		872D944515737B0400BCB4EC /* AuthorsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AuthorsViewController.h; sourceTree = "<group>"; };
 		872D944615737B0400BCB4EC /* AuthorsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AuthorsViewController.m; sourceTree = "<group>"; };
 		872D944C15737B0400BCB4EC /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/AuthorsViewController.xib; sourceTree = "<group>"; };
+		872D945D15737E7900BCB4EC /* KxArc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KxArc.h; sourceTree = "<group>"; };
+		872D945E15737E7900BCB4EC /* KxCast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KxCast.h; sourceTree = "<group>"; };
+		872D945F15737E7900BCB4EC /* KxCast.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KxCast.m; sourceTree = "<group>"; };
+		872D946015737E7900BCB4EC /* KxConsole.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KxConsole.h; sourceTree = "<group>"; };
+		872D946115737E7900BCB4EC /* KxConsole.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KxConsole.m; sourceTree = "<group>"; };
+		872D946215737E7900BCB4EC /* KxList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KxList.h; sourceTree = "<group>"; };
+		872D946315737E7900BCB4EC /* KxList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KxList.m; sourceTree = "<group>"; };
+		872D946415737E7900BCB4EC /* KxMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KxMacros.h; sourceTree = "<group>"; };
+		872D946515737E7900BCB4EC /* KxTuple2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KxTuple2.h; sourceTree = "<group>"; };
+		872D946615737E7900BCB4EC /* KxTuple2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KxTuple2.m; sourceTree = "<group>"; };
+		872D946715737E7900BCB4EC /* KxUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KxUtils.h; sourceTree = "<group>"; };
+		872D946815737E7900BCB4EC /* KxUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KxUtils.m; sourceTree = "<group>"; };
+		872D946915737E7900BCB4EC /* NSArray+Kolyvan.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+Kolyvan.h"; sourceTree = "<group>"; };
+		872D946A15737E7900BCB4EC /* NSArray+Kolyvan.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+Kolyvan.m"; sourceTree = "<group>"; };
+		872D946B15737E7900BCB4EC /* NSData+Kolyvan.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Kolyvan.h"; sourceTree = "<group>"; };
+		872D946C15737E7900BCB4EC /* NSData+Kolyvan.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Kolyvan.m"; sourceTree = "<group>"; };
+		872D946D15737E7900BCB4EC /* NSDate+Kolyvan.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+Kolyvan.h"; sourceTree = "<group>"; };
+		872D946E15737E7900BCB4EC /* NSDate+Kolyvan.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+Kolyvan.m"; sourceTree = "<group>"; };
+		872D946F15737E7900BCB4EC /* NSDictionary+Kolyvan.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+Kolyvan.h"; sourceTree = "<group>"; };
+		872D947015737E7900BCB4EC /* NSDictionary+Kolyvan.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+Kolyvan.m"; sourceTree = "<group>"; };
+		872D947115737E7900BCB4EC /* NSObject+Kolyvan.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+Kolyvan.h"; sourceTree = "<group>"; };
+		872D947215737E7900BCB4EC /* NSObject+Kolyvan.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+Kolyvan.m"; sourceTree = "<group>"; };
+		872D947315737E7900BCB4EC /* NSString+Kolyvan.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Kolyvan.h"; sourceTree = "<group>"; };
+		872D947415737E7900BCB4EC /* NSString+Kolyvan.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Kolyvan.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -50,6 +85,7 @@
 		872D942415737B0400BCB4EC = {
 			isa = PBXGroup;
 			children = (
+				872D945C15737E7900BCB4EC /* kxtools */,
 				872D943915737B0400BCB4EC /* iSamizdat */,
 				872D943215737B0400BCB4EC /* Frameworks */,
 				872D943015737B0400BCB4EC /* Products */,
@@ -104,6 +140,38 @@
 				872D944B15737B0400BCB4EC /* AuthorsViewController.xib */,
 			);
 			name = views;
+			sourceTree = "<group>";
+		};
+		872D945C15737E7900BCB4EC /* kxtools */ = {
+			isa = PBXGroup;
+			children = (
+				872D945D15737E7900BCB4EC /* KxArc.h */,
+				872D945E15737E7900BCB4EC /* KxCast.h */,
+				872D945F15737E7900BCB4EC /* KxCast.m */,
+				872D946015737E7900BCB4EC /* KxConsole.h */,
+				872D946115737E7900BCB4EC /* KxConsole.m */,
+				872D946215737E7900BCB4EC /* KxList.h */,
+				872D946315737E7900BCB4EC /* KxList.m */,
+				872D946415737E7900BCB4EC /* KxMacros.h */,
+				872D946515737E7900BCB4EC /* KxTuple2.h */,
+				872D946615737E7900BCB4EC /* KxTuple2.m */,
+				872D946715737E7900BCB4EC /* KxUtils.h */,
+				872D946815737E7900BCB4EC /* KxUtils.m */,
+				872D946915737E7900BCB4EC /* NSArray+Kolyvan.h */,
+				872D946A15737E7900BCB4EC /* NSArray+Kolyvan.m */,
+				872D946B15737E7900BCB4EC /* NSData+Kolyvan.h */,
+				872D946C15737E7900BCB4EC /* NSData+Kolyvan.m */,
+				872D946D15737E7900BCB4EC /* NSDate+Kolyvan.h */,
+				872D946E15737E7900BCB4EC /* NSDate+Kolyvan.m */,
+				872D946F15737E7900BCB4EC /* NSDictionary+Kolyvan.h */,
+				872D947015737E7900BCB4EC /* NSDictionary+Kolyvan.m */,
+				872D947115737E7900BCB4EC /* NSObject+Kolyvan.h */,
+				872D947215737E7900BCB4EC /* NSObject+Kolyvan.m */,
+				872D947315737E7900BCB4EC /* NSString+Kolyvan.h */,
+				872D947415737E7900BCB4EC /* NSString+Kolyvan.m */,
+			);
+			name = kxtools;
+			path = kxtools/kxtools;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -172,6 +240,17 @@
 				872D944015737B0400BCB4EC /* main.m in Sources */,
 				872D944415737B0400BCB4EC /* AppDelegate.m in Sources */,
 				872D944715737B0400BCB4EC /* AuthorsViewController.m in Sources */,
+				872D947515737E7900BCB4EC /* KxCast.m in Sources */,
+				872D947615737E7900BCB4EC /* KxConsole.m in Sources */,
+				872D947715737E7900BCB4EC /* KxList.m in Sources */,
+				872D947815737E7900BCB4EC /* KxTuple2.m in Sources */,
+				872D947915737E7900BCB4EC /* KxUtils.m in Sources */,
+				872D947A15737E7900BCB4EC /* NSArray+Kolyvan.m in Sources */,
+				872D947B15737E7900BCB4EC /* NSData+Kolyvan.m in Sources */,
+				872D947C15737E7900BCB4EC /* NSDate+Kolyvan.m in Sources */,
+				872D947D15737E7900BCB4EC /* NSDictionary+Kolyvan.m in Sources */,
+				872D947E15737E7900BCB4EC /* NSObject+Kolyvan.m in Sources */,
+				872D947F15737E7900BCB4EC /* NSString+Kolyvan.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
