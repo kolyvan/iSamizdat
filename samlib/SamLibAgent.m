@@ -127,8 +127,7 @@ static NSString * settingsPath()
     return path;    
 }
 
-
-NSMutableDictionary * _settings(BOOL save)
+static NSMutableDictionary * _settings(BOOL save)
 {   
     static NSMutableDictionary * dict = nil;
     static NSString *digest = nil;
@@ -168,11 +167,15 @@ NSMutableDictionary * _settings(BOOL save)
     return dict;
 }
 
-NSMutableDictionary * settings()
+static NSMutableDictionary * settings()
 {       
     return _settings(NO);
 }
 
+static void saveSettings()
+{
+    _settings(YES);
+}
 
 //#pragma mark - fetching
 
@@ -418,6 +421,7 @@ SamLibAgent_t SamLibAgent = {
     indexPath,        
     //settingsPath,
     settings,
+    saveSettings,
     
     fetchData,
     postData,

@@ -8,8 +8,11 @@
 
 #import "AppDelegate.h"
 #import "MainViewController.h"
-
+#import "SamLibAgent.h"
+#import "SamLibModel.h"
 #import "DDLog.h"
+#import "DDTTYLogger.h"
+#import "KxUtils.h"
 
 #if DEBUG
 int ddLogLevel = LOG_LEVEL_INFO;
@@ -25,6 +28,8 @@ int ddLogLevel = LOG_LEVEL_WARN;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    [self initLogger];
+    
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 
     MainViewController *viewController = [[MainViewController alloc] initWithNibName:@"MainViewController" bundle:nil];
@@ -40,6 +45,8 @@ int ddLogLevel = LOG_LEVEL_WARN;
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
+    [[SamLibModel shared] save]; 
+     SamLibAgent.saveSettings();
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
@@ -52,6 +59,18 @@ int ddLogLevel = LOG_LEVEL_WARN;
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
+    SamLibAgent.cleanup();
+}
+
+- (void) initLogger
+{
+#ifdef DEBUG
+    [DDLog addLogger:[DDTTYLogger sharedInstance]];
+#else
+    // todo: file logger
+#endif    
+    
+    DDLogInfo(@"%@ started", [NSBundle mainBundle].bundleIdentifier);
 }
 
 @end

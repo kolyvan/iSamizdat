@@ -22,7 +22,7 @@ typedef struct {
 
     void (*initialize)();
     void (*cleanup)();
-    
+        
     NSString * (*samlibURL)();        
     NSString * (*authorsPath)();
     NSString * (*textsPath)();    
@@ -30,6 +30,7 @@ typedef struct {
     NSString * (*indexPath)();    
     
     NSMutableDictionary * (*settings)();
+    void (*saveSettings)();
    
     void (*fetchData)(NSString *path, 
                       NSString *lastModified, 
