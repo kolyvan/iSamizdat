@@ -13,8 +13,8 @@
 		872D943E15737B0400BCB4EC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 872D943C15737B0400BCB4EC /* InfoPlist.strings */; };
 		872D944015737B0400BCB4EC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D943F15737B0400BCB4EC /* main.m */; };
 		872D944415737B0400BCB4EC /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D944315737B0400BCB4EC /* AppDelegate.m */; };
-		872D944715737B0400BCB4EC /* AuthorsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D944615737B0400BCB4EC /* AuthorsViewController.m */; };
-		872D944D15737B0400BCB4EC /* AuthorsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 872D944B15737B0400BCB4EC /* AuthorsViewController.xib */; };
+		872D944715737B0400BCB4EC /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D944615737B0400BCB4EC /* MainViewController.m */; };
+		872D944D15737B0400BCB4EC /* MainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 872D944B15737B0400BCB4EC /* MainViewController.xib */; };
 		872D947515737E7900BCB4EC /* KxCast.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D945F15737E7900BCB4EC /* KxCast.m */; };
 		872D947615737E7900BCB4EC /* KxConsole.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D946115737E7900BCB4EC /* KxConsole.m */; };
 		872D947715737E7900BCB4EC /* KxList.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D946315737E7900BCB4EC /* KxList.m */; };
@@ -45,6 +45,9 @@
 		872D955C157386B100BCB4EC /* DDTTYLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D9559157386B100BCB4EC /* DDTTYLogger.m */; };
 		872D95661573876C00BCB4EC /* SSKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D95651573876C00BCB4EC /* SSKeychain.m */; };
 		872D9568157387BB00BCB4EC /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 872D9567157387BB00BCB4EC /* Security.framework */; };
+		872D956F1573983A00BCB4EC /* emblem-system.png in Resources */ = {isa = PBXBuildFile; fileRef = 872D956E1573983A00BCB4EC /* emblem-system.png */; };
+		872D9571157399D600BCB4EC /* emblem-system@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 872D9570157399D600BCB4EC /* emblem-system@2x.png */; };
+		872D957415739B1C00BCB4EC /* localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 872D957615739B1C00BCB4EC /* localizable.strings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -58,9 +61,9 @@
 		872D944115737B0400BCB4EC /* iSamizdat-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "iSamizdat-Prefix.pch"; sourceTree = "<group>"; };
 		872D944215737B0400BCB4EC /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		872D944315737B0400BCB4EC /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		872D944515737B0400BCB4EC /* AuthorsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AuthorsViewController.h; sourceTree = "<group>"; };
-		872D944615737B0400BCB4EC /* AuthorsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AuthorsViewController.m; sourceTree = "<group>"; };
-		872D944C15737B0400BCB4EC /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/AuthorsViewController.xib; sourceTree = "<group>"; };
+		872D944515737B0400BCB4EC /* MainViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
+		872D944615737B0400BCB4EC /* MainViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
+		872D944C15737B0400BCB4EC /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainViewController.xib; sourceTree = "<group>"; };
 		872D945D15737E7900BCB4EC /* KxArc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KxArc.h; sourceTree = "<group>"; };
 		872D945E15737E7900BCB4EC /* KxCast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KxCast.h; sourceTree = "<group>"; };
 		872D945F15737E7900BCB4EC /* KxCast.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KxCast.m; sourceTree = "<group>"; };
@@ -122,6 +125,10 @@
 		872D95641573876C00BCB4EC /* SSKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SSKeychain.h; path = vendors/keychain/SSKeychain.h; sourceTree = "<group>"; };
 		872D95651573876C00BCB4EC /* SSKeychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SSKeychain.m; path = vendors/keychain/SSKeychain.m; sourceTree = "<group>"; };
 		872D9567157387BB00BCB4EC /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		872D956E1573983A00BCB4EC /* emblem-system.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "emblem-system.png"; path = "resources/emblem-system.png"; sourceTree = "<group>"; };
+		872D9570157399D600BCB4EC /* emblem-system@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "emblem-system@2x.png"; path = "resources/emblem-system@2x.png"; sourceTree = "<group>"; };
+		872D957515739B1C00BCB4EC /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/localizable.strings; sourceTree = "<group>"; };
+		872D957715739B2100BCB4EC /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/localizable.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -142,7 +149,7 @@
 		872D942415737B0400BCB4EC = {
 			isa = PBXGroup;
 			children = (
-				872D9567157387BB00BCB4EC /* Security.framework */,
+				872D956D1573968C00BCB4EC /* resources */,
 				872D94AE1573857500BCB4EC /* vendors */,
 				872D94851573836500BCB4EC /* samlib */,
 				872D945C15737E7900BCB4EC /* kxtools */,
@@ -163,6 +170,7 @@
 		872D943215737B0400BCB4EC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				872D9567157387BB00BCB4EC /* Security.framework */,
 				872D943315737B0400BCB4EC /* UIKit.framework */,
 				872D943515737B0400BCB4EC /* Foundation.framework */,
 				872D943715737B0400BCB4EC /* CoreGraphics.framework */,
@@ -176,8 +184,8 @@
 				872D945615737B9500BCB4EC /* views */,
 				872D944215737B0400BCB4EC /* AppDelegate.h */,
 				872D944315737B0400BCB4EC /* AppDelegate.m */,
-				872D944515737B0400BCB4EC /* AuthorsViewController.h */,
-				872D944615737B0400BCB4EC /* AuthorsViewController.m */,
+				872D944515737B0400BCB4EC /* MainViewController.h */,
+				872D944615737B0400BCB4EC /* MainViewController.m */,
 				872D943A15737B0400BCB4EC /* Supporting Files */,
 			);
 			path = iSamizdat;
@@ -190,6 +198,7 @@
 				872D943C15737B0400BCB4EC /* InfoPlist.strings */,
 				872D943F15737B0400BCB4EC /* main.m */,
 				872D944115737B0400BCB4EC /* iSamizdat-Prefix.pch */,
+				872D957615739B1C00BCB4EC /* localizable.strings */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -197,7 +206,7 @@
 		872D945615737B9500BCB4EC /* views */ = {
 			isa = PBXGroup;
 			children = (
-				872D944B15737B0400BCB4EC /* AuthorsViewController.xib */,
+				872D944B15737B0400BCB4EC /* MainViewController.xib */,
 			);
 			name = views;
 			sourceTree = "<group>";
@@ -317,6 +326,15 @@
 			name = keychain;
 			sourceTree = "<group>";
 		};
+		872D956D1573968C00BCB4EC /* resources */ = {
+			isa = PBXGroup;
+			children = (
+				872D9570157399D600BCB4EC /* emblem-system@2x.png */,
+				872D956E1573983A00BCB4EC /* emblem-system.png */,
+			);
+			name = resources;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -352,6 +370,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				ru,
 			);
 			mainGroup = 872D942415737B0400BCB4EC;
 			productRefGroup = 872D943015737B0400BCB4EC /* Products */;
@@ -369,7 +388,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				872D943E15737B0400BCB4EC /* InfoPlist.strings in Resources */,
-				872D944D15737B0400BCB4EC /* AuthorsViewController.xib in Resources */,
+				872D944D15737B0400BCB4EC /* MainViewController.xib in Resources */,
+				872D956F1573983A00BCB4EC /* emblem-system.png in Resources */,
+				872D9571157399D600BCB4EC /* emblem-system@2x.png in Resources */,
+				872D957415739B1C00BCB4EC /* localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -382,7 +404,7 @@
 			files = (
 				872D944015737B0400BCB4EC /* main.m in Sources */,
 				872D944415737B0400BCB4EC /* AppDelegate.m in Sources */,
-				872D944715737B0400BCB4EC /* AuthorsViewController.m in Sources */,
+				872D944715737B0400BCB4EC /* MainViewController.m in Sources */,
 				872D947515737E7900BCB4EC /* KxCast.m in Sources */,
 				872D947615737E7900BCB4EC /* KxConsole.m in Sources */,
 				872D947715737E7900BCB4EC /* KxList.m in Sources */,
@@ -426,12 +448,21 @@
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
-		872D944B15737B0400BCB4EC /* AuthorsViewController.xib */ = {
+		872D944B15737B0400BCB4EC /* MainViewController.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
 				872D944C15737B0400BCB4EC /* en */,
 			);
-			name = AuthorsViewController.xib;
+			name = MainViewController.xib;
+			sourceTree = "<group>";
+		};
+		872D957615739B1C00BCB4EC /* localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				872D957515739B1C00BCB4EC /* en */,
+				872D957715739B2100BCB4EC /* ru */,
+			);
+			name = localizable.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

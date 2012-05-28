@@ -7,7 +7,7 @@
 //
 
 #import "AppDelegate.h"
-#import "AuthorsViewController.h"
+#import "MainViewController.h"
 
 #import "DDLog.h"
 
@@ -26,10 +26,9 @@ int ddLogLevel = LOG_LEVEL_WARN;
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    // Override point for customization after application launch.
 
-    AuthorsViewController *masterViewController = [[AuthorsViewController alloc] initWithNibName:@"AuthorsViewController" bundle:nil];
-    self.navigationController = [[UINavigationController alloc] initWithRootViewController:masterViewController];
+    MainViewController *viewController = [[MainViewController alloc] initWithNibName:@"MainViewController" bundle:nil];
+    self.navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
     self.window.rootViewController = self.navigationController;
     [self.window makeKeyAndVisible];
     return YES;

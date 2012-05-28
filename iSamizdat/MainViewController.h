@@ -9,6 +9,6 @@
 #import <UIKit/UIKit.h>
 
 
-@interface AuthorsViewController : UITableViewController
+@interface MainViewController : UITableViewController
 
 @end
