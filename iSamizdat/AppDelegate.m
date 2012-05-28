@@ -7,8 +7,16 @@
 //
 
 #import "AppDelegate.h"
-
 #import "AuthorsViewController.h"
+
+#import "DDLog.h"
+
+#if DEBUG
+int ddLogLevel = LOG_LEVEL_INFO;
+#else
+int ddLogLevel = LOG_LEVEL_WARN;
+#endif
+
 
 @implementation AppDelegate
 

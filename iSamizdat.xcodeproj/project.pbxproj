@@ -26,6 +26,25 @@
 		872D947D15737E7900BCB4EC /* NSDictionary+Kolyvan.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D947015737E7900BCB4EC /* NSDictionary+Kolyvan.m */; };
 		872D947E15737E7900BCB4EC /* NSObject+Kolyvan.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D947215737E7900BCB4EC /* NSObject+Kolyvan.m */; };
 		872D947F15737E7900BCB4EC /* NSString+Kolyvan.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D947415737E7900BCB4EC /* NSString+Kolyvan.m */; };
+		872D94981573836500BCB4EC /* AFHTTPClient+Kolyvan.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D94871573836500BCB4EC /* AFHTTPClient+Kolyvan.m */; };
+		872D94991573836500BCB4EC /* SamLib.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D94891573836500BCB4EC /* SamLib.m */; };
+		872D949A1573836500BCB4EC /* SamLibAgent.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D948B1573836500BCB4EC /* SamLibAgent.m */; };
+		872D949B1573836500BCB4EC /* SamLibAuthor.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D948D1573836500BCB4EC /* SamLibAuthor.m */; };
+		872D949C1573836500BCB4EC /* SamLibComments.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D948F1573836500BCB4EC /* SamLibComments.m */; };
+		872D949D1573836500BCB4EC /* SamLibModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D94911573836500BCB4EC /* SamLibModel.m */; };
+		872D949E1573836500BCB4EC /* SamLibParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D94931573836500BCB4EC /* SamLibParser.m */; };
+		872D949F1573836500BCB4EC /* SamLibText.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D94951573836500BCB4EC /* SamLibText.m */; };
+		872D94A01573836500BCB4EC /* SamLibUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D94971573836500BCB4EC /* SamLibUser.m */; };
+		872D94B51573857D00BCB4EC /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D94B21573857D00BCB4EC /* JSONKit.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		872D954F1573868500BCB4EC /* AFHTTPClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D95481573868500BCB4EC /* AFHTTPClient.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		872D95501573868500BCB4EC /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D954A1573868500BCB4EC /* AFHTTPRequestOperation.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		872D95511573868500BCB4EC /* AFJSONUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D954C1573868500BCB4EC /* AFJSONUtilities.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		872D95521573868500BCB4EC /* AFURLConnectionOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D954E1573868500BCB4EC /* AFURLConnectionOperation.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		872D955A157386B100BCB4EC /* DDFileLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D9555157386B100BCB4EC /* DDFileLogger.m */; };
+		872D955B157386B100BCB4EC /* DDLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D9557157386B100BCB4EC /* DDLog.m */; };
+		872D955C157386B100BCB4EC /* DDTTYLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D9559157386B100BCB4EC /* DDTTYLogger.m */; };
+		872D95661573876C00BCB4EC /* SSKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D95651573876C00BCB4EC /* SSKeychain.m */; };
+		872D9568157387BB00BCB4EC /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 872D9567157387BB00BCB4EC /* Security.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -66,6 +85,43 @@
 		872D947215737E7900BCB4EC /* NSObject+Kolyvan.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+Kolyvan.m"; sourceTree = "<group>"; };
 		872D947315737E7900BCB4EC /* NSString+Kolyvan.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Kolyvan.h"; sourceTree = "<group>"; };
 		872D947415737E7900BCB4EC /* NSString+Kolyvan.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Kolyvan.m"; sourceTree = "<group>"; };
+		872D94861573836500BCB4EC /* AFHTTPClient+Kolyvan.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AFHTTPClient+Kolyvan.h"; sourceTree = "<group>"; };
+		872D94871573836500BCB4EC /* AFHTTPClient+Kolyvan.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "AFHTTPClient+Kolyvan.m"; sourceTree = "<group>"; };
+		872D94881573836500BCB4EC /* SamLib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SamLib.h; sourceTree = "<group>"; };
+		872D94891573836500BCB4EC /* SamLib.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SamLib.m; sourceTree = "<group>"; };
+		872D948A1573836500BCB4EC /* SamLibAgent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SamLibAgent.h; sourceTree = "<group>"; };
+		872D948B1573836500BCB4EC /* SamLibAgent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SamLibAgent.m; sourceTree = "<group>"; };
+		872D948C1573836500BCB4EC /* SamLibAuthor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SamLibAuthor.h; sourceTree = "<group>"; };
+		872D948D1573836500BCB4EC /* SamLibAuthor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SamLibAuthor.m; sourceTree = "<group>"; };
+		872D948E1573836500BCB4EC /* SamLibComments.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SamLibComments.h; sourceTree = "<group>"; };
+		872D948F1573836500BCB4EC /* SamLibComments.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SamLibComments.m; sourceTree = "<group>"; };
+		872D94901573836500BCB4EC /* SamLibModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SamLibModel.h; sourceTree = "<group>"; };
+		872D94911573836500BCB4EC /* SamLibModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SamLibModel.m; sourceTree = "<group>"; };
+		872D94921573836500BCB4EC /* SamLibParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SamLibParser.h; sourceTree = "<group>"; };
+		872D94931573836500BCB4EC /* SamLibParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SamLibParser.m; sourceTree = "<group>"; };
+		872D94941573836500BCB4EC /* SamLibText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SamLibText.h; sourceTree = "<group>"; };
+		872D94951573836500BCB4EC /* SamLibText.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SamLibText.m; sourceTree = "<group>"; };
+		872D94961573836500BCB4EC /* SamLibUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SamLibUser.h; sourceTree = "<group>"; };
+		872D94971573836500BCB4EC /* SamLibUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SamLibUser.m; sourceTree = "<group>"; };
+		872D94B11573857D00BCB4EC /* JSONKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONKit.h; sourceTree = "<group>"; };
+		872D94B21573857D00BCB4EC /* JSONKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSONKit.m; sourceTree = "<group>"; };
+		872D95471573868500BCB4EC /* AFHTTPClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AFHTTPClient.h; path = vendors/af/AFNetworking/AFHTTPClient.h; sourceTree = "<group>"; };
+		872D95481573868500BCB4EC /* AFHTTPClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AFHTTPClient.m; path = vendors/af/AFNetworking/AFHTTPClient.m; sourceTree = "<group>"; };
+		872D95491573868500BCB4EC /* AFHTTPRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AFHTTPRequestOperation.h; path = vendors/af/AFNetworking/AFHTTPRequestOperation.h; sourceTree = "<group>"; };
+		872D954A1573868500BCB4EC /* AFHTTPRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AFHTTPRequestOperation.m; path = vendors/af/AFNetworking/AFHTTPRequestOperation.m; sourceTree = "<group>"; };
+		872D954B1573868500BCB4EC /* AFJSONUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AFJSONUtilities.h; path = vendors/af/AFNetworking/AFJSONUtilities.h; sourceTree = "<group>"; };
+		872D954C1573868500BCB4EC /* AFJSONUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AFJSONUtilities.m; path = vendors/af/AFNetworking/AFJSONUtilities.m; sourceTree = "<group>"; };
+		872D954D1573868500BCB4EC /* AFURLConnectionOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AFURLConnectionOperation.h; path = vendors/af/AFNetworking/AFURLConnectionOperation.h; sourceTree = "<group>"; };
+		872D954E1573868500BCB4EC /* AFURLConnectionOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AFURLConnectionOperation.m; path = vendors/af/AFNetworking/AFURLConnectionOperation.m; sourceTree = "<group>"; };
+		872D9554157386B100BCB4EC /* DDFileLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DDFileLogger.h; path = vendors/logger/Lumberjack/DDFileLogger.h; sourceTree = "<group>"; };
+		872D9555157386B100BCB4EC /* DDFileLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DDFileLogger.m; path = vendors/logger/Lumberjack/DDFileLogger.m; sourceTree = "<group>"; };
+		872D9556157386B100BCB4EC /* DDLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DDLog.h; path = vendors/logger/Lumberjack/DDLog.h; sourceTree = "<group>"; };
+		872D9557157386B100BCB4EC /* DDLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DDLog.m; path = vendors/logger/Lumberjack/DDLog.m; sourceTree = "<group>"; };
+		872D9558157386B100BCB4EC /* DDTTYLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DDTTYLogger.h; path = vendors/logger/Lumberjack/DDTTYLogger.h; sourceTree = "<group>"; };
+		872D9559157386B100BCB4EC /* DDTTYLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DDTTYLogger.m; path = vendors/logger/Lumberjack/DDTTYLogger.m; sourceTree = "<group>"; };
+		872D95641573876C00BCB4EC /* SSKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SSKeychain.h; path = vendors/keychain/SSKeychain.h; sourceTree = "<group>"; };
+		872D95651573876C00BCB4EC /* SSKeychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SSKeychain.m; path = vendors/keychain/SSKeychain.m; sourceTree = "<group>"; };
+		872D9567157387BB00BCB4EC /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,6 +129,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				872D9568157387BB00BCB4EC /* Security.framework in Frameworks */,
 				872D943415737B0400BCB4EC /* UIKit.framework in Frameworks */,
 				872D943615737B0400BCB4EC /* Foundation.framework in Frameworks */,
 				872D943815737B0400BCB4EC /* CoreGraphics.framework in Frameworks */,
@@ -85,6 +142,9 @@
 		872D942415737B0400BCB4EC = {
 			isa = PBXGroup;
 			children = (
+				872D9567157387BB00BCB4EC /* Security.framework */,
+				872D94AE1573857500BCB4EC /* vendors */,
+				872D94851573836500BCB4EC /* samlib */,
 				872D945C15737E7900BCB4EC /* kxtools */,
 				872D943915737B0400BCB4EC /* iSamizdat */,
 				872D943215737B0400BCB4EC /* Frameworks */,
@@ -174,6 +234,89 @@
 			path = kxtools/kxtools;
 			sourceTree = "<group>";
 		};
+		872D94851573836500BCB4EC /* samlib */ = {
+			isa = PBXGroup;
+			children = (
+				872D94861573836500BCB4EC /* AFHTTPClient+Kolyvan.h */,
+				872D94871573836500BCB4EC /* AFHTTPClient+Kolyvan.m */,
+				872D94881573836500BCB4EC /* SamLib.h */,
+				872D94891573836500BCB4EC /* SamLib.m */,
+				872D948A1573836500BCB4EC /* SamLibAgent.h */,
+				872D948B1573836500BCB4EC /* SamLibAgent.m */,
+				872D948C1573836500BCB4EC /* SamLibAuthor.h */,
+				872D948D1573836500BCB4EC /* SamLibAuthor.m */,
+				872D948E1573836500BCB4EC /* SamLibComments.h */,
+				872D948F1573836500BCB4EC /* SamLibComments.m */,
+				872D94901573836500BCB4EC /* SamLibModel.h */,
+				872D94911573836500BCB4EC /* SamLibModel.m */,
+				872D94921573836500BCB4EC /* SamLibParser.h */,
+				872D94931573836500BCB4EC /* SamLibParser.m */,
+				872D94941573836500BCB4EC /* SamLibText.h */,
+				872D94951573836500BCB4EC /* SamLibText.m */,
+				872D94961573836500BCB4EC /* SamLibUser.h */,
+				872D94971573836500BCB4EC /* SamLibUser.m */,
+			);
+			path = samlib;
+			sourceTree = "<group>";
+		};
+		872D94AE1573857500BCB4EC /* vendors */ = {
+			isa = PBXGroup;
+			children = (
+				872D95631573875D00BCB4EC /* keychain */,
+				872D95531573869A00BCB4EC /* logger */,
+				872D95461573866700BCB4EC /* af */,
+				872D94AF1573857D00BCB4EC /* json */,
+			);
+			name = vendors;
+			sourceTree = "<group>";
+		};
+		872D94AF1573857D00BCB4EC /* json */ = {
+			isa = PBXGroup;
+			children = (
+				872D94B11573857D00BCB4EC /* JSONKit.h */,
+				872D94B21573857D00BCB4EC /* JSONKit.m */,
+			);
+			name = json;
+			path = vendors/json;
+			sourceTree = "<group>";
+		};
+		872D95461573866700BCB4EC /* af */ = {
+			isa = PBXGroup;
+			children = (
+				872D95471573868500BCB4EC /* AFHTTPClient.h */,
+				872D95481573868500BCB4EC /* AFHTTPClient.m */,
+				872D95491573868500BCB4EC /* AFHTTPRequestOperation.h */,
+				872D954A1573868500BCB4EC /* AFHTTPRequestOperation.m */,
+				872D954B1573868500BCB4EC /* AFJSONUtilities.h */,
+				872D954C1573868500BCB4EC /* AFJSONUtilities.m */,
+				872D954D1573868500BCB4EC /* AFURLConnectionOperation.h */,
+				872D954E1573868500BCB4EC /* AFURLConnectionOperation.m */,
+			);
+			name = af;
+			sourceTree = "<group>";
+		};
+		872D95531573869A00BCB4EC /* logger */ = {
+			isa = PBXGroup;
+			children = (
+				872D9554157386B100BCB4EC /* DDFileLogger.h */,
+				872D9555157386B100BCB4EC /* DDFileLogger.m */,
+				872D9556157386B100BCB4EC /* DDLog.h */,
+				872D9557157386B100BCB4EC /* DDLog.m */,
+				872D9558157386B100BCB4EC /* DDTTYLogger.h */,
+				872D9559157386B100BCB4EC /* DDTTYLogger.m */,
+			);
+			name = logger;
+			sourceTree = "<group>";
+		};
+		872D95631573875D00BCB4EC /* keychain */ = {
+			isa = PBXGroup;
+			children = (
+				872D95641573876C00BCB4EC /* SSKeychain.h */,
+				872D95651573876C00BCB4EC /* SSKeychain.m */,
+			);
+			name = keychain;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -251,6 +394,24 @@
 				872D947D15737E7900BCB4EC /* NSDictionary+Kolyvan.m in Sources */,
 				872D947E15737E7900BCB4EC /* NSObject+Kolyvan.m in Sources */,
 				872D947F15737E7900BCB4EC /* NSString+Kolyvan.m in Sources */,
+				872D94981573836500BCB4EC /* AFHTTPClient+Kolyvan.m in Sources */,
+				872D94991573836500BCB4EC /* SamLib.m in Sources */,
+				872D949A1573836500BCB4EC /* SamLibAgent.m in Sources */,
+				872D949B1573836500BCB4EC /* SamLibAuthor.m in Sources */,
+				872D949C1573836500BCB4EC /* SamLibComments.m in Sources */,
+				872D949D1573836500BCB4EC /* SamLibModel.m in Sources */,
+				872D949E1573836500BCB4EC /* SamLibParser.m in Sources */,
+				872D949F1573836500BCB4EC /* SamLibText.m in Sources */,
+				872D94A01573836500BCB4EC /* SamLibUser.m in Sources */,
+				872D94B51573857D00BCB4EC /* JSONKit.m in Sources */,
+				872D954F1573868500BCB4EC /* AFHTTPClient.m in Sources */,
+				872D95501573868500BCB4EC /* AFHTTPRequestOperation.m in Sources */,
+				872D95511573868500BCB4EC /* AFJSONUtilities.m in Sources */,
+				872D95521573868500BCB4EC /* AFURLConnectionOperation.m in Sources */,
+				872D955A157386B100BCB4EC /* DDFileLogger.m in Sources */,
+				872D955B157386B100BCB4EC /* DDLog.m in Sources */,
+				872D955C157386B100BCB4EC /* DDTTYLogger.m in Sources */,
+				872D95661573876C00BCB4EC /* SSKeychain.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

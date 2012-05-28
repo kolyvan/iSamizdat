@@ -1,3 +1,15 @@
 [submodule "kxtools"]
 	path = kxtools
 	url = git@github.com:kolyvan/kxtools.git
+[submodule "vendors/json"]
+	path = vendors/json
+	url = https://github.com/johnezang/JSONKit.git
+[submodule "vendors/af"]
+	path = vendors/af
+	url = https://github.com/AFNetworking/AFNetworking.git
+[submodule "vendors/logger"]
+	path = vendors/logger
+	url = git://github.com/robbiehanson/CocoaLumberjack.git
+[submodule "vendors/keychain"]
+	path = vendors/keychain
+	url = git://github.com/samsoffes/sskeychain.git
