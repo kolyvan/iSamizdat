@@ -13,3 +13,6 @@
 [submodule "vendors/keychain"]
 	path = vendors/keychain
 	url = git://github.com/samsoffes/sskeychain.git
+[submodule "vendors/refresh"]
+	path = vendors/refresh
+	url = git://github.com/samsoffes/sspulltorefresh.git

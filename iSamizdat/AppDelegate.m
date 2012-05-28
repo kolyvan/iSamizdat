@@ -10,6 +10,7 @@
 #import "MainViewController.h"
 #import "SamLibAgent.h"
 #import "SamLibModel.h"
+#import "SamLibAuthor.h"
 #import "DDLog.h"
 #import "DDTTYLogger.h"
 #import "KxUtils.h"
@@ -72,5 +73,8 @@ int ddLogLevel = LOG_LEVEL_WARN;
     
     DDLogInfo(@"%@ started", [NSBundle mainBundle].bundleIdentifier);
 }
+
+
+
 
 @end

@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SSPullToRefresh.h"
 
 
-@interface MainViewController : UITableViewController
+@interface MainViewController : UITableViewController<SSPullToRefreshViewDelegate>
 
 @end

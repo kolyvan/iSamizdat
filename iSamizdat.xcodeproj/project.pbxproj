@@ -48,6 +48,9 @@
 		872D956F1573983A00BCB4EC /* emblem-system.png in Resources */ = {isa = PBXBuildFile; fileRef = 872D956E1573983A00BCB4EC /* emblem-system.png */; };
 		872D9571157399D600BCB4EC /* emblem-system@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 872D9570157399D600BCB4EC /* emblem-system@2x.png */; };
 		872D957415739B1C00BCB4EC /* localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 872D957615739B1C00BCB4EC /* localizable.strings */; };
+		872D958A1573AB5600BCB4EC /* SSPullToRefreshDefaultContentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D95851573AB5600BCB4EC /* SSPullToRefreshDefaultContentView.m */; };
+		872D958B1573AB5600BCB4EC /* SSPullToRefreshSimpleContentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D95871573AB5600BCB4EC /* SSPullToRefreshSimpleContentView.m */; };
+		872D958C1573AB5600BCB4EC /* SSPullToRefreshView.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D95891573AB5600BCB4EC /* SSPullToRefreshView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -129,6 +132,13 @@
 		872D9570157399D600BCB4EC /* emblem-system@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "emblem-system@2x.png"; path = "resources/emblem-system@2x.png"; sourceTree = "<group>"; };
 		872D957515739B1C00BCB4EC /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/localizable.strings; sourceTree = "<group>"; };
 		872D957715739B2100BCB4EC /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/localizable.strings; sourceTree = "<group>"; };
+		872D95831573AB5600BCB4EC /* SSPullToRefresh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SSPullToRefresh.h; path = vendors/refresh/SSPullToRefresh.h; sourceTree = "<group>"; };
+		872D95841573AB5600BCB4EC /* SSPullToRefreshDefaultContentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SSPullToRefreshDefaultContentView.h; path = vendors/refresh/SSPullToRefreshDefaultContentView.h; sourceTree = "<group>"; };
+		872D95851573AB5600BCB4EC /* SSPullToRefreshDefaultContentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SSPullToRefreshDefaultContentView.m; path = vendors/refresh/SSPullToRefreshDefaultContentView.m; sourceTree = "<group>"; };
+		872D95861573AB5600BCB4EC /* SSPullToRefreshSimpleContentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SSPullToRefreshSimpleContentView.h; path = vendors/refresh/SSPullToRefreshSimpleContentView.h; sourceTree = "<group>"; };
+		872D95871573AB5600BCB4EC /* SSPullToRefreshSimpleContentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SSPullToRefreshSimpleContentView.m; path = vendors/refresh/SSPullToRefreshSimpleContentView.m; sourceTree = "<group>"; };
+		872D95881573AB5600BCB4EC /* SSPullToRefreshView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SSPullToRefreshView.h; path = vendors/refresh/SSPullToRefreshView.h; sourceTree = "<group>"; };
+		872D95891573AB5600BCB4EC /* SSPullToRefreshView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SSPullToRefreshView.m; path = vendors/refresh/SSPullToRefreshView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -271,6 +281,7 @@
 		872D94AE1573857500BCB4EC /* vendors */ = {
 			isa = PBXGroup;
 			children = (
+				872D95821573AB3D00BCB4EC /* refresh */,
 				872D95631573875D00BCB4EC /* keychain */,
 				872D95531573869A00BCB4EC /* logger */,
 				872D95461573866700BCB4EC /* af */,
@@ -333,6 +344,20 @@
 				872D956E1573983A00BCB4EC /* emblem-system.png */,
 			);
 			name = resources;
+			sourceTree = "<group>";
+		};
+		872D95821573AB3D00BCB4EC /* refresh */ = {
+			isa = PBXGroup;
+			children = (
+				872D95831573AB5600BCB4EC /* SSPullToRefresh.h */,
+				872D95841573AB5600BCB4EC /* SSPullToRefreshDefaultContentView.h */,
+				872D95851573AB5600BCB4EC /* SSPullToRefreshDefaultContentView.m */,
+				872D95861573AB5600BCB4EC /* SSPullToRefreshSimpleContentView.h */,
+				872D95871573AB5600BCB4EC /* SSPullToRefreshSimpleContentView.m */,
+				872D95881573AB5600BCB4EC /* SSPullToRefreshView.h */,
+				872D95891573AB5600BCB4EC /* SSPullToRefreshView.m */,
+			);
+			name = refresh;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -434,6 +459,9 @@
 				872D955B157386B100BCB4EC /* DDLog.m in Sources */,
 				872D955C157386B100BCB4EC /* DDTTYLogger.m in Sources */,
 				872D95661573876C00BCB4EC /* SSKeychain.m in Sources */,
+				872D958A1573AB5600BCB4EC /* SSPullToRefreshDefaultContentView.m in Sources */,
+				872D958B1573AB5600BCB4EC /* SSPullToRefreshSimpleContentView.m in Sources */,
+				872D958C1573AB5600BCB4EC /* SSPullToRefreshView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
