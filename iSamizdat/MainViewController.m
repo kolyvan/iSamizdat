@@ -13,13 +13,14 @@
 #import "SamLibAuthor.h"
 #import "SamLibText.h"
 #import "SamLibAgent.h"
+#import "SamLibAuthor+IOS.h"
 #import "NSArray+Kolyvan.h"
 #import "NSString+Kolyvan.h"
 #import "NSDictionary+Kolyvan.h"
-#import "NSData+Kolyvan.h"
 #import "KxTuple2.h"
 #import "DDLog.h"
 #import "WBSuccessNoticeView.h"
+#import "WBErrorNoticeView.h"
 
 extern int ddLogLevel;
 
@@ -171,9 +172,13 @@ static UIFont* systemFont14 = nil;
     NSMutableArray * ma = [NSMutableArray array];            
     for (SamLibAuthor *author in self.authors) {            
         [ma push:author];    
+        BOOL hasChangedSize = NO;
         for (SamLibText *text in author.texts)
-            if (text.changedSize)
+            if (text.changedSize) {
+                hasChangedSize = YES;
                 [ma push:text];
+            }
+        author.hasChangedSize = hasChangedSize;
     }
     return ma;
 }
@@ -200,9 +205,9 @@ static UIFont* systemFont14 = nil;
 - (void) refresh
 {           
     __block NSInteger count = self.authors.count;
-    __block SamLibStatus reloadStatus = SamLibStatusNotModifed;
-    __block NSString *lastError = nil;
-    
+    __block NSInteger reloaded = 0; 
+    __block NSMutableArray * errors = nil;
+        
     self.navigationItem.rightBarButtonItem = self.stopButton;
     [self.pullToRefreshView startLoading];
 
@@ -210,46 +215,52 @@ static UIFont* systemFont14 = nil;
         
         [author update:^(SamLibAuthor *author, SamLibStatus status, NSString *error) {
             
-            if (status == SamLibStatusSuccess) {
-                reloadStatus = SamLibStatusSuccess;               
-            }
+            if (status != SamLibStatusNotModifed)                
+                ++reloaded;               
             
-            if (status == SamLibStatusFailure &&
-                ![error isEqualToString: lastError]) {
+            if (status == SamLibStatusFailure) {
                 
-                // todo: show failure
-                // "@"reload failure\n%@", error;                    
-                lastError = error;
+                if (!errors)
+                    errors = [[NSMutableArray alloc] init];
+
+                if (![errors containsObject:error])
+                    [errors push: error];
+                
+                author.lastError = error;
+                
+            } else {
+                author.lastError = nil;                
             }
             
             if (--count == 0) {
                 
                 [self.pullToRefreshView finishLoading];
-                self.navigationItem.rightBarButtonItem = self.addButton;
+                self.navigationItem.rightBarButtonItem = self.addButton;                
                 
-                
-                if (reloadStatus == SamLibStatusSuccess) {
+                if (reloaded > 0) {
                     
                     self.content = [self mkContent];  
-                    [self.tableView reloadData];                        
-                    //DDLogInfo(@"reload table %@", [self class]); 
+                    [self.tableView reloadData];    
+                }
                 
-                    WBSuccessNoticeView *notice;
-                    notice = [WBSuccessNoticeView successNoticeInView:self.view 
-                                                                title:locString(@"reload success")];
+                if (errors.nonEmpty) {
+                    
+                    NSString *message = [errors mkString: @"\n"];                    
+                    WBErrorNoticeView *notice;
+                    notice = [WBErrorNoticeView errorNoticeInView:self.view 
+                                                            title:locString(@"Reload failure") 
+                                                          message:message];
                     [notice show];
                     
-                }
-                
-                //if (reloadStatus == SamLibStatusSuccess) {
-               // }
-
-                
-                if (lastError.nonEmpty) {
+                } else if (reloaded > 0) {
                     
+                    WBSuccessNoticeView *notice;
+                    notice = [WBSuccessNoticeView successNoticeInView:self.view 
+                                                                title:locString(@"Reload success")];
+                    [notice show];
                 }
                 
-                lastError = nil;
+                errors = nil;
             }
         }];
     } 
@@ -369,6 +380,11 @@ static UIFont* systemFont14 = nil;
             UITableViewCell *cell = [self mkMainCell];
             SamLibAuthor *author = obj;
             cell.textLabel.text = author.name.nonEmpty ? author.name : author.path;
+            if (author.lastError.nonEmpty) {
+                cell.imageView.image = [UIImage imageNamed:@"failure.png"];
+            } else if (author.hasChangedSize) {
+                cell.imageView.image = [UIImage imageNamed:@"success.png"];                
+            }
             return cell;
         }
     } 

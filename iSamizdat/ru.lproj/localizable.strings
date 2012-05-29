@@ -2,4 +2,6 @@
 "Authors" = "Авторы";
 "Ignored" = "Игнорируется";
 "Favorites" = "Закладки";
+"Reload success" = "Успешно обновлено";
+"Reload failure" = "Ошибка при обновлении";
 
