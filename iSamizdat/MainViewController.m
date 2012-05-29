@@ -269,21 +269,15 @@ static UIFont* systemFont14 = nil;
                                 
                 if (errors.nonEmpty) {
 
-                    //[[AppDelegate shared] errorNoticeInView:self.view 
-                    //                                  title:locString(@"Reload failure") 
-                    //                                message:[errors mkString: @"\n"]];
                     [self performSelector:@selector(showNoticeAboutReloadResult:) 
                                withObject:[errors mkString: @"\n"] 
-                               afterDelay:1.0];
+                               afterDelay:0.3];
                     
                 } else if (reloaded > 0) {
 
-                    //[[AppDelegate shared] successNoticeInView:self.view 
-                    //                                    title:locString(@"Reload success")];
-                    
                     [self performSelector:@selector(showNoticeAboutReloadResult:) 
                                withObject:nil
-                               afterDelay:1.0];
+                               afterDelay:0.3];
 
                 }
                  

@@ -7,17 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		8712FF861574954200C01283 /* NoticeView.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8712FF7A1574954200C01283 /* NoticeView.bundle */; };
-		8712FF871574954200C01283 /* UILabel+WBExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 8712FF7C1574954200C01283 /* UILabel+WBExtensions.m */; };
-		8712FF881574954200C01283 /* WBBaseNoticeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8712FF7E1574954200C01283 /* WBBaseNoticeView.m */; };
-		8712FF891574954200C01283 /* WBErrorNoticeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8712FF801574954200C01283 /* WBErrorNoticeView.m */; };
-		8712FF8A1574954200C01283 /* WBNoticeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8712FF831574954200C01283 /* WBNoticeView.m */; };
-		8712FF8B1574954200C01283 /* WBSuccessNoticeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8712FF851574954200C01283 /* WBSuccessNoticeView.m */; };
 		8712FF9315749A3800C01283 /* SamLibAuthor+IOS.m in Sources */ = {isa = PBXBuildFile; fileRef = 8712FF9215749A3800C01283 /* SamLibAuthor+IOS.m */; };
 		8712FF9515749D7D00C01283 /* failure.png in Resources */ = {isa = PBXBuildFile; fileRef = 8712FF9415749D7D00C01283 /* failure.png */; };
 		8712FF9715749DE400C01283 /* success.png in Resources */ = {isa = PBXBuildFile; fileRef = 8712FF9615749DE400C01283 /* success.png */; };
 		8712FF9B1574A02B00C01283 /* NewAuthorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8712FF991574A02B00C01283 /* NewAuthorViewController.m */; };
 		8712FFAC1574C02700C01283 /* NewAuthorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8712FFAD1574C02700C01283 /* NewAuthorViewController.xib */; };
+		8712FFC81574D8D300C01283 /* NoticeView.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8712FFBC1574D8D300C01283 /* NoticeView.bundle */; };
+		8712FFC91574D8D300C01283 /* UILabel+WBExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 8712FFBE1574D8D300C01283 /* UILabel+WBExtensions.m */; };
+		8712FFCA1574D8D300C01283 /* WBBaseNoticeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8712FFC01574D8D300C01283 /* WBBaseNoticeView.m */; };
+		8712FFCB1574D8D300C01283 /* WBErrorNoticeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8712FFC21574D8D300C01283 /* WBErrorNoticeView.m */; };
+		8712FFCC1574D8D300C01283 /* WBNoticeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8712FFC51574D8D300C01283 /* WBNoticeView.m */; };
+		8712FFCD1574D8D300C01283 /* WBSuccessNoticeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8712FFC71574D8D300C01283 /* WBSuccessNoticeView.m */; };
 		872D943415737B0400BCB4EC /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 872D943315737B0400BCB4EC /* UIKit.framework */; };
 		872D943615737B0400BCB4EC /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 872D943515737B0400BCB4EC /* Foundation.framework */; };
 		872D943815737B0400BCB4EC /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 872D943715737B0400BCB4EC /* CoreGraphics.framework */; };
@@ -65,18 +65,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		8712FF7A1574954200C01283 /* NoticeView.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = NoticeView.bundle; path = vendors/notice/NoticeView/WBNoticeView/NoticeView.bundle; sourceTree = "<group>"; };
-		8712FF7B1574954200C01283 /* UILabel+WBExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UILabel+WBExtensions.h"; path = "vendors/notice/NoticeView/WBNoticeView/UILabel+WBExtensions.h"; sourceTree = "<group>"; };
-		8712FF7C1574954200C01283 /* UILabel+WBExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UILabel+WBExtensions.m"; path = "vendors/notice/NoticeView/WBNoticeView/UILabel+WBExtensions.m"; sourceTree = "<group>"; };
-		8712FF7D1574954200C01283 /* WBBaseNoticeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WBBaseNoticeView.h; path = vendors/notice/NoticeView/WBNoticeView/WBBaseNoticeView.h; sourceTree = "<group>"; };
-		8712FF7E1574954200C01283 /* WBBaseNoticeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WBBaseNoticeView.m; path = vendors/notice/NoticeView/WBNoticeView/WBBaseNoticeView.m; sourceTree = "<group>"; };
-		8712FF7F1574954200C01283 /* WBErrorNoticeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WBErrorNoticeView.h; path = vendors/notice/NoticeView/WBNoticeView/WBErrorNoticeView.h; sourceTree = "<group>"; };
-		8712FF801574954200C01283 /* WBErrorNoticeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WBErrorNoticeView.m; path = vendors/notice/NoticeView/WBNoticeView/WBErrorNoticeView.m; sourceTree = "<group>"; };
-		8712FF811574954200C01283 /* WBNoticeView_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WBNoticeView_Private.h; path = vendors/notice/NoticeView/WBNoticeView/WBNoticeView_Private.h; sourceTree = "<group>"; };
-		8712FF821574954200C01283 /* WBNoticeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WBNoticeView.h; path = vendors/notice/NoticeView/WBNoticeView/WBNoticeView.h; sourceTree = "<group>"; };
-		8712FF831574954200C01283 /* WBNoticeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WBNoticeView.m; path = vendors/notice/NoticeView/WBNoticeView/WBNoticeView.m; sourceTree = "<group>"; };
-		8712FF841574954200C01283 /* WBSuccessNoticeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WBSuccessNoticeView.h; path = vendors/notice/NoticeView/WBNoticeView/WBSuccessNoticeView.h; sourceTree = "<group>"; };
-		8712FF851574954200C01283 /* WBSuccessNoticeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WBSuccessNoticeView.m; path = vendors/notice/NoticeView/WBNoticeView/WBSuccessNoticeView.m; sourceTree = "<group>"; };
 		8712FF9115749A3800C01283 /* SamLibAuthor+IOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SamLibAuthor+IOS.h"; sourceTree = "<group>"; };
 		8712FF9215749A3800C01283 /* SamLibAuthor+IOS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SamLibAuthor+IOS.m"; sourceTree = "<group>"; };
 		8712FF9415749D7D00C01283 /* failure.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = failure.png; path = resources/failure.png; sourceTree = "<group>"; };
@@ -84,6 +72,18 @@
 		8712FF981574A02B00C01283 /* NewAuthorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewAuthorViewController.h; sourceTree = "<group>"; };
 		8712FF991574A02B00C01283 /* NewAuthorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewAuthorViewController.m; sourceTree = "<group>"; };
 		8712FFAD1574C02700C01283 /* NewAuthorViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NewAuthorViewController.xib; sourceTree = "<group>"; };
+		8712FFBC1574D8D300C01283 /* NoticeView.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = NoticeView.bundle; path = vendors/notice/NoticeView/WBNoticeView/NoticeView.bundle; sourceTree = "<group>"; };
+		8712FFBD1574D8D300C01283 /* UILabel+WBExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UILabel+WBExtensions.h"; path = "vendors/notice/NoticeView/WBNoticeView/UILabel+WBExtensions.h"; sourceTree = "<group>"; };
+		8712FFBE1574D8D300C01283 /* UILabel+WBExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UILabel+WBExtensions.m"; path = "vendors/notice/NoticeView/WBNoticeView/UILabel+WBExtensions.m"; sourceTree = "<group>"; };
+		8712FFBF1574D8D300C01283 /* WBBaseNoticeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WBBaseNoticeView.h; path = vendors/notice/NoticeView/WBNoticeView/WBBaseNoticeView.h; sourceTree = "<group>"; };
+		8712FFC01574D8D300C01283 /* WBBaseNoticeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WBBaseNoticeView.m; path = vendors/notice/NoticeView/WBNoticeView/WBBaseNoticeView.m; sourceTree = "<group>"; };
+		8712FFC11574D8D300C01283 /* WBErrorNoticeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WBErrorNoticeView.h; path = vendors/notice/NoticeView/WBNoticeView/WBErrorNoticeView.h; sourceTree = "<group>"; };
+		8712FFC21574D8D300C01283 /* WBErrorNoticeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WBErrorNoticeView.m; path = vendors/notice/NoticeView/WBNoticeView/WBErrorNoticeView.m; sourceTree = "<group>"; };
+		8712FFC31574D8D300C01283 /* WBNoticeView_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WBNoticeView_Private.h; path = vendors/notice/NoticeView/WBNoticeView/WBNoticeView_Private.h; sourceTree = "<group>"; };
+		8712FFC41574D8D300C01283 /* WBNoticeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WBNoticeView.h; path = vendors/notice/NoticeView/WBNoticeView/WBNoticeView.h; sourceTree = "<group>"; };
+		8712FFC51574D8D300C01283 /* WBNoticeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WBNoticeView.m; path = vendors/notice/NoticeView/WBNoticeView/WBNoticeView.m; sourceTree = "<group>"; };
+		8712FFC61574D8D300C01283 /* WBSuccessNoticeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WBSuccessNoticeView.h; path = vendors/notice/NoticeView/WBNoticeView/WBSuccessNoticeView.h; sourceTree = "<group>"; };
+		8712FFC71574D8D300C01283 /* WBSuccessNoticeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WBSuccessNoticeView.m; path = vendors/notice/NoticeView/WBNoticeView/WBSuccessNoticeView.m; sourceTree = "<group>"; };
 		872D942F15737B0400BCB4EC /* iSamizdat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iSamizdat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		872D943315737B0400BCB4EC /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		872D943515737B0400BCB4EC /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -186,25 +186,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		8712FF781574952200C01283 /* notice */ = {
-			isa = PBXGroup;
-			children = (
-				8712FF7A1574954200C01283 /* NoticeView.bundle */,
-				8712FF7B1574954200C01283 /* UILabel+WBExtensions.h */,
-				8712FF7C1574954200C01283 /* UILabel+WBExtensions.m */,
-				8712FF7D1574954200C01283 /* WBBaseNoticeView.h */,
-				8712FF7E1574954200C01283 /* WBBaseNoticeView.m */,
-				8712FF7F1574954200C01283 /* WBErrorNoticeView.h */,
-				8712FF801574954200C01283 /* WBErrorNoticeView.m */,
-				8712FF811574954200C01283 /* WBNoticeView_Private.h */,
-				8712FF821574954200C01283 /* WBNoticeView.h */,
-				8712FF831574954200C01283 /* WBNoticeView.m */,
-				8712FF841574954200C01283 /* WBSuccessNoticeView.h */,
-				8712FF851574954200C01283 /* WBSuccessNoticeView.m */,
-			);
-			name = notice;
-			sourceTree = "<group>";
-		};
 		8712FF8C15749A0300C01283 /* samlib category */ = {
 			isa = PBXGroup;
 			children = (
@@ -212,6 +193,25 @@
 				8712FF9215749A3800C01283 /* SamLibAuthor+IOS.m */,
 			);
 			name = "samlib category";
+			sourceTree = "<group>";
+		};
+		8712FFBB1574D8B600C01283 /* notice */ = {
+			isa = PBXGroup;
+			children = (
+				8712FFBC1574D8D300C01283 /* NoticeView.bundle */,
+				8712FFBD1574D8D300C01283 /* UILabel+WBExtensions.h */,
+				8712FFBE1574D8D300C01283 /* UILabel+WBExtensions.m */,
+				8712FFBF1574D8D300C01283 /* WBBaseNoticeView.h */,
+				8712FFC01574D8D300C01283 /* WBBaseNoticeView.m */,
+				8712FFC11574D8D300C01283 /* WBErrorNoticeView.h */,
+				8712FFC21574D8D300C01283 /* WBErrorNoticeView.m */,
+				8712FFC31574D8D300C01283 /* WBNoticeView_Private.h */,
+				8712FFC41574D8D300C01283 /* WBNoticeView.h */,
+				8712FFC51574D8D300C01283 /* WBNoticeView.m */,
+				8712FFC61574D8D300C01283 /* WBSuccessNoticeView.h */,
+				8712FFC71574D8D300C01283 /* WBSuccessNoticeView.m */,
+			);
+			name = notice;
 			sourceTree = "<group>";
 		};
 		872D942415737B0400BCB4EC = {
@@ -343,7 +343,7 @@
 		872D94AE1573857500BCB4EC /* vendors */ = {
 			isa = PBXGroup;
 			children = (
-				8712FF781574952200C01283 /* notice */,
+				8712FFBB1574D8B600C01283 /* notice */,
 				872D95821573AB3D00BCB4EC /* refresh */,
 				872D95631573875D00BCB4EC /* keychain */,
 				872D95531573869A00BCB4EC /* logger */,
@@ -482,10 +482,10 @@
 				872D956F1573983A00BCB4EC /* emblem-system.png in Resources */,
 				872D9571157399D600BCB4EC /* emblem-system@2x.png in Resources */,
 				872D957415739B1C00BCB4EC /* localizable.strings in Resources */,
-				8712FF861574954200C01283 /* NoticeView.bundle in Resources */,
 				8712FF9515749D7D00C01283 /* failure.png in Resources */,
 				8712FF9715749DE400C01283 /* success.png in Resources */,
 				8712FFAC1574C02700C01283 /* NewAuthorViewController.xib in Resources */,
+				8712FFC81574D8D300C01283 /* NoticeView.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -531,13 +531,13 @@
 				872D958A1573AB5600BCB4EC /* SSPullToRefreshDefaultContentView.m in Sources */,
 				872D958B1573AB5600BCB4EC /* SSPullToRefreshSimpleContentView.m in Sources */,
 				872D958C1573AB5600BCB4EC /* SSPullToRefreshView.m in Sources */,
-				8712FF871574954200C01283 /* UILabel+WBExtensions.m in Sources */,
-				8712FF881574954200C01283 /* WBBaseNoticeView.m in Sources */,
-				8712FF891574954200C01283 /* WBErrorNoticeView.m in Sources */,
-				8712FF8A1574954200C01283 /* WBNoticeView.m in Sources */,
-				8712FF8B1574954200C01283 /* WBSuccessNoticeView.m in Sources */,
 				8712FF9315749A3800C01283 /* SamLibAuthor+IOS.m in Sources */,
 				8712FF9B1574A02B00C01283 /* NewAuthorViewController.m in Sources */,
+				8712FFC91574D8D300C01283 /* UILabel+WBExtensions.m in Sources */,
+				8712FFCA1574D8D300C01283 /* WBBaseNoticeView.m in Sources */,
+				8712FFCB1574D8D300C01283 /* WBErrorNoticeView.m in Sources */,
+				8712FFCC1574D8D300C01283 /* WBNoticeView.m in Sources */,
+				8712FFCD1574D8D300C01283 /* WBSuccessNoticeView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
