@@ -8,8 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import "SSPullToRefresh.h"
+#import "NewAuthorViewController.h"
 
-
-@interface MainViewController : UITableViewController<SSPullToRefreshViewDelegate>
+@interface MainViewController : UITableViewController<SSPullToRefreshViewDelegate, NewAuthorViewDelegate>
 
 @end

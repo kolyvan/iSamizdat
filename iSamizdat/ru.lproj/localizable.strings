@@ -4,4 +4,11 @@
 "Favorites" = "Закладки";
 "Reload success" = "Успешно обновлено";
 "Reload failure" = "Ошибка при обновлении";
-
+"Invalid path" = "Неверный путь";
+"Already exists" = "Уже существует";
+"Fetch failure" = "Ошибка при загрузке";
+"Fetch success" = "Успешно загружен";
+"Found: %ld" = "Найдено: %ld";
+"Not found" = "Не найдено";
+"Search result" = "Результат поиска";
+"Size: %@" = "Размер: %@";

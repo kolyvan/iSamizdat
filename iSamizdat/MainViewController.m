@@ -18,9 +18,9 @@
 #import "NSString+Kolyvan.h"
 #import "NSDictionary+Kolyvan.h"
 #import "KxTuple2.h"
-#import "DDLog.h"
 #import "WBSuccessNoticeView.h"
 #import "WBErrorNoticeView.h"
+#import "DDLog.h"
 
 extern int ddLogLevel;
 
@@ -43,6 +43,7 @@ typedef enum {
 @property (nonatomic, strong) SSPullToRefreshView *pullToRefreshView;
 @property (nonatomic, strong) UIBarButtonItem *addButton;
 @property (nonatomic, strong) UIBarButtonItem *stopButton;
+@property (nonatomic, strong) NewAuthorViewController *addAuthorViewController;
 
 @end
 
@@ -53,6 +54,7 @@ typedef enum {
 @synthesize authors;
 @synthesize pullToRefreshView;
 @synthesize addButton, stopButton;
+@synthesize addAuthorViewController;
 
 static UIFont* systemFont14 = nil;
 
@@ -111,7 +113,8 @@ static UIFont* systemFont14 = nil;
     self.navigationItem.rightBarButtonItem = nil;
     self.pullToRefreshView = nil;
     self.addButton = nil;
-    self.stopButton = nil;
+    self.stopButton = nil;    
+    self.addAuthorViewController = nil;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -126,7 +129,9 @@ static UIFont* systemFont14 = nil;
 
 - (void) didReceiveMemoryWarning
 {
-    [super didReceiveMemoryWarning];        
+    [super didReceiveMemoryWarning];     
+    
+    self.addAuthorViewController = nil;
 }
 
 #pragma mark - private functions
@@ -185,6 +190,26 @@ static UIFont* systemFont14 = nil;
 
 - (void) goAddAuthor
 {
+    if (!self.addAuthorViewController) {
+        self.addAuthorViewController = [[NewAuthorViewController alloc] initWithNibName:@"NewAuthorViewController" 
+                                                                                 bundle:nil];
+        self.addAuthorViewController.delegate = self;
+    }
+    
+    UINavigationController *navigationController = [[UINavigationController alloc]
+                                                    initWithRootViewController:self.addAuthorViewController];
+    
+    [self presentViewController:navigationController 
+                       animated:YES 
+                     completion:NULL];
+}
+
+- (void) addNewAuthor: (SamLibAuthor *) author
+{
+    DDLogInfo(@"add author %@", author.path);
+    
+    [[SamLibModel shared] addAuthor:author]; 
+    [self prepareData];    
 }
 
 - (void) goSettings
@@ -196,10 +221,10 @@ static UIFont* systemFont14 = nil;
 - (void) goStop
 {
     SamLibAgent.cancelAll();
-    //self.content = [self mkContent];  
-    //[self.tableView reloadData]; 
     [self.pullToRefreshView finishLoading];
     self.navigationItem.rightBarButtonItem = self.addButton;    
+    self.content = [self mkContent];  
+    [self.tableView reloadData];     
 }
 
 - (void) refresh

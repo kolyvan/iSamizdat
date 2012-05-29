@@ -16,6 +16,8 @@
 		8712FF9315749A3800C01283 /* SamLibAuthor+IOS.m in Sources */ = {isa = PBXBuildFile; fileRef = 8712FF9215749A3800C01283 /* SamLibAuthor+IOS.m */; };
 		8712FF9515749D7D00C01283 /* failure.png in Resources */ = {isa = PBXBuildFile; fileRef = 8712FF9415749D7D00C01283 /* failure.png */; };
 		8712FF9715749DE400C01283 /* success.png in Resources */ = {isa = PBXBuildFile; fileRef = 8712FF9615749DE400C01283 /* success.png */; };
+		8712FF9B1574A02B00C01283 /* NewAuthorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8712FF991574A02B00C01283 /* NewAuthorViewController.m */; };
+		8712FF9C1574A02B00C01283 /* NewAuthorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8712FF9A1574A02B00C01283 /* NewAuthorViewController.xib */; };
 		872D943415737B0400BCB4EC /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 872D943315737B0400BCB4EC /* UIKit.framework */; };
 		872D943615737B0400BCB4EC /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 872D943515737B0400BCB4EC /* Foundation.framework */; };
 		872D943815737B0400BCB4EC /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 872D943715737B0400BCB4EC /* CoreGraphics.framework */; };
@@ -79,6 +81,9 @@
 		8712FF9215749A3800C01283 /* SamLibAuthor+IOS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SamLibAuthor+IOS.m"; sourceTree = "<group>"; };
 		8712FF9415749D7D00C01283 /* failure.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = failure.png; path = resources/failure.png; sourceTree = "<group>"; };
 		8712FF9615749DE400C01283 /* success.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = success.png; path = resources/success.png; sourceTree = "<group>"; };
+		8712FF981574A02B00C01283 /* NewAuthorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewAuthorViewController.h; sourceTree = "<group>"; };
+		8712FF991574A02B00C01283 /* NewAuthorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewAuthorViewController.m; sourceTree = "<group>"; };
+		8712FF9A1574A02B00C01283 /* NewAuthorViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NewAuthorViewController.xib; sourceTree = "<group>"; };
 		872D942F15737B0400BCB4EC /* iSamizdat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iSamizdat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		872D943315737B0400BCB4EC /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		872D943515737B0400BCB4EC /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -244,13 +249,15 @@
 		872D943915737B0400BCB4EC /* iSamizdat */ = {
 			isa = PBXGroup;
 			children = (
-				8712FF8C15749A0300C01283 /* samlib category */,
 				872D943A15737B0400BCB4EC /* Supporting Files */,
+				8712FF8C15749A0300C01283 /* samlib category */,
 				872D945615737B9500BCB4EC /* views */,
 				872D944215737B0400BCB4EC /* AppDelegate.h */,
 				872D944315737B0400BCB4EC /* AppDelegate.m */,
 				872D944515737B0400BCB4EC /* MainViewController.h */,
 				872D944615737B0400BCB4EC /* MainViewController.m */,
+				8712FF981574A02B00C01283 /* NewAuthorViewController.h */,
+				8712FF991574A02B00C01283 /* NewAuthorViewController.m */,
 			);
 			path = iSamizdat;
 			sourceTree = "<group>";
@@ -270,6 +277,7 @@
 		872D945615737B9500BCB4EC /* views */ = {
 			isa = PBXGroup;
 			children = (
+				8712FF9A1574A02B00C01283 /* NewAuthorViewController.xib */,
 				872D944B15737B0400BCB4EC /* MainViewController.xib */,
 			);
 			name = views;
@@ -477,6 +485,7 @@
 				8712FF861574954200C01283 /* NoticeView.bundle in Resources */,
 				8712FF9515749D7D00C01283 /* failure.png in Resources */,
 				8712FF9715749DE400C01283 /* success.png in Resources */,
+				8712FF9C1574A02B00C01283 /* NewAuthorViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -528,6 +537,7 @@
 				8712FF8A1574954200C01283 /* WBNoticeView.m in Sources */,
 				8712FF8B1574954200C01283 /* WBSuccessNoticeView.m in Sources */,
 				8712FF9315749A3800C01283 /* SamLibAuthor+IOS.m in Sources */,
+				8712FF9B1574A02B00C01283 /* NewAuthorViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
