@@ -19,6 +19,7 @@
 #import "NSData+Kolyvan.h"
 #import "KxTuple2.h"
 #import "DDLog.h"
+#import "WBSuccessNoticeView.h"
 
 extern int ddLogLevel;
 
@@ -223,15 +224,26 @@ static UIFont* systemFont14 = nil;
             
             if (--count == 0) {
                 
+                [self.pullToRefreshView finishLoading];
+                self.navigationItem.rightBarButtonItem = self.addButton;
+                
+                
                 if (reloadStatus == SamLibStatusSuccess) {
                     
                     self.content = [self mkContent];  
                     [self.tableView reloadData];                        
                     //DDLogInfo(@"reload table %@", [self class]); 
+                
+                    WBSuccessNoticeView *notice;
+                    notice = [WBSuccessNoticeView successNoticeInView:self.view 
+                                                                title:locString(@"reload success")];
+                    [notice show];
+                    
                 }
                 
-                [self.pullToRefreshView finishLoading];
-                self.navigationItem.rightBarButtonItem = self.addButton;
+                //if (reloadStatus == SamLibStatusSuccess) {
+               // }
+
                 
                 if (lastError.nonEmpty) {
                     
