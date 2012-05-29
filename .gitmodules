@@ -16,6 +16,3 @@
 [submodule "vendors/refresh"]
 	path = vendors/refresh
 	url = git://github.com/samsoffes/sspulltorefresh.git
-[submodule "vendors/notice"]
-	path = vendors/notice
-	url = git://github.com/tciuro/NoticeView.git
