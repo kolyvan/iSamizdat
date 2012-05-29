@@ -12,13 +12,23 @@
 #import "SamLibModel.h"
 #import "SamLibAuthor.h"
 #import "SamLibText.h"
+#import "SamLibAgent.h"
 #import "NSArray+Kolyvan.h"
 #import "NSString+Kolyvan.h"
-#import "NSDate+Kolyvan.h"
+#import "NSDictionary+Kolyvan.h"
+#import "NSData+Kolyvan.h"
 #import "KxTuple2.h"
 #import "DDLog.h"
 
 extern int ddLogLevel;
+
+typedef enum {
+    
+    FavoritesSectionNumber  = 0,
+    AuthorSectionNumber     = 1,
+    IgnoredSectionNumber    = 2,    
+    
+} SectionNumber;
 
 @interface MainViewController () {
     NSInteger _version;
@@ -29,15 +39,18 @@ extern int ddLogLevel;
 @property (nonatomic, strong) NSArray *ignored;
 @property (nonatomic, strong) NSArray *authors;
 @property (nonatomic, strong) SSPullToRefreshView *pullToRefreshView;
+@property (nonatomic, strong) UIBarButtonItem *addButton;
+@property (nonatomic, strong) UIBarButtonItem *stopButton;
 
 @end
 
 @implementation MainViewController
 
-@synthesize content = _content;
-@synthesize ignored = _ignored;
-@synthesize authors = _authors;
-@synthesize pullToRefreshView = _pullToRefreshView;
+@synthesize content;
+@synthesize ignored;
+@synthesize authors;
+@synthesize pullToRefreshView;
+@synthesize addButton, stopButton;
 
 static UIFont* systemFont14 = nil;
 
@@ -68,14 +81,20 @@ static UIFont* systemFont14 = nil;
                                                                       action:@selector(goSettings)];
 
 
-    UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd 
-                                                                               target:self 
-                                                                               action:@selector(goAddAuthor)];
+    self.addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd 
+                                                                   target:self 
+                                                                   action:@selector(goAddAuthor)];
+    
+    self.stopButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemStop 
+                                                                    target:self 
+                                                                    action:@selector(goStop)];
+
 
     self.navigationItem.leftBarButtonItem = settingsButton;    
-    self.navigationItem.rightBarButtonItem = addButton;
+    self.navigationItem.rightBarButtonItem = self.addButton;
     
-    self.pullToRefreshView = [[SSPullToRefreshView alloc] initWithScrollView:self.tableView delegate:self];
+    self.pullToRefreshView = [[SSPullToRefreshView alloc] initWithScrollView:self.tableView 
+                                                                    delegate:self];
 }
 
 - (void)viewDidUnload
@@ -89,6 +108,8 @@ static UIFont* systemFont14 = nil;
     self.navigationItem.leftBarButtonItem = nil;
     self.navigationItem.rightBarButtonItem = nil;
     self.pullToRefreshView = nil;
+    self.addButton = nil;
+    self.stopButton = nil;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -108,14 +129,27 @@ static UIFont* systemFont14 = nil;
 
 #pragma mark - private functions
 
+- (BOOL) hasFavorites
+{
+    NSArray * favorites = [SamLibAgent.settings() get: @"favorites"];
+    return favorites.nonEmpty;
+}
+
+- (SectionNumber) sectionMap: (NSInteger) section
+{
+    if (!self.hasFavorites)
+        section += 1;
+    return section;
+}
+
 - (void) prepareData
 {
     SamLibModel *model = [SamLibModel shared];
     
     if (_version != model.version ||
-        _authors == nil ||
-        _content == nil ||
-        _ignored == nil) {
+        self.authors == nil ||
+        self.content == nil ||
+        self.ignored == nil) {
         
         _version = model.version;
         
@@ -153,25 +187,30 @@ static UIFont* systemFont14 = nil;
 
 #pragma mark - refresh 
 
-
+- (void) goStop
+{
+    SamLibAgent.cancelAll();
+    //self.content = [self mkContent];  
+    //[self.tableView reloadData]; 
+    [self.pullToRefreshView finishLoading];
+    self.navigationItem.rightBarButtonItem = self.addButton;    
+}
 
 - (void) refresh
 {           
-    __block NSInteger count = _authors.count;
+    __block NSInteger count = self.authors.count;
     __block SamLibStatus reloadStatus = SamLibStatusNotModifed;
     __block NSString *lastError = nil;
     
+    self.navigationItem.rightBarButtonItem = self.stopButton;
     [self.pullToRefreshView startLoading];
-    
-    for (SamLibAuthor *author in _authors) {
+
+    for (SamLibAuthor *author in self.authors) {
         
         [author update:^(SamLibAuthor *author, SamLibStatus status, NSString *error) {
             
-            //DDLogInfo(@"reload author %@ %ld", author.path, status); 
-            
             if (status == SamLibStatusSuccess) {
-                reloadStatus = SamLibStatusSuccess;
-                // [self reloadTableView];
+                reloadStatus = SamLibStatusSuccess;               
             }
             
             if (status == SamLibStatusFailure &&
@@ -192,6 +231,12 @@ static UIFont* systemFont14 = nil;
                 }
                 
                 [self.pullToRefreshView finishLoading];
+                self.navigationItem.rightBarButtonItem = self.addButton;
+                
+                if (lastError.nonEmpty) {
+                    
+                }
+                
                 lastError = nil;
             }
         }];
@@ -218,15 +263,22 @@ static UIFont* systemFont14 = nil;
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 3;
+    NSInteger sections = 1;
+    if (self.hasFavorites)
+        sections += 1;
+    if (self.ignored.nonEmpty)
+        sections += 1;        
+    return sections;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{    
-    if (section == 1)
+{   
+    section = [self sectionMap:section];
+    
+    if (section == AuthorSectionNumber)
         return locString(@"Authors");
     
-    else if (section == 2)
+    else if (section == IgnoredSectionNumber)
         return locString(@"Ignored");
     
     return @"";
@@ -234,13 +286,15 @@ static UIFont* systemFont14 = nil;
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (section == 0)
+    section = [self sectionMap:section];
+    
+    if (section == FavoritesSectionNumber)
         return 1;
     
-    else if (section == 1)
+    else if (section == AuthorSectionNumber)
         return self.content.count;
     
-    else if (section == 2)
+    else if (section == IgnoredSectionNumber)
         return self.ignored.count;
 
     return 0;
@@ -276,15 +330,16 @@ static UIFont* systemFont14 = nil;
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    NSInteger section = [self sectionMap:indexPath.section];
 
-    if (indexPath.section == 0) {
+    if (section == FavoritesSectionNumber) {
         
         UITableViewCell *cell = [self mkMainCell];
         cell.textLabel.text = locString(@"Favorites");
         return cell;
     }
         
-    if (indexPath.section == 1) {        
+    if (section == AuthorSectionNumber) {        
         
         id obj = [self.content objectAtIndex:indexPath.row]; 
         
@@ -306,7 +361,7 @@ static UIFont* systemFont14 = nil;
         }
     } 
     
-    if (indexPath.section == 2) {        
+    if (section == IgnoredSectionNumber) {        
         
         UITableViewCell *cell = [self mkMainCell];
         SamLibAuthor *author = [self.ignored objectAtIndex:indexPath.row];    
@@ -318,8 +373,9 @@ static UIFont* systemFont14 = nil;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath 
-{       
-    if (indexPath.section == 1) {
+{  
+     NSInteger section = [self sectionMap:indexPath.section];
+    if (section == AuthorSectionNumber) {
         id obj = [self.content objectAtIndex:indexPath.row];         
         if ([obj isKindOfClass:[SamLibText class]]) {         
             return systemFont14.lineHeight + 16;
@@ -330,7 +386,8 @@ static UIFont* systemFont14 = nil;
 
 - (NSInteger)tableView:(UITableView *)tableView indentationLevelForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 1) {
+    NSInteger section = [self sectionMap:indexPath.section];
+    if (section == AuthorSectionNumber) {
         id obj = [self.content objectAtIndex:indexPath.row];         
         if ([obj isKindOfClass:[SamLibText class]]) {         
             return 1;
