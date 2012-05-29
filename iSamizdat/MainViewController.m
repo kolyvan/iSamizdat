@@ -19,6 +19,7 @@
 #import "NSDictionary+Kolyvan.h"
 #import "KxTuple2.h"
 #import "AppDelegate.h"
+#import "AuthorViewController.h"
 #import "DDLog.h"
 
 extern int ddLogLevel;
@@ -43,6 +44,7 @@ typedef enum {
 @property (nonatomic, strong) UIBarButtonItem *addButton;
 @property (nonatomic, strong) UIBarButtonItem *stopButton;
 @property (nonatomic, strong) NewAuthorViewController *addAuthorViewController;
+@property (nonatomic, strong) AuthorViewController* authorViewController;
 
 @end
 
@@ -54,6 +56,7 @@ typedef enum {
 @synthesize pullToRefreshView;
 @synthesize addButton, stopButton;
 @synthesize addAuthorViewController;
+@synthesize authorViewController;
 
 static UIFont* systemFont14 = nil;
 
@@ -91,8 +94,13 @@ static UIFont* systemFont14 = nil;
     self.stopButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemStop 
                                                                     target:self 
                                                                     action:@selector(goStop)];
+    
+    
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back.png"]
+                                                                   style:UIBarButtonItemStylePlain                                                                                           target:nil                                                                                            action:nil];
 
-
+    
+    self.navigationItem.backBarButtonItem = backButton;
     self.navigationItem.leftBarButtonItem = settingsButton;    
     self.navigationItem.rightBarButtonItem = self.addButton;
     
@@ -108,6 +116,7 @@ static UIFont* systemFont14 = nil;
     self.ignored = nil;
     self.authors = nil;
     
+    self.navigationItem.backBarButtonItem = nil;
     self.navigationItem.leftBarButtonItem = nil;
     self.navigationItem.rightBarButtonItem = nil;
     self.pullToRefreshView = nil;
@@ -131,6 +140,7 @@ static UIFont* systemFont14 = nil;
     [super didReceiveMemoryWarning];     
     
     self.addAuthorViewController = nil;
+    self.authorViewController = nil;
 }
 
 #pragma mark - private functions
@@ -278,9 +288,7 @@ static UIFont* systemFont14 = nil;
                     [self performSelector:@selector(showNoticeAboutReloadResult:) 
                                withObject:nil
                                afterDelay:0.3];
-
                 }
-                 
                 
                 errors = nil;
             }
@@ -458,6 +466,27 @@ static UIFont* systemFont14 = nil;
         }        
     }    
     return 0;
+}
+
+#pragma mark - Table view delegate
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSInteger section = [self sectionMap:indexPath.section];
+    if (section == AuthorSectionNumber) {
+        id obj = [self.content objectAtIndex:indexPath.row];         
+        if ([obj isKindOfClass:[SamLibAuthor class]]) {         
+            
+            if (!self.authorViewController) {
+                self.authorViewController = [[AuthorViewController alloc] initWithNibName:@"AuthorViewController" 
+                                                                                   bundle:nil];
+            }
+            
+            self.authorViewController.author = obj;
+            [self.navigationController pushViewController:self.authorViewController 
+                                                 animated:YES];
+        }
+    } 
 }
 
 @end
