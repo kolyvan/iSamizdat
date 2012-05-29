@@ -31,6 +31,8 @@ extern int ddLogLevel;
 @property (nonatomic, strong) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (nonatomic, strong) UIBarButtonItem *doneButton;
+@property (nonatomic, strong) IBOutlet UILabel *pathLabel;
+@property (nonatomic, strong) IBOutlet UILabel *searchLabel;
 
 @end
 
@@ -42,11 +44,14 @@ extern int ddLogLevel;
 @synthesize delegate;
 @synthesize activityIndicator;
 @synthesize doneButton;
+@synthesize pathLabel;
+@synthesize searchLabel;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
+        self.title = locString(@"Add");
     }
     return self;
 }
@@ -79,6 +84,9 @@ extern int ddLogLevel;
     
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    
+    self.pathLabel.text = locString(@"Enter author's page on samlib.ru");
+    self.searchLabel.text = locString(@"Or author's name for search");
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -106,7 +114,6 @@ extern int ddLogLevel;
     [self.searchField removeTarget:self 
                             action:nil
                   forControlEvents:UIControlEventEditingDidEndOnExit];
-    
     
     self.tableView.delegate = nil;
     self.tableView.dataSource = nil;
