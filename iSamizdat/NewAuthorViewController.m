@@ -15,8 +15,7 @@
 #import "SamLibAuthor.h"
 #import "SamLibText.h"
 #import "SamLibModel.h"
-#import "WBSuccessNoticeView.h"
-#import "WBErrorNoticeView.h"
+#import "AppDelegate.h"
 #import "DDLog.h"
 
 extern int ddLogLevel;
@@ -155,19 +154,18 @@ extern int ddLogLevel;
         [path contains: @"."] ||
         [path contains: @"/"]) {
 
-        [[WBErrorNoticeView errorNoticeInView:self.view 
-                                        title:locString(@"Invalid path")
-                                      message:path] show];
-        
+        [[AppDelegate shared] errorNoticeInView:self.view 
+                                          title:locString(@"Invalid path")
+                                        message:path];
         return;
     }
     
     SamLibAuthor *author = [[SamLibModel shared] findAuthor: path];
     if (author) {
         
-        [[WBErrorNoticeView errorNoticeInView:self.view 
-                                        title:locString(@"Already exists")
-                                      message:author.name] show];
+        [[AppDelegate shared] errorNoticeInView:self.view 
+                                          title:locString(@"Already exists")
+                                        message:author.name];
         return;
     }
     
@@ -188,10 +186,10 @@ extern int ddLogLevel;
         self.searchField.enabled = YES; 
                 
         if (status == SamLibStatusFailure) {
-
-            [[WBErrorNoticeView errorNoticeInView:self.view 
-                                            title:locString(@"Fetch failure")
-                                          message:error] show];
+            
+            [[AppDelegate shared] errorNoticeInView:self.view 
+                                              title:locString(@"Fetch failure")
+                                            message:error];
         }
         else {
 
@@ -199,11 +197,9 @@ extern int ddLogLevel;
             self.tableView.hidden = NO;
             [self.tableView reloadData];
             
-            [[WBSuccessNoticeView successNoticeInView:self.view 
-                                            title:locString(@"Fetch success")] show];
-            
+            [[AppDelegate shared] successNoticeInView:self.view 
+                                                title:locString(@"Fetch success")];
         }
-        
     }]; 
 }
 
@@ -242,17 +238,15 @@ extern int ddLogLevel;
                                             [self.tableView reloadData]; 
                                             
                                             NSString *s = KxUtils.format(locString(@"Found: %ld"), result.count); 
-                                            [[WBSuccessNoticeView successNoticeInView:self.view 
-                                                                                title:s] show];                                            
+                                            [[AppDelegate shared] successNoticeInView:self.view 
+                                                                                title:s];                                            
                                         } else {
                                             
-                                            [[WBErrorNoticeView errorNoticeInView:self.view 
-                                                                            title:locString(@"Not found") 
-                                                                          message:@""] show];
+                                            [[AppDelegate shared] errorNoticeInView:self.view 
+                                                                              title:locString(@"Not found") 
+                                                                            message:@""];
                                         }
-                                        
                                     }];
-
 }
 
 - (NSString *) preparePath: (NSString *) path

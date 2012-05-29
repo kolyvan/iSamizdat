@@ -12,6 +12,13 @@
 
 @property (strong, nonatomic) UIWindow *window;
 
-@property (strong, nonatomic) UINavigationController *navigationController;
++ (AppDelegate *) shared;
+
+- (void) errorNoticeInView:(UIView *) view
+                     title:(NSString *) title
+                   message:(NSString *) message;
+
+- (void) successNoticeInView:(UIView *) view
+                       title:(NSString *) title;
 
 @end

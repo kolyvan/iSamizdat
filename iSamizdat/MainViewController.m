@@ -18,8 +18,7 @@
 #import "NSString+Kolyvan.h"
 #import "NSDictionary+Kolyvan.h"
 #import "KxTuple2.h"
-#import "WBSuccessNoticeView.h"
-#import "WBErrorNoticeView.h"
+#import "AppDelegate.h"
 #import "DDLog.h"
 
 extern int ddLogLevel;
@@ -267,28 +266,46 @@ static UIFont* systemFont14 = nil;
                     self.content = [self mkContent];  
                     [self.tableView reloadData];    
                 }
-                
+                                
                 if (errors.nonEmpty) {
-                    
-                    NSString *message = [errors mkString: @"\n"];                    
-                    WBErrorNoticeView *notice;
-                    notice = [WBErrorNoticeView errorNoticeInView:self.view 
-                                                            title:locString(@"Reload failure") 
-                                                          message:message];
-                    [notice show];
+
+                    //[[AppDelegate shared] errorNoticeInView:self.view 
+                    //                                  title:locString(@"Reload failure") 
+                    //                                message:[errors mkString: @"\n"]];
+                    [self performSelector:@selector(showNoticeAboutReloadResult:) 
+                               withObject:[errors mkString: @"\n"] 
+                               afterDelay:1.0];
                     
                 } else if (reloaded > 0) {
+
+                    //[[AppDelegate shared] successNoticeInView:self.view 
+                    //                                    title:locString(@"Reload success")];
                     
-                    WBSuccessNoticeView *notice;
-                    notice = [WBSuccessNoticeView successNoticeInView:self.view 
-                                                                title:locString(@"Reload success")];
-                    [notice show];
+                    [self performSelector:@selector(showNoticeAboutReloadResult:) 
+                               withObject:nil
+                               afterDelay:1.0];
+
                 }
+                 
                 
                 errors = nil;
             }
         }];
     } 
+}
+
+- (void) showNoticeAboutReloadResult: (NSString *) error
+{
+    if (error) {
+        
+        [[AppDelegate shared] errorNoticeInView:self.view 
+                                          title:locString(@"Reload failure") 
+                                        message:error];        
+    } else {
+        
+        [[AppDelegate shared] successNoticeInView:self.view 
+                                            title:locString(@"Reload success")];
+    }
 }
 
 - (void)pullToRefreshViewDidStartLoading:(SSPullToRefreshView *)view 

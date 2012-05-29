@@ -14,6 +14,8 @@
 #import "DDLog.h"
 #import "DDTTYLogger.h"
 #import "KxUtils.h"
+#import "WBSuccessNoticeView.h"
+#import "WBErrorNoticeView.h"
 
 #if DEBUG
 int ddLogLevel = LOG_LEVEL_INFO;
@@ -21,11 +23,24 @@ int ddLogLevel = LOG_LEVEL_INFO;
 int ddLogLevel = LOG_LEVEL_WARN;
 #endif
 
+@interface AppDelegate()
+
+@property (strong, nonatomic) UINavigationController *navigationController;
+@property (strong, nonatomic) WBErrorNoticeView * errorNotice;
+@property (strong, nonatomic) WBSuccessNoticeView * successNotice;
+@end
 
 @implementation AppDelegate
 
 @synthesize window = _window;
-@synthesize navigationController = _navigationController;
+@synthesize navigationController;
+@synthesize errorNotice;
+@synthesize successNotice;
+
++ (AppDelegate *) shared
+{
+    return [UIApplication sharedApplication].delegate;
+}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -63,6 +78,14 @@ int ddLogLevel = LOG_LEVEL_WARN;
     SamLibAgent.cleanup();
 }
 
+- (void)applicationDidReceiveMemoryWarning:(UIApplication *)application
+{
+    self.errorNotice = nil;
+    self.successNotice = nil;
+    
+    // todo: free comments objects in samlibtext
+}
+
 - (void) initLogger
 {
 #ifdef DEBUG
@@ -75,6 +98,33 @@ int ddLogLevel = LOG_LEVEL_WARN;
 }
 
 
+- (void) errorNoticeInView:(UIView *) view
+                     title:(NSString *) title
+                   message:(NSString *) message
+{
+    if (!self.errorNotice)
+        self.errorNotice =  [[WBErrorNoticeView alloc] init];
+    
+    self.errorNotice.view = view;
+    self.errorNotice.title = title;
+    self.errorNotice.message = message;
+    
+    [self.errorNotice show];
+}
+
+- (void) successNoticeInView:(UIView *) view
+                       title:(NSString *) title
+{    
+    if (!self.successNotice)
+        self.successNotice =  [[WBSuccessNoticeView alloc] init];
+    
+    self.successNotice.view = view;
+    self.successNotice.title = title;
+    
+    [self.successNotice show];
+    
+    //[[WBSuccessNoticeView successNoticeInView:view title:title] show];
+}
 
 
 @end
