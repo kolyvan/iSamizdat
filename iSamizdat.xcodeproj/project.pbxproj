@@ -8,6 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		870BA4591574F04400B71E07 /* FastCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 870BA4581574F04400B71E07 /* FastCell.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		870BA45D1575009600B71E07 /* favorite-off.png in Resources */ = {isa = PBXBuildFile; fileRef = 870BA45B1575009600B71E07 /* favorite-off.png */; };
+		870BA45E1575009600B71E07 /* favorite.png in Resources */ = {isa = PBXBuildFile; fileRef = 870BA45C1575009600B71E07 /* favorite.png */; };
+		870BA46115750A2600B71E07 /* comment.png in Resources */ = {isa = PBXBuildFile; fileRef = 870BA45F15750A2600B71E07 /* comment.png */; };
+		870BA46215750A2600B71E07 /* size_changed.png in Resources */ = {isa = PBXBuildFile; fileRef = 870BA46015750A2600B71E07 /* size_changed.png */; };
+		870BA469157515F500B71E07 /* SamLibText+IOS.m in Sources */ = {isa = PBXBuildFile; fileRef = 870BA468157515F500B71E07 /* SamLibText+IOS.m */; };
 		8712FF9315749A3800C01283 /* SamLibAuthor+IOS.m in Sources */ = {isa = PBXBuildFile; fileRef = 8712FF9215749A3800C01283 /* SamLibAuthor+IOS.m */; };
 		8712FF9515749D7D00C01283 /* failure.png in Resources */ = {isa = PBXBuildFile; fileRef = 8712FF9415749D7D00C01283 /* failure.png */; };
 		8712FF9715749DE400C01283 /* success.png in Resources */ = {isa = PBXBuildFile; fileRef = 8712FF9615749DE400C01283 /* success.png */; };
@@ -76,6 +81,12 @@
 /* Begin PBXFileReference section */
 		870BA4571574F04400B71E07 /* FastCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FastCell.h; path = vendors/FastCell.h; sourceTree = "<group>"; };
 		870BA4581574F04400B71E07 /* FastCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FastCell.m; path = vendors/FastCell.m; sourceTree = "<group>"; };
+		870BA45B1575009600B71E07 /* favorite-off.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "favorite-off.png"; path = "resources/favorite-off.png"; sourceTree = "<group>"; };
+		870BA45C1575009600B71E07 /* favorite.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = favorite.png; path = resources/favorite.png; sourceTree = "<group>"; };
+		870BA45F15750A2600B71E07 /* comment.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = comment.png; path = resources/comment.png; sourceTree = "<group>"; };
+		870BA46015750A2600B71E07 /* size_changed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = size_changed.png; path = resources/size_changed.png; sourceTree = "<group>"; };
+		870BA467157515F500B71E07 /* SamLibText+IOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SamLibText+IOS.h"; sourceTree = "<group>"; };
+		870BA468157515F500B71E07 /* SamLibText+IOS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SamLibText+IOS.m"; sourceTree = "<group>"; };
 		8712FF9115749A3800C01283 /* SamLibAuthor+IOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SamLibAuthor+IOS.h"; sourceTree = "<group>"; };
 		8712FF9215749A3800C01283 /* SamLibAuthor+IOS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SamLibAuthor+IOS.m"; sourceTree = "<group>"; };
 		8712FF9415749D7D00C01283 /* failure.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = failure.png; path = resources/failure.png; sourceTree = "<group>"; };
@@ -212,6 +223,8 @@
 			children = (
 				8712FF9115749A3800C01283 /* SamLibAuthor+IOS.h */,
 				8712FF9215749A3800C01283 /* SamLibAuthor+IOS.m */,
+				870BA467157515F500B71E07 /* SamLibText+IOS.h */,
+				870BA468157515F500B71E07 /* SamLibText+IOS.m */,
 			);
 			name = "samlib category";
 			sourceTree = "<group>";
@@ -432,6 +445,10 @@
 		872D956D1573968C00BCB4EC /* resources */ = {
 			isa = PBXGroup;
 			children = (
+				870BA45F15750A2600B71E07 /* comment.png */,
+				870BA46015750A2600B71E07 /* size_changed.png */,
+				870BA45B1575009600B71E07 /* favorite-off.png */,
+				870BA45C1575009600B71E07 /* favorite.png */,
 				8712FFDC1574E8D000C01283 /* back.png */,
 				8712FFDD1574E8D000C01283 /* back@2x.png */,
 				8712FFD81574E84900C01283 /* round_back.png */,
@@ -525,6 +542,10 @@
 				8712FFDB1574E84900C01283 /* round_back@2x.png in Resources */,
 				8712FFDE1574E8D000C01283 /* back.png in Resources */,
 				8712FFDF1574E8D000C01283 /* back@2x.png in Resources */,
+				870BA45D1575009600B71E07 /* favorite-off.png in Resources */,
+				870BA45E1575009600B71E07 /* favorite.png in Resources */,
+				870BA46115750A2600B71E07 /* comment.png in Resources */,
+				870BA46215750A2600B71E07 /* size_changed.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -580,6 +601,7 @@
 				8712FFD11574DA7900C01283 /* AuthorViewController.m in Sources */,
 				8712FFD61574E65500C01283 /* TextViewController.m in Sources */,
 				870BA4591574F04400B71E07 /* FastCell.m in Sources */,
+				870BA469157515F500B71E07 /* SamLibText+IOS.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

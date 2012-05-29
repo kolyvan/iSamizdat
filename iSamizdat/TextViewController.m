@@ -8,6 +8,8 @@
 
 #import "TextViewController.h"
 #import "SamLibText.h"
+#import "SamLibText+IOS.h"
+#import "KxMacros.h"
 #import "KxUtils.h"
 #import "NSString+Kolyvan.h"
 #import "FastCell.h"
@@ -56,9 +58,36 @@ static UIFont* systemFont14 = nil;
          lineBreakMode:UILineBreakModeTailTruncation];    
 }
 
+@end
+
+////
+
+@interface TitleCell : UITableViewCell
+
+@property (weak, nonatomic) TextViewController *controller;
 
 @end
 
+@implementation TitleCell
+
+@synthesize controller;
+
+- (void)touchesEnded:(NSSet *)touches
+           withEvent:(UIEvent *)event
+{   
+    UITouch *t = [touches anyObject];
+    if ([t tapCount] > 1)
+        return;  // double tap
+            
+    CGPoint loc = [t locationInView:self];     
+    if (CGRectContainsPoint(self.imageView.frame, loc)) {
+
+        controller.text.favorited = !controller.text.favorited;
+        self.imageView.image = controller.text.favoritedImage;        
+    }
+}
+
+@end
 ////
 
 #define TextViewSection0_RowTitle 0
@@ -94,7 +123,7 @@ static UIFont* systemFont14 = nil;
 - (id)initWithStyle:(UITableViewStyle)style
 {
     self = [super initWithStyle:style];
-    if (self) {
+    if (self) {        
     }
     return self;
 }
@@ -102,15 +131,21 @@ static UIFont* systemFont14 = nil;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    UIBarButtonItem *goButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemBookmarks 
+                                                                               target:self 
+                                                                               action:@selector(goRead)];
+    
+    self.navigationItem.rightBarButtonItem = goButton;
+    
+    self.title = locString(@"Text");
 }
 
 - (void) viewWillAppear:(BOOL)animated 
 {    
     [super viewWillAppear:animated];
     if (_needReload) {
-        _needReload = NO;
-        //self.title = _text.title;
-        //[self prepareData];
+        _needReload = NO;        
         [self.tableView reloadData];
     }
 }
@@ -118,6 +153,7 @@ static UIFont* systemFont14 = nil;
 - (void)viewDidUnload
 {
     [super viewDidUnload];
+    self.navigationItem.rightBarButtonItem = nil;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -144,9 +180,15 @@ static UIFont* systemFont14 = nil;
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath 
 {  
-    if (indexPath.section == 0 && indexPath.row == TextViewSection0_RowNote)
+    if (indexPath.section == 0 && indexPath.row == TextViewSection0_RowNote) {
         return [[NoteCell class] computeHeight:_text.note 
                                       forWidth:tableView.frame.size.width];
+        
+    //    return [_text.note sizeWithFont:[UIFont systemFontOfSize: 14] 
+    //                  constrainedToSize:CGSizeMake(tableView.frame.size.width - 20, 999999) 
+    //                      lineBreakMode:UILineBreakModeTailTruncation].height + 20;
+        
+    }
     return self.tableView.rowHeight;
 }
 
@@ -172,27 +214,41 @@ static UIFont* systemFont14 = nil;
         if (TextViewSection0_RowNote == indexPath.row) { 
             
             static NSString *CellIdentifier = @"NoteCell";
-            NoteCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-            
+            NoteCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];            
             if (cell == nil) {
                 cell = [[NoteCell alloc] initWithStyle:UITableViewCellStyleDefault 
                                               reuseIdentifier:CellIdentifier];
             }
-            
             cell.note = _text.note;
+           
+            /*
+            UITableViewCell *cell = [self mkCell: @"NoteCell" withStyle:UITableViewCellStyleValue1];
+            cell.textLabel.text = _text.note;
+            cell.textLabel.numberOfLines = 0;
+            cell.textLabel.font = [UIFont systemFontOfSize: 14];
+            */
             return cell;
             
         } else  if (TextViewSection0_RowTitle == indexPath.row) { 
             
-            UITableViewCell *cell = [self mkCell: @"TitleCell" withStyle:UITableViewCellStyleValue1];
+            //UITableViewCell *cell = [self mkCell: @"TitleCell" withStyle:UITableViewCellStyleValue1];
+            
+            TitleCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"TitleCell"];    
+            if (cell == nil) {
+                cell = [[TitleCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"TitleCell"];                
+            }
+            
+            cell.controller = self;
             cell.textLabel.text = _text.title;
+            cell.textLabel.numberOfLines = 0;
+            cell.imageView.image = _text.favoritedImage;
             cell.detailTextLabel.text = [_text ratingWithDelta:@" "];
             return cell;
             
         } else  if (TextViewSection0_RowSize == indexPath.row) { 
            
-            UITableViewCell *cell = [self mkCell: @"TitleCell" withStyle:UITableViewCellStyleValue1];            
-            cell.textLabel.text = @"Size";
+            UITableViewCell *cell = [self mkCell: @"SizeCell" withStyle:UITableViewCellStyleValue1];            
+            cell.textLabel.text = locString(@"Size");
             cell.detailTextLabel.text = [_text sizeWithDelta: @" "];
             return cell;    
             
@@ -216,7 +272,7 @@ static UIFont* systemFont14 = nil;
         
             UITableViewCell *cell = [self mkCell: @"CommentsCell" withStyle:UITableViewCellStyleValue1];                    
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            cell.textLabel.text = @"Comments";
+            cell.textLabel.text = locString(@"Comments");
             cell.detailTextLabel.text = [_text commentsWithDelta: @" "];  
             return cell;
             
@@ -224,7 +280,7 @@ static UIFont* systemFont14 = nil;
             
             UITableViewCell *cell = [self mkCell: @"CommentsCell" withStyle:UITableViewCellStyleDefault];                    
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            cell.textLabel.text = @"Saved copy";
+            cell.textLabel.text = locString(@"Saved copy");
             return cell;
         }        
     }
