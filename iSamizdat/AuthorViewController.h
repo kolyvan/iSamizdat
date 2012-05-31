@@ -11,10 +11,10 @@
 // 
 
 #import <UIKit/UIKit.h>
-#import "SSPullToRefresh.h"
+#import "TableViewControllerEx.h"
 
 @class SamLibAuthor;
 
-@interface AuthorViewController : UITableViewController<SSPullToRefreshViewDelegate>
+@interface AuthorViewController :TableViewControllerEx
 @property (strong, nonatomic) SamLibAuthor *author;
 @end

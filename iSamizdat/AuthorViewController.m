@@ -28,16 +28,12 @@
     NSArray *_sections;
 }
 @property (nonatomic, strong) TextViewController *textViewController;
-@property (nonatomic, strong) SSPullToRefreshView *pullToRefreshView;
-@property (nonatomic, strong) UIBarButtonItem *stopButton;
 @end
 
 @implementation AuthorViewController
 
 @synthesize author = _author;
 @synthesize textViewController;
-@synthesize pullToRefreshView;
-@synthesize stopButton;
 
 - (void) setAuthor:(SamLibAuthor *)author 
 {
@@ -81,16 +77,8 @@ static UIFont* boldSystemFont = nil;
                                                                                 target:self 
                                                                                 action:@selector(goInfo)];
 
-    
-    self.stopButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemStop 
-                                                                    target:self 
-                                                                    action:@selector(goStop)];
-    
     self.navigationItem.backBarButtonItem = backButton;
     self.navigationItem.rightBarButtonItem = infoButton;    
-    
-    self.pullToRefreshView = [[SSPullToRefreshView alloc] initWithScrollView:self.tableView 
-                                                                    delegate:self];
 }
 
 - (void) viewWillAppear:(BOOL)animated 
@@ -111,13 +99,6 @@ static UIFont* boldSystemFont = nil;
     
     self.navigationItem.backBarButtonItem = nil;
     self.navigationItem.rightBarButtonItem = nil;
-    self.pullToRefreshView = nil;
-    self.stopButton = nil;
-}
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
 }
 
 #pragma mark - private
@@ -168,67 +149,13 @@ static UIFont* boldSystemFont = nil;
     
 }
 
-- (void) goStop
+- (void) refresh: (void(^)(SamLibStatus status, NSString *error)) block
 {
-    SamLibAgent.cancelAll();
-    [self.pullToRefreshView finishLoading];
-    self.navigationItem.rightBarButtonItem = nil;    
-}
-
-- (void) refresh
-{
-    self.navigationItem.rightBarButtonItem = self.stopButton;
-    [self.pullToRefreshView startLoading];
-    
-    [_author update:^(SamLibAuthor *author, SamLibStatus status, NSString *error) {
+     [_author update:^(SamLibAuthor *author, SamLibStatus status, NSString *error) {
         
-        [self.pullToRefreshView finishLoading];
-        self.navigationItem.rightBarButtonItem = nil;
-
-        author.lastError = nil;                
-        
-        if (status == SamLibStatusFailure) {
-            
-            author.lastError = error;
-            
-            [self performSelector:@selector(showNoticeAboutReloadResult:) 
-                       withObject:error
-                       afterDelay:0.3];
-            
-        } 
-        
-        if (status == SamLibStatusSuccess) {            
-            
-            [self prepareData];
-            [self.tableView reloadData];
-            
-            [self performSelector:@selector(showNoticeAboutReloadResult:) 
-                       withObject:nil
-                       afterDelay:0.3];
-        }
-    }];
-}
-
-- (void) showNoticeAboutReloadResult: (NSString *) error
-{
-    if (error) {
-        
-        [[AppDelegate shared] errorNoticeInView:self.view 
-                                          title:locString(@"Reload failure") 
-                                        message:error];        
-    } else {
-        
-        [[AppDelegate shared] successNoticeInView:self.view 
-                                            title:locString(@"Reload success")];
-    }
-}
-
-- (void)pullToRefreshViewDidStartLoading:(SSPullToRefreshView *)view 
-{    
-    [self.pullToRefreshView.contentView setLastUpdatedAt:_author.timestamp 
-                                   withPullToRefreshView:view]; 
-    
-    [self refresh];
+         author.lastError = error;
+         block(status, error);
+     }];
 }
 
 #pragma mark - Table view data source
@@ -252,16 +179,6 @@ static UIFont* boldSystemFont = nil;
         return text.group.nonEmpty ? text.groupEx : text.type;
     }    
     return @"";
-}
-
-- (id) mkCell: (NSString *) cellIdentifier
-    withStyle: (UITableViewCellStyle) style
-{
-    UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];    
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:style reuseIdentifier:cellIdentifier];                
-    }
-    return cell;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

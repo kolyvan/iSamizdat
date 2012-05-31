@@ -11,9 +11,9 @@
 // 
 
 #import <UIKit/UIKit.h>
-#import "SSPullToRefresh.h"
 #import "NewAuthorViewController.h"
+#import "TableViewControllerEx.h"
 
-@interface MainViewController : UITableViewController<SSPullToRefreshViewDelegate, NewAuthorViewDelegate>
+@interface MainViewController : TableViewControllerEx<NewAuthorViewDelegate>
 
 @end

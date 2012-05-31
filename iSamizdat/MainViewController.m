@@ -44,9 +44,7 @@ typedef enum {
 @property (nonatomic, strong) NSArray *content;
 @property (nonatomic, strong) NSArray *ignored;
 @property (nonatomic, strong) NSArray *authors;
-@property (nonatomic, strong) SSPullToRefreshView *pullToRefreshView;
 @property (nonatomic, strong) UIBarButtonItem *addButton;
-@property (nonatomic, strong) UIBarButtonItem *stopButton;
 @property (nonatomic, strong) NewAuthorViewController *addAuthorViewController;
 @property (nonatomic, strong) AuthorViewController* authorViewController;
 
@@ -57,8 +55,7 @@ typedef enum {
 @synthesize content;
 @synthesize ignored;
 @synthesize authors;
-@synthesize pullToRefreshView;
-@synthesize addButton, stopButton;
+@synthesize addButton;
 @synthesize addAuthorViewController;
 @synthesize authorViewController;
 
@@ -95,11 +92,6 @@ static UIFont* systemFont14 = nil;
                                                                    target:self 
                                                                    action:@selector(goAddAuthor)];
     
-    self.stopButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemStop 
-                                                                    target:self 
-                                                                    action:@selector(goStop)];
-    
-    
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back.png"]
                                                                    style:UIBarButtonItemStylePlain                                                                                           target:nil                                                                                            action:nil];
 
@@ -107,9 +99,6 @@ static UIFont* systemFont14 = nil;
     self.navigationItem.backBarButtonItem = backButton;
     self.navigationItem.leftBarButtonItem = settingsButton;    
     self.navigationItem.rightBarButtonItem = self.addButton;
-    
-    self.pullToRefreshView = [[SSPullToRefreshView alloc] initWithScrollView:self.tableView 
-                                                                    delegate:self];
 }
 
 - (void)viewDidUnload
@@ -123,15 +112,8 @@ static UIFont* systemFont14 = nil;
     self.navigationItem.backBarButtonItem = nil;
     self.navigationItem.leftBarButtonItem = nil;
     self.navigationItem.rightBarButtonItem = nil;
-    self.pullToRefreshView = nil;
     self.addButton = nil;
-    self.stopButton = nil;    
     self.addAuthorViewController = nil;
-}
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -233,22 +215,18 @@ static UIFont* systemFont14 = nil;
 
 - (void) goStop
 {
-    SamLibAgent.cancelAll();
-    [self.pullToRefreshView finishLoading];
-    self.navigationItem.rightBarButtonItem = self.addButton;    
+    [super goStop];
+    
     self.content = [self mkContent];  
     [self.tableView reloadData];     
 }
 
-- (void) refresh
-{           
+- (void) refresh: (void(^)(SamLibStatus status, NSString *error)) block
+{
     __block NSInteger count = self.authors.count;
     __block NSInteger reloaded = 0; 
     __block NSMutableArray * errors = nil;
-        
-    self.navigationItem.rightBarButtonItem = self.stopButton;
-    [self.pullToRefreshView startLoading];
-
+    
     for (SamLibAuthor *author in self.authors) {
         
         [author update:^(SamLibAuthor *author, SamLibStatus status, NSString *error) {
@@ -260,7 +238,7 @@ static UIFont* systemFont14 = nil;
                 
                 if (!errors)
                     errors = [[NSMutableArray alloc] init];
-
+                
                 if (![errors containsObject:error])
                     [errors push: error];
                 
@@ -272,62 +250,36 @@ static UIFont* systemFont14 = nil;
             
             if (--count == 0) {
                 
-                [self.pullToRefreshView finishLoading];
-                self.navigationItem.rightBarButtonItem = self.addButton;                
-                
                 if (reloaded > 0) {
-                    
-                    self.content = [self mkContent];  
-                    [self.tableView reloadData];    
-                }
-                                
-                if (errors.nonEmpty) {
-
-                    [self performSelector:@selector(showNoticeAboutReloadResult:) 
-                               withObject:[errors mkString: @"\n"] 
-                               afterDelay:0.3];
-                    
-                } else if (reloaded > 0) {
-
-                    [self performSelector:@selector(showNoticeAboutReloadResult:) 
-                               withObject:nil
-                               afterDelay:0.3];
+                    status = SamLibStatusSuccess;   
+                    self.content = [self mkContent];   
                 }
                 
-                errors = nil;
+                NSString *errMsg = nil;
+                if (errors.nonEmpty) {
+                    
+                    status = SamLibStatusFailure;
+                    errMsg = [errors mkString: @"\n"];
+                    errors = nil; 
+                }
+                
+                block(status, errMsg);
             }
         }];
-    } 
-}
-
-- (void) showNoticeAboutReloadResult: (NSString *) error
-{
-    if (error) {
-        
-        [[AppDelegate shared] errorNoticeInView:self.view 
-                                          title:locString(@"Reload failure") 
-                                        message:error];        
-    } else {
-        
-        [[AppDelegate shared] successNoticeInView:self.view 
-                                            title:locString(@"Reload success")];
     }
-}
 
-- (void)pullToRefreshViewDidStartLoading:(SSPullToRefreshView *)view 
+}
+ 
+- (NSDate *) lastUpdateDate
 {
+    NSDate *date = nil;
     if (self.authors.nonEmpty) {
-    
-        NSDate *date = [self.authors fold:nil with:^id(id acc, id elem) {
+        date = [self.authors fold:nil with:^id(id acc, id elem) {
             NSDate *l = acc, *r = ((SamLibAuthor *)elem).timestamp;
             return [r laterDate: l];
         }];
-        
-        [self.pullToRefreshView.contentView setLastUpdatedAt:date 
-                                       withPullToRefreshView:view];        
     }
-    
-    [self refresh];
+    return date;
 }
 
 #pragma mark - Table View
@@ -373,14 +325,8 @@ static UIFont* systemFont14 = nil;
 
 - (UITableViewCell *) mkMainCell
 {
-    static NSString *CellIdentifier = @"MainCell";
-    
-    UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    }
-    
+    UITableViewCell * cell = [self mkCell:@"MainCell" withStyle:UITableViewCellStyleDefault];
+    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;    
     return cell;
 }
 
