@@ -24,6 +24,7 @@
 #import "NSDate+Kolyvan.h"
 #import "FastCell.h"
 #import "TextReadViewController.h"
+#import "UIFont+Kolyvan.h"
 #import "DDLog.h"
 
 extern int ddLogLevel;
@@ -41,20 +42,11 @@ extern int ddLogLevel;
 
 @synthesize note = _note;
 
-static UIFont* systemFont14 = nil;
-
-+ (void)initialize
-{
-	if (self == [NoteCell class])
-	{		
-		systemFont14 = [UIFont systemFontOfSize:14];     
-	}
-}
 
 + (CGFloat) computeHeight: (NSString *) note 
                  forWidth: (CGFloat) width
 {    
-    return [note sizeWithFont:systemFont14 
+    return [note sizeWithFont:[UIFont systemFont14] 
             constrainedToSize:CGSizeMake(width - 20, 999999) 
                 lineBreakMode:UILineBreakModeTailTruncation].height + 20;  
 }
@@ -68,7 +60,7 @@ static UIFont* systemFont14 = nil;
     
     [[UIColor darkTextColor] set];
     [_note drawInRect: CGRectInset(rect, 10, 10)
-              withFont:systemFont14 
+              withFont:[UIFont systemFont14]  
          lineBreakMode:UILineBreakModeTailTruncation];    
 }
 
@@ -108,6 +100,7 @@ enum {
     RowSize,
     RowUpdate,    
     RowNote,
+    //RowGroup,    
     RowGenre,
     RowComments,
     RowMakeDiff,            
@@ -221,15 +214,9 @@ enum {
     NSMutableArray *ma = [NSMutableArray array];
     
     [ma push: $int(RowTitle)];
+        
     [ma push: $int(RowSize)];
-    
-    if (_text.note.nonEmpty)
-        [ma push: $int(RowNote)];
-    
-    if (_text.genre.nonEmpty ||
-        _text.type.nonEmpty)
-        [ma push: $int(RowGenre)];
-
+      
     [ma push: $int(RowComments)];
      
     // fixme: below is most likely wrong code
@@ -251,6 +238,16 @@ enum {
 
     if (_text.diffFile.nonEmpty)
         [ma push: $int(RowDiff)];
+    
+    if (_text.note.nonEmpty)
+        [ma push: $int(RowNote)];
+        
+    //if (_text.group.nonEmpty)
+    //    [ma push: $int(RowGroup)];
+        
+    if (_text.genre.nonEmpty ||
+        _text.type.nonEmpty)
+        [ma push: $int(RowGenre)];  
 
     _rows = [ma toArray];
 }
@@ -331,12 +328,23 @@ enum {
         cell.detailTextLabel.text = [_text sizeWithDelta: @" "];
         return cell;    
         
+    //} else if (RowGroup == row) {
+    //    
+    //    UITableViewCell *cell = [self mkCell: @"GenreCell" withStyle:UITableViewCellStyleDefault];             
+    //    cell.textLabel.text = _text.group;
+    //    return cell;
+    
     } else if (RowGenre == row) {
         
         UITableViewCell *cell = [self mkCell: @"GenreCell" withStyle:UITableViewCellStyleDefault];             
         NSMutableString *ms = [NSMutableString string];
         
+        if (_text.group.nonEmpty) {
+            [ms appendString:_text.group];                
+        }        
         if (_text.type.nonEmpty) {
+            if (ms.length > 0)
+                [ms appendString:@", "];
             [ms appendString:_text.type];                
         }
         if (_text.genre.nonEmpty) {
@@ -345,6 +353,8 @@ enum {
             [ms appendString:_text.genre];                                
         }            
         cell.textLabel.text = ms;
+        cell.textLabel.numberOfLines = 2;
+        cell.textLabel.font = [UIFont boldSystemFont14];
         return cell;
         
     } else if (RowComments == row) {

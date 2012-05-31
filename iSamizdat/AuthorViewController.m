@@ -21,6 +21,7 @@
 #import "NSDictionary+Kolyvan.h"
 #import "TextViewController.h"
 #import "AppDelegate.h"
+#import "UIFont+Kolyvan.h"
 
 @interface AuthorViewController () {
     BOOL _needReload;
@@ -44,16 +45,6 @@
         _author = author;
         _needReload = YES;
     }
-}
-
-static UIFont* boldSystemFont = nil;
-
-+ (void)initialize
-{
-	if (self == [AuthorViewController class])
-	{		
-		boldSystemFont = [UIFont boldSystemFontOfSize:16];     
-	}
 }
 
 - (id) init
@@ -199,7 +190,7 @@ static UIFont* boldSystemFont = nil;
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         cell.textLabel.text = text.title;
         cell.textLabel.numberOfLines = 2;
-        cell.textLabel.font = boldSystemFont;
+        cell.textLabel.font = [UIFont boldSystemFont16];
         
         if (text.changedSize) {
             

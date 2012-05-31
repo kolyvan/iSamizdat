@@ -25,6 +25,7 @@
 #import "AppDelegate.h"
 #import "AuthorViewController.h"
 #import "TextViewController.h"
+#import "UIFont+Kolyvan.h"
 #import "DDLog.h"
 
 extern int ddLogLevel;
@@ -61,16 +62,6 @@ typedef enum {
 @synthesize addAuthorViewController;
 @synthesize authorViewController;
 @synthesize textViewController;
-
-static UIFont* systemFont14 = nil;
-
-+ (void)initialize
-{
-	if (self == [MainViewController class])
-	{		
-		systemFont14 = [UIFont systemFontOfSize:14];     
-	}
-}
 
 - (id) init
 {
@@ -347,8 +338,8 @@ static UIFont* systemFont14 = nil;
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier];
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        cell.detailTextLabel.font = systemFont14;
-        cell.textLabel.font = systemFont14;        
+        cell.detailTextLabel.font = [UIFont systemFont14];
+        cell.textLabel.font = [UIFont systemFont14];        
     }
     
     return cell;
@@ -409,7 +400,7 @@ static UIFont* systemFont14 = nil;
     if (section == AuthorSectionNumber) {
         id obj = [self.content objectAtIndex:indexPath.row];         
         if ([obj isKindOfClass:[SamLibText class]]) {         
-            return systemFont14.lineHeight + 16;
+            return [UIFont systemFont14].lineHeight + 16;
         }        
     }    
     return self.tableView.rowHeight;

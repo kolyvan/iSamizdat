@@ -130,5 +130,4 @@ int ddLogLevel = LOG_LEVEL_WARN;
     //[[WBSuccessNoticeView successNoticeInView:view title:title] show];
 }
 
-
 @end

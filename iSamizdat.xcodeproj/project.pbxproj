@@ -83,6 +83,7 @@
 		8776CA3A157756820099C83D /* TextReadViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8776CA38157756820099C83D /* TextReadViewController.xib */; };
 		8776CA3E157763890099C83D /* CommentsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8776CA3C157763890099C83D /* CommentsViewController.m */; };
 		8776CA3F157763890099C83D /* CommentsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8776CA3D157763890099C83D /* CommentsViewController.xib */; };
+		8776CA42157767460099C83D /* UIFont+Kolyvan.m in Sources */ = {isa = PBXBuildFile; fileRef = 8776CA41157767460099C83D /* UIFont+Kolyvan.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -218,6 +219,8 @@
 		8776CA3B157763890099C83D /* CommentsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommentsViewController.h; sourceTree = "<group>"; };
 		8776CA3C157763890099C83D /* CommentsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommentsViewController.m; sourceTree = "<group>"; };
 		8776CA3D157763890099C83D /* CommentsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CommentsViewController.xib; sourceTree = "<group>"; };
+		8776CA40157767460099C83D /* UIFont+Kolyvan.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIFont+Kolyvan.h"; sourceTree = "<group>"; };
+		8776CA41157767460099C83D /* UIFont+Kolyvan.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIFont+Kolyvan.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -235,15 +238,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		8712FF8C15749A0300C01283 /* samlib category */ = {
+		8712FF8C15749A0300C01283 /* category */ = {
 			isa = PBXGroup;
 			children = (
 				8712FF9115749A3800C01283 /* SamLibAuthor+IOS.h */,
 				8712FF9215749A3800C01283 /* SamLibAuthor+IOS.m */,
 				870BA467157515F500B71E07 /* SamLibText+IOS.h */,
 				870BA468157515F500B71E07 /* SamLibText+IOS.m */,
+				8776CA40157767460099C83D /* UIFont+Kolyvan.h */,
+				8776CA41157767460099C83D /* UIFont+Kolyvan.m */,
 			);
-			name = "samlib category";
+			name = category;
 			sourceTree = "<group>";
 		};
 		8712FFBB1574D8B600C01283 /* notice */ = {
@@ -301,7 +306,7 @@
 			isa = PBXGroup;
 			children = (
 				872D943A15737B0400BCB4EC /* Supporting Files */,
-				8712FF8C15749A0300C01283 /* samlib category */,
+				8712FF8C15749A0300C01283 /* category */,
 				872D945615737B9500BCB4EC /* views */,
 				872D944215737B0400BCB4EC /* AppDelegate.h */,
 				872D944315737B0400BCB4EC /* AppDelegate.m */,
@@ -636,6 +641,7 @@
 				8776CA2C157738670099C83D /* TableViewControllerEx.m in Sources */,
 				8776CA39157756820099C83D /* TextReadViewController.m in Sources */,
 				8776CA3E157763890099C83D /* CommentsViewController.m in Sources */,
+				8776CA42157767460099C83D /* UIFont+Kolyvan.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
