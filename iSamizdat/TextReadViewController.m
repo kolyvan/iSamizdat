@@ -9,6 +9,7 @@
 #import "TextReadViewController.h"
 #import "SamLibText.h"
 #import "SamLibAuthor.h"
+#import "SamLibAuthor+IOS.h"
 #import "KxUtils.h"
 #import "NSString+Kolyvan.h"
 #import "KxMacros.h"
@@ -54,6 +55,7 @@
     
     if (_needReload) {        
         _needReload = NO;
+        self.title = _text.author.name;
         [self reloadWebView];
     }
 }

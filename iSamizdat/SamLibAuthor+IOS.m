@@ -13,6 +13,8 @@
 #import "SamLibAuthor+IOS.h"
 #import <objc/runtime.h>
 #import "NSDictionary+Kolyvan.h"
+#import "NSString+Kolyvan.h"
+#import "NSArray+Kolyvan.h"
 
 @implementation SamLibAuthor (IOS)
 
@@ -64,6 +66,9 @@ static char gKey;
         [dict removeObjectForKey:@"hasChanged"];
 }
 
-
+- (NSString *) shortName
+{
+    return [self.name split].first;
+}
 
 @end

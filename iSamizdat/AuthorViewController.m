@@ -65,10 +65,13 @@ static UIFont* boldSystemFont = nil;
 {
     [super viewDidLoad];
     
-    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@""
-                                                                   style:UIBarButtonItemStylePlain 
-                                                                  target:nil
-                                                                  action:nil];
+    //UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@""
+    //                                                               style:UIBarButtonItemStylePlain 
+    //                                                              target:nil
+    //                                                              action:nil];
+    
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back.png"]
+                                                                   style:UIBarButtonItemStylePlain                                                                                           target:nil                                                                                            action:nil];
     
     UIBarButtonItem *infoButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose 
                                                                                 target:self 
@@ -84,7 +87,7 @@ static UIFont* boldSystemFont = nil;
     if (_needReload) {
         _needReload = NO;
         self.title = _author.name;
-        self.navigationItem.backBarButtonItem.title = [_author.name split].first;        
+        //self.navigationItem.backBarButtonItem.title = _author.shortName
         [self prepareData];
         [self.tableView reloadData];
     }

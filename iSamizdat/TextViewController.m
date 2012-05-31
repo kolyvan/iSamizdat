@@ -16,6 +16,8 @@
 #import "KxMacros.h"
 #import "KxUtils.h"
 #import "SamLibText.h"
+#import "SamLibAuthor.h"
+#import "SamLibAuthor+IOS.h"
 #import "SamLibText+IOS.h"
 #import "NSString+Kolyvan.h"
 #import "NSArray+Kolyvan.h"
@@ -109,8 +111,7 @@ enum {
     RowGenre,
     RowComments,
     RowMakeDiff,            
-    RowSaved1,
-    RowSaved2,
+    RowRead,
     RowDiff, 
 };
 
@@ -180,16 +181,15 @@ enum {
 
     self.navigationItem.rightBarButtonItem = goButton;    
     self.navigationItem.backBarButtonItem = backButton;
-    
-    self.title = locString(@"Text");
+
 }
 
 - (void) viewWillAppear:(BOOL)animated 
 {    
     [super viewWillAppear:animated];
     if (_needReload) {
-        _needReload = NO;   
-        
+        _needReload = NO;           
+        self.title = _text.author.name;        
         [self prepareData];       
         [self.tableView reloadData];
     }
@@ -231,13 +231,19 @@ enum {
         [ma push: $int(RowGenre)];
 
     [ma push: $int(RowComments)];
-        
+     
+    // fixme: below is most likely wrong code
     if (_text.htmlFile.nonEmpty) {
         
         if (_text.canUpdate)
             [ma push: $int(RowUpdate)];
         
-        [ma push: $int(RowSaved1)];
+        [ma push: $int(RowRead)];
+    } else {
+    
+        if (_text.changedSize &&
+            _text.canUpdate)
+            [ma push: $int(RowUpdate)];
     }
     
     if (_text.canMakeDiff)
@@ -288,7 +294,6 @@ enum {
 {   
     return _rows.count;    
 }
-
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {         
@@ -350,12 +355,12 @@ enum {
         cell.detailTextLabel.text = [_text commentsWithDelta: @" "];  
         return cell;
         
-    } else if (RowSaved1 == row) {
+    } else if (RowRead == row) {
         
-        UITableViewCell *cell = [self mkCell: @"SavedCell" withStyle:UITableViewCellStyleValue1];                    
+        UITableViewCell *cell = [self mkCell: @"ReadCell" withStyle:UITableViewCellStyleValue1];                    
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        cell.textLabel.text = locString(@"Saved");
-        cell.detailTextLabel.text = [_text.filetime shortRelativeFormatted];          
+        cell.textLabel.text = locString(@"The copy from");
+        cell.detailTextLabel.text = _text.dateModified;          
         return cell;
         
     } else if (RowDiff == row) {
@@ -389,7 +394,7 @@ enum {
 {
     NSInteger row = [[_rows objectAtIndex:indexPath.row] integerValue];     
     
-    if (RowSaved1 == row) {
+    if (RowRead == row) {
         
         if (!self.textReadViewController) {
             self.textReadViewController = [[TextReadViewController alloc] init];

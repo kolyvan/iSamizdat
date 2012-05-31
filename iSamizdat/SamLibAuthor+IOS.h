@@ -17,5 +17,6 @@
 
 @property (strong, nonatomic) NSString *lastError;
 @property (nonatomic) BOOL hasChangedSize;
+@property (readonly, nonatomic) NSString * shortName;
 
 @end
