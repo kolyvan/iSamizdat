@@ -22,10 +22,14 @@
 #import "TextViewController.h"
 #import "AppDelegate.h"
 #import "UIFont+Kolyvan.h"
+#import "DDLog.h"
+
+extern int ddLogLevel;
 
 @interface AuthorViewController () {
     BOOL _needReload;
     id _version;
+    NSArray * _textVersions;
     NSArray *_sections;
 }
 @property (nonatomic, strong) TextViewController *textViewController;
@@ -41,6 +45,7 @@
     if (author != _author || 
         ![author.version isEqual:_version]) {        
         
+        _textVersions = nil;
         _version = author.version;
         _author = author;
         _needReload = YES;
@@ -78,9 +83,22 @@
     if (_needReload) {
         _needReload = NO;
         self.title = _author.name;
-        //self.navigationItem.backBarButtonItem.title = _author.shortName
+        
         [self prepareData];
         [self.tableView reloadData];
+        
+    } else {
+    
+        NSArray *a = [_author.texts map:^id(id elem) {
+            return ((SamLibText *)elem).version;
+        }];
+        
+        if (![_textVersions isEqualToArray:a]) {
+            
+            _textVersions = a;
+            // todo: reload a text's row with changed version only?
+            [self.tableView reloadData];
+        }
     }
 }
 
@@ -139,6 +157,10 @@
     }
     
     _sections = sections.allValues;
+    
+    _textVersions = [_author.texts map:^id(id elem) {
+        return ((SamLibText *)elem).version;
+    }];
 }
 
 - (void) goInfo

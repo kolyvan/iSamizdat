@@ -134,8 +134,9 @@ typedef enum {
 
 - (BOOL) hasFavorites
 {
-    NSArray * favorites = [SamLibAgent.settings() get: @"favorites"];
-    return favorites.nonEmpty;
+    //NSArray * favorites = [SamLibAgent.settings() get: @"favorites"];
+    //return favorites.nonEmpty;
+    return YES;
 }
 
 - (SectionNumber) sectionMap: (NSInteger) section

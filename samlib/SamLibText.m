@@ -243,10 +243,14 @@ static NSString * prettyHtml (NSMutableArray *diffs)
     
     BOOL containts = [favorites containsObject:self.key];
     
-    if (containts && !favorited)
+    if (containts && !favorited) {
+        ++_version;
         [favorites removeObject:self.key];
-    else if (!containts && favorited)
+    }
+    else if (!containts && favorited) {
+        ++_version;
         [favorites addObject:self.key];
+    }
 }
 
 + (id) fromDictionary: (NSDictionary *) dict
