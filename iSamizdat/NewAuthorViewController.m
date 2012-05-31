@@ -51,6 +51,11 @@ extern int ddLogLevel;
 @synthesize pathLabel;
 @synthesize searchLabel;
 
+- (id) init
+{
+    return [self initWithNibName:@"NewAuthorViewController" bundle:nil];
+}
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];

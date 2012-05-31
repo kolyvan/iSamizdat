@@ -56,12 +56,9 @@ static UIFont* boldSystemFont = nil;
 	}
 }
 
-- (id)initWithStyle:(UITableViewStyle)style
+- (id) init
 {
-    self = [super initWithStyle:style];
-    if (self) {     
-    }
-    return self;
+    return [self initWithNibName:@"AuthorViewController" bundle:nil];
 }
 
 - (void)viewDidLoad
@@ -234,8 +231,7 @@ static UIFont* boldSystemFont = nil;
     if ([obj isKindOfClass:[SamLibText class]]) {
 
         if (!self.textViewController) {
-            self.textViewController = [[TextViewController alloc] initWithNibName:@"TextViewController" 
-                                                                           bundle:nil];
+            self.textViewController = [[TextViewController alloc] init];
         }
         
         self.textViewController.text = obj;

@@ -125,12 +125,9 @@ static UIFont* systemFont14 = nil;
     }
 }
 
-- (id)initWithStyle:(UITableViewStyle)style
+- (id) init
 {
-    self = [super initWithStyle:style];
-    if (self) {        
-    }
-    return self;
+    return [self initWithNibName:@"TextViewController" bundle:nil];
 }
 
 - (void)viewDidLoad

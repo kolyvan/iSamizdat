@@ -196,8 +196,7 @@ static UIFont* systemFont14 = nil;
 - (void) goAddAuthor
 {
     if (!self.addAuthorViewController) {
-        self.addAuthorViewController = [[NewAuthorViewController alloc] initWithNibName:@"NewAuthorViewController" 
-                                                                                 bundle:nil];
+        self.addAuthorViewController = [[NewAuthorViewController alloc] init];
         self.addAuthorViewController.delegate = self;
     }
     
@@ -438,8 +437,7 @@ static UIFont* systemFont14 = nil;
         if ([obj isKindOfClass:[SamLibAuthor class]]) {         
             
             if (!self.authorViewController) {
-                self.authorViewController = [[AuthorViewController alloc] initWithNibName:@"AuthorViewController" 
-                                                                                   bundle:nil];
+                self.authorViewController = [[AuthorViewController alloc] init];
             }
             self.authorViewController.author = obj;
             [self.navigationController pushViewController:self.authorViewController 
@@ -448,8 +446,7 @@ static UIFont* systemFont14 = nil;
         } else if ([obj isKindOfClass:[SamLibText class]]) {
             
             if (!self.textViewController) {
-                self.textViewController = [[TextViewController alloc] initWithNibName:@"TextViewController" 
-                                                                               bundle:nil];
+                self.textViewController = [[TextViewController alloc] init];
             }
             self.textViewController.text = obj;
             [self.navigationController pushViewController:self.textViewController 
