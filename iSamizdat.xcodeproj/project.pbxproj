@@ -81,6 +81,8 @@
 		8776CA35157751D50099C83D /* text.html in Resources */ = {isa = PBXBuildFile; fileRef = 8776CA33157751D50099C83D /* text.html */; };
 		8776CA39157756820099C83D /* TextReadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8776CA37157756820099C83D /* TextReadViewController.m */; };
 		8776CA3A157756820099C83D /* TextReadViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8776CA38157756820099C83D /* TextReadViewController.xib */; };
+		8776CA3E157763890099C83D /* CommentsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8776CA3C157763890099C83D /* CommentsViewController.m */; };
+		8776CA3F157763890099C83D /* CommentsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8776CA3D157763890099C83D /* CommentsViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -213,6 +215,9 @@
 		8776CA36157756820099C83D /* TextReadViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextReadViewController.h; sourceTree = "<group>"; };
 		8776CA37157756820099C83D /* TextReadViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextReadViewController.m; sourceTree = "<group>"; };
 		8776CA38157756820099C83D /* TextReadViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TextReadViewController.xib; sourceTree = "<group>"; };
+		8776CA3B157763890099C83D /* CommentsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommentsViewController.h; sourceTree = "<group>"; };
+		8776CA3C157763890099C83D /* CommentsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommentsViewController.m; sourceTree = "<group>"; };
+		8776CA3D157763890099C83D /* CommentsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CommentsViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -312,6 +317,8 @@
 				8776CA2B157738670099C83D /* TableViewControllerEx.m */,
 				8776CA36157756820099C83D /* TextReadViewController.h */,
 				8776CA37157756820099C83D /* TextReadViewController.m */,
+				8776CA3B157763890099C83D /* CommentsViewController.h */,
+				8776CA3C157763890099C83D /* CommentsViewController.m */,
 			);
 			path = iSamizdat;
 			sourceTree = "<group>";
@@ -331,6 +338,7 @@
 		872D945615737B9500BCB4EC /* views */ = {
 			isa = PBXGroup;
 			children = (
+				8776CA3D157763890099C83D /* CommentsViewController.xib */,
 				8776CA38157756820099C83D /* TextReadViewController.xib */,
 				8712FFD51574E65500C01283 /* TextViewController.xib */,
 				8712FFAD1574C02700C01283 /* NewAuthorViewController.xib */,
@@ -568,6 +576,7 @@
 				8776CA34157751D50099C83D /* text.css in Resources */,
 				8776CA35157751D50099C83D /* text.html in Resources */,
 				8776CA3A157756820099C83D /* TextReadViewController.xib in Resources */,
+				8776CA3F157763890099C83D /* CommentsViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -626,6 +635,7 @@
 				870BA469157515F500B71E07 /* SamLibText+IOS.m in Sources */,
 				8776CA2C157738670099C83D /* TableViewControllerEx.m in Sources */,
 				8776CA39157756820099C83D /* TextReadViewController.m in Sources */,
+				8776CA3E157763890099C83D /* CommentsViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
