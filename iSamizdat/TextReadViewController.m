@@ -109,23 +109,15 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
 - (void) viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    
-    if (_needRestoreOffset) {
-        _needRestoreOffset = NO;        
-        CGFloat y = _text.htmlOffset;
-        if (y > 0) {            
-            //DDLogInfo(@"restore offset %f", y);
-            [_webView.scrollView setContentOffset:CGPointMake(0, y) 
-                                         animated:NO]; 
-        }
-    }
 }
 
 - (void) viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
    
-    CGFloat y = MAX(0, _webView.scrollView.contentOffset.y);
+    CGFloat y = _webView.scrollView.contentOffset.y;
+    if (y < 10) 
+        y = 0;
     _text.htmlOffset = y;
     //DDLogInfo(@"store offset %f", y);    
 }
@@ -142,6 +134,19 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
 }
 
 #pragma mark - private
+
+- (void) restoreOffset
+{
+    if (_needRestoreOffset) {
+        _needRestoreOffset = NO;        
+        CGFloat y = _text.htmlOffset;
+        if (y > 0) {            
+            //DDLogInfo(@"restore offset %f", y);
+            [_webView.scrollView setContentOffset:CGPointMake(0, y) 
+                                         animated:YES]; 
+        }
+    }
+}
 
 - (void) reloadWebView
 {    
@@ -195,6 +200,7 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
     [self prepareHTML];
+    [self restoreOffset];
 }
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
