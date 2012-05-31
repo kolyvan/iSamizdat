@@ -134,26 +134,6 @@ enum {
     }
 }
 
-+ (NSString *) mkHTMLPage: (NSString *) html
-{
-    NSString *path = KxUtils.pathForResource(@"text.html");
-    NSError *error;
-    NSString *template = [NSString stringWithContentsOfFile:path 
-                                                   encoding:NSUTF8StringEncoding 
-                                                      error:&error];            
-    if (!template.nonEmpty) {
-        DDLogCWarn(@"file error %@", 
-                   KxUtils.completeErrorMessage(error));
-        return html;                
-    }
-    
-    // replase css link from relative to absolute         
-    template = [template stringByReplacingOccurrencesOfString:@"text.css" 
-                                                   withString:KxUtils.pathForResource(@"text.css")];
-    
-    return [template stringByReplacingOccurrencesOfString:@"<!-- DOWNLOADED_TEXT -->" 
-                                               withString:html];
-}
 
 - (id) init
 {
@@ -265,7 +245,9 @@ enum {
         
     }
          progress: nil
-        formatter: ^(NSString * html) { return [self->isa mkHTMLPage: html]; } 
+        formatter: ^(SamLibText *text, NSString * html) { 
+            return mkHTMLPage(text, html); 
+        } 
      ];
 
 }
@@ -369,7 +351,7 @@ enum {
         
         UITableViewCell *cell = [self mkCell: @"ReadCell" withStyle:UITableViewCellStyleValue1];                    
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        cell.textLabel.text = locString(@"The copy from");
+        cell.textLabel.text = locString(@"The text from");
         cell.detailTextLabel.text = _text.dateModified;          
         return cell;
         

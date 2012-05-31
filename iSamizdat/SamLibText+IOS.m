@@ -11,6 +11,7 @@
 // 
 
 #import "SamLibText+IOS.h"
+#import "NSDictionary+Kolyvan.h"
 
 @implementation SamLibText (IOS)
 
@@ -34,6 +35,30 @@
     } else {
         
         return self.favoritedImage;
+    }
+}
+
+- (CGFloat) htmlOffset
+{
+    NSDictionary* dict = [SamLibAgent.settings() get: @"htmlOffset"];    
+    return [[dict get:self.key] floatValue];    
+}
+
+- (void) setHtmlOffset:(CGFloat)offset
+{
+    NSMutableDictionary * dict = [SamLibAgent.settings() get: @"htmlOffset" 
+                                                       orSet:^id{
+                                                           return [NSMutableDictionary dictionary];
+                                                       }];
+    
+    CGFloat old = [[dict get:self.key] floatValue]; 
+    
+    if (old != offset) {
+        //++_version;
+        if (offset > 0)
+            [dict update:self.key value:[NSNumber numberWithFloat:offset]];
+        else
+            [dict removeObjectForKey:self.key];
     }
 }
 

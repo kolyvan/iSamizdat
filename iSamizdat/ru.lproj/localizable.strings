@@ -21,4 +21,6 @@
 "Comments" = "Комментарии";
 "Saved copy" = "Сохраненная копия";
 "The copy from" = "Копия от";
+"The text from" = "Текст от";
 "Read" = "Читать";
+"new version: %@" = "можно загрузить: %@";

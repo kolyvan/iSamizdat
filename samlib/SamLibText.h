@@ -16,6 +16,7 @@
 #import "SamLibAgent.h"
 
 typedef void (^UpdateTextBlock)(SamLibText *text, SamLibStatus status, NSString *error);
+typedef NSString *(^TextFormatter)(SamLibText *text, NSString *s);
 
 typedef enum {
     
@@ -127,9 +128,9 @@ typedef enum {
 
 - (void) update: (UpdateTextBlock) block 
        progress: (AsyncProgressBlock) progress
-      formatter: (NSString *(^)(NSString *)) formatter;
+      formatter: (TextFormatter) formatter;
 
-- (void) makeDiff: (NSString *(^)(NSString *)) formatter;
+- (void) makeDiff: (TextFormatter) formatter;
 
 - (SamLibComments *) commentsObject: (BOOL) forceLoad;
 

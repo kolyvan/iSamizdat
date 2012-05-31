@@ -8,14 +8,57 @@
 
 #import "TextReadViewController.h"
 #import "SamLibText.h"
+#import "SamLibText+IOS.h"
 #import "SamLibAuthor.h"
 #import "SamLibAuthor+IOS.h"
 #import "KxUtils.h"
 #import "NSString+Kolyvan.h"
+#import "NSDate+Kolyvan.h"
+#import "NSDictionary+Kolyvan.h"
 #import "KxMacros.h"
+#import "DDLog.h"
+
+extern int ddLogLevel;
+
+NSString * mkHTMLPage(SamLibText * text, NSString * html)
+{
+    NSString *path = KxUtils.pathForResource(@"text.html");
+    NSError *error;
+    NSString *template = [NSString stringWithContentsOfFile:path 
+                                                   encoding:NSUTF8StringEncoding 
+                                                      error:&error];            
+    if (!template.nonEmpty) {
+        DDLogCWarn(@"file error %@", 
+                   KxUtils.completeErrorMessage(error));
+        return html;                
+    }
+    
+    // replase css link from relative to absolute         
+    template = [template stringByReplacingOccurrencesOfString:@"text.css" 
+                                                   withString:KxUtils.pathForResource(@"text.css")];
+    
+    template = [template stringByReplacingOccurrencesOfString:@"<!-- TEXT_DATE -->" 
+                                                   withString:text.dateModified];
+    
+    template = [template stringByReplacingOccurrencesOfString:@"<!-- TEXT_SIZE -->" 
+                                                   withString:[text sizeWithDelta:@" "]];
+    
+    template = [template stringByReplacingOccurrencesOfString:@"<!-- TEXT_RATING -->" 
+                                                   withString:[text ratingWithDelta:@" "]];
+    
+    if (text.note.nonEmpty)
+        template = [template stringByReplacingOccurrencesOfString:@"<!-- TEXT_NOTE -->" 
+                                                       withString:text.note];
+    
+    return [template stringByReplacingOccurrencesOfString:@"<!-- DOWNLOADED_TEXT -->" 
+                                               withString:html];
+}
+
+/////
 
 @interface TextReadViewController () {
     BOOL _needReload;
+    BOOL _needRestoreOffset;
     id _version;
 }
 @property (nonatomic, strong) IBOutlet UIWebView * webView;
@@ -34,7 +77,7 @@
         
         _version = text.version;
         _text = text;
-        _needReload = YES;
+        _needReload = YES;        
     }
 }
 
@@ -55,9 +98,36 @@
     
     if (_needReload) {        
         _needReload = NO;
+        _needRestoreOffset = YES;
         self.title = _text.author.name;
         [self reloadWebView];
+        //DDLogInfo(@"reload text %@", _text.path);           
     }
+}
+
+
+- (void) viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    if (_needRestoreOffset) {
+        _needRestoreOffset = NO;        
+        CGFloat y = _text.htmlOffset;
+        if (y > 0) {            
+            //DDLogInfo(@"restore offset %f", y);
+            [_webView.scrollView setContentOffset:CGPointMake(0, y) 
+                                         animated:NO]; 
+        }
+    }
+}
+
+- (void) viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+   
+    CGFloat y = MAX(0, _webView.scrollView.contentOffset.y);
+    _text.htmlOffset = y;
+    //DDLogInfo(@"store offset %f", y);    
 }
 
 - (void)viewDidUnload
@@ -109,21 +179,15 @@
     if (_text.genre.nonEmpty)    
         [self selElement:@"textGenre" value:_text.genre];
     
-    if (_text.dateModified.nonEmpty)        
-        [self selElement:@"textDate" value:_text.dateModified];                    
-    
-    if (_text.note.nonEmpty)
-        [self selElement:@"textNote" value:_text.note];  
-    
-    [self selElement:@"textSize" value:[_text sizeWithDelta:@" "]];    
-    [self selElement:@"textRating" value:[_text ratingWithDelta:@" "]];                        
+    [self selElement:@"textFiletime" value:[_text.filetime shortRelativeFormatted]];                        
     
     [self selElement:@"commentsCount" value:[_text commentsWithDelta:@" "]];  
     
-    if (_text.canUpdate)
+    if (_text.canUpdate) {
+         NSString *s = KxUtils.format(locString(@"new version: %@"), [_text sizeWithDelta:@" "]);
         [self selElement:@"textReload"
-                   value:locString(@"a new version is available")];
-    
+                   value:s];
+    }
 }
 
 #pragma mark - UIWebView delegate

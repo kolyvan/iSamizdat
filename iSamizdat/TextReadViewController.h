@@ -13,3 +13,6 @@
 @interface TextReadViewController : UIViewController<UIWebViewDelegate>
 @property (nonatomic, strong) SamLibText *text;
 @end
+
+
+extern NSString * mkHTMLPage(SamLibText * text, NSString * html);

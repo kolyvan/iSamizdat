@@ -529,7 +529,7 @@ static NSString * prettyHtml (NSMutableArray *diffs)
     return r;
 }
 
-- (void) makeDiff: (NSString *(^)(NSString *)) formatter
+- (void) makeDiff: (TextFormatter) formatter
 { 
 #ifndef __IPHONE_OS_VERSION_MAX_ALLOWED    
     NSString *old = [NSString stringWithContentsOfFile:self.oldPath
@@ -544,7 +544,6 @@ static NSString * prettyHtml (NSMutableArray *diffs)
     
     if (!old || !now)
         return;
-    
     
     DiffMatchPatch *dmp = [DiffMatchPatch new];
     dmp.Diff_Timeout = 5.0;        
@@ -565,7 +564,7 @@ static NSString * prettyHtml (NSMutableArray *diffs)
         // yes any diff is found
         NSString *pretty = prettyHtml(result);
         
-        NSString *diff = formatter ? formatter(pretty) : pretty;        
+        NSString *diff = formatter ? formatter(self, pretty) : pretty;        
         
         // save .diff
         NSError *error; 
@@ -579,25 +578,24 @@ static NSString * prettyHtml (NSMutableArray *diffs)
         }
         else {
         
-            // delete .old 
-            NSFileManager *fm = [[NSFileManager alloc] init];
-            [fm removeItemAtPath:self.oldPath error:nil];
-            KX_RELEASE(fm);
-            
+            self.diffResult = KxUtils.format(@"%ld/%ld", delDiffs, insDiffs);            
         }
-        
-        self.diffResult = KxUtils.format(@"%ld/%ld", delDiffs, insDiffs);
     } 
     
     KX_RELEASE(dmp); 
     
-    DDLogCInfo(@"Diff elapsed time: %.4lf count: %ld dels: %ld ins: %ld", 
+    // delete .old, for preventing next try
+    NSFileManager *fm = [[NSFileManager alloc] init];
+    [fm removeItemAtPath:self.oldPath error:nil];
+    KX_RELEASE(fm);
+        
+    DDLogInfo(@"Diff elapsed time: %.4lf count: %ld dels: %ld ins: %ld", 
                (double)duration, result.count, delDiffs, insDiffs);
 #endif    
 }
 
 - (void) saveHTML: (NSString *) data
-        formatter: (NSString *(^)(NSString *)) formatter
+        formatter: (TextFormatter) formatter
 {       
     NSError *error;
     
@@ -649,7 +647,7 @@ static NSString * prettyHtml (NSMutableArray *diffs)
     }  
     
     // save .html
-    NSString *html = formatter ? formatter(data) : data;
+    NSString *html = formatter ? formatter(self, data) : data;
     if ([html writeToFile:self.htmlPath
                atomically:NO 
                  encoding:NSUTF8StringEncoding
@@ -672,7 +670,7 @@ static NSString * prettyHtml (NSMutableArray *diffs)
 
 - (void) update: (UpdateTextBlock) block 
        progress: (AsyncProgressBlock) progress
-      formatter: (NSString *(^)(NSString *)) formatter;
+      formatter: (TextFormatter) formatter;
 {    
 #if __has_feature(objc_arc_weak)    
     __weak SamLibText *this = self;

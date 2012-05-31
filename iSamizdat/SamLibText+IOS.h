@@ -17,5 +17,6 @@
 
 @property (nonatomic, readonly) UIImage * favoritedImage;
 @property (nonatomic, readonly) UIImage * image;
+@property (nonatomic) CGFloat htmlOffset;
 
 @end
