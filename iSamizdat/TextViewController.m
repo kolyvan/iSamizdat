@@ -11,6 +11,7 @@
 // 
 
 #import "TextViewController.h"
+#import "KxArc.h"
 #import "SamLibText.h"
 #import "SamLibText+IOS.h"
 #import "KxMacros.h"
@@ -68,7 +69,7 @@ static UIFont* systemFont14 = nil;
 
 @interface TitleCell : UITableViewCell
 
-@property (weak, nonatomic) TextViewController *controller;
+@property (nonatomic, KX_PROP_WEAK) TextViewController *controller;
 
 @end
 

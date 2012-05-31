@@ -11,6 +11,7 @@
 // 
 
 #import <UIKit/UIKit.h>
+#import "KxArc.h"
 
 @class SamLibAuthor;
 
@@ -19,5 +20,5 @@
 @end
 
 @interface NewAuthorViewController : UIViewController<UITableViewDelegate, UITableViewDataSource>
-@property (nonatomic, weak) id<NewAuthorViewDelegate> delegate;
+@property (nonatomic, KX_PROP_WEAK) id<NewAuthorViewDelegate> delegate;
 @end
