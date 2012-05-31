@@ -116,8 +116,10 @@ extern int ddLogLevel;
     NSMutableString *ms = [NSMutableString string];    
     [ms appendString: [self.timestamp description]];
     [ms appendString: self.lastModified];
-    for (SamLibText *p in _texts)
-        [ms appendString: [p.timestamp description]];                
+    for (SamLibText *p in _texts) {
+//        [ms appendString: [p.timestamp description]];                
+        [ms appendString: [p.version description]];
+    }
     return [ms md5];
 }
 

@@ -11,10 +11,11 @@
 // 
 
 #import <UIKit/UIKit.h>
+#import "TableViewControllerEx.h"
 
 @class SamLibText;
 
-@interface TextViewController : UITableViewController
+@interface TextViewController : TableViewControllerEx
 
 @property (nonatomic, strong) SamLibText *text;
 

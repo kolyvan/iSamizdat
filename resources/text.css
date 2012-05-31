@@ -1,0 +1,61 @@
+.main {    
+    font-family: Lucida Grande;
+}
+
+.info .title {
+	text-align:center;
+	padding: 0em 1em 0em 1em;		
+}
+
+.info .title .copyright {	
+	font-size: 1.2em;
+	font-weight: bold;		
+}
+
+.info .title .name {	
+	font-size: 1.2em;
+	font-weight: bold;		
+}
+
+.info .title .group {	
+	
+}
+
+.info .subinfo {
+	font-size: 0.8em;
+	color:black;
+	margin: 1em 1em 1em 1em;
+	padding: 1em 0em 1em 0em;    
+    border-top: 1px dotted #555;
+    border-bottom: 1px dotted #555;    
+}
+
+.info .subinfo div span {
+	color:#00008B;
+}
+
+.info .subinfo .rating {
+
+}
+
+.info .subinfo .date {
+
+}
+
+.info .subinfo .note {
+    padding: 1em 0em 1em 0em;		
+}
+
+.info .actions {
+	text-align:center;
+}
+
+.info .updated  {
+	color:blue;
+}
+
+.text {
+	border-style-top:solid;
+	padding: 1em 1em 1em 1em;
+	font-size: 0.8em;
+}

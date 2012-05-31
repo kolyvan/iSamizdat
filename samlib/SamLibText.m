@@ -652,6 +652,7 @@ static NSString * prettyHtml (NSMutableArray *diffs)
                     error:&error]) {
         
         
+         ++_version;
         self.filetime = [NSDate date];
         
     } else {
