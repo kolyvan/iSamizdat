@@ -52,7 +52,7 @@ int ddLogLevel = LOG_LEVEL_WARN;
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 
-    MainViewController *viewController = [[MainViewController alloc] initWithNibName:@"MainViewController" bundle:nil];
+    MainViewController *viewController = [[MainViewController alloc] init];
     self.navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
     self.window.rootViewController = self.navigationController;
     [self.window makeKeyAndVisible];

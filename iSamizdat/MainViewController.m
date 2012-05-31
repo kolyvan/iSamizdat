@@ -24,6 +24,7 @@
 #import "KxTuple2.h"
 #import "AppDelegate.h"
 #import "AuthorViewController.h"
+#import "TextViewController.h"
 #import "DDLog.h"
 
 extern int ddLogLevel;
@@ -47,6 +48,7 @@ typedef enum {
 @property (nonatomic, strong) UIBarButtonItem *addButton;
 @property (nonatomic, strong) NewAuthorViewController *addAuthorViewController;
 @property (nonatomic, strong) AuthorViewController* authorViewController;
+@property (nonatomic, strong) TextViewController* textViewController;
 
 @end
 
@@ -58,6 +60,7 @@ typedef enum {
 @synthesize addButton;
 @synthesize addAuthorViewController;
 @synthesize authorViewController;
+@synthesize textViewController;
 
 static UIFont* systemFont14 = nil;
 
@@ -67,6 +70,11 @@ static UIFont* systemFont14 = nil;
 	{		
 		systemFont14 = [UIFont systemFontOfSize:14];     
 	}
+}
+
+- (id) init
+{
+    return [self initWithNibName:@"MainViewController" bundle:nil];
 }
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -114,6 +122,7 @@ static UIFont* systemFont14 = nil;
     self.navigationItem.rightBarButtonItem = nil;
     self.addButton = nil;
     self.addAuthorViewController = nil;
+    self.textViewController = nil;
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -127,6 +136,7 @@ static UIFont* systemFont14 = nil;
     
     self.addAuthorViewController = nil;
     self.authorViewController = nil;
+    self.textViewController = nil;
 }
 
 #pragma mark - private functions
@@ -431,9 +441,18 @@ static UIFont* systemFont14 = nil;
                 self.authorViewController = [[AuthorViewController alloc] initWithNibName:@"AuthorViewController" 
                                                                                    bundle:nil];
             }
-            
             self.authorViewController.author = obj;
             [self.navigationController pushViewController:self.authorViewController 
+                                                 animated:YES];
+            
+        } else if ([obj isKindOfClass:[SamLibText class]]) {
+            
+            if (!self.textViewController) {
+                self.textViewController = [[TextViewController alloc] initWithNibName:@"TextViewController" 
+                                                                               bundle:nil];
+            }
+            self.textViewController.text = obj;
+            [self.navigationController pushViewController:self.textViewController 
                                                  animated:YES];
         }
     } 
