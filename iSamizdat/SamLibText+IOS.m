@@ -19,4 +19,22 @@
     return [UIImage imageNamed: self.favorited ? @"favorite.png" : @"favorite-off.png"];        
 }
 
+- (UIImage *) image
+{
+    // todo: new and removed
+    
+    if (self.changedSize) {
+        
+        return [UIImage imageNamed:@"size_changed.png"];
+        
+    } else if (self.changedComments) {
+        
+        return [UIImage imageNamed:@"comment.png"];     
+        
+    } else {
+        
+        return self.favoritedImage;
+    }
+}
+
 @end

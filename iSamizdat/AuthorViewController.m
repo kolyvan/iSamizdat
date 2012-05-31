@@ -213,20 +213,8 @@ extern int ddLogLevel;
         cell.textLabel.text = text.title;
         cell.textLabel.numberOfLines = 2;
         cell.textLabel.font = [UIFont boldSystemFont16];
+        cell.imageView.image = text.image;        
         
-        if (text.changedSize) {
-            
-            cell.imageView.image = [UIImage imageNamed:@"size_changed.png"];
-            
-        } else if (text.changedComments) {
-            
-            cell.imageView.image = [UIImage imageNamed:@"comment.png"];     
-            
-        } else {
-            
-            cell.imageView.image = text.favoritedImage;
-        }
-
         return cell;        
     } 
     

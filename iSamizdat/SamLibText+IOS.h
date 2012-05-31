@@ -16,5 +16,6 @@
 @interface SamLibText (IOS)
 
 @property (nonatomic, readonly) UIImage * favoritedImage;
+@property (nonatomic, readonly) UIImage * image;
 
 @end

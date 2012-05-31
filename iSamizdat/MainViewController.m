@@ -25,6 +25,7 @@
 #import "AppDelegate.h"
 #import "AuthorViewController.h"
 #import "TextViewController.h"
+#import "FavoritesViewController.h"
 #import "UIFont+Kolyvan.h"
 #import "DDLog.h"
 
@@ -50,6 +51,7 @@ typedef enum {
 @property (nonatomic, strong) NewAuthorViewController *addAuthorViewController;
 @property (nonatomic, strong) AuthorViewController* authorViewController;
 @property (nonatomic, strong) TextViewController* textViewController;
+@property (nonatomic, strong) FavoritesViewController* favoritesViewController;
 
 @end
 
@@ -62,6 +64,7 @@ typedef enum {
 @synthesize addAuthorViewController;
 @synthesize authorViewController;
 @synthesize textViewController;
+@synthesize favoritesViewController;
 
 - (id) init
 {
@@ -114,6 +117,7 @@ typedef enum {
     self.addButton = nil;
     self.addAuthorViewController = nil;
     self.textViewController = nil;
+    self.favoritesViewController = nil;
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -128,6 +132,7 @@ typedef enum {
     self.addAuthorViewController = nil;
     self.authorViewController = nil;
     self.textViewController = nil;
+    self.favoritesViewController = nil;    
 }
 
 #pragma mark - private functions
@@ -424,7 +429,16 @@ typedef enum {
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSInteger section = [self sectionMap:indexPath.section];
-    if (section == AuthorSectionNumber) {
+    
+    if (section == FavoritesSectionNumber) {
+                
+        if (!self.favoritesViewController) {
+            self.favoritesViewController = [[FavoritesViewController alloc] init];        
+        }
+        [self.navigationController pushViewController:self.favoritesViewController 
+                                             animated:YES];
+        
+    } else if (section == AuthorSectionNumber) {
         id obj = [self.content objectAtIndex:indexPath.row];         
         if ([obj isKindOfClass:[SamLibAuthor class]]) {         
             

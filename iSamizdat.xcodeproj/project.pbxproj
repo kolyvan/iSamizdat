@@ -84,6 +84,8 @@
 		8776CA3E157763890099C83D /* CommentsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8776CA3C157763890099C83D /* CommentsViewController.m */; };
 		8776CA3F157763890099C83D /* CommentsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8776CA3D157763890099C83D /* CommentsViewController.xib */; };
 		8776CA42157767460099C83D /* UIFont+Kolyvan.m in Sources */ = {isa = PBXBuildFile; fileRef = 8776CA41157767460099C83D /* UIFont+Kolyvan.m */; };
+		8776CA4615776EC50099C83D /* FavoritesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8776CA4415776EC50099C83D /* FavoritesViewController.m */; };
+		8776CA4715776EC50099C83D /* FavoritesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8776CA4515776EC50099C83D /* FavoritesViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -221,6 +223,9 @@
 		8776CA3D157763890099C83D /* CommentsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CommentsViewController.xib; sourceTree = "<group>"; };
 		8776CA40157767460099C83D /* UIFont+Kolyvan.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIFont+Kolyvan.h"; sourceTree = "<group>"; };
 		8776CA41157767460099C83D /* UIFont+Kolyvan.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIFont+Kolyvan.m"; sourceTree = "<group>"; };
+		8776CA4315776EC50099C83D /* FavoritesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FavoritesViewController.h; sourceTree = "<group>"; };
+		8776CA4415776EC50099C83D /* FavoritesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FavoritesViewController.m; sourceTree = "<group>"; };
+		8776CA4515776EC50099C83D /* FavoritesViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FavoritesViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -324,6 +329,8 @@
 				8776CA37157756820099C83D /* TextReadViewController.m */,
 				8776CA3B157763890099C83D /* CommentsViewController.h */,
 				8776CA3C157763890099C83D /* CommentsViewController.m */,
+				8776CA4315776EC50099C83D /* FavoritesViewController.h */,
+				8776CA4415776EC50099C83D /* FavoritesViewController.m */,
 			);
 			path = iSamizdat;
 			sourceTree = "<group>";
@@ -343,6 +350,7 @@
 		872D945615737B9500BCB4EC /* views */ = {
 			isa = PBXGroup;
 			children = (
+				8776CA4515776EC50099C83D /* FavoritesViewController.xib */,
 				8776CA3D157763890099C83D /* CommentsViewController.xib */,
 				8776CA38157756820099C83D /* TextReadViewController.xib */,
 				8712FFD51574E65500C01283 /* TextViewController.xib */,
@@ -582,6 +590,7 @@
 				8776CA35157751D50099C83D /* text.html in Resources */,
 				8776CA3A157756820099C83D /* TextReadViewController.xib in Resources */,
 				8776CA3F157763890099C83D /* CommentsViewController.xib in Resources */,
+				8776CA4715776EC50099C83D /* FavoritesViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -642,6 +651,7 @@
 				8776CA39157756820099C83D /* TextReadViewController.m in Sources */,
 				8776CA3E157763890099C83D /* CommentsViewController.m in Sources */,
 				8776CA42157767460099C83D /* UIFont+Kolyvan.m in Sources */,
+				8776CA4615776EC50099C83D /* FavoritesViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
