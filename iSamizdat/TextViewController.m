@@ -21,6 +21,7 @@
 #import "NSArray+Kolyvan.h"
 #import "NSDate+Kolyvan.h"
 #import "FastCell.h"
+#import "TextReadViewController.h"
 #import "DDLog.h"
 
 extern int ddLogLevel;
@@ -74,9 +75,7 @@ static UIFont* systemFont14 = nil;
 ////
 
 @interface TitleCell : UITableViewCell
-
 @property (nonatomic, KX_PROP_WEAK) TextViewController *controller;
-
 @end
 
 @implementation TitleCell
@@ -120,11 +119,15 @@ enum {
     id _version;
     NSArray *_rows;
 }
+
+@property (nonatomic, strong) TextReadViewController *textReadViewController;
+
 @end
 
 @implementation TextViewController
 
 @synthesize text = _text;
+@synthesize textReadViewController;
 
 - (void) setText:(SamLibText *)text 
 {    
@@ -171,7 +174,12 @@ enum {
                                                                                target:self 
                                                                                action:@selector(goRead)];
     
-    self.navigationItem.rightBarButtonItem = goButton;
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back.png"]
+                                                                   style:UIBarButtonItemStylePlain                                                                                           target:nil                                                                                            action:nil];
+    
+
+    self.navigationItem.rightBarButtonItem = goButton;    
+    self.navigationItem.backBarButtonItem = backButton;
     
     self.title = locString(@"Text");
 }
@@ -191,6 +199,14 @@ enum {
 {
     [super viewDidUnload];
     self.navigationItem.rightBarButtonItem = nil;
+    self.navigationItem.backBarButtonItem = nil;
+    self.textReadViewController = nil;
+}
+
+- (void) didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];         
+    self.textReadViewController = nil;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -216,9 +232,6 @@ enum {
 
     [ma push: $int(RowComments)];
         
-    if (_text.canMakeDiff)
-        [ma push: $int(RowMakeDiff)];
-
     if (_text.htmlFile.nonEmpty) {
         
         if (_text.canUpdate)
@@ -226,6 +239,9 @@ enum {
         
         [ma push: $int(RowSaved1)];
     }
+    
+    if (_text.canMakeDiff)
+        [ma push: $int(RowMakeDiff)];
 
     if (_text.diffFile.nonEmpty)
         [ma push: $int(RowDiff)];
@@ -275,9 +291,7 @@ enum {
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // if (indexPath.section == 0) 
-        
+{         
     NSInteger row = [[_rows objectAtIndex:indexPath.row] integerValue];    
         
     if (RowNote == row) { 
@@ -370,5 +384,22 @@ enum {
 
 
 #pragma mark - Table view delegate
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSInteger row = [[_rows objectAtIndex:indexPath.row] integerValue];     
+    
+    if (RowSaved1 == row) {
+        
+        if (!self.textReadViewController) {
+            self.textReadViewController = [[TextReadViewController alloc] init];
+        }
+        
+        self.textReadViewController.text = _text;
+        [self.navigationController pushViewController:self.textReadViewController 
+                                             animated:YES]; 
+    }
+}
+
 
 @end

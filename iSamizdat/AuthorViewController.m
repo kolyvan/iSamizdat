@@ -98,6 +98,12 @@ static UIFont* boldSystemFont = nil;
     self.navigationItem.rightBarButtonItem = nil;
 }
 
+- (void) didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];         
+    self.textViewController = nil;
+}
+
 #pragma mark - private
 
 - (void) prepareData
