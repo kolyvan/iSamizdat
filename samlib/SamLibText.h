@@ -111,7 +111,7 @@ typedef enum {
 
 @property (readonly, nonatomic) NSString * groupEx;
 @property (readwrite, nonatomic) BOOL favorited;
-
+@property (nonatomic) CGFloat scrollOffset;
 
 + (id) fromDictionary: (NSDictionary *) dict 
            withAuthor: (SamLibAuthor *) author;

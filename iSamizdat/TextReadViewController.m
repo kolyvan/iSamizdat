@@ -113,13 +113,14 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
 - (void) viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-   
+       
+    CGFloat offset = 0;
     CGFloat value = _webView.scrollView.contentOffset.y;
-    if (value < 10) 
-        value = 0;    
-    CGFloat size = _webView.scrollView.contentSize.height;
-    CGFloat offset = value / size;
-    _text.htmlOffset = offset;
+    if (value > 10) {
+        CGFloat size = _webView.scrollView.contentSize.height;
+        offset = value / size;
+    }
+    _text.scrollOffset = offset;
     //DDLogInfo(@"store offset %f", offset);    
 }
 
@@ -140,15 +141,14 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
 {
     if (_needRestoreOffset) {
         _needRestoreOffset = NO;        
-        CGFloat offset = _text.htmlOffset;
-        if (offset > 0) {       
-            
-            //DDLogInfo(@"restore offset %f", offset); 
-            CGRect frame = _webView.scrollView.frame;
+        CGFloat offset = _text.scrollOffset;
+        if (offset > 0) {                   
+            //DDLogInfo(@"restore offset %f", offset);             
             CGFloat size = _webView.scrollView.contentSize.height;
-            frame.origin.y = offset * size;                                
-            [_webView.scrollView scrollRectToVisible:frame animated:NO];            
-            //[_webView.scrollView setContentOffset:CGPointMake(0, y) animated:YES]; 
+            //CGRect frame = _webView.scrollView.frame;            
+            //frame.origin.y = offset * size;                                
+            //[_webView.scrollView scrollRectToVisible:frame animated:NO];            
+            [_webView.scrollView setContentOffset:CGPointMake(0, offset * size) animated:NO]; 
         }
     }
 }

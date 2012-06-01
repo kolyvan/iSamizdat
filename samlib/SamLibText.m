@@ -253,6 +253,30 @@ static NSString * prettyHtml (NSMutableArray *diffs)
     }
 }
 
+- (CGFloat) scrollOffset
+{
+    NSDictionary* dict = [SamLibAgent.settings() get: @"scrollOffset"];    
+    return [[dict get:self.key] floatValue];    
+}
+
+- (void) setScrollOffset:(CGFloat)offset
+{
+    NSMutableDictionary * dict = [SamLibAgent.settings() get: @"scrollOffset" 
+                                                       orSet:^id{
+                                                           return [NSMutableDictionary dictionary];
+                                                       }];
+    
+    CGFloat old = [[dict get:self.key] floatValue]; 
+    
+    if (old != offset) {
+        //++_version;
+        if (offset > 0)
+            [dict update:self.key value:[NSNumber numberWithFloat:offset]];
+        else
+            [dict removeObjectForKey:self.key];
+    }
+}
+
 + (id) fromDictionary: (NSDictionary *) dict
            withAuthor: (SamLibAuthor *) author;
 {
