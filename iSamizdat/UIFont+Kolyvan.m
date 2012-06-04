@@ -10,6 +10,16 @@
 
 @implementation UIFont (Kolyvan)
 
++ (UIFont *) systemFont12
+{
+    static UIFont * systemFont12;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        systemFont12 = [UIFont systemFontOfSize:12];    
+    });    
+    return systemFont12;
+}
+
 + (UIFont *) systemFont14
 {
     static UIFont * systemFont14;

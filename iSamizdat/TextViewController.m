@@ -24,6 +24,7 @@
 #import "NSDate+Kolyvan.h"
 #import "FastCell.h"
 #import "TextReadViewController.h"
+#import "CommentsViewController.h"
 #import "UIFont+Kolyvan.h"
 #import "DDLog.h"
 
@@ -115,6 +116,8 @@ enum {
 }
 
 @property (nonatomic, strong) TextReadViewController *textReadViewController;
+@property (nonatomic, strong) CommentsViewController *commentsViewController;
+
 
 @end
 
@@ -122,6 +125,7 @@ enum {
 
 @synthesize text = _text;
 @synthesize textReadViewController;
+@synthesize commentsViewController;
 
 - (void) setText:(SamLibText *)text 
 {    
@@ -174,12 +178,14 @@ enum {
     self.navigationItem.rightBarButtonItem = nil;
     self.navigationItem.backBarButtonItem = nil;
     self.textReadViewController = nil;
+    self.commentsViewController = nil;
 }
 
 - (void) didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];         
     self.textReadViewController = nil;
+    self.commentsViewController = nil;    
 }
 
 #pragma mark - private
@@ -389,6 +395,16 @@ enum {
         
         self.textReadViewController.text = _text;
         [self.navigationController pushViewController:self.textReadViewController 
+                                             animated:YES]; 
+        
+    } else if (RowComments == row) {
+        
+        if (!self.commentsViewController) {
+            self.commentsViewController = [[CommentsViewController alloc] init];
+        }
+        
+        self.commentsViewController.comments = [_text commentsObject:YES];
+        [self.navigationController pushViewController:self.commentsViewController 
                                              animated:YES]; 
     }
 }

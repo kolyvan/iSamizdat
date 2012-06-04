@@ -76,6 +76,9 @@
 		872D958A1573AB5600BCB4EC /* SSPullToRefreshDefaultContentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D95851573AB5600BCB4EC /* SSPullToRefreshDefaultContentView.m */; };
 		872D958B1573AB5600BCB4EC /* SSPullToRefreshSimpleContentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D95871573AB5600BCB4EC /* SSPullToRefreshSimpleContentView.m */; };
 		872D958C1573AB5600BCB4EC /* SSPullToRefreshView.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D95891573AB5600BCB4EC /* SSPullToRefreshView.m */; };
+		87546F27157C888000DE58DD /* CommentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 87546F26157C888000DE58DD /* CommentCell.m */; };
+		87546F2B157C895C00DE58DD /* TextLine.m in Sources */ = {isa = PBXBuildFile; fileRef = 87546F2A157C895C00DE58DD /* TextLine.m */; };
+		87546F2E157C8A7200DE58DD /* SamLibComment+IOS.m in Sources */ = {isa = PBXBuildFile; fileRef = 87546F2D157C8A7200DE58DD /* SamLibComment+IOS.m */; };
 		8776CA2C157738670099C83D /* TableViewControllerEx.m in Sources */ = {isa = PBXBuildFile; fileRef = 8776CA2B157738670099C83D /* TableViewControllerEx.m */; };
 		8776CA34157751D50099C83D /* text.css in Resources */ = {isa = PBXBuildFile; fileRef = 8776CA32157751D50099C83D /* text.css */; };
 		8776CA35157751D50099C83D /* text.html in Resources */ = {isa = PBXBuildFile; fileRef = 8776CA33157751D50099C83D /* text.html */; };
@@ -211,6 +214,12 @@
 		872D95871573AB5600BCB4EC /* SSPullToRefreshSimpleContentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SSPullToRefreshSimpleContentView.m; path = vendors/refresh/SSPullToRefreshSimpleContentView.m; sourceTree = "<group>"; };
 		872D95881573AB5600BCB4EC /* SSPullToRefreshView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SSPullToRefreshView.h; path = vendors/refresh/SSPullToRefreshView.h; sourceTree = "<group>"; };
 		872D95891573AB5600BCB4EC /* SSPullToRefreshView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SSPullToRefreshView.m; path = vendors/refresh/SSPullToRefreshView.m; sourceTree = "<group>"; };
+		87546F25157C888000DE58DD /* CommentCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommentCell.h; sourceTree = "<group>"; };
+		87546F26157C888000DE58DD /* CommentCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommentCell.m; sourceTree = "<group>"; };
+		87546F29157C895C00DE58DD /* TextLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextLine.h; sourceTree = "<group>"; };
+		87546F2A157C895C00DE58DD /* TextLine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextLine.m; sourceTree = "<group>"; };
+		87546F2C157C8A7200DE58DD /* SamLibComment+IOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SamLibComment+IOS.h"; sourceTree = "<group>"; };
+		87546F2D157C8A7200DE58DD /* SamLibComment+IOS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SamLibComment+IOS.m"; sourceTree = "<group>"; };
 		8776CA2A157738670099C83D /* TableViewControllerEx.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableViewControllerEx.h; sourceTree = "<group>"; };
 		8776CA2B157738670099C83D /* TableViewControllerEx.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TableViewControllerEx.m; sourceTree = "<group>"; };
 		8776CA32157751D50099C83D /* text.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; name = text.css; path = resources/text.css; sourceTree = "<group>"; };
@@ -250,6 +259,8 @@
 				8712FF9215749A3800C01283 /* SamLibAuthor+IOS.m */,
 				870BA467157515F500B71E07 /* SamLibText+IOS.h */,
 				870BA468157515F500B71E07 /* SamLibText+IOS.m */,
+				87546F2C157C8A7200DE58DD /* SamLibComment+IOS.h */,
+				87546F2D157C8A7200DE58DD /* SamLibComment+IOS.m */,
 				8776CA40157767460099C83D /* UIFont+Kolyvan.h */,
 				8776CA41157767460099C83D /* UIFont+Kolyvan.m */,
 			);
@@ -331,6 +342,10 @@
 				8776CA3C157763890099C83D /* CommentsViewController.m */,
 				8776CA4315776EC50099C83D /* FavoritesViewController.h */,
 				8776CA4415776EC50099C83D /* FavoritesViewController.m */,
+				87546F25157C888000DE58DD /* CommentCell.h */,
+				87546F26157C888000DE58DD /* CommentCell.m */,
+				87546F29157C895C00DE58DD /* TextLine.h */,
+				87546F2A157C895C00DE58DD /* TextLine.m */,
 			);
 			path = iSamizdat;
 			sourceTree = "<group>";
@@ -652,6 +667,9 @@
 				8776CA3E157763890099C83D /* CommentsViewController.m in Sources */,
 				8776CA42157767460099C83D /* UIFont+Kolyvan.m in Sources */,
 				8776CA4615776EC50099C83D /* FavoritesViewController.m in Sources */,
+				87546F27157C888000DE58DD /* CommentCell.m in Sources */,
+				87546F2B157C895C00DE58DD /* TextLine.m in Sources */,
+				87546F2E157C8A7200DE58DD /* SamLibComment+IOS.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -737,7 +755,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "iSamizdat/iSamizdat-Prefix.pch";
 				INFOPLIST_FILE = "iSamizdat/iSamizdat-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -749,7 +767,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "iSamizdat/iSamizdat-Prefix.pch";
 				INFOPLIST_FILE = "iSamizdat/iSamizdat-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};

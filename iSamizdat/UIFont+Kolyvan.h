@@ -10,6 +10,7 @@
 
 @interface UIFont (Kolyvan)
 
++ (UIFont *) systemFont12;
 + (UIFont *) systemFont14;
 + (UIFont *) boldSystemFont14;
 + (UIFont *) boldSystemFont16;
