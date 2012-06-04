@@ -24,3 +24,15 @@
 "The text from" = "Текст от";
 "Read" = "Читать";
 "new version: %@" = "можно загрузить: %@";
+"Are you sure?" = "Вы уверены?";
+"Cancel" = "Отменить";
+"Delete" = "Удалить";
+"Name" = "Имя";
+"Login" = "Логин";
+"Password" = "Пароль";
+"Enable" = "Включить";
+"User info" = "Пользователь";
+"Post comment as"= "Отправлять комментарий как";
+"Samizdat account" = "Регистрация на Самиздат";
+"Warning" = "Внимание";
+"No username" = "Не указано имя";

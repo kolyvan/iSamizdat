@@ -26,6 +26,7 @@
 #import "AuthorViewController.h"
 #import "TextViewController.h"
 #import "FavoritesViewController.h"
+#import "UserViewController.h"
 #import "UIFont+Kolyvan.h"
 #import "DDLog.h"
 
@@ -52,6 +53,7 @@ typedef enum {
 @property (nonatomic, strong) AuthorViewController* authorViewController;
 @property (nonatomic, strong) TextViewController* textViewController;
 @property (nonatomic, strong) FavoritesViewController* favoritesViewController;
+@property (nonatomic, strong) UserViewController *userViewController;
 
 @end
 
@@ -65,6 +67,7 @@ typedef enum {
 @synthesize authorViewController;
 @synthesize textViewController;
 @synthesize favoritesViewController;
+@synthesize userViewController;
 
 - (id) init
 {
@@ -118,6 +121,7 @@ typedef enum {
     self.addAuthorViewController = nil;
     self.textViewController = nil;
     self.favoritesViewController = nil;
+    self.userViewController = nil;
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -133,6 +137,7 @@ typedef enum {
     self.authorViewController = nil;
     self.textViewController = nil;
     self.favoritesViewController = nil;    
+    self.userViewController = nil;    
 }
 
 #pragma mark - private functions
@@ -215,6 +220,19 @@ typedef enum {
 
 - (void) goSettings
 {
+    if (!self.userViewController) {
+        self.userViewController = [[UserViewController alloc] init];        
+    }
+    
+    UINavigationController *navigationController = [[UINavigationController alloc]
+                                                    initWithRootViewController:self.userViewController];
+    
+    [self presentViewController:navigationController 
+                       animated:YES 
+                     completion:NULL];
+    
+    //[self.navigationController pushViewController:self.userViewController animated:YES];    
+    
 }
 
 #pragma mark - refresh 

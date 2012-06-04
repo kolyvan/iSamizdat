@@ -16,6 +16,7 @@
 #import "CommentsViewController.h"
 #import "TextLine.h"
 #import "UIFont+Kolyvan.h"
+#import <objc/runtime.h>
 
 ////
 
@@ -49,13 +50,13 @@ static void drawLine(CGPoint from, CGPoint to, UIColor *color, CGFloat width)
 
 @interface CommentCell() {
     int _wantTouches;
-    BOOL _swipe;
-    KX_WEAK CommentsViewController * _controller;
+    BOOL _swipe;  
 }
 @end
 
 @implementation CommentCell
 
+@synthesize delegate = _delegate;
 @synthesize comment = _comment;
 
 - (void) setComment:(SamLibComment *)comment
@@ -90,48 +91,67 @@ static void drawLine(CGPoint from, CGPoint to, UIColor *color, CGFloat width)
 }
 
 - (id) initWithStyle:(UITableViewCellStyle)style 
-     reuseIdentifier:(NSString *)reuseIdentifier 
-          controller:(CommentsViewController *)controller 
+     reuseIdentifier:(NSString *)reuseIdentifier      
 {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) 
-    {
-        _controller = controller;
-        
+    {                
 		self.backgroundColor = [UIColor whiteColor];
 		self.opaque = YES;
         
         // configure "backView"
-        /*
-        UIButton* replyButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-        replyButton.frame = CGRectMake(5, 5, 60, 30);
+        
+        UIButton* replyButton = [UIButton buttonWithType:UIButtonTypeRoundedRect]; //
+        replyButton.frame = CGRectMake(5, 5, 70, 30);
         [replyButton setTitle:@"Reply" forState:UIControlStateNormal];        
         [replyButton addTarget:self action:@selector(replyPressed) forControlEvents:UIControlEventTouchUpInside];        
         replyButton.tag = 0;        
-        [self.backView addSubview:replyButton];
+        //replyButton.tintColor = [UIColor blueColor];            
+        
+        //Class $UIGlassButton = objc_getClass("UIGlassButton");        
+        //UIButton *deleteButton = [[$UIGlassButton alloc] initWithFrame:CGRectMake(75, 5, 60, 30)];                
         
         UIButton* deleteButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-        deleteButton.frame = CGRectMake(75, 5, 60, 30);
+        deleteButton.frame = CGRectMake(85, 5, 70, 30);
         [deleteButton setTitle:@"Delete" forState:UIControlStateNormal];        
         [deleteButton addTarget:self action:@selector(deletePressed) forControlEvents:UIControlEventTouchUpInside];        
         deleteButton.tag = 1;
-        [self.backView addSubview:deleteButton];
+        deleteButton.tintColor = [UIColor redColor];
+        deleteButton.titleLabel.textColor = [UIColor redColor];    
+        
+        //static UIImage *redBackground;
+        //static dispatch_once_t onceToken;
+        //dispatch_once(&onceToken, ^{            
+        //    UIImage *image = [UIImage imageNamed:@"button_red.png"];
+        //    float w = image.size.width / 2, h = image.size.height / 2; 
+        //    redBackground = [image stretchableImageWithLeftCapWidth:w topCapHeight:h];            
+        //});        
+        //[deleteButton setBackgroundImage:redBackground forState:UIControlStateNormal];
         
         UIButton* editButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-        editButton.frame = CGRectMake(145, 5, 60, 30);
+        editButton.frame = CGRectMake(165, 5, 70, 30);
         [editButton setTitle:@"Edit" forState:UIControlStateNormal];        
         [editButton addTarget:self action:@selector(editPressed) forControlEvents:UIControlEventTouchUpInside];                
         editButton.tag = 2;        
-        [self.backView addSubview:editButton];
-        self.backView.hidden = YES;        
+
+        [self.backView addSubview:replyButton];        
+        [self.backView addSubview:deleteButton];        
+        [self.backView addSubview:editButton];        
+        self.backView.hidden = YES;
+        self.backView.backgroundColor = [UIColor groupTableViewBackgroundColor];         
         
-        self.backView.backgroundColor = [UIColor groupTableViewBackgroundColor];
-        */ 
+        //replyButton.hidden = YES;
+        //deleteButton.hidden = YES;
+        //editButton.hidden = YES;        
+        
+        //[self.contentView addSubview:replyButton];        
+        //[self.contentView addSubview:deleteButton];        
+        //[self.contentView addSubview:editButton];        
         
     }
     return self;
 }
 
-/*
+
 - (void) prepareForReuse 
 {
 	[super prepareForReuse];    
@@ -153,7 +173,9 @@ static void drawLine(CGPoint from, CGPoint to, UIColor *color, CGFloat width)
             
             self.backView.hidden = NO;        
             [self.backView viewWithTag:1].hidden = !_comment.canDelete;
-            [self.backView viewWithTag:2].hidden = !_comment.canEdit;
+            [self.backView viewWithTag:2].hidden = !_comment.canEdit;            
+            //[self.backView viewWithTag:1].hidden = NO;
+            //[self.backView viewWithTag:2].hidden = NO;
             
             [UIView beginAnimations:@"" context:nil];
             [UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
@@ -193,25 +215,21 @@ static void drawLine(CGPoint from, CGPoint to, UIColor *color, CGFloat width)
  
 - (void) replyPressed 
 {    
-    NSLog(@"replyPressed");
-    [self swipeClose];   
-    
-    [_controller goReplyView];
-    
+    [self swipeClose];       
+    [_delegate replyPost: _comment];    
 }
 
 - (void) deletePressed 
-{    
-    NSLog(@"rdeletePressed");    
+{   
     [self swipeClose];
+    [_delegate deletePost: _comment];    
 }
 
 - (void) editPressed 
 {    
-    NSLog(@"editPressed");    
     [self swipeClose];
+    [_delegate editPost: _comment];    
 }
- */
 
 + (CGFloat) heightForComment:(SamLibComment *) comment 
                    withWidth:(CGFloat) width

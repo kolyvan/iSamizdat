@@ -9,9 +9,13 @@
 #import <UIKit/UIKit.h>
 
 #import "TableViewControllerEx.h"
+#import "PostViewController.h"
+#import "CommentCell.h"
 
 @class SamLibComments;
+@class SamLibComment;
 
-@interface CommentsViewController : TableViewControllerEx
+@interface CommentsViewController : TableViewControllerEx<CommentCellDelegate, PostViewDelagate, UIActionSheetDelegate>
 @property (nonatomic, strong) SamLibComments *comments;
+
 @end

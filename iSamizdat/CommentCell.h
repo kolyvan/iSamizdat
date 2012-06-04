@@ -7,13 +7,22 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "KxArc.h"
 #import "FastCell.h"
 
 @class SamLibComment;
-@class CommentsViewController;
+
+@protocol CommentCellDelegate <NSObject>
+
+- (void) replyPost: (SamLibComment *) comment;
+- (void) deletePost: (SamLibComment *) comment;
+- (void) editPost: (SamLibComment *) comment;
+
+@end
 
 @interface CommentCell : FastCell
 
+@property (nonatomic, KX_PROP_WEAK) id<CommentCellDelegate> delegate;
 @property (nonatomic, strong) SamLibComment *comment;
 @property (readonly, nonatomic) BOOL wantTouches;
 
@@ -21,7 +30,10 @@
                    withWidth:(CGFloat) width;
 
 - (id) initWithStyle:(UITableViewCellStyle)style 
-     reuseIdentifier:(NSString *)reuseIdentifier 
-          controller:(CommentsViewController *)controller; 
+     reuseIdentifier:(NSString *)reuseIdentifier;
+
+
+
+
 
 @end
