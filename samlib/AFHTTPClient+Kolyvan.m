@@ -9,7 +9,43 @@
 #import "AFHTTPClient+Kolyvan.h"
 #import "AFURLConnectionOperation.h"
 #import "AFHTTPRequestOperation.h"
+#import "DDLog.h"
 
+extern int ddLogLevel;
+
+@interface AFHTTPRequestOperation_NoRedirect : AFHTTPRequestOperation
+
+-(NSURLRequest *)connection:(NSURLConnection *)connection
+            willSendRequest:(NSURLRequest *)request
+           redirectResponse:(NSURLResponse *)redirectResponse;
+
+@end
+
+@implementation AFHTTPRequestOperation_NoRedirect
+
++ (NSIndexSet *)acceptableStatusCodes {
+    NSMutableIndexSet * mis = [[AFHTTPRequestOperation acceptableStatusCodes] mutableCopy];
+    [mis addIndex:302];
+    return [mis autorelease];
+}
+
+-(NSURLRequest *)connection:(NSURLConnection *)connection
+            willSendRequest:(NSURLRequest *)request
+           redirectResponse:(NSURLResponse *)redirectResponse
+{   
+    if (redirectResponse) {
+        
+        DDLogInfo(@"stop redirect %@ to %@", redirectResponse.URL.relativePath, request.URL.relativePath);        
+        //if ([redirectResponse.URL.relativePath isEqualToString:@"/cgi-bin/votecounter"])
+        return nil;
+    }
+    
+    return request;
+}
+
+@end
+
+////
 
 @implementation AFHTTPClient (Kolyvan)
 
@@ -81,10 +117,24 @@
     [self enqueueHTTPRequestOperation:operation];
 }
 
+- (void)postPath:(NSString *)path
+         referer:(NSString *)referer
+      parameters:(NSDictionary *)parameters 
+         success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+         failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
+{    
+    [self postPath:path 
+           referer:referer 
+        parameters:parameters 
+          redirect:YES 
+           success: success 
+           failure:failure];
+}
 
 - (void)postPath:(NSString *)path
          referer:(NSString *)referer
       parameters:(NSDictionary *)parameters 
+        redirect:(BOOL)redirect
          success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
          failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {    
@@ -101,7 +151,16 @@
     // unfortunately theirs coders cannot into content-type charset
     [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];    
     
-	AFHTTPRequestOperation *operation = [self HTTPRequestOperationWithRequest:request success:success failure:failure];
+	//AFHTTPRequestOperation *operation = [self HTTPRequestOperationWithRequest:request success:success failure:failure];
+    
+    AFHTTPRequestOperation *operation;       
+    if (redirect) {
+        operation = [self HTTPRequestOperationWithRequest:request success:success failure:failure];
+    } else {
+        operation = [[[AFHTTPRequestOperation_NoRedirect alloc] initWithRequest:request] autorelease];
+        [operation setCompletionBlockWithSuccess:success failure:failure];
+    }
+    
     [self enqueueHTTPRequestOperation:operation];    
 }
 
@@ -114,6 +173,5 @@
         }
     }
 }
-
 
 @end

@@ -11,6 +11,7 @@
 
 
 #import "AFHTTPClient.h"
+#import "AFHTTPRequestOperation.h"
 
 @interface AFHTTPClient (Kolyvan)
 
@@ -45,6 +46,14 @@
        parameters:(NSDictionary *)parameters 
           success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
           failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+
+
+- (void)postPath:(NSString *)path
+         referer:(NSString *)referer
+      parameters:(NSDictionary *)parameters 
+        redirect:(BOOL)redirect  
+         success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+         failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 
 
 

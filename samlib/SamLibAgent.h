@@ -41,8 +41,9 @@ typedef struct {
                       AsyncProgressBlock progress);
     
     void (*postData)(NSString *path, 
-                     NSString *referer, 
+                     NSString *referer,                  
                      NSDictionary * parameters,
+                     BOOL redirect,                         
                      AsyncResultBlock block);
     
     void (*cancelAll)();    

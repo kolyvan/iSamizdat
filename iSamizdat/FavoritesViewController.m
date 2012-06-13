@@ -66,28 +66,23 @@
 - (void) prepareData
 {
     _texts = nil;
-    
-    NSArray * favorites = [SamLibAgent.settings() get: @"favorites"];
-    
-    if (favorites.nonEmpty)
-    {   
-        NSMutableArray * ma = [NSMutableArray array];  
         
-        SamLibModel *model = [SamLibModel shared];        
-        for (NSString *key in favorites) {        
+    NSMutableArray * ma = [NSMutableArray array];
+        
+    for (SamLibAuthor *author in [SamLibModel shared].authors) {
+        
+        for (SamLibText *text in author.texts) {
             
-            SamLibText *text = [model findTextByKey:key];
-            if (text) {
+            if (text.favorited) {
+                
                 [text commentsObject:YES]; // force to load comments from disk
                 [ma push:text];
             }
-        }   
-        
-        _texts = [ma sortWith:^(id obj1, id obj2) {        
-            SamLibText *l = obj1, *r = obj2;
-            return [l.author.name compare:r.author.name];
-        }];
+        }
     }
+    
+    if (ma.nonEmpty)
+        _texts = [ma copy];
 }
 
 #pragma mark - Table view data source

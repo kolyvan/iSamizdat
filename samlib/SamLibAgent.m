@@ -194,7 +194,10 @@ static AFHTTPClient * httpClient(BOOL cleanup)
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
             
-            NSIndexSet *codes = [NSIndexSet indexSetWithIndex:304];
+            //NSMutableIndexSet *codes = [NSMutableIndexSet indexSet];
+            //[codes addIndex:302];
+            //[codes addIndex:304];            
+            NSIndexSet *codes = [NSIndexSet indexSetWithIndex:304];            
             [[AFHTTPRequestOperation class] addAcceptableStatusCodes: codes];
             
             NSSet *contens = [NSSet setWithObject: @"text/html"];    
@@ -315,6 +318,7 @@ static void fetchData(NSString *path,
 static void postData(NSString *path, 
                      NSString *referer, 
                      NSDictionary * parameters,
+                     BOOL redirect,
                      AsyncResultBlock block)
 {
     AFHTTPClient *client = httpClient(NO);
@@ -323,8 +327,9 @@ static void postData(NSString *path,
     client.stringEncoding = NSWindowsCP1251StringEncoding;
 
     [client postPath:path
-             referer:referer
+             referer:referer             
           parameters:parameters
+            redirect:redirect
              success:^(AFHTTPRequestOperation *operation, id responseObject) {
                  
                  handleSuccess(operation, responseObject, block);

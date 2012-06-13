@@ -31,6 +31,7 @@ typedef enum {
 
 extern NSString * getStringFromDict(NSDictionary *dict, NSString *name, NSString *path);
 extern NSDate * getDateFromDict(NSDictionary * dict, NSString *name, NSString *path);
+extern NSNumber * getNumberFromDict(NSDictionary *dict, NSString *name, NSString *path);
 extern NSHTTPCookie * searchSamLibCookie(NSString *name);
 extern NSHTTPCookie * deleteSamLibCookie(NSString *name);
 extern NSDictionary * loadDictionary(NSString *filepath);

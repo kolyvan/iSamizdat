@@ -192,6 +192,7 @@ static NSString * gKeychainService = @"ru.kolyvan.samlib";
     SamLibAgent.postData(@"/cgi-bin/login", 
                          @"http://samlib.ru/cgi-bin/login", 
                          d, 
+                         YES,
                          ^(SamLibStatus status, NSString *data, NSString *_unused){
           
                              if (status == SamLibStatusSuccess &&
@@ -210,6 +211,7 @@ static NSString * gKeychainService = @"ru.kolyvan.samlib";
     SamLibAgent.postData(@"/cgi-bin/logout", 
                          @"http://samlib.ru/", 
                          nil, 
+                         YES,
                          ^(SamLibStatus status, NSString *data, NSString *_unused){
                              
                              if (status == SamLibStatusSuccess &&

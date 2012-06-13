@@ -91,31 +91,24 @@ extern int ddLogLevel;
 
 
 - (BOOL) ignored
-{    
-    NSArray * array = [SamLibAgent.settings() get: @"ignored"];
-    return [array containsObject:_path];
+{
+    return _ignored;
 }
 
 - (void) setIgnored:(BOOL)ignored
 {
-    NSMutableArray * array = [SamLibAgent.settings() get: @"ignored" 
-                                                   orSet:^id{
-                                                       return [NSMutableArray array];
-                                                   }];
-
-    BOOL contains = [array containsObject:_path];
-    if (contains && !ignored)
-        [array removeObject:_path];
-    else if (!contains && ignored)
-        [array addObject:_path];
+    if (_ignored != ignored) {
+        _ignored = ignored;
+        ++_version;
+    }
 }
-
 
 - (NSString *) computeHash 
 {
     NSMutableString *ms = [NSMutableString string];    
     [ms appendString: [self.timestamp description]];
     [ms appendString: self.lastModified];
+    [ms appendString: [self.version description]];    
     for (SamLibText *p in _texts) {
 //        [ms appendString: [p.timestamp description]];                
         [ms appendString: [p.version description]];
@@ -153,6 +146,7 @@ extern int ddLogLevel;
         
         _lastModified   = KX_RETAIN(getStringFromDict(dict, @"lastModified", path));
         _digest         = KX_RETAIN(getStringFromDict(dict, @"digest", path));
+        _ignored        = [getNumberFromDict(dict, @"ignored", path) boolValue];  
         
         NSDate *dt = getDateFromDict(dict, @"timestamp", path);        
         if (dt) self.timestamp = dt;
@@ -216,14 +210,13 @@ extern int ddLogLevel;
 
 - (NSDictionary *) toDictionary
 {
-    NSMutableDictionary * dict = [NSMutableDictionary dictionaryWithCapacity:12];
+    NSMutableDictionary * dict = [NSMutableDictionary dictionaryWithCapacity:14];
     
     NSArray * textsAsDict = [_texts map: ^(id elem) {
         return [elem toDictionary];
     }];
-    
-    // [dict updateOnly: @"path" valueNotNil: _path];
-    [dict updateOnly: @"name" valueNotNil: _name];    
+
+    [dict updateOnly: @"name" valueNotNil: _name];
     [dict updateOnly: @"title" valueNotNil: _title];    
     [dict updateOnly: @"updated" valueNotNil: _updated];    
     [dict updateOnly: @"size" valueNotNil: _size];        
@@ -235,7 +228,10 @@ extern int ddLogLevel;
     [dict updateOnly: @"digest" valueNotNil: _digest];    
     [dict updateOnly: @"timestamp" valueNotNil: [_timestamp iso8601Formatted]];    
     [dict updateOnly: @"texts" valueNotNil: textsAsDict];    
-    [dict updateOnly: @"about" valueNotNil: _about];        
+    [dict updateOnly: @"about" valueNotNil: _about];   
+    
+    if (_ignored)
+        [dict update: @"ignored" value: [NSNumber numberWithBool:_ignored]];
     
     return dict;
 }

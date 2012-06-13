@@ -19,7 +19,7 @@ extern int ddLogLevel;
 
 ////
 
-NSString* getStringFromDict(NSDictionary *dict, NSString *name, NSString *path)
+NSString * getStringFromDict(NSDictionary *dict, NSString *name, NSString *path)
 {
     id value = [dict get:name];
     if (value &&
@@ -38,6 +38,17 @@ NSDate * getDateFromDict(NSDictionary * dict, NSString *name, NSString *path)
     if (ts)
         return [NSDate dateWithISO8601String: ts];
     return nil;
+}
+
+NSNumber * getNumberFromDict(NSDictionary *dict, NSString *name, NSString *path)
+{
+    id value = [dict get:name];
+    if (value &&
+        ![value isKindOfClass:[NSNumber class]]) {        
+        DDLogCWarn(locString(@"invalid '%@' in dictionary: %@"), name, path);
+        return nil;    
+    }
+    return value;
 }
 
 NSHTTPCookie * searchSamLibCookie(NSString *name)

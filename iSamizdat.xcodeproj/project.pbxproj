@@ -51,7 +51,7 @@
 		872D947D15737E7900BCB4EC /* NSDictionary+Kolyvan.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D947015737E7900BCB4EC /* NSDictionary+Kolyvan.m */; };
 		872D947E15737E7900BCB4EC /* NSObject+Kolyvan.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D947215737E7900BCB4EC /* NSObject+Kolyvan.m */; };
 		872D947F15737E7900BCB4EC /* NSString+Kolyvan.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D947415737E7900BCB4EC /* NSString+Kolyvan.m */; };
-		872D94981573836500BCB4EC /* AFHTTPClient+Kolyvan.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D94871573836500BCB4EC /* AFHTTPClient+Kolyvan.m */; };
+		872D94981573836500BCB4EC /* AFHTTPClient+Kolyvan.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D94871573836500BCB4EC /* AFHTTPClient+Kolyvan.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		872D94991573836500BCB4EC /* SamLib.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D94891573836500BCB4EC /* SamLib.m */; };
 		872D949A1573836500BCB4EC /* SamLibAgent.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D948B1573836500BCB4EC /* SamLibAgent.m */; };
 		872D949B1573836500BCB4EC /* SamLibAuthor.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D948D1573836500BCB4EC /* SamLibAuthor.m */; };

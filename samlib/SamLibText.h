@@ -17,6 +17,7 @@
 
 typedef void (^UpdateTextBlock)(SamLibText *text, SamLibStatus status, NSString *error);
 typedef NSString *(^TextFormatter)(SamLibText *text, NSString *s);
+typedef void (^FetchVotesBlock)(SamLibText *text, NSArray *votes, SamLibStatus status, NSString *error);
 
 typedef enum {
     
@@ -33,6 +34,24 @@ typedef enum {
     SamLibTextChangedRemoved     = 1 << 9,    
     
 } SamLibTextChanged;
+
+typedef enum {
+
+    SamLibTextVote0, // none, не читал        
+    
+    SamLibTextVote1, // must not read, не читать    
+    SamLibTextVote2, // very bad, очень плохо   
+    SamLibTextVote3, // bad, плохо    
+    SamLibTextVote4, // mediocre, посредственно
+    SamLibTextVote5, // nothing, терпимо   
+
+    SamLibTextVote6, // normally, нормально
+    SamLibTextVote7, // good, хорошо   
+    SamLibTextVote8, // very good, очень хорошо
+    SamLibTextVote9, // great, замечательно       
+    SamLibTextVote10,// masterwork, шедевр
+    
+} SamLibTextVote;
 
 // 
 @class SamLibComments;
@@ -54,7 +73,11 @@ typedef enum {
     NSString * _diffResult;
     NSDate * _filetime;
     NSString *_dateModified;
-    
+    BOOL _favorited;    
+    SamLibTextVote _myVote;        
+    unsigned long long _position;
+    unsigned long long _cachedFileSize;
+
     SamLibTextChanged _changedFlag;        
     NSInteger _deltaSize;
     NSInteger _deltaComments;    
@@ -110,8 +133,10 @@ typedef enum {
 @property (readonly, nonatomic) BOOL canMakeDiff;
 
 @property (readonly, nonatomic) NSString * groupEx;
+
 @property (readwrite, nonatomic) BOOL favorited;
-@property (nonatomic) CGFloat scrollOffset;
+@property (readwrite, nonatomic) CGFloat scrollOffset;
+@property (readonly, nonatomic) SamLibTextVote myVote;
 
 + (id) fromDictionary: (NSDictionary *) dict 
            withAuthor: (SamLibAuthor *) author;
@@ -137,5 +162,12 @@ typedef enum {
 - (NSString *) sizeWithDelta: (NSString *)sep;
 - (NSString *) commentsWithDelta: (NSString *)sep;;
 - (NSString *) ratingWithDelta: (NSString *)sep;
+
+
+- (void) vote: (SamLibTextVote) value 
+        block: (UpdateTextBlock) block;
+
+//- (void) fetchVotes: (FetchVotesBlock) block;
+
 
 @end

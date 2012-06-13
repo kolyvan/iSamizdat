@@ -527,6 +527,7 @@ static NSDate* mkDateFromComment(NSString *dt)
     SamLibAgent.postData(@"/cgi-bin/comment",  
                          KxUtils.format(@"http://samlib.ru/cgi-bin/comment?COMMENT=%@", url), 
                          d,
+                         YES,
                          ^(SamLibStatus status, NSString *data, NSString *lastModified) {
 
                              if (status == SamLibStatusSuccess) {

@@ -117,6 +117,7 @@ static NSString * prettyHtml (NSMutableArray *diffs)
 @synthesize diffResult = _diffResult;
 @synthesize filetime = _filetime;
 @synthesize dateModified = _dateModified;
+@synthesize myVote = _myVote;
 
 @synthesize deltaSize = _deltaSize;
 //@synthesize deltaComments = _deltaComments;
@@ -230,51 +231,33 @@ static NSString * prettyHtml (NSMutableArray *diffs)
 
 - (BOOL) favorited
 {
-    NSArray * favorites = [SamLibAgent.settings() get: @"favorites"];    
-    return [favorites containsObject:self.key];    
+    return _favorited;
 }
 
 - (void) setFavorited:(BOOL)favorited
 {
-    NSMutableArray * favorites = [SamLibAgent.settings() get: @"favorites" 
-                                                       orSet:^id{
-                                                           return [NSMutableArray array];
-                                                       }];
-    
-    BOOL containts = [favorites containsObject:self.key];
-    
-    if (containts && !favorited) {
+    if (_favorited != favorited) {
+        _favorited = favorited;
         ++_version;
-        [favorites removeObject:self.key];
-    }
-    else if (!containts && favorited) {
-        ++_version;
-        [favorites addObject:self.key];
     }
 }
 
 - (CGFloat) scrollOffset
 {
-    NSDictionary* dict = [SamLibAgent.settings() get: @"scrollOffset"];    
-    return [[dict get:self.key] floatValue];    
+    unsigned long long fileSize = self.htmlFileSize;
+    if (fileSize)
+        return _position / (CGFloat)fileSize;
+    return 0;    
 }
 
 - (void) setScrollOffset:(CGFloat)offset
 {
-    NSMutableDictionary * dict = [SamLibAgent.settings() get: @"scrollOffset" 
-                                                       orSet:^id{
-                                                           return [NSMutableDictionary dictionary];
-                                                       }];
-    
-    CGFloat old = [[dict get:self.key] floatValue]; 
-    
-    if (old != offset) {
-        //++_version;
-        if (offset > 0)
-            [dict update:self.key value:[NSNumber numberWithFloat:offset]];
-        else
-            [dict removeObjectForKey:self.key];
-    }
+    unsigned long long fileSize = self.htmlFileSize;
+    unsigned long long position = fileSize * offset;
+    if (llabs(_position - position) > 40) {
+        _position = position;
+        ++_version;
+    }    
 }
 
 + (id) fromDictionary: (NSDictionary *) dict
@@ -308,14 +291,18 @@ static NSString * prettyHtml (NSMutableArray *diffs)
         _author = author;   
         
         [self updateFromDictionary:dict setChanged:NO allowNil:NO];
-        
-        //_favorited      = [[dict get: @"favorited" orElse:[NSNumber numberWithBool:NO]] boolValue];    
+
         _diffResult     = KX_RETAIN(getStringFromDict(dict, @"diffResult", path));
         _lastModified   = KX_RETAIN(getStringFromDict(dict, @"lastModified", path));
-        _filetime       = KX_RETAIN(getDateFromDict(dict, @"filetime", path));            
+        _filetime       = KX_RETAIN(getDateFromDict(dict, @"filetime", path));
+        _favorited      = [getNumberFromDict(dict, @"favorited", path) boolValue];  
+        _myVote         = [getNumberFromDict(dict, @"myVote", path) intValue];
+        _position       = [getNumberFromDict(dict, @"position", path) unsignedLongLongValue];
         
         NSDate *dt = getDateFromDict(dict, @"timestamp", path);        
         if (dt) self.timestamp = dt;
+        
+        _cachedFileSize = 0;
     }
     
     return self;
@@ -473,7 +460,7 @@ static NSString * prettyHtml (NSMutableArray *diffs)
 
 - (NSDictionary *) toDictionary
 {
-    NSMutableDictionary * dict = [NSMutableDictionary dictionaryWithCapacity:16];
+    NSMutableDictionary * dict = [NSMutableDictionary dictionaryWithCapacity:19];
     
     [dict updateOnly: @"path" valueNotNil: _path];
     [dict updateOnly: @"copyright" valueNotNil: _copyright];    
@@ -491,6 +478,15 @@ static NSString * prettyHtml (NSMutableArray *diffs)
     [dict updateOnly: @"lastModified" valueNotNil: _lastModified];
     [dict updateOnly: @"diffResult" valueNotNil: _diffResult];
     [dict updateOnly: @"filetime" valueNotNil: [_filetime iso8601Formatted]];
+    
+    if (_myVote)
+        [dict update: @"myVote" value: [NSNumber numberWithInt:_myVote]];
+    
+    if (_favorited)
+        [dict update: @"favorited" value: [NSNumber numberWithBool:_favorited]];
+    
+    if (_position)
+        [dict update: @"position" value: [NSNumber numberWithUnsignedLongLong:_position]];        
     
     return dict;
 }
@@ -535,6 +531,24 @@ static NSString * prettyHtml (NSMutableArray *diffs)
     KX_RELEASE(fm);    
     return r ? self.htmlPath : nil;
 }
+
+- (unsigned long long) htmlFileSize
+{
+    if (0 == _cachedFileSize) {
+
+        NSString *path = self.htmlPath;    
+        NSFileManager * fm = [[NSFileManager alloc] init];        
+        if ([fm isReadableFileAtPath:path]) {        
+            NSDictionary *dict = [fm attributesOfItemAtPath:path error:nil];        
+            if (dict)
+                _cachedFileSize = [dict fileSize];
+        }    
+        KX_RELEASE(fm);    
+        
+    }
+    return _cachedFileSize;
+}
+
 
 - (NSString *) diffFile
 {
@@ -620,7 +634,9 @@ static NSString * prettyHtml (NSMutableArray *diffs)
 
 - (void) saveHTML: (NSString *) data
         formatter: (TextFormatter) formatter
-{       
+{           
+    _cachedFileSize = 0;
+    
     NSError *error;
     
     NSFileManager *fm = [[NSFileManager alloc] init];
@@ -773,5 +789,36 @@ static NSString * prettyHtml (NSMutableArray *diffs)
         return KxUtils.format(@"%.2f", f);
     return @"";
 }
+
+- (void) vote: (SamLibTextVote) value 
+        block: (UpdateTextBlock) block
+{
+    NSMutableDictionary * d = [NSMutableDictionary dictionary];    
+    
+    [d update:@"FILE" value:[_path stringByDeletingPathExtension]];
+    [d update:@"DIR" value:[_author.relativeUrl drop:1]];        
+    [d update:@"BALL" value:KxUtils.format(@"%ld", value)];
+    
+    SamLibAgent.postData(@"/cgi-bin/votecounter",  
+                         KxUtils.format(@"http://samlib.ru%@", self.relativeUrl), 
+                         d,
+                         NO,
+                         ^(SamLibStatus status, NSString *data, NSString *lastModified) {
+                             
+                             if (status == SamLibStatusSuccess) {
+                             //if (status == SamLibStatusSuccess &&
+                             //    [data contains:@"<TITLE>302 Found</TITLE>"]) {
+                                
+                                 DDLogInfo(@"vote accepted %d", value);                                 
+                                 _myVote = value;
+                                 ++_version;
+                             }
+                             
+                             block(self, status, data);
+                         });
+}
+
+//- (void) fetchVotes: (FetchVotesBlock) block{}
+
 
 @end
