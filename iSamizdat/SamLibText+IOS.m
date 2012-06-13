@@ -12,6 +12,7 @@
 
 #import "SamLibText+IOS.h"
 #import "NSDictionary+Kolyvan.h"
+#import "KxMacros.h"
 
 @implementation SamLibText (IOS)
 
@@ -36,6 +37,33 @@
         
         return self.favoritedImage;
     }
+}
+
+- (NSString *) myVoteAsString
+{        
+    return [self->isa stringForVote:self.myVote];
+}
+
++ (NSString *) stringForVote: (NSInteger) vote
+{   
+    static NSString * voteNames[11] = {
+        @"none",
+        @"must not read",
+        @"very bad",
+        @"bad",
+        @"mediocre",
+        @"nothing",
+        @"normally",
+        @"good",
+        @"very good", 
+        @"great", 
+        @"masterwork",
+    };
+    
+    if (vote >= 0 && vote < 11)
+        return locString(voteNames[vote]);    
+    return nil;
+
 }
 
 @end

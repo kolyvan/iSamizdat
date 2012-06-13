@@ -107,6 +107,8 @@ enum {
     RowMakeDiff,            
     RowRead,
     RowDiff, 
+    RowMyVote,
+    //RowMyMemo,
 };
 
 @interface TextViewController () {
@@ -117,7 +119,7 @@ enum {
 
 @property (nonatomic, strong) TextReadViewController *textReadViewController;
 @property (nonatomic, strong) CommentsViewController *commentsViewController;
-
+@property (nonatomic, strong) VoteViewController *voteViewController;
 
 @end
 
@@ -126,6 +128,7 @@ enum {
 @synthesize text = _text;
 @synthesize textReadViewController;
 @synthesize commentsViewController;
+@synthesize voteViewController;
 
 - (void) setText:(SamLibText *)text 
 {    
@@ -179,6 +182,7 @@ enum {
     self.navigationItem.backBarButtonItem = nil;
     self.textReadViewController = nil;
     self.commentsViewController = nil;
+    self.voteViewController = nil;
 }
 
 - (void) didReceiveMemoryWarning
@@ -186,6 +190,7 @@ enum {
     [super didReceiveMemoryWarning];         
     self.textReadViewController = nil;
     self.commentsViewController = nil;    
+    self.voteViewController = nil;    
 }
 
 #pragma mark - private
@@ -229,6 +234,8 @@ enum {
     if (_text.genre.nonEmpty ||
         _text.type.nonEmpty)
         [ma push: $int(RowGenre)];  
+    
+    [ma push: $int(RowMyVote)];  
 
     _rows = [ma toArray];
 }
@@ -251,6 +258,17 @@ enum {
         } 
      ];
 
+}
+
+- (NSString *) textVoteString
+{
+     NSInteger myVote = _text.myVote;
+    if (myVote == 0)
+        return locString(@"none");
+    else if (myVote > 0 && myVote < 11)
+        return KxUtils.format(@"%ld", myVote);  
+    else
+        return @"ERR";
 }
 
 #pragma mark - Table view data source
@@ -375,7 +393,15 @@ enum {
         UITableViewCell *cell = [self mkCell: @"MakeDiffCell" withStyle:UITableViewCellStyleDefault];                            
         cell.textLabel.text = locString(@"Make diff");
         return cell;
-    }         
+        
+    } else if (RowMyVote == row) {
+        
+        UITableViewCell *cell = [self mkCell: @"VoteCell" withStyle:UITableViewCellStyleValue1];
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;        
+        cell.textLabel.text = locString(@"My vote");
+        cell.detailTextLabel.text = [self textVoteString];
+        return cell;
+    }        
     
     return nil;
 }
@@ -406,8 +432,46 @@ enum {
         self.commentsViewController.comments = [_text commentsObject:YES];
         [self.navigationController pushViewController:self.commentsViewController 
                                              animated:YES]; 
+        
+    } else if (RowMyVote == row) {
+        
+        if (!self.voteViewController) {
+            self.voteViewController = [[VoteViewController alloc] init];
+            self.voteViewController.delegate = self;
+        }
+        
+        self.voteViewController.myVote = _text.myVote;
+        [self.navigationController pushViewController:self.voteViewController 
+                                             animated:YES]; 
+        
     }
+
 }
 
+#pragma mark - VoteViewController delagate
+
+- (void) sendVote: (NSInteger) vote
+{
+    //NSLog(@"send vote: %d", vote);
+    
+    NSInteger row = [_rows indexOfObject:$int(RowMyVote)];
+    
+    NSIndexPath *indexPath;
+    UITableViewCell *cell;
+    indexPath = [NSIndexPath indexPathForRow:row inSection:0];
+    cell = [self.tableView cellForRowAtIndexPath:indexPath];
+    
+    cell.detailTextLabel.text = @"..";
+    
+    [_text vote: vote
+         block: ^(SamLibText *text, SamLibStatus status, NSString *error) {             
+
+             if (status == SamLibStatusSuccess)
+                 cell.detailTextLabel.text = [self textVoteString];
+             else
+                 cell.detailTextLabel.text = @"ERR";
+             
+         }];
+}
 
 @end

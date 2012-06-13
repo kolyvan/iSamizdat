@@ -12,11 +12,14 @@
 
 #import <UIKit/UIKit.h>
 #import "TableViewControllerEx.h"
+#import "VoteViewController.h"
 
 @class SamLibText;
 
-@interface TextViewController : TableViewControllerEx
+@interface TextViewController : TableViewControllerEx<VoteViewDelagate>
 
 @property (nonatomic, strong) SamLibText *text;
+
+- (void) sendVote: (NSInteger) vote;  
 
 @end

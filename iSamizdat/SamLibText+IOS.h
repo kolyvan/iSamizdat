@@ -18,4 +18,8 @@
 @property (nonatomic, readonly) UIImage * favoritedImage;
 @property (nonatomic, readonly) UIImage * image;
 
+@property (nonatomic, readonly) NSString * myVoteAsString;
+
++ (NSString *) stringForVote: (NSInteger) vote;
+
 @end

@@ -26,6 +26,7 @@
 #import "AuthorViewController.h"
 #import "TextViewController.h"
 #import "FavoritesViewController.h"
+#import "VotedViewController.h"
 #import "UserViewController.h"
 #import "UIFont+Kolyvan.h"
 #import "DDLog.h"
@@ -54,6 +55,7 @@ typedef enum {
 @property (nonatomic, strong) TextViewController* textViewController;
 @property (nonatomic, strong) FavoritesViewController* favoritesViewController;
 @property (nonatomic, strong) UserViewController *userViewController;
+@property (nonatomic, strong) VotedViewController* votedViewController;
 
 @end
 
@@ -68,6 +70,7 @@ typedef enum {
 @synthesize textViewController;
 @synthesize favoritesViewController;
 @synthesize userViewController;
+@synthesize votedViewController;
 
 - (id) init
 {
@@ -122,6 +125,7 @@ typedef enum {
     self.textViewController = nil;
     self.favoritesViewController = nil;
     self.userViewController = nil;
+    self.votedViewController = nil;
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -138,14 +142,18 @@ typedef enum {
     self.textViewController = nil;
     self.favoritesViewController = nil;    
     self.userViewController = nil;    
+    self.votedViewController = nil;    
 }
 
 #pragma mark - private functions
 
 - (BOOL) hasFavorites
 {
-    //NSArray * favorites = [SamLibAgent.settings() get: @"favorites"];
-    //return favorites.nonEmpty;
+    return YES;
+}
+
+- (BOOL) hasVoted
+{
     return YES;
 }
 
@@ -311,7 +319,7 @@ typedef enum {
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     NSInteger sections = 1;
-    if (self.hasFavorites)
+    if (self.hasFavorites || self.hasVoted)
         sections += 1;
     if (self.ignored.nonEmpty)
         sections += 1;        
@@ -336,7 +344,7 @@ typedef enum {
     section = [self sectionMap:section];
     
     if (section == FavoritesSectionNumber)
-        return 1;
+        return (self.hasFavorites ? 1 : 0) + (self.hasVoted ? 1 : 0);
     
     else if (section == AuthorSectionNumber)
         return self.content.count;
@@ -376,7 +384,12 @@ typedef enum {
     if (section == FavoritesSectionNumber) {
         
         UITableViewCell *cell = [self mkMainCell];
-        cell.textLabel.text = locString(@"Favorites");
+        
+        if (indexPath.row == 0)        
+            cell.textLabel.text = locString(@"Favorites");
+        else
+            cell.textLabel.text = locString(@"Voted");
+        
         return cell;
     }
         
@@ -449,12 +462,24 @@ typedef enum {
     NSInteger section = [self sectionMap:indexPath.section];
     
     if (section == FavoritesSectionNumber) {
-                
-        if (!self.favoritesViewController) {
-            self.favoritesViewController = [[FavoritesViewController alloc] init];        
+        
+        if (indexPath.row == 0) {
+            
+            if (!self.favoritesViewController) {
+                self.favoritesViewController = [[FavoritesViewController alloc] init];        
+            }
+            [self.navigationController pushViewController:self.favoritesViewController 
+                                                 animated:YES];
+            
+        } else {
+        
+            if (!self.votedViewController) {
+                self.votedViewController = [[VotedViewController alloc] init];        
+            }
+            [self.navigationController pushViewController:self.votedViewController 
+                                                 animated:YES];
+            
         }
-        [self.navigationController pushViewController:self.favoritesViewController 
-                                             animated:YES];
         
     } else if (section == AuthorSectionNumber) {
         id obj = [self.content objectAtIndex:indexPath.row];         
