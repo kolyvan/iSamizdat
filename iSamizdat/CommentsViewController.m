@@ -176,12 +176,16 @@
 - (void) sendPost: (PostData *) post
 {   
     _postToSend = post;
-    
-    //[self performSelector:@selector(forceRefresh:) 
-    //           withObject:nil
-    //           afterDelay:1.0];
-    
+        
     [self.pullToRefreshView startLoadingAndExpand:YES];  
+    
+    // fixes an issue with hidden content view (pullToRefresh)
+    UIScrollView *scrollView = self.pullToRefreshView.scrollView;    
+    if (scrollView.contentSize.height > scrollView.frame.size.height) {
+            
+        [scrollView setContentOffset:CGPointMake(0, -self.pullToRefreshView.expandedHeight) 
+                                                   animated:YES];
+    }
 }
 
 - (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex

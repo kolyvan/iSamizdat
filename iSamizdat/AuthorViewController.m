@@ -164,11 +164,11 @@ extern int ddLogLevel;
 }
 
 - (void) goInfo
-{
+{     
 }
 
 - (void) refresh: (void(^)(SamLibStatus status, NSString *error)) block
-{
+{   
      [_author update:^(SamLibAuthor *author, SamLibStatus status, NSString *error) {
         
          author.lastError = error;
