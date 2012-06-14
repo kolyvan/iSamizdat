@@ -19,6 +19,7 @@
 #import "SamLibText.h"
 #import "CommentCell.h"
 #import "PostViewController.h"
+#import "SSPullToRefreshView+Kolyvan.h"
 
 @interface ActionSheetWithComment : UIActionSheet
 @property (readwrite, strong) SamLibComment * comment;
@@ -30,13 +31,10 @@
 
 ////
 
-
-////
-
 @interface CommentsViewController () {
     BOOL _needReload;
     id _version;
-    PostData *_postToSend;
+    PostData *_postData;
 }
 
 @property (nonatomic, strong) PostViewController *postViewController;
@@ -107,18 +105,28 @@
 
 - (void) refresh: (void(^)(SamLibStatus status, NSString *error)) block
 {
-    if (_postToSend) {
+    if (_postData) {
         
-        [_comments post:_postToSend.message
-                  msgid:_postToSend.msgid
-                isReply:!_postToSend.isEdit
-                  block:^(SamLibComments *comments, SamLibStatus status, NSString *error) {
-                      
-                      block(status, error);
-                  }];
+        if (_postData.message != nil) {
         
+            [_comments post:_postData.message
+                      msgid:_postData.msgid
+                    isReply:!_postData.isEdit
+                      block:^(SamLibComments *comments, SamLibStatus status, NSString *error) {
+                          
+                          block(status, error);
+                      }];
+        } else {
+            
+            [_comments deleteComment:_postData.msgid 
+                               block:^(SamLibComments *comments, SamLibStatus status, NSString *error) {
+                                   
+                                  block(status, error);
+                                   
+                               }];   
+        }        
         
-        _postToSend = nil;
+        _postData = nil;
         
     } else {
     
@@ -175,17 +183,8 @@
 
 - (void) sendPost: (PostData *) post
 {   
-    _postToSend = post;
-        
-    [self.pullToRefreshView startLoadingAndExpand:YES];  
-    
-    // fixes an issue with hidden content view (pullToRefresh)
-    UIScrollView *scrollView = self.pullToRefreshView.scrollView;    
-    if (scrollView.contentSize.height > scrollView.frame.size.height) {
-            
-        [scrollView setContentOffset:CGPointMake(0, -self.pullToRefreshView.expandedHeight) 
-                                                   animated:YES];
-    }
+    _postData = post;        
+    [self.pullToRefreshView startLoadingAndForceExpand];      
 }
 
 - (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex
@@ -194,6 +193,11 @@
         
         SamLibComment *comment = ((ActionSheetWithComment *)actionSheet).comment;
         
+        _postData = [[PostData alloc] init];
+        _postData.msgid = comment.msgid;
+        [self.pullToRefreshView startLoadingAndForceExpand]; 
+        
+        /*
         [_comments deleteComment:comment.msgid 
                            block:^(SamLibComments *comments, SamLibStatus status, NSString *error) {
                                
@@ -201,6 +205,7 @@
                                    [self.tableView reloadData];
                                
                            }];        
+       */  
     }
 }
 

@@ -18,12 +18,6 @@
 
 ////
 
-@interface PostData()
-@property (readwrite, nonatomic) NSString * message;
-@property (readwrite, nonatomic) NSString * msgid;
-@property (readwrite, nonatomic) BOOL isEdit;
-@end
-
 @implementation PostData
 @synthesize message, msgid, isEdit;
 @end

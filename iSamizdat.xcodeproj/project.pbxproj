@@ -76,6 +76,7 @@
 		872D958A1573AB5600BCB4EC /* SSPullToRefreshDefaultContentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D95851573AB5600BCB4EC /* SSPullToRefreshDefaultContentView.m */; };
 		872D958B1573AB5600BCB4EC /* SSPullToRefreshSimpleContentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D95871573AB5600BCB4EC /* SSPullToRefreshSimpleContentView.m */; };
 		872D958C1573AB5600BCB4EC /* SSPullToRefreshView.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D95891573AB5600BCB4EC /* SSPullToRefreshView.m */; };
+		8744AD921589CD8500D77917 /* SSPullToRefreshView+Kolyvan.m in Sources */ = {isa = PBXBuildFile; fileRef = 8744AD911589CD8500D77917 /* SSPullToRefreshView+Kolyvan.m */; };
 		87546F27157C888000DE58DD /* CommentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 87546F26157C888000DE58DD /* CommentCell.m */; };
 		87546F2B157C895C00DE58DD /* TextLine.m in Sources */ = {isa = PBXBuildFile; fileRef = 87546F2A157C895C00DE58DD /* TextLine.m */; };
 		87546F2E157C8A7200DE58DD /* SamLibComment+IOS.m in Sources */ = {isa = PBXBuildFile; fileRef = 87546F2D157C8A7200DE58DD /* SamLibComment+IOS.m */; };
@@ -222,6 +223,8 @@
 		872D95871573AB5600BCB4EC /* SSPullToRefreshSimpleContentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SSPullToRefreshSimpleContentView.m; path = vendors/refresh/SSPullToRefreshSimpleContentView.m; sourceTree = "<group>"; };
 		872D95881573AB5600BCB4EC /* SSPullToRefreshView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SSPullToRefreshView.h; path = vendors/refresh/SSPullToRefreshView.h; sourceTree = "<group>"; };
 		872D95891573AB5600BCB4EC /* SSPullToRefreshView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SSPullToRefreshView.m; path = vendors/refresh/SSPullToRefreshView.m; sourceTree = "<group>"; };
+		8744AD901589CD8500D77917 /* SSPullToRefreshView+Kolyvan.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SSPullToRefreshView+Kolyvan.h"; sourceTree = "<group>"; };
+		8744AD911589CD8500D77917 /* SSPullToRefreshView+Kolyvan.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SSPullToRefreshView+Kolyvan.m"; sourceTree = "<group>"; };
 		87546F25157C888000DE58DD /* CommentCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommentCell.h; sourceTree = "<group>"; };
 		87546F26157C888000DE58DD /* CommentCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommentCell.m; sourceTree = "<group>"; };
 		87546F29157C895C00DE58DD /* TextLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextLine.h; sourceTree = "<group>"; };
@@ -283,6 +286,8 @@
 				87546F2D157C8A7200DE58DD /* SamLibComment+IOS.m */,
 				8776CA40157767460099C83D /* UIFont+Kolyvan.h */,
 				8776CA41157767460099C83D /* UIFont+Kolyvan.m */,
+				8744AD901589CD8500D77917 /* SSPullToRefreshView+Kolyvan.h */,
+				8744AD911589CD8500D77917 /* SSPullToRefreshView+Kolyvan.m */,
 			);
 			name = category;
 			sourceTree = "<group>";
@@ -710,6 +715,7 @@
 				87546F44157CB21300DE58DD /* UserViewController.m in Sources */,
 				87EE1E5315885C130015BA99 /* VoteViewController.m in Sources */,
 				87EE1E5815886C9F0015BA99 /* VotedViewController.m in Sources */,
+				8744AD921589CD8500D77917 /* SSPullToRefreshView+Kolyvan.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
