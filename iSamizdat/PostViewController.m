@@ -16,6 +16,19 @@
 #import "SamLibComments.h"
 #import "SamLibUser.h"
 
+////
+
+@interface PostData()
+@property (readwrite, nonatomic) NSString * message;
+@property (readwrite, nonatomic) NSString * msgid;
+@property (readwrite, nonatomic) BOOL isEdit;
+@end
+
+@implementation PostData
+@synthesize message, msgid, isEdit;
+@end
+
+////
 
 @interface PostViewController () {
     BOOL _needReload;
@@ -158,10 +171,13 @@
         if (self.delegate) {
             
             NSString * message = self.textView.text;    
-            if (message.nonEmpty) {        
-                [self.delegate sendPost:[message copy] 
-                                comment:self.comment.msgid 
-                                 isEdit:self.isEdit];             
+            if (message.nonEmpty) {   
+                PostData *p = [[PostData alloc] init];
+                p.message = message;
+                p.msgid = self.comment.msgid;
+                p.isEdit = self.isEdit;    
+                
+                [self.delegate sendPost:p];             
             }
         }
         

@@ -33,6 +33,7 @@
     withStyle: (UITableViewCellStyle) style;
 
 - (void) showNoticeAboutReloadResult: (NSString *) error;
-
+- (void) handleStatus: (SamLibStatus) status 
+            withError: (NSString *)error;
 
 @end

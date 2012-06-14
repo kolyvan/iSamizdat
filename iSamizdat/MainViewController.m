@@ -227,7 +227,7 @@ typedef enum {
 }
 
 - (void) goSettings
-{
+{   
     if (!self.userViewController) {
         self.userViewController = [[UserViewController alloc] init];        
     }
@@ -239,8 +239,7 @@ typedef enum {
                        animated:YES 
                      completion:NULL];
     
-    //[self.navigationController pushViewController:self.userViewController animated:YES];    
-    
+    //[self.navigationController pushViewController:self.userViewController animated:YES];     
 }
 
 #pragma mark - refresh 

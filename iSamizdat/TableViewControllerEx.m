@@ -90,6 +90,28 @@
     }
 }
 
+- (void) handleStatus: (SamLibStatus) status 
+            withError: (NSString *)error
+{
+    if (status == SamLibStatusFailure) {
+        
+        [self performSelector:@selector(showNoticeAboutReloadResult:) 
+                   withObject:error ? error : @""
+                   afterDelay:0.3];
+        
+    } else if (status == SamLibStatusSuccess) {            
+        
+        [self performSelector:@selector(showNoticeAboutReloadResult:) 
+                   withObject:nil
+                   afterDelay:0.3];
+    }
+    
+    if (status != SamLibStatusNotModifed) {
+        [self prepareData];
+        [self.tableView reloadData];            
+    }
+}
+
 - (void)pullToRefreshViewDidStartLoading:(SSPullToRefreshView *)view 
 {   
     self.savedRightButton = self.navigationItem.rightBarButtonItem;
@@ -106,25 +128,7 @@
         
         [self.pullToRefreshView finishLoading];
         self.navigationItem.rightBarButtonItem = self.savedRightButton;
-        
-        if (status == SamLibStatusFailure) {
-            
-            [self performSelector:@selector(showNoticeAboutReloadResult:) 
-                       withObject:error ? error : @""
-                       afterDelay:0.3];
-            
-        } else if (status == SamLibStatusSuccess) {            
-                        
-            [self performSelector:@selector(showNoticeAboutReloadResult:) 
-                       withObject:nil
-                       afterDelay:0.3];
-        }
-    
-        if (status != SamLibStatusNotModifed) {
-            [self prepareData];
-            [self.tableView reloadData];            
-        }
-        
+        [self handleStatus: status withError:error];        
     }];
 }
 

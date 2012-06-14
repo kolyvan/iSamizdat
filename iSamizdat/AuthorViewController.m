@@ -165,7 +165,6 @@ extern int ddLogLevel;
 
 - (void) goInfo
 {
-    
 }
 
 - (void) refresh: (void(^)(SamLibStatus status, NSString *error)) block

@@ -17,10 +17,14 @@
 @class SamLibComment;
 @class PostViewController;
 
+@interface PostData : NSObject
+@property (readonly, nonatomic) NSString * message;
+@property (readonly, nonatomic) NSString * msgid;
+@property (readonly, nonatomic) BOOL isEdit;
+@end
+
 @protocol PostViewDelagate <NSObject>
-- (void) sendPost: (NSString *) message
-          comment: (NSString *) msgid 
-           isEdit: (BOOL) isEdit;  
+- (void) sendPost: (PostData *) post;  
 @end
 
 @interface PostViewController : UIViewController<UITextViewDelegate, UserViewDelegate>

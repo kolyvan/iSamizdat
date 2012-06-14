@@ -30,11 +30,13 @@
 
 ////
 
+
+////
+
 @interface CommentsViewController () {
     BOOL _needReload;
     id _version;
-    
-    
+    PostData *_postToSend;
 }
 
 @property (nonatomic, strong) PostViewController *postViewController;
@@ -105,11 +107,28 @@
 
 - (void) refresh: (void(^)(SamLibStatus status, NSString *error)) block
 {
-    [_comments update:YES block:^(SamLibComments *comments, SamLibStatus status, NSString *error) {
+    if (_postToSend) {
         
-        block(status, error);        
+        [_comments post:_postToSend.message
+                  msgid:_postToSend.msgid
+                isReply:!_postToSend.isEdit
+                  block:^(SamLibComments *comments, SamLibStatus status, NSString *error) {
+                      
+                      block(status, error);
+                  }];
         
-    }];
+        
+        _postToSend = nil;
+        
+    } else {
+    
+        [_comments update:YES 
+                    block:^(SamLibComments *comments, SamLibStatus status, NSString *error) {
+            
+            block(status, error);        
+            
+        }];        
+    }
 }
 
 - (void) replyPost:(SamLibComment *)comment 
@@ -128,7 +147,7 @@
 }
 
 - (void) replyPost
-{
+{   
     [self replyPost:nil isEdit:NO];
 }
 
@@ -154,23 +173,16 @@
     [actionSheet showInView:self.view];
 }
 
-- (void) sendPost: (NSString *) message
-          comment: (NSString *) msgid 
-           isEdit: (BOOL) isEdit
-{ 
+- (void) sendPost: (PostData *) post
+{   
+    _postToSend = post;
     
-    [_comments post:message
-              msgid:msgid
-            isReply:!isEdit
-              block:^(SamLibComments *comments, SamLibStatus status, NSString *error) {
-                  
-                  if (status == SamLibStatusSuccess)
-                      [self.tableView reloadData];
-                  
-              }];
+    //[self performSelector:@selector(forceRefresh:) 
+    //           withObject:nil
+    //           afterDelay:1.0];
     
+    [self.pullToRefreshView startLoadingAndExpand:YES];  
 }
-
 
 - (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
@@ -187,7 +199,6 @@
                            }];        
     }
 }
-
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView 
 {
@@ -235,6 +246,7 @@ commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
 forRowAtIndexPath:(NSIndexPath *)indexPath 
 {
     // just leave this method empty
-} 
+}
+
 
 @end
