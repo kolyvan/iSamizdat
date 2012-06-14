@@ -12,6 +12,7 @@
 #import "NSDictionary+Kolyvan.h"
 #import "NSDate+Kolyvan.h"
 #import "NSString+Kolyvan.h"
+#import "NSArray+Kolyvan.h"
 #import "DDLog.h"
 #import "JSONKit.h"
 
@@ -78,6 +79,39 @@ NSHTTPCookie * deleteSamLibCookie(NSString *name)
         }
     
     return nil;
+}
+
+void storeSamLibSessionCookies(BOOL save)
+{
+    if (save) {
+        
+        NSHTTPCookieStorage * storage = [NSHTTPCookieStorage sharedHTTPCookieStorage];    
+        NSArray * cookies = [storage cookiesForURL: [NSURL URLWithString: @"http://samlib.ru/"]]; 
+        if (cookies.nonEmpty) {
+            NSArray *session = [cookies filter:^(id elem) {
+                return [elem isSessionOnly];
+            }];                        
+            [SamLibAgent.settings() update:@"session" 
+                                     value:[session map:^(id elem){ return [elem properties];}]];
+        }
+        
+    } else {
+        
+        [SamLibAgent.settings() removeObjectForKey:@"session"];
+    }
+}
+
+void restoreSamLibSessionCookies()
+{
+    NSArray * session = [SamLibAgent.settings() get:@"session"];
+    if (session.nonEmpty) {
+        NSHTTPCookieStorage * storage = [NSHTTPCookieStorage sharedHTTPCookieStorage];
+        for (NSDictionary *dict in session) {
+            NSHTTPCookie *cookie = [NSHTTPCookie cookieWithProperties: dict];
+            [storage setCookie:cookie];
+            //DDLogInfo(@"set cookie %@: %@", cookie.name, cookie.value);
+        }
+    }
 }
 
 id loadObject(NSString *filepath, BOOL immutable)

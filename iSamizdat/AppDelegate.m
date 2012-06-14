@@ -15,9 +15,13 @@
 #import "SamLibAgent.h"
 #import "SamLibModel.h"
 #import "SamLibAuthor.h"
+#import "SamLibUser.h"
 #import "DDLog.h"
 #import "DDTTYLogger.h"
 #import "KxUtils.h"
+#import "KxMacros.h"
+#import "NSDictionary+Kolyvan.h"
+#import "NSString+Kolyvan.h"
 #import "WBSuccessNoticeView.h"
 #import "WBErrorNoticeView.h"
 
@@ -49,6 +53,13 @@ int ddLogLevel = LOG_LEVEL_WARN;
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     [self initLogger];
+    
+    if ([[SamLibAgent.settings() get: @"user.enableAccount"] boolValue]) {
+        DDLogInfo(@"restore SamLib session cookies");
+        restoreSamLibSessionCookies();
+    }
+    
+    DDLogInfo(@"logged as %@", [SamLibUser loggedUserName]);
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 
@@ -128,6 +139,117 @@ int ddLogLevel = LOG_LEVEL_WARN;
     [self.successNotice show];
     
     //[[WBSuccessNoticeView successNoticeInView:view title:title] show];
+}
+
+- (void) clearCookies
+{
+    DDLogInfo(@"clear cookies");    
+    storeSamLibSessionCookies(NO);
+    deleteSamLibCookie(@"COMMENT");
+    deleteSamLibCookie(@"ZUI");    
+    deleteSamLibCookie(@"NAME");
+    deleteSamLibCookie(@"PASSWORD");                    
+    deleteSamLibCookie(@"HOME");     
+}
+
+- (void) checkLogin
+{
+    SamLibUser *user = [SamLibUser currentUser];
+    
+    BOOL enableAccount = NO;     
+    enableAccount = [[SamLibAgent.settings() get: @"user.enableAccount"] boolValue];
+           
+    if (enableAccount) {
+        
+        if (!user.isLogin) {
+            
+            [self clearCookies];          
+            
+            NSString *login = user.login;
+            NSString *password = user.pass;
+            
+            if (login.nonEmpty && password.nonEmpty) {
+                
+                DDLogInfo(@"attempt to log in as %@", login);
+                
+                // login and save cookies            
+                
+                [user loginSamizdat:login
+                               pass:password
+                              block:^(SamLibStatus status, NSString *error){
+                                  
+                                  NSString *title;
+                                  NSString *message;
+                                  
+                                  if (SamLibStatusSuccess == status) {
+                                      
+                                      storeSamLibSessionCookies(YES);
+                                      
+                                      title = locString(@"login success");
+                                      message = KxUtils.format(locString(@"logged as %@"), login);
+                                      
+                                  } else {
+                                      
+                                      title = locString(@"login failure");
+                                      message = locString(@"invalid name or password");
+                                  }
+                                  
+                                  
+                                  UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title
+                                                                                      message:message
+                                                                                     delegate:nil 
+                                                                            cancelButtonTitle:locString(@"Ok") 
+                                                                            otherButtonTitles:nil];
+                                  
+                                  [alertView show];
+                                  
+                              }];
+            }
+        }
+        
+    } else {
+        
+        // logout and clear cookies
+              
+        /*
+        if (user.isLogin) {                        
+            
+            DDLogInfo(@"attempt to log out");            
+            [user logoutSamizdat:^(SamLibStatus status, NSString *error) {
+                
+                NSString *title;
+                NSString *message;
+                
+                if (SamLibStatusSuccess == status) {
+                    
+                    title = locString(@"logout success");
+                    message = nil;
+                    
+                } else {
+                    
+                    title = locString(@"logout failure"); 
+                    message = error.nonEmpty ? error : locString(@"unknown error");                                                           
+                }
+                
+                
+                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title
+                                                                    message:message
+                                                                   delegate:nil 
+                                                          cancelButtonTitle:locString(@"Ok") 
+                                                          otherButtonTitles:nil];
+                
+                [alertView show];
+               
+            }]; 
+        }
+        */ 
+        
+        if ([SamLibUser loggedUserName] != nil) {
+            [self clearCookies];
+        }
+        
+    }    
+        
 }
 
 @end

@@ -16,6 +16,7 @@
 #import "NSDictionary+Kolyvan.h"
 #import "SamLibUser.h"
 #import "SamLibAgent.h"
+#import "AppDelegate.h"
 
 #define USER_SECTION 0
 #define ACCOUNT_SECTION 1
@@ -191,9 +192,9 @@
         
         [SamLibAgent.settings() update: @"user.enableAccount" 
                                  value: [NSNumber numberWithBool:cell.switchButton.on]];   
-        changed = YES;        
+        changed = YES;  
     }
-
+    
     BOOL dismiss = YES;
     
     if (self.delegate && changed) {
@@ -203,7 +204,13 @@
     if (dismiss)
         [self dismissViewControllerAnimated:YES 
                                  completion:NULL];
+
     
+    if (changed) {
+        
+        [[AppDelegate shared] checkLogin];
+    }
+ 
 }
 
 

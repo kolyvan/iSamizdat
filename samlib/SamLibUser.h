@@ -32,6 +32,7 @@ typedef void (^LoginBlock)(SamLibStatus status, NSString *error);
 - (NSString *) homePage;
 - (BOOL) isLogin;
 
++ (NSString *) loggedUserName;
 + (SamLibUser *) currentUser;
 
 - (void) loginSamizdat: (NSString *) login 

@@ -34,6 +34,8 @@ extern NSDate * getDateFromDict(NSDictionary * dict, NSString *name, NSString *p
 extern NSNumber * getNumberFromDict(NSDictionary *dict, NSString *name, NSString *path);
 extern NSHTTPCookie * searchSamLibCookie(NSString *name);
 extern NSHTTPCookie * deleteSamLibCookie(NSString *name);
+extern void storeSamLibSessionCookies(BOOL save);
+extern void restoreSamLibSessionCookies();
 extern NSDictionary * loadDictionary(NSString *filepath);
 extern NSDictionary * loadDictionaryEx(NSString *filepath, BOOL immutable);
 extern BOOL saveDictionary(NSDictionary *dict, NSString * filepath);

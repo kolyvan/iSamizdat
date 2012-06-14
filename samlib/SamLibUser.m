@@ -169,8 +169,16 @@ static NSString * gKeychainService = @"ru.kolyvan.samlib";
 
 - (BOOL) isLogin
 {
+    return [[self->isa loggedUserName] isEqualToString:self.login];
+}
+
++ (NSString *) loggedUserName
+{
     NSHTTPCookie *cookie = searchSamLibCookie(@"NAME");
-    return cookie.value != nil && ![cookie.value isEqualToString: @"none"];
+    NSString *name = cookie.value;
+    if (!name || [name isEqualToString: @"none"])
+        return nil;
+    return name;
 }
 
 - (void) loginSamizdat:(LoginBlock) block
