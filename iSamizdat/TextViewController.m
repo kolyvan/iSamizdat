@@ -151,9 +151,9 @@ enum {
 {
     [super viewDidLoad];
     
-    UIBarButtonItem *goButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemBookmarks 
+    UIBarButtonItem *goButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction 
                                                                                target:self 
-                                                                               action:@selector(goRead)];
+                                                                               action:@selector(goSafari)];
     
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back.png"]
                                                                    style:UIBarButtonItemStylePlain                                                                                           target:nil                                                                                            action:nil];
@@ -271,8 +271,10 @@ enum {
         return @"ERR";
 }
 
-- (void) goRead
-{
+- (void) goSafari
+{    
+    NSURL *url = [NSURL URLWithString: [@"http://" stringByAppendingString: _text.url]];
+    [UIApplication.sharedApplication openURL: url];                     
 }
 
 #pragma mark - Table view data source

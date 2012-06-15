@@ -72,9 +72,9 @@ extern int ddLogLevel;
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back.png"]
                                                                    style:UIBarButtonItemStylePlain                                                                                           target:nil                                                                                            action:nil];
     
-    UIBarButtonItem *infoButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose 
+    UIBarButtonItem *infoButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction 
                                                                                 target:self 
-                                                                                action:@selector(goInfo)];
+                                                                                action:@selector(goSafari)];
 
     self.navigationItem.backBarButtonItem = backButton;
     self.navigationItem.rightBarButtonItem = infoButton;    
@@ -169,8 +169,10 @@ extern int ddLogLevel;
     }];
 }
 
-- (void) goInfo
-{     
+- (void) goSafari
+{    
+    NSURL *url = [NSURL URLWithString: [@"http://" stringByAppendingString: _author.url]];
+    [UIApplication.sharedApplication openURL: url];                     
 }
 
 - (void) refresh: (void(^)(SamLibStatus status, NSString *error)) block
