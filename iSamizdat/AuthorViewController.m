@@ -21,6 +21,7 @@
 #import "NSDictionary+Kolyvan.h"
 #import "TextViewController.h"
 #import "TextGroupViewController.h"
+#import "AuthorInfoViewController.h"
 #import "AppDelegate.h"
 #import "UIFont+Kolyvan.h"
 #import "DDLog.h"
@@ -35,6 +36,7 @@ extern int ddLogLevel;
 }
 @property (nonatomic, strong) TextViewController *textViewController;
 @property (nonatomic, strong) TextGroupViewController * textGroupViewController;
+@property (nonatomic, strong) AuthorInfoViewController* authorInfoViewController;
 @end
 
 @implementation AuthorViewController
@@ -42,6 +44,7 @@ extern int ddLogLevel;
 @synthesize author = _author;
 @synthesize textViewController;
 @synthesize textGroupViewController;
+@synthesize authorInfoViewController;
 
 - (void) setAuthor:(SamLibAuthor *)author 
 {
@@ -63,19 +66,20 @@ extern int ddLogLevel;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    //UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@""
-    //                                                               style:UIBarButtonItemStylePlain 
-    //                                                              target:nil
-    //                                                              action:nil];
-    
+        
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back.png"]
                                                                    style:UIBarButtonItemStylePlain                                                                                           target:nil                                                                                            action:nil];
     
-    UIBarButtonItem *infoButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction 
+    UIBarButtonItem *infoButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemOrganize 
                                                                                 target:self 
-                                                                                action:@selector(goSafari)];
-
+                                                                               action:@selector(goInfo)];
+    //UIButton * button = [UIButton buttonWithType: UIButtonTypeInfoLight];
+    //[button addTarget:self 
+    //           action:@selector(goSafari) 
+    // forControlEvents:UIControlEventTouchUpInside];        
+    //UIBarButtonItem *infoButton = [[UIBarButtonItem alloc] initWithCustomView:button];
+    
+    
     self.navigationItem.backBarButtonItem = backButton;
     self.navigationItem.rightBarButtonItem = infoButton;    
 }
@@ -113,6 +117,7 @@ extern int ddLogLevel;
     self.navigationItem.rightBarButtonItem = nil;
     self.textViewController = nil;
     self.textGroupViewController = nil;
+    self.authorInfoViewController = nil;
 }
 
 - (void) didReceiveMemoryWarning
@@ -120,6 +125,7 @@ extern int ddLogLevel;
     [super didReceiveMemoryWarning];         
     self.textViewController = nil;
     self.textGroupViewController = nil;
+    self.authorInfoViewController = nil;    
 }
 
 #pragma mark - private
@@ -173,6 +179,17 @@ extern int ddLogLevel;
 {    
     NSURL *url = [NSURL URLWithString: [@"http://" stringByAppendingString: _author.url]];
     [UIApplication.sharedApplication openURL: url];                     
+}
+
+- (void) goInfo
+{
+    if (!self.authorInfoViewController) {
+        self.authorInfoViewController = [[AuthorInfoViewController alloc] init];
+    }
+    
+    self.authorInfoViewController.author = _author;
+    [self.navigationController pushViewController:self.authorInfoViewController 
+                                         animated:YES]; 
 }
 
 - (void) refresh: (void(^)(SamLibStatus status, NSString *error)) block
