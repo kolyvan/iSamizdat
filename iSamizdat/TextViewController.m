@@ -100,13 +100,11 @@ enum {
     RowTitle,
     RowSize,
     RowUpdate,    
+    RowDownload,        
     RowNote,
-    //RowGroup,    
     RowGenre,
     RowComments,
-    RowMakeDiff,            
     RowRead,
-    RowDiff, 
     RowMyVote,
     //RowMyMemo,
 };
@@ -208,28 +206,21 @@ enum {
     // fixme: below is most likely wrong code
     if (_text.htmlFile.nonEmpty) {
         
-        if (_text.canUpdate)
+        if (_text.changedSize) // _text.canUpdate
             [ma push: $int(RowUpdate)];
         
         [ma push: $int(RowRead)];
+        
     } else {
     
-        if (_text.changedSize &&
-            _text.canUpdate)
+        if (_text.changedSize)
             [ma push: $int(RowUpdate)];
+        else    
+            [ma push: $int(RowDownload)];
     }
-    
-    if (_text.canMakeDiff)
-        [ma push: $int(RowMakeDiff)];
-
-    if (_text.diffFile.nonEmpty)
-        [ma push: $int(RowDiff)];
-    
+   
     if (_text.note.nonEmpty)
         [ma push: $int(RowNote)];
-        
-    //if (_text.group.nonEmpty)
-    //    [ma push: $int(RowGroup)];
         
     if (_text.genre.nonEmpty ||
         _text.type.nonEmpty)
@@ -277,6 +268,18 @@ enum {
     [UIApplication.sharedApplication openURL: url];                     
 }
 
+- (void) goDownload
+{
+    UIActionSheet *actionSheet;
+    actionSheet = [[UIActionSheet alloc] initWithTitle:locString(@"Download text?")
+                                              delegate:self
+                                     cancelButtonTitle:locString(@"No") 
+                                destructiveButtonTitle:locString(@"Yes") 
+                                     otherButtonTitles:nil];
+    
+    [actionSheet showInView:self.view];
+}
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -297,6 +300,26 @@ enum {
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {   
     return _rows.count;    
+}
+
+- (UITableViewCell *) mkDownloadCell
+{
+    static NSString *CellIdentifier = @"DownloadCell";
+    UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];    
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault 
+                                      reuseIdentifier:CellIdentifier];   
+        
+        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];        
+        button.frame = CGRectMake(0, 0, 24, 24);        
+        [button addTarget:self 
+                   action:@selector(goDownload) 
+        forControlEvents:UIControlEventTouchUpInside];        
+        [button setBackgroundImage:[UIImage imageNamed:@"download.png"]
+                          forState:UIControlStateNormal];
+        cell.accessoryView = button;
+    }
+    return cell;    
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -334,12 +357,6 @@ enum {
         cell.textLabel.text = locString(@"Size");
         cell.detailTextLabel.text = [_text sizeWithDelta: @" "];
         return cell;    
-        
-    //} else if (RowGroup == row) {
-    //    
-    //    UITableViewCell *cell = [self mkCell: @"GenreCell" withStyle:UITableViewCellStyleDefault];             
-    //    cell.textLabel.text = _text.group;
-    //    return cell;
     
     } else if (RowGenre == row) {
         
@@ -380,25 +397,19 @@ enum {
         cell.detailTextLabel.text = _text.dateModified;          
         return cell;
         
-    } else if (RowDiff == row) {
-        
-        UITableViewCell *cell = [self mkCell: @"DiffCell" withStyle:UITableViewCellStyleDefault];                    
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        cell.textLabel.text = locString(@"Show Diff");
-        return cell;
-        
     } else if (RowUpdate == row) {
         
-        UITableViewCell *cell = [self mkCell: @"UpdateCell" withStyle:UITableViewCellStyleDefault];                    
-        cell.textLabel.text = locString(@"Update is available");
+        UITableViewCell *cell = [self mkDownloadCell];                    
         cell.textLabel.textColor = [UIColor blueColor];
-        return cell;
-        
-    } else if (RowMakeDiff == row) {
-        
-        UITableViewCell *cell = [self mkCell: @"MakeDiffCell" withStyle:UITableViewCellStyleDefault];                            
-        cell.textLabel.text = locString(@"Make diff");
-        return cell;
+        cell.textLabel.text = locString(@"Update is available");
+        return cell; 
+       
+    } else if (RowDownload == row) {   
+         
+        UITableViewCell *cell = [self mkDownloadCell];                    
+        cell.textLabel.text = locString(@"Download text");        
+        cell.textLabel.textColor = [UIColor darkTextColor];        
+        return cell; 
         
     } else if (RowMyVote == row) {
         
@@ -450,6 +461,8 @@ enum {
         [self.navigationController pushViewController:self.voteViewController 
                                              animated:YES]; 
         
+    } else if (RowUpdate == row || RowDownload == row) {
+
     }
 
 }
@@ -478,6 +491,16 @@ enum {
                  cell.detailTextLabel.text = @"ERR";
              
          }];
+}
+
+#pragma mark - UIActionSheet delegate
+
+- (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex != actionSheet.cancelButtonIndex) {
+      
+        [self.pullToRefreshView startLoadingAndExpand:YES];
+    }
 }
 
 @end

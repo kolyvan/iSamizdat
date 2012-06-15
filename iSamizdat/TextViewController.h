@@ -16,7 +16,7 @@
 
 @class SamLibText;
 
-@interface TextViewController : TableViewControllerEx<VoteViewDelagate>
+@interface TextViewController : TableViewControllerEx<VoteViewDelagate, UIActionSheetDelegate>
 
 @property (nonatomic, strong) SamLibText *text;
 

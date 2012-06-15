@@ -195,17 +195,7 @@
         
         _postData = [[PostData alloc] init];
         _postData.msgid = comment.msgid;
-        [self.pullToRefreshView startLoadingAndForceExpand]; 
-        
-        /*
-        [_comments deleteComment:comment.msgid 
-                           block:^(SamLibComments *comments, SamLibStatus status, NSString *error) {
-                               
-                               if (status == SamLibStatusSuccess)
-                                   [self.tableView reloadData];
-                               
-                           }];        
-       */  
+        [self.pullToRefreshView startLoadingAndForceExpand];          
     }
 }
 
