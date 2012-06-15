@@ -20,6 +20,7 @@
 #import "NSArray+Kolyvan.h"
 #import "NSDictionary+Kolyvan.h"
 #import "TextViewController.h"
+#import "TextGroupViewController.h"
 #import "AppDelegate.h"
 #import "UIFont+Kolyvan.h"
 #import "DDLog.h"
@@ -33,12 +34,14 @@ extern int ddLogLevel;
     NSArray *_sections;
 }
 @property (nonatomic, strong) TextViewController *textViewController;
+@property (nonatomic, strong) TextGroupViewController * textGroupViewController;
 @end
 
 @implementation AuthorViewController
 
 @synthesize author = _author;
 @synthesize textViewController;
+@synthesize textGroupViewController;
 
 - (void) setAuthor:(SamLibAuthor *)author 
 {
@@ -108,12 +111,15 @@ extern int ddLogLevel;
     
     self.navigationItem.backBarButtonItem = nil;
     self.navigationItem.rightBarButtonItem = nil;
+    self.textViewController = nil;
+    self.textGroupViewController = nil;
 }
 
 - (void) didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];         
     self.textViewController = nil;
+    self.textGroupViewController = nil;
 }
 
 #pragma mark - private
@@ -147,8 +153,8 @@ extern int ddLogLevel;
         
         if (subGroup)  {
             
-            if (![ma containsObject:text.groupEx])
-                [ma push: text.groupEx];     
+            if (![ma containsObject:text.group])
+                [ma push: text.group];     
             
         } else {
             
@@ -219,10 +225,13 @@ extern int ddLogLevel;
     
     if ([obj isKindOfClass:[NSString class]]) {
         
+        NSString *groupName = obj;
+        if (groupName.first == '@')
+            groupName = groupName.tail;
+        
         UITableViewCell *cell = [self mkCell: @"GroupCell" withStyle:UITableViewCellStyleDefault];
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;        
-        cell.textLabel.text = obj;  
-        //cell.textLabel.font = boldSystemFont;
+        cell.textLabel.text = groupName;  
         return cell;
     }
     
@@ -246,6 +255,22 @@ extern int ddLogLevel;
         self.textViewController.text = obj;
         [self.navigationController pushViewController:self.textViewController 
                                              animated:YES]; 
+        
+    } else if ([obj isKindOfClass:[NSString class]]) {
+               
+        if (!self.textGroupViewController) {
+            self.textGroupViewController = [[TextGroupViewController alloc] init];
+        }
+        
+        NSString *groupName = obj;        
+        NSArray *a = [_author.texts filter:^(id elem) {
+            SamLibText * p = elem;
+            return [p.group isEqualToString:groupName];
+        }];
+        
+        self.textGroupViewController.texts = a;
+        [self.navigationController pushViewController:self.textGroupViewController 
+                                             animated:YES];         
     }
 }
 

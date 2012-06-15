@@ -94,6 +94,8 @@
 		8776CA42157767460099C83D /* UIFont+Kolyvan.m in Sources */ = {isa = PBXBuildFile; fileRef = 8776CA41157767460099C83D /* UIFont+Kolyvan.m */; };
 		8776CA4615776EC50099C83D /* FavoritesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8776CA4415776EC50099C83D /* FavoritesViewController.m */; };
 		8776CA4715776EC50099C83D /* FavoritesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8776CA4515776EC50099C83D /* FavoritesViewController.xib */; };
+		87E230AC158B0AC70074EBF1 /* TextGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87E230AA158B0AC70074EBF1 /* TextGroupViewController.m */; };
+		87E230AD158B0AC70074EBF1 /* TextGroupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 87E230AB158B0AC70074EBF1 /* TextGroupViewController.xib */; };
 		87EE1E5315885C130015BA99 /* VoteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87EE1E5115885C130015BA99 /* VoteViewController.m */; };
 		87EE1E5415885C130015BA99 /* VoteViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 87EE1E5215885C130015BA99 /* VoteViewController.xib */; };
 		87EE1E5815886C9F0015BA99 /* VotedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87EE1E5615886C9F0015BA99 /* VotedViewController.m */; };
@@ -252,6 +254,9 @@
 		8776CA4315776EC50099C83D /* FavoritesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FavoritesViewController.h; sourceTree = "<group>"; };
 		8776CA4415776EC50099C83D /* FavoritesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FavoritesViewController.m; sourceTree = "<group>"; };
 		8776CA4515776EC50099C83D /* FavoritesViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FavoritesViewController.xib; sourceTree = "<group>"; };
+		87E230A9158B0AC70074EBF1 /* TextGroupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextGroupViewController.h; sourceTree = "<group>"; };
+		87E230AA158B0AC70074EBF1 /* TextGroupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextGroupViewController.m; sourceTree = "<group>"; };
+		87E230AB158B0AC70074EBF1 /* TextGroupViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TextGroupViewController.xib; sourceTree = "<group>"; };
 		87EE1E5015885C130015BA99 /* VoteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VoteViewController.h; sourceTree = "<group>"; };
 		87EE1E5115885C130015BA99 /* VoteViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VoteViewController.m; sourceTree = "<group>"; };
 		87EE1E5215885C130015BA99 /* VoteViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VoteViewController.xib; sourceTree = "<group>"; };
@@ -359,6 +364,8 @@
 				87546F42157CB21200DE58DD /* UserViewController.m */,
 				8712FFCE1574DA7900C01283 /* AuthorViewController.h */,
 				8712FFCF1574DA7900C01283 /* AuthorViewController.m */,
+				87E230A9158B0AC70074EBF1 /* TextGroupViewController.h */,
+				87E230AA158B0AC70074EBF1 /* TextGroupViewController.m */,
 				8712FFD31574E65500C01283 /* TextViewController.h */,
 				8712FFD41574E65500C01283 /* TextViewController.m */,
 				8776CA2A157738670099C83D /* TableViewControllerEx.h */,
@@ -398,6 +405,7 @@
 		872D945615737B9500BCB4EC /* views */ = {
 			isa = PBXGroup;
 			children = (
+				87E230AB158B0AC70074EBF1 /* TextGroupViewController.xib */,
 				87546F43157CB21200DE58DD /* UserViewController.xib */,
 				87546F31157C98B800DE58DD /* PostViewController.xib */,
 				8776CA4515776EC50099C83D /* FavoritesViewController.xib */,
@@ -647,6 +655,7 @@
 				87546F45157CB21300DE58DD /* UserViewController.xib in Resources */,
 				87EE1E5415885C130015BA99 /* VoteViewController.xib in Resources */,
 				87EE1E5915886C9F0015BA99 /* VotedViewController.xib in Resources */,
+				87E230AD158B0AC70074EBF1 /* TextGroupViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -716,6 +725,7 @@
 				87EE1E5315885C130015BA99 /* VoteViewController.m in Sources */,
 				87EE1E5815886C9F0015BA99 /* VotedViewController.m in Sources */,
 				8744AD921589CD8500D77917 /* SSPullToRefreshView+Kolyvan.m in Sources */,
+				87E230AC158B0AC70074EBF1 /* TextGroupViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
