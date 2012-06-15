@@ -274,9 +274,9 @@ enum {
     UIActionSheet *actionSheet;
     actionSheet = [[UIActionSheet alloc] initWithTitle:locString(@"Download text?")
                                               delegate:self
-                                     cancelButtonTitle:locString(@"No") 
-                                destructiveButtonTitle:locString(@"Yes") 
-                                     otherButtonTitles:nil];
+                                     cancelButtonTitle:locString(@"Cancel") 
+                                destructiveButtonTitle:nil
+                                     otherButtonTitles:locString(@"Download"), nil];
     
     [actionSheet showInView:self.view];
 }
