@@ -211,9 +211,9 @@ static AFHTTPClient * httpClient(BOOL cleanup)
         
         [client setDefaultHeader:@"Accept-Language" value:@"ru-RU, ru, en-US;q=0.8"]; 
         
-        //[_client setDefaultHeader:@"User-Agent" value:@"samizdatSpider/0.1, (unknown)"]; 
+        //@"samizdatSpider/0.1, (unknown)"; 
         [client setDefaultHeader:@"User-Agent" 
-                           value:@"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.6; rv:12.0) Gecko/20100101 Firefox/12.0"]; 
+                           value:@"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.7; rv:12.0) Gecko/20100101 Firefox/12.0"]; 
         
         [client setDefaultHeader:@"Pragma" value:@"no-cache"];
         [client setDefaultHeader:@"Cache-Control" value:@"no-cache, max-age=0"];

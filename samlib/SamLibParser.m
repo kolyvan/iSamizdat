@@ -281,7 +281,13 @@ static void parseCommentName(NSString *html, NSMutableDictionary *dict)
                 color = scanUpToTag(scanner, @">");
             }                
             
-            name = scanUpToTag(scanner, @"</a></noindex>");            
+            NSInteger scanLoc = scanner.scanLocation;
+            name = scanUpToTag(scanner, @"</a></noindex>");
+            if (!name.nonEmpty) { 
+                // yes, sometimes samlib.ru returns a wrong formatted html 
+                // such as an unclosed tag it this case                 
+                name = [[html substringFromIndex:scanLoc] removeHTML];
+            }
         }
     }     
     else  {
@@ -608,7 +614,7 @@ static NSString * scanTextData(NSString *html)
 }
 
 static NSArray * scanComments(NSString *html)
-{
+{  
     NSScanner *scanner = [NSScanner scannerWithString: html];    
     if (findTag(scanner, @"href=/long.shtml>Полный") &&
         findTag(scanner, @"список...&gt;&gt;</a></div>") &&
