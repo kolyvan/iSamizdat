@@ -12,6 +12,7 @@
 
 #import "SamLibText+IOS.h"
 #import "NSDictionary+Kolyvan.h"
+#import "NSString+Kolyvan.h"
 #import "KxMacros.h"
 
 @implementation SamLibText (IOS)
@@ -22,21 +23,34 @@
 }
 
 - (UIImage *) image
-{
-    // todo: new and removed
+{   
+    if (self.isRemoved) 
+        return [UIImage imageNamed:@"trash.png"];     
     
-    if (self.changedSize) {
-        
+    if (self.changedSize)
         return [UIImage imageNamed:@"success.png"];
         
-    } else if (self.changedComments) {
-        
+    if (self.changedComments)        
         return [UIImage imageNamed:@"comment.png"];     
+    
+    if (self.favorited)
+        return [UIImage imageNamed: @"favorite.png"];        
         
-    } else {
+    if (self.flagNew.nonEmpty) {
         
-        return self.favoritedImage;
+        //return [UIImage imageNamed:@"new.png"];
+        
+        if ([self.flagNew isEqualToString:@"red"])         
+            return [UIImage imageNamed:@"new-red.png"];        
+        
+        if ([self.flagNew isEqualToString:@"brown"])
+            return [UIImage imageNamed:@"new-brown.png"];        
+        
+        if ([self.flagNew isEqualToString:@"gray"])
+            return [UIImage imageNamed:@"new-gray.png"];  
     }
+        
+    return [UIImage imageNamed: @"favorite-off.png"];
 }
 
 - (NSString *) myVoteAsString
