@@ -103,6 +103,8 @@
 		87EE1E5415885C130015BA99 /* VoteViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 87EE1E5215885C130015BA99 /* VoteViewController.xib */; };
 		87EE1E5815886C9F0015BA99 /* VotedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87EE1E5615886C9F0015BA99 /* VotedViewController.m */; };
 		87EE1E5915886C9F0015BA99 /* VotedViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 87EE1E5715886C9F0015BA99 /* VotedViewController.xib */; };
+		87F0668C158C4CB400694FAC /* delete.png in Resources */ = {isa = PBXBuildFile; fileRef = 87F0668B158C4CB400694FAC /* delete.png */; };
+		87F06694158C5F1C00694FAC /* UIColor+Kolyvan.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F06693158C5F1C00694FAC /* UIColor+Kolyvan.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -270,6 +272,9 @@
 		87EE1E5515886C9F0015BA99 /* VotedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VotedViewController.h; sourceTree = "<group>"; };
 		87EE1E5615886C9F0015BA99 /* VotedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VotedViewController.m; sourceTree = "<group>"; };
 		87EE1E5715886C9F0015BA99 /* VotedViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VotedViewController.xib; sourceTree = "<group>"; };
+		87F0668B158C4CB400694FAC /* delete.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = delete.png; path = resources/delete.png; sourceTree = "<group>"; };
+		87F06692158C5F1C00694FAC /* UIColor+Kolyvan.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Kolyvan.h"; sourceTree = "<group>"; };
+		87F06693158C5F1C00694FAC /* UIColor+Kolyvan.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Kolyvan.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -300,6 +305,8 @@
 				8776CA41157767460099C83D /* UIFont+Kolyvan.m */,
 				8744AD901589CD8500D77917 /* SSPullToRefreshView+Kolyvan.h */,
 				8744AD911589CD8500D77917 /* SSPullToRefreshView+Kolyvan.m */,
+				87F06692158C5F1C00694FAC /* UIColor+Kolyvan.h */,
+				87F06693158C5F1C00694FAC /* UIColor+Kolyvan.m */,
 			);
 			name = category;
 			sourceTree = "<group>";
@@ -553,6 +560,7 @@
 		872D956D1573968C00BCB4EC /* resources */ = {
 			isa = PBXGroup;
 			children = (
+				87F0668B158C4CB400694FAC /* delete.png */,
 				87E230AF158B1D490074EBF1 /* download.png */,
 				8776CA32157751D50099C83D /* text.css */,
 				8776CA33157751D50099C83D /* text.html */,
@@ -669,6 +677,7 @@
 				87E230AD158B0AC70074EBF1 /* TextGroupViewController.xib in Resources */,
 				87E230B0158B1D490074EBF1 /* download.png in Resources */,
 				87E230C1158B5A600074EBF1 /* AuthorInfoViewController.xib in Resources */,
+				87F0668C158C4CB400694FAC /* delete.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -740,6 +749,7 @@
 				8744AD921589CD8500D77917 /* SSPullToRefreshView+Kolyvan.m in Sources */,
 				87E230AC158B0AC70074EBF1 /* TextGroupViewController.m in Sources */,
 				87E230C0158B5A600074EBF1 /* AuthorInfoViewController.m in Sources */,
+				87F06694158C5F1C00694FAC /* UIColor+Kolyvan.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

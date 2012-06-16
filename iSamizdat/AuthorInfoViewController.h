@@ -10,6 +10,6 @@
 
 @class SamLibAuthor;
 
-@interface AuthorInfoViewController : UITableViewController
+@interface AuthorInfoViewController : UITableViewController<UIActionSheetDelegate>
 @property (readwrite, nonatomic, strong) SamLibAuthor *author; 
 @end

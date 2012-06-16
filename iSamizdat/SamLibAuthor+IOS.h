@@ -16,7 +16,7 @@
 @interface SamLibAuthor (IOS)
 
 @property (strong, nonatomic) NSString *lastError;
-@property (nonatomic) BOOL hasChangedSize;
+@property (readonly, nonatomic) BOOL hasChangedSize;
 @property (readonly, nonatomic) NSString * shortName;
 
 @end

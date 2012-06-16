@@ -8,11 +8,15 @@
 
 #import "AuthorInfoViewController.h"
 #import "KxMacros.h"
+#import "NSString+Kolyvan.h"
+#import "SamLibModel.h"
 #import "SamLibAuthor.h"
+#import "SamLibAuthor+IOS.h"
 
 enum {
     RowName,
     RowRating,    
+    RowStatus,    
     RowUpdated,
     RowSize,
     RowVisitors,
@@ -80,6 +84,35 @@ enum {
     [UIApplication.sharedApplication openURL: url];                     
 }
 
+- (void) goDelete
+{
+    UIActionSheet *actionSheet;
+    actionSheet = [[UIActionSheet alloc] initWithTitle:locString(@"Are you sure?")
+                                                       delegate:self
+                                              cancelButtonTitle:locString(@"Cancel") 
+                                         destructiveButtonTitle:locString(@"Delete") 
+                                              otherButtonTitles:nil];
+
+    [actionSheet showInView:self.view];
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex != actionSheet.cancelButtonIndex) {
+        
+        [[SamLibModel shared] deleteAuthor:_author];
+        [self.navigationController popToRootViewControllerAnimated:YES];
+    }
+}
+
+- (void) goIgnore: (id) sender
+{
+    UISwitch *button = sender;    
+    _author.ignored = button.on;
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SamLibAuthorIgnoredChanged" object:nil];
+}
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -89,7 +122,7 @@ enum {
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 7;
+    return 8;
 }
 
 - (id) mkCell: (NSString *) cellIdentifier
@@ -146,10 +179,16 @@ enum {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault 
                                           reuseIdentifier:CellIdentifier];  
             
-            UISwitch * button = [[UISwitch alloc] initWithFrame:CGRectZero];                        
+            UISwitch * button = [[UISwitch alloc] initWithFrame:CGRectZero]; 
+            
+            [button addTarget:self 
+                       action:@selector(goIgnore:) 
+             forControlEvents:UIControlEventValueChanged ];
             cell.accessoryView = button;
             cell.textLabel.text = locString(@"Ignore");               
         }
+        
+        ((UISwitch *)cell.accessoryView).on = _author.ignored;
         
     } else if (RowRemove == row) {        
         
@@ -159,22 +198,42 @@ enum {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault 
                                           reuseIdentifier:CellIdentifier];  
             
-            /*
+            
             UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-            button.frame = CGRectMake(0, 0, 100, 30);        
-            [button setTitle:@"Remove" forState:UIControlStateNormal];
+            button.frame = CGRectMake(0, 0, 24, 24);                    
             [button addTarget:self 
-                       action:@selector(goRemove) 
+                       action:@selector(goDelete) 
              forControlEvents:UIControlEventTouchUpInside];                    
-            [button setBackgroundImage:[UIImage imageNamed:@"button_red.png"]
+            [button setBackgroundImage:[UIImage imageNamed:@"delete.png"]
                                forState:UIControlStateNormal];
-            cell.accessoryView = button;        
-            */  
-            cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;            
+            cell.accessoryView = button;  
+            //cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;            
             cell.textLabel.text = locString(@"Delete");                
             //cell.textLabel.textColor = [UIColor redColor];
         }
-    }    
+    } else if (RowStatus == row) {    
+        
+        cell = [self mkCell: @"StatusCell" withStyle:UITableViewCellStyleDefault];                
+        
+        if (_author.lastError.nonEmpty) {
+            
+            cell.imageView.image = [UIImage imageNamed:@"failure.png"];
+            cell.textLabel.text = _author.lastError;
+            cell.textLabel.textColor = [UIColor redColor];
+            
+        } else if (_author.hasChangedSize) {
+            
+            cell.imageView.image = [UIImage imageNamed:@"success.png"];                
+            cell.textLabel.text = locString(@"Updated");
+            cell.textLabel.textColor = [UIColor blueColor];
+            
+        } else {
+            cell.imageView.image = nil;
+            cell.textLabel.text = locString(@"No updates");
+        }
+
+        
+    }     
     
     return cell;
 }

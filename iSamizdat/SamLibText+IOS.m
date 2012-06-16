@@ -27,7 +27,7 @@
     
     if (self.changedSize) {
         
-        return [UIImage imageNamed:@"size_changed.png"];
+        return [UIImage imageNamed:@"success.png"];
         
     } else if (self.changedComments) {
         

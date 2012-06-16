@@ -15,6 +15,7 @@
 #import "NSDictionary+Kolyvan.h"
 #import "NSString+Kolyvan.h"
 #import "NSArray+Kolyvan.h"
+#import "SamLibText.h"
 
 @implementation SamLibAuthor (IOS)
 
@@ -53,17 +54,10 @@ static char gKey;
 
 - (BOOL) hasChangedSize
 {
-    NSMutableDictionary * dict = [self extra];
-    return [dict contains:@"hasChanged"];    
-}
-
-- (void) setHasChangedSize:(BOOL)hasChanged
-{
-    NSMutableDictionary * dict = [self extra];
-    if (hasChanged)
-        [dict update:@"hasChanged" value:[NSNull null]];
-    else
-        [dict removeObjectForKey:@"hasChanged"];
+    for (SamLibText *text in self.texts)
+        if (text.changedSize)
+            return YES;
+    return NO;
 }
 
 - (NSString *) shortName

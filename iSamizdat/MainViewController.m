@@ -29,6 +29,7 @@
 #import "VotedViewController.h"
 #import "UserViewController.h"
 #import "UIFont+Kolyvan.h"
+#import "UIColor+Kolyvan.h"
 #import "DDLog.h"
 
 extern int ddLogLevel;
@@ -42,7 +43,7 @@ typedef enum {
 } SectionNumber;
 
 @interface MainViewController () {
-    NSInteger _version;
+    NSInteger _modelVersion;
     BOOL _tableLoaded;
 }
 
@@ -107,6 +108,17 @@ typedef enum {
     self.navigationItem.backBarButtonItem = backButton;
     self.navigationItem.leftBarButtonItem = settingsButton;    
     self.navigationItem.rightBarButtonItem = self.addButton;
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(samLibAuthorIgnoredChanged:)
+                                                 name:@"SamLibAuthorIgnoredChanged" 
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(samLibAuthorHasChangedSize:)
+                                                 name:@"SamLibAuthorHasChangedSize" 
+                                               object:nil];
+    
 }
 
 - (void)viewDidUnload
@@ -126,6 +138,8 @@ typedef enum {
     self.favoritesViewController = nil;
     self.userViewController = nil;
     self.votedViewController = nil;
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -159,8 +173,8 @@ typedef enum {
 
 - (SectionNumber) sectionMap: (NSInteger) section
 {
-    if (!self.hasFavorites)
-        section += 1;
+    //if (!self.hasFavorites)
+    //    section += 1;
     return section;
 }
 
@@ -168,12 +182,14 @@ typedef enum {
 {
     SamLibModel *model = [SamLibModel shared];
     
-    if (_version != model.version ||
+    if (_modelVersion != model.version ||
         self.authors == nil ||
         self.content == nil ||
         self.ignored == nil) {
         
-        _version = model.version;
+        DDLogInfo(@"%@ prepareData", [self class]);
+        
+        _modelVersion = model.version;
         
         NSArray *a = [SamLibModel shared].authors;
         KxTuple2 * result = [a partition:^(id elem) {
@@ -191,14 +207,10 @@ typedef enum {
 {
     NSMutableArray * ma = [NSMutableArray array];            
     for (SamLibAuthor *author in self.authors) {            
-        [ma push:author];    
-        BOOL hasChangedSize = NO;
+        [ma push:author];            
         for (SamLibText *text in author.texts)
-            if (text.changedSize) {
-                hasChangedSize = YES;
+            if (text.changedSize)
                 [ma push:text];
-            }
-        author.hasChangedSize = hasChangedSize;
     }
     return ma;
 }
@@ -240,6 +252,18 @@ typedef enum {
                      completion:NULL];
     
     //[self.navigationController pushViewController:self.userViewController animated:YES];     
+}
+
+- (void) samLibAuthorIgnoredChanged:(NSNotification *)notification
+{
+    DDLogInfo(@"Notification: SamLibAuthorIgnoredChanged");
+    self.ignored = nil;
+}
+
+- (void) samLibAuthorHasChangedSize:(NSNotification *)notification
+{
+    DDLogInfo(@"Notification: samLibAuthorHasChangedSize");
+    self.content = nil;
 }
 
 #pragma mark - refresh 
@@ -298,7 +322,6 @@ typedef enum {
             }
         }];
     }
-
 }
  
 - (NSDate *) lastUpdateDate
@@ -402,6 +425,7 @@ typedef enum {
             SamLibText *text = obj;
             cell.detailTextLabel.text = KxUtils.format(@"%+ldk", text.deltaSize);
             cell.textLabel.text = text.title;
+            cell.textLabel.textColor = [UIColor secondaryTextColor];  
             return cell;            
         }
         
@@ -410,10 +434,13 @@ typedef enum {
             UITableViewCell *cell = [self mkMainCell];
             SamLibAuthor *author = obj;
             cell.textLabel.text = author.name.nonEmpty ? author.name : author.path;
+            cell.textLabel.textColor = [UIColor darkTextColor];                        
             if (author.lastError.nonEmpty) {
                 cell.imageView.image = [UIImage imageNamed:@"failure.png"];
             } else if (author.hasChangedSize) {
                 cell.imageView.image = [UIImage imageNamed:@"success.png"];                
+            } else {
+                cell.imageView.image = nil;
             }
             return cell;
         }
@@ -424,6 +451,8 @@ typedef enum {
         UITableViewCell *cell = [self mkMainCell];
         SamLibAuthor *author = [self.ignored objectAtIndex:indexPath.row];    
         cell.textLabel.text = author.name.nonEmpty ? author.name : author.path;
+        cell.textLabel.textColor = [UIColor grayColor];
+        cell.imageView.image = nil;        
         return cell;
     }
     
@@ -481,6 +510,7 @@ typedef enum {
         }
         
     } else if (section == AuthorSectionNumber) {
+        
         id obj = [self.content objectAtIndex:indexPath.row];         
         if ([obj isKindOfClass:[SamLibAuthor class]]) {         
             
@@ -500,6 +530,18 @@ typedef enum {
             [self.navigationController pushViewController:self.textViewController 
                                                  animated:YES];
         }
+        
+    } else if (section == IgnoredSectionNumber) {
+        
+        SamLibAuthor *author = [self.ignored objectAtIndex:indexPath.row];         
+        
+        if (!self.authorViewController) {
+            self.authorViewController = [[AuthorViewController alloc] init];
+        }
+        self.authorViewController.author = author;
+        [self.navigationController pushViewController:self.authorViewController 
+                                                 animated:YES];
+
     } 
 }
 

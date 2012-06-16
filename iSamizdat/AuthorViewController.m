@@ -196,7 +196,17 @@ extern int ddLogLevel;
 {   
      [_author update:^(SamLibAuthor *author, SamLibStatus status, NSString *error) {
         
-         author.lastError = error;
+         if (status == SamLibStatusFailure)             
+             author.lastError = error;
+         else
+             author.lastError = nil;
+         
+         if (status == SamLibStatusSuccess && 
+             author.hasChangedSize) {
+             
+             [[NSNotificationCenter defaultCenter] postNotificationName:@"SamLibAuthorHasChangedSize" object:nil];
+         }
+         
          block(status, error);
      }];
 }
