@@ -109,6 +109,8 @@
 		87F0669A158C63B200694FAC /* new-brown.png in Resources */ = {isa = PBXBuildFile; fileRef = 87F06697158C63B200694FAC /* new-brown.png */; };
 		87F0669B158C63B200694FAC /* new-gray.png in Resources */ = {isa = PBXBuildFile; fileRef = 87F06698158C63B200694FAC /* new-gray.png */; };
 		87F0669C158C63B200694FAC /* new-red.png in Resources */ = {isa = PBXBuildFile; fileRef = 87F06699158C63B200694FAC /* new-red.png */; };
+		87F066A5158C737C00694FAC /* SearchAuthorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F066A3158C737C00694FAC /* SearchAuthorViewController.m */; };
+		87F066A6158C737C00694FAC /* SearchAuthorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 87F066A4158C737C00694FAC /* SearchAuthorViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -283,6 +285,9 @@
 		87F06697158C63B200694FAC /* new-brown.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "new-brown.png"; path = "resources/new-brown.png"; sourceTree = "<group>"; };
 		87F06698158C63B200694FAC /* new-gray.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "new-gray.png"; path = "resources/new-gray.png"; sourceTree = "<group>"; };
 		87F06699158C63B200694FAC /* new-red.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "new-red.png"; path = "resources/new-red.png"; sourceTree = "<group>"; };
+		87F066A2158C737C00694FAC /* SearchAuthorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchAuthorViewController.h; sourceTree = "<group>"; };
+		87F066A3158C737C00694FAC /* SearchAuthorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchAuthorViewController.m; sourceTree = "<group>"; };
+		87F066A4158C737C00694FAC /* SearchAuthorViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SearchAuthorViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -382,6 +387,8 @@
 				872D944615737B0400BCB4EC /* MainViewController.m */,
 				8712FF981574A02B00C01283 /* NewAuthorViewController.h */,
 				8712FF991574A02B00C01283 /* NewAuthorViewController.m */,
+				87F066A2158C737C00694FAC /* SearchAuthorViewController.h */,
+				87F066A3158C737C00694FAC /* SearchAuthorViewController.m */,
 				87546F41157CB21200DE58DD /* UserViewController.h */,
 				87546F42157CB21200DE58DD /* UserViewController.m */,
 				8712FFCE1574DA7900C01283 /* AuthorViewController.h */,
@@ -429,6 +436,7 @@
 		872D945615737B9500BCB4EC /* views */ = {
 			isa = PBXGroup;
 			children = (
+				87F066A4158C737C00694FAC /* SearchAuthorViewController.xib */,
 				87E230AB158B0AC70074EBF1 /* TextGroupViewController.xib */,
 				87546F43157CB21200DE58DD /* UserViewController.xib */,
 				87546F31157C98B800DE58DD /* PostViewController.xib */,
@@ -694,6 +702,7 @@
 				87F0669A158C63B200694FAC /* new-brown.png in Resources */,
 				87F0669B158C63B200694FAC /* new-gray.png in Resources */,
 				87F0669C158C63B200694FAC /* new-red.png in Resources */,
+				87F066A6158C737C00694FAC /* SearchAuthorViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -766,6 +775,7 @@
 				87E230AC158B0AC70074EBF1 /* TextGroupViewController.m in Sources */,
 				87E230C0158B5A600074EBF1 /* AuthorInfoViewController.m in Sources */,
 				87F06694158C5F1C00694FAC /* UIColor+Kolyvan.m in Sources */,
+				87F066A5158C737C00694FAC /* SearchAuthorViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

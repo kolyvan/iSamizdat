@@ -28,6 +28,7 @@
 #import "FavoritesViewController.h"
 #import "VotedViewController.h"
 #import "UserViewController.h"
+#import "SearchAuthorViewController.h"
 #import "UIFont+Kolyvan.h"
 #import "UIColor+Kolyvan.h"
 #import "DDLog.h"
@@ -57,6 +58,7 @@ typedef enum {
 @property (nonatomic, strong) FavoritesViewController* favoritesViewController;
 @property (nonatomic, strong) UserViewController *userViewController;
 @property (nonatomic, strong) VotedViewController* votedViewController;
+@property (nonatomic, strong) SearchAuthorViewController *searchAuthorViewController;
 
 @end
 
@@ -72,6 +74,7 @@ typedef enum {
 @synthesize favoritesViewController;
 @synthesize userViewController;
 @synthesize votedViewController;
+@synthesize searchAuthorViewController;
 
 - (id) init
 {
@@ -138,6 +141,7 @@ typedef enum {
     self.favoritesViewController = nil;
     self.userViewController = nil;
     self.votedViewController = nil;
+    self.searchAuthorViewController = nil;
     
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
@@ -157,6 +161,7 @@ typedef enum {
     self.favoritesViewController = nil;    
     self.userViewController = nil;    
     self.votedViewController = nil;    
+    self.searchAuthorViewController = nil;    
 }
 
 #pragma mark - private functions
@@ -217,6 +222,7 @@ typedef enum {
 
 - (void) goAddAuthor
 {
+    /*
     if (!self.addAuthorViewController) {
         self.addAuthorViewController = [[NewAuthorViewController alloc] init];
         self.addAuthorViewController.delegate = self;
@@ -224,6 +230,21 @@ typedef enum {
     
     UINavigationController *navigationController = [[UINavigationController alloc]
                                                     initWithRootViewController:self.addAuthorViewController];
+    
+    [self presentViewController:navigationController 
+                       animated:YES 
+                     completion:NULL];
+    */
+    
+    
+    
+    if (!self.searchAuthorViewController) {
+        self.searchAuthorViewController = [[SearchAuthorViewController alloc] init];
+        //self.searchAuthorViewController.delegate = self;
+    }
+    
+    UINavigationController *navigationController = [[UINavigationController alloc]
+                                                    initWithRootViewController:self.searchAuthorViewController];
     
     [self presentViewController:navigationController 
                        animated:YES 
