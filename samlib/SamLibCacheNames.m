@@ -17,6 +17,7 @@
 #import "NSDictionary+Kolyvan.h"
 #import "NSString+Kolyvan.h"
 #import "FMDatabase.h"
+#import "SamLibStorage.h"
 #import "DDLog.h"
 
 extern int ddLogLevel;
@@ -60,7 +61,7 @@ extern int ddLogLevel;
 {
     if (!db && _status) {
                 
-        NSString *dbPath = [KxUtils.cacheDataPath() stringByAppendingPathComponent: @"names.db"];            
+        NSString *dbPath = [SamLibStorage.namesPath() stringByAppendingPathComponent: @"names.db"];
         BOOL needCreateTable = !KxUtils.fileExists(dbPath);
         
         db = [[FMDatabase alloc] initWithPath:dbPath];

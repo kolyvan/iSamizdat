@@ -90,17 +90,17 @@ typedef enum {
     NSInteger _version;
 }
 
-@property (readonly, nonatomic) NSString * copyright;
-@property (readonly, nonatomic) NSString * title;
-@property (readonly, nonatomic) NSString * size;
-@property (readonly, nonatomic) NSString * comments;
-@property (readonly, nonatomic) NSString * note;
-@property (readonly, nonatomic) NSString * genre;
-@property (readonly, nonatomic) NSString * group;
-@property (readonly, nonatomic) NSString * type;
-@property (readonly, nonatomic) NSString * rating;
-@property (readonly, nonatomic) NSString * flagNew;
-@property (readonly, nonatomic) NSString * dateModified;
+@property (readonly, nonatomic, KX_PROP_STRONG) NSString * copyright;
+@property (readonly, nonatomic, KX_PROP_STRONG) NSString * title;
+@property (readonly, nonatomic, KX_PROP_STRONG) NSString * size;
+@property (readonly, nonatomic, KX_PROP_STRONG) NSString * comments;
+@property (readonly, nonatomic, KX_PROP_STRONG) NSString * note;
+@property (readonly, nonatomic, KX_PROP_STRONG) NSString * genre;
+@property (readonly, nonatomic, KX_PROP_STRONG) NSString * group;
+@property (readonly, nonatomic, KX_PROP_STRONG) NSString * type;
+@property (readonly, nonatomic, KX_PROP_STRONG) NSString * rating;
+@property (readonly, nonatomic, KX_PROP_STRONG) NSString * flagNew;
+@property (readonly, nonatomic, KX_PROP_STRONG) NSString * dateModified;
 
 @property (readonly, nonatomic) NSInteger sizeInt;
 @property (readonly, nonatomic) NSInteger commentsInt;
@@ -124,9 +124,10 @@ typedef enum {
 @property (readonly) NSString * key;
 @property (readonly, KX_PROP_WEAK) SamLibAuthor * author;
 
-@property (readonly, nonatomic) NSDate * filetime;
-@property (readonly, nonatomic) NSString * lastModified;
-@property (readonly, nonatomic) NSString * diffResult;
+@property (readonly, nonatomic, KX_PROP_STRONG) NSDate * filetime;
+@property (readonly, nonatomic, KX_PROP_STRONG) NSString * lastModified;
+@property (readonly, nonatomic, KX_PROP_STRONG) NSString * diffResult;
+
 @property (readonly, nonatomic) NSString * htmlFile;
 @property (readonly, nonatomic) NSString * diffFile;
 

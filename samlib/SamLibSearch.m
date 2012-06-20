@@ -25,6 +25,7 @@
 #import "SamLibCacheNames.h"
 #import "GoogleSearch.h"
 #import "DDLog.h"
+#import "SamLibStorage.h"
 
 extern int ddLogLevel;
 
@@ -102,12 +103,14 @@ static NSArray * searchAuthor(NSString * pattern,
                 NSMutableDictionary *md = [dict mutableCopy];
                 [md update:@"distance" value:[NSNumber numberWithFloat:1.0 + distance]];                
                 [ma push:md];
+                KX_RELEASE(md);
             }
             else if (distance > MINDISTANCE2) {            
                 
                 NSMutableDictionary *md = [dict mutableCopy];
                 [md update:@"distance" value:[NSNumber numberWithFloat:distance]];                
                 [ma push:md];
+                KX_RELEASE(md);                
             }
         }
     }
@@ -163,7 +166,7 @@ static NSString * mkPathFromName(NSString *name)
 
 + (NSString *) historyPath
 {
-    return [KxUtils.cacheDataPath() stringByAppendingPathComponent: @"searchlog.json"];
+    return [SamLibStorage.namesPath() stringByAppendingPathComponent: @"searchlog.json"];
 }
 
 - (id) init
@@ -172,7 +175,7 @@ static NSString * mkPathFromName(NSString *name)
     if (self) {
         _cacheNames = [[SamLibCacheNames alloc] init];
         
-        _history = (NSMutableDictionary *)loadDictionaryEx([self->isa historyPath], NO);
+        _history = (NSMutableDictionary *)SamLibStorage.loadDictionaryEx([self->isa historyPath], NO);
         if (!_history)            
             _history = [NSMutableDictionary dictionary];        
         _historyDigest = [_history.description md5];
@@ -189,11 +192,11 @@ static NSString * mkPathFromName(NSString *name)
     if (![_historyDigest isEqualToString: [_history.description md5]]) {
 
         DDLogInfo(@"save search history");
-        saveDictionary(_history, [self->isa historyPath]);        
+        SamLibStorage.saveDictionary(_history, [self->isa historyPath]);        
     }
 
     KX_RELEASE(_history);
-    KX_RELEASE(_historyVersion); 
+    KX_RELEASE(_historyDigest); 
     
     [_cacheNames close];
     KX_RELEASE(_cacheNames);

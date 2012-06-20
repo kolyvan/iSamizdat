@@ -119,6 +119,7 @@
 		87F75D0E15919B500046DA46 /* FMDatabasePool.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F75D0715919B500046DA46 /* FMDatabasePool.m */; };
 		87F75D0F15919B500046DA46 /* FMDatabaseQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F75D0915919B500046DA46 /* FMDatabaseQueue.m */; };
 		87F75D1015919B500046DA46 /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F75D0B15919B500046DA46 /* FMResultSet.m */; };
+		87F75D181591E3580046DA46 /* SamLibStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F75D171591E3580046DA46 /* SamLibStorage.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -311,6 +312,8 @@
 		87F75D0915919B500046DA46 /* FMDatabaseQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FMDatabaseQueue.m; path = vendors/fmdb/src/FMDatabaseQueue.m; sourceTree = "<group>"; };
 		87F75D0A15919B500046DA46 /* FMResultSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FMResultSet.h; path = vendors/fmdb/src/FMResultSet.h; sourceTree = "<group>"; };
 		87F75D0B15919B500046DA46 /* FMResultSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FMResultSet.m; path = vendors/fmdb/src/FMResultSet.m; sourceTree = "<group>"; };
+		87F75D161591E3580046DA46 /* SamLibStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SamLibStorage.h; sourceTree = "<group>"; };
+		87F75D171591E3580046DA46 /* SamLibStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SamLibStorage.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -512,6 +515,8 @@
 		872D94851573836500BCB4EC /* samlib */ = {
 			isa = PBXGroup;
 			children = (
+				87F75D161591E3580046DA46 /* SamLibStorage.h */,
+				87F75D171591E3580046DA46 /* SamLibStorage.m */,
 				87F75CF515919AB90046DA46 /* GoogleSearch.h */,
 				87F75CF615919AB90046DA46 /* GoogleSearch.m */,
 				87F75CF715919AB90046DA46 /* SamLibCacheNames.h */,
@@ -830,6 +835,7 @@
 				87F75D0E15919B500046DA46 /* FMDatabasePool.m in Sources */,
 				87F75D0F15919B500046DA46 /* FMDatabaseQueue.m in Sources */,
 				87F75D1015919B500046DA46 /* FMResultSet.m in Sources */,
+				87F75D181591E3580046DA46 /* SamLibStorage.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

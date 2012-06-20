@@ -41,26 +41,22 @@ static NSString * gKeychainService = @"ru.kolyvan.samlib";
 
 - (NSString *) name
 {
-    NSDictionary *d = SamLibAgent.settings();
-    return [d get: @"user.name" orElse: @""];
+    return SamLibAgent.settingsString(@"user.name", @"");
 }
 
 - (void) setName:(NSString *)name
 {
-    NSMutableDictionary *d = SamLibAgent.settings();
-    [d updateOnly: @"user.name" valueNotNil: name];
+    SamLibAgent.setSettingsString(@"user.name", name, @"");
 }
 
 - (NSString *) login
 {
-    NSDictionary *d = SamLibAgent.settings();
-    return [d get: @"user.login" orElse: @""];
+    return SamLibAgent.settingsString(@"user.login", @"");
 }
 
 - (void) setLogin:(NSString *)login
 {
-    NSMutableDictionary *d = SamLibAgent.settings();
-    [d updateOnly: @"user.login" valueNotNil: login];
+    SamLibAgent.setSettingsString(@"user.login", login, @"");
 }
 
 - (NSString *) pass
@@ -121,26 +117,22 @@ static NSString * gKeychainService = @"ru.kolyvan.samlib";
 
 - (NSString *) email
 {
-    NSDictionary *d = SamLibAgent.settings();
-    return [d get: @"user.email" orElse: @""];
+    return SamLibAgent.settingsString(@"user.email", @"");
 }
 
 - (void) setEmail:(NSString *)email
 {
-    NSMutableDictionary *d = SamLibAgent.settings();
-    [d updateOnly: @"user.email" valueNotNil: email];    
+    SamLibAgent.setSettingsString(@"user.email", email, @"");
 }
 
 - (NSString *) url
 {
-    NSDictionary *d = SamLibAgent.settings();
-    return [d get: @"user.url" orElse: @""];
+    return SamLibAgent.settingsString(@"user.url", @"");
 }
 
 - (void) setUrl:(NSString *)url
 {
-    NSMutableDictionary *d = SamLibAgent.settings();
-    [d updateOnly: @"user.url" valueNotNil: url];    
+    SamLibAgent.setSettingsString(@"user.url", url, @"");    
 }
 
 + (void) initialize

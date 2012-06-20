@@ -57,9 +57,9 @@ typedef void (^UpdateCommentsBlock)(SamLibComments *comments,
 }
 
 @property (readonly, nonatomic, KX_PROP_WEAK) SamLibText * text;
-@property (readonly, nonatomic) NSArray * all;
+@property (readonly, nonatomic, KX_PROP_STRONG) NSArray * all;
+@property (readonly, nonatomic, KX_PROP_STRONG) NSString * lastModified;
 @property (readonly, nonatomic) BOOL changed;
-@property (readonly, nonatomic) NSString * lastModified;
 @property (readonly, nonatomic) BOOL isDirty;
 @property (readonly, nonatomic) NSInteger numberOfNew; 
 

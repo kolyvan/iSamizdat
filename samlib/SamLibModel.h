@@ -11,6 +11,7 @@
 
 
 #import <Foundation/Foundation.h>
+#import "KxArc.h"
 
 @class SamLibAuthor;
 @class SamLibText;
@@ -18,7 +19,7 @@
 
 @interface SamLibModel : NSObject 
 
-@property (readonly, nonatomic) NSArray * authors;
+@property (readonly, nonatomic, KX_PROP_STRONG) NSArray * authors;
 @property (readonly, nonatomic) NSInteger version;
 
 + (SamLibModel *) shared;

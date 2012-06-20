@@ -9,9 +9,6 @@
 //  this file is part of Samizdat
 //  Samizdat is licenced under the LGPL v3, see lgpl-3.0.txt
 
-
-
-#import "KxArc.h"
 #import "KxMacros.h"
 #import "KxUtils.h"
 #import "NSArray+Kolyvan.h"
@@ -22,6 +19,7 @@
 #import "SamLibAuthor.h"
 #import "SamLibText.h"
 #import "SamLibComments.h"
+#import "SamLibStorage.h"
 #import "DDLog.h"
 
 extern int ddLogLevel;
@@ -32,7 +30,7 @@ extern int ddLogLevel;
     NSInteger _version;
 }
 
-@property (readwrite, nonatomic, ) NSArray * authors;
+@property (readwrite, nonatomic, KX_PROP_STRONG) NSArray * authors;
 @property (readwrite, nonatomic) NSInteger version;
 
 @end
@@ -74,7 +72,7 @@ extern int ddLogLevel;
 
 - (void) reload
 {
-    self.authors = SamLibAgent.loadAuthors();
+    self.authors = [self->isa loadAuthors];    
     self.version += 1;
     
     DDLogInfo(@"loaded authors: %ld", _authors.count);    
@@ -84,13 +82,13 @@ extern int ddLogLevel;
 {
     for (SamLibAuthor * author in _authors) {
         if (author.isDirty) {
-            [author save: SamLibAgent.authorsPath()];
+            [author save: SamLibStorage.authorsPath()];
             DDLogInfo(@"save author: %@", author.path);
         }
         for (SamLibText *text in author.texts) {
             SamLibComments *comments = [text commentsObject:NO];
             if (comments && comments.isDirty) {
-                [comments save: SamLibAgent.commentsPath()];
+                [comments save: SamLibStorage.commentsPath()];
                 DDLogInfo(@"save comments: %@", text.key);
             }
         }
@@ -99,7 +97,7 @@ extern int ddLogLevel;
 
 - (void) addAuthor: (SamLibAuthor *) author
 {    
-    [author save:SamLibAgent.authorsPath()];
+    [author save:SamLibStorage.authorsPath()];
 
     NSMutableArray *a = [_authors mutableCopy];
     [a push: author];    
@@ -110,11 +108,21 @@ extern int ddLogLevel;
 
 - (void) deleteAuthor: (SamLibAuthor *) author
 {
+    // remove cached texts and comments
     for (SamLibText *text in author.texts)
         [text removeTextFiles:YES andComments:YES];
-        
-    SamLibAgent.removeAuthor(author.path); 
+
+    // remove file
+    NSError * error;    
+    NSString * fullpath = [SamLibStorage.authorsPath() stringByAppendingPathComponent:author.path];
+    NSFileManager *fm = [[NSFileManager alloc] init];
+    if (![fm removeItemAtPath:fullpath error:&error]) {
+        DDLogCError(locString(@"file error: %@"), 
+                    KxUtils.completeErrorMessage(error));                   
+    }    
+    KX_RELEASE(fm);
     
+    // remove from authors
     NSMutableArray *ma = [_authors mutableCopy];
     [ma removeObject:author];    
     self.authors = ma;
@@ -151,5 +159,25 @@ extern int ddLogLevel;
 }
 
 
++ (NSArray*) loadAuthors
+{    
+    NSMutableArray * authors = [NSMutableArray array];
+        
+    SamLibStorage.enumerateFolder(SamLibStorage.authorsPath(), 
+                                  ^(NSFileManager *fm, NSString *fullpath, NSDictionary *attr){
+                                      
+                                      SamLibAuthor *author = [SamLibAuthor fromFile: fullpath];
+                                      
+                                      if (author) {
+                                          DDLogVerbose(@"loaded author: %@", author.path);
+                                          [authors push: author];
+                                      }
+                                      else {
+                                          DDLogWarn(@"unable load author: %@", [fullpath lastPathComponent]);                        
+                                      }   
+    });
+    
+    return authors;
+}
 
 @end

@@ -178,6 +178,8 @@ static void getGoogleSearch(AFHTTPClient *client, NSDictionary *parameters, GetG
                                 block(GoogleSearchStatusSuccess, nil, results);                            
                             }
                             
+                            KX_RELEASE(results);
+                            
                         } else {
                             
                             block(status, details, nil);                                        
@@ -225,6 +227,8 @@ static void getGoogleSearch(AFHTTPClient *client, NSDictionary *parameters, GetG
                             block(GoogleSearchStatusSuccess, nil, results); 
                         }
                     });    
+    
+    KX_RELEASE(parameters_);
 }
 
 @end

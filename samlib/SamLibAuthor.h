@@ -12,6 +12,7 @@
 
 #import <Foundation/Foundation.h>
 #import "SamLib.h"
+#import "KxArc.h"
 
 typedef void (^UpdateAuthorBlock)(SamLibAuthor *author, SamLibStatus status, NSString *error);
 
@@ -36,18 +37,18 @@ typedef void (^UpdateAuthorBlock)(SamLibAuthor *author, SamLibStatus status, NSS
     NSInteger _version;
 }
 
-@property (readonly, nonatomic) NSString * name;
-@property (readonly, nonatomic) NSString * title;
-@property (readonly, nonatomic) NSString * updated;
-@property (readonly, nonatomic) NSString * size;
-@property (readonly, nonatomic) NSString * rating;
-@property (readonly, nonatomic) NSString * visitors;
-@property (readonly, nonatomic) NSString * www;
-@property (readonly, nonatomic) NSString * email;
-@property (readonly, nonatomic) NSString * lastModified;
-@property (readonly, nonatomic) NSString * digest;
-@property (readonly, nonatomic) NSString * about;
-@property (readonly, nonatomic) NSArray * texts;
+@property (readonly, nonatomic, KX_PROP_STRONG) NSString * name;
+@property (readonly, nonatomic, KX_PROP_STRONG) NSString * title;
+@property (readonly, nonatomic, KX_PROP_STRONG) NSString * updated;
+@property (readonly, nonatomic, KX_PROP_STRONG) NSString * size;
+@property (readonly, nonatomic, KX_PROP_STRONG) NSString * rating;
+@property (readonly, nonatomic, KX_PROP_STRONG) NSString * visitors;
+@property (readonly, nonatomic, KX_PROP_STRONG) NSString * www;
+@property (readonly, nonatomic, KX_PROP_STRONG) NSString * email;
+@property (readonly, nonatomic, KX_PROP_STRONG) NSString * lastModified;
+@property (readonly, nonatomic, KX_PROP_STRONG) NSString * digest;
+@property (readonly, nonatomic, KX_PROP_STRONG) NSString * about;
+@property (readonly, nonatomic, KX_PROP_STRONG) NSArray * texts;
 @property (readwrite, nonatomic) BOOL ignored;
 
 @property (readonly, nonatomic) float ratingFloat;
