@@ -147,7 +147,6 @@
     SamLibUser *user = [SamLibUser currentUser];        
     
     if (user.name.isEmpty) {
-        
                 
         UserViewController *userViewController = [[UserViewController alloc] init];        
         UINavigationController *navigationController = [[UINavigationController alloc]

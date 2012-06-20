@@ -147,20 +147,19 @@
     }
 
     if (dismiss)
-        [self dismissViewControllerAnimated:YES 
-                                 completion:NULL];
-
+        [self goBack];
     
-    if (changed) {
-        
-        [[AppDelegate shared] checkLogin];
-    }
+    if (changed)        
+        [[AppDelegate shared] checkLogin];    
 }
 
 - (void) goBack
 {
-    [self dismissViewControllerAnimated:YES 
-                             completion:NULL];
+    // todo: fix me, must be another way to detect modal view
+    if (self.delegate)
+        [self dismissViewControllerAnimated:YES completion:NULL];
+    else
+        [self.navigationController popViewControllerAnimated:YES];
 }
 
 #pragma mark - Table view data source

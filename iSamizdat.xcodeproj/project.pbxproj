@@ -120,6 +120,10 @@
 		87F75D0F15919B500046DA46 /* FMDatabaseQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F75D0915919B500046DA46 /* FMDatabaseQueue.m */; };
 		87F75D1015919B500046DA46 /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F75D0B15919B500046DA46 /* FMResultSet.m */; };
 		87F75D181591E3580046DA46 /* SamLibStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F75D171591E3580046DA46 /* SamLibStorage.m */; };
+		87F75D1C1591EA5B0046DA46 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F75D1A1591EA5B0046DA46 /* SettingsViewController.m */; };
+		87F75D1D1591EA5B0046DA46 /* SettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 87F75D1B1591EA5B0046DA46 /* SettingsViewController.xib */; };
+		87F75D211591EFE10046DA46 /* CacheViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F75D1F1591EFE00046DA46 /* CacheViewController.m */; };
+		87F75D221591EFE10046DA46 /* CacheViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 87F75D201591EFE10046DA46 /* CacheViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -314,6 +318,12 @@
 		87F75D0B15919B500046DA46 /* FMResultSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FMResultSet.m; path = vendors/fmdb/src/FMResultSet.m; sourceTree = "<group>"; };
 		87F75D161591E3580046DA46 /* SamLibStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SamLibStorage.h; sourceTree = "<group>"; };
 		87F75D171591E3580046DA46 /* SamLibStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SamLibStorage.m; sourceTree = "<group>"; };
+		87F75D191591EA5A0046DA46 /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
+		87F75D1A1591EA5B0046DA46 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
+		87F75D1B1591EA5B0046DA46 /* SettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SettingsViewController.xib; sourceTree = "<group>"; };
+		87F75D1E1591EFE00046DA46 /* CacheViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CacheViewController.h; sourceTree = "<group>"; };
+		87F75D1F1591EFE00046DA46 /* CacheViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CacheViewController.m; sourceTree = "<group>"; };
+		87F75D201591EFE10046DA46 /* CacheViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CacheViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -417,6 +427,10 @@
 				87F066A3158C737C00694FAC /* SearchAuthorViewController.m */,
 				87546F41157CB21200DE58DD /* UserViewController.h */,
 				87546F42157CB21200DE58DD /* UserViewController.m */,
+				87F75D191591EA5A0046DA46 /* SettingsViewController.h */,
+				87F75D1A1591EA5B0046DA46 /* SettingsViewController.m */,
+				87F75D1E1591EFE00046DA46 /* CacheViewController.h */,
+				87F75D1F1591EFE00046DA46 /* CacheViewController.m */,
 				8712FFCE1574DA7900C01283 /* AuthorViewController.h */,
 				8712FFCF1574DA7900C01283 /* AuthorViewController.m */,
 				87E230BD158B5A600074EBF1 /* AuthorInfoViewController.h */,
@@ -462,9 +476,11 @@
 		872D945615737B9500BCB4EC /* views */ = {
 			isa = PBXGroup;
 			children = (
+				87F75D201591EFE10046DA46 /* CacheViewController.xib */,
 				87F066A4158C737C00694FAC /* SearchAuthorViewController.xib */,
 				87E230AB158B0AC70074EBF1 /* TextGroupViewController.xib */,
 				87546F43157CB21200DE58DD /* UserViewController.xib */,
+				87F75D1B1591EA5B0046DA46 /* SettingsViewController.xib */,
 				87546F31157C98B800DE58DD /* PostViewController.xib */,
 				8776CA4515776EC50099C83D /* FavoritesViewController.xib */,
 				8776CA3D157763890099C83D /* CommentsViewController.xib */,
@@ -755,6 +771,8 @@
 				87F0669B158C63B200694FAC /* new-gray.png in Resources */,
 				87F0669C158C63B200694FAC /* new-red.png in Resources */,
 				87F066A6158C737C00694FAC /* SearchAuthorViewController.xib in Resources */,
+				87F75D1D1591EA5B0046DA46 /* SettingsViewController.xib in Resources */,
+				87F75D221591EFE10046DA46 /* CacheViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -836,6 +854,8 @@
 				87F75D0F15919B500046DA46 /* FMDatabaseQueue.m in Sources */,
 				87F75D1015919B500046DA46 /* FMResultSet.m in Sources */,
 				87F75D181591E3580046DA46 /* SamLibStorage.m in Sources */,
+				87F75D1C1591EA5B0046DA46 /* SettingsViewController.m in Sources */,
+				87F75D211591EFE10046DA46 /* CacheViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

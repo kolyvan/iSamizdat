@@ -29,6 +29,7 @@
 #import "VotedViewController.h"
 #import "UserViewController.h"
 #import "SearchAuthorViewController.h"
+#import "SettingsViewController.h"
 #import "UIFont+Kolyvan.h"
 #import "UIColor+Kolyvan.h"
 #import "DDLog.h"
@@ -52,11 +53,11 @@ typedef enum {
 @property (nonatomic, strong) NSArray *ignored;
 @property (nonatomic, strong) NSArray *authors;
 @property (nonatomic, strong) UIBarButtonItem *addButton;
-//@property (nonatomic, strong) NewAuthorViewController *addAuthorViewController;
 @property (nonatomic, strong) AuthorViewController* authorViewController;
 @property (nonatomic, strong) TextViewController* textViewController;
 @property (nonatomic, strong) FavoritesViewController* favoritesViewController;
-@property (nonatomic, strong) UserViewController *userViewController;
+//@property (nonatomic, strong) UserViewController *userViewController;
+@property (nonatomic, strong) SettingsViewController *settingsViewController;
 @property (nonatomic, strong) VotedViewController* votedViewController;
 @property (nonatomic, strong) SearchAuthorViewController *searchAuthorViewController;
 
@@ -68,11 +69,10 @@ typedef enum {
 @synthesize ignored;
 @synthesize authors;
 @synthesize addButton;
-//@synthesize addAuthorViewController;
 @synthesize authorViewController;
 @synthesize textViewController;
 @synthesize favoritesViewController;
-@synthesize userViewController;
+@synthesize settingsViewController;
 @synthesize votedViewController;
 @synthesize searchAuthorViewController;
 
@@ -136,10 +136,9 @@ typedef enum {
     self.navigationItem.leftBarButtonItem = nil;
     self.navigationItem.rightBarButtonItem = nil;
     self.addButton = nil;
-    //self.addAuthorViewController = nil;
     self.textViewController = nil;
     self.favoritesViewController = nil;
-    self.userViewController = nil;
+    self.settingsViewController = nil;
     self.votedViewController = nil;
     self.searchAuthorViewController = nil;
     
@@ -154,12 +153,11 @@ typedef enum {
 - (void) didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];     
-    
-    //self.addAuthorViewController = nil;
+
     self.authorViewController = nil;
     self.textViewController = nil;
     self.favoritesViewController = nil;    
-    self.userViewController = nil;    
+    self.settingsViewController = nil;
     self.votedViewController = nil;    
     self.searchAuthorViewController = nil;    
 }
@@ -249,13 +247,14 @@ typedef enum {
 }
 
 - (void) goSettings
-{   
-    if (!self.userViewController) {
-        self.userViewController = [[UserViewController alloc] init];        
+{      
+    if (!self.settingsViewController) {
+        self.settingsViewController = [[SettingsViewController alloc] init];        
     }
     
     UINavigationController *navigationController = [[UINavigationController alloc]
-                                                    initWithRootViewController:self.userViewController];
+                                                    initWithRootViewController:self.settingsViewController];
+
     
     [self presentViewController:navigationController 
                        animated:YES 
