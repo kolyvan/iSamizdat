@@ -109,6 +109,15 @@ extern int ddLogLevel;
     }
 }
 
+- (void) viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    if (!_author.lastModified && !_author.digest)
+        [self forceRefresh];
+    
+}
+
 - (void)viewDidUnload
 {
     [super viewDidUnload];

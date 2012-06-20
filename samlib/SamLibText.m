@@ -524,6 +524,12 @@ static NSString * prettyHtml (NSMutableArray *diffs)
     return [s stringByAppendingPathExtension:@"old"];    
 }
 
+- (NSString *) commentsPath
+{
+    NSString *s = [SamLibAgent.commentsPath() stringByAppendingPathComponent: self.key];
+    return [s stringByAppendingPathExtension: @"comments"];
+}
+
 - (NSString *) htmlFile
 {
     NSFileManager * fm = [[NSFileManager alloc] init];    
@@ -706,8 +712,6 @@ static NSString * prettyHtml (NSMutableArray *diffs)
     KX_RELEASE(fm);
 }
 
-
-
 - (void) update: (UpdateTextBlock) block 
        progress: (AsyncProgressBlock) progress
       formatter: (TextFormatter) formatter;
@@ -753,10 +757,8 @@ static NSString * prettyHtml (NSMutableArray *diffs)
 - (SamLibComments *) commentsObject: (BOOL) forceLoad
 {
     if (!_commentsObject && forceLoad) {
-        NSString *path;
-        path = [SamLibAgent.commentsPath() stringByAppendingPathComponent: self.key];
-        path = [path stringByAppendingPathExtension: @"comments"];
-        _commentsObject = KX_RETAIN([SamLibComments fromFile: path withText: self]); 
+        _commentsObject = KX_RETAIN([SamLibComments fromFile: self.commentsPath 
+                                                    withText: self]); 
     }
     return _commentsObject;
 }
@@ -820,5 +822,19 @@ static NSString * prettyHtml (NSMutableArray *diffs)
 
 //- (void) fetchVotes: (FetchVotesBlock) block{}
 
+- (void) removeTextFiles: (BOOL) texts 
+             andComments: (BOOL) comments
+{
+    NSFileManager * fm = [[NSFileManager alloc] init];    
+    if (texts) {
+        [fm removeItemAtPath:self.htmlPath error:nil];
+        [fm removeItemAtPath:self.diffPath error:nil];    
+        [fm removeItemAtPath:self.oldPath error:nil]; 
+        [fm removeItemAtPath:self.rawPath error:nil];     
+    }
+    if (comments)
+        [fm removeItemAtPath:self.commentsPath error:nil];            
+    KX_RELEASE(fm);    
+}
 
 @end

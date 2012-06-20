@@ -16,7 +16,6 @@
 		8712FF9315749A3800C01283 /* SamLibAuthor+IOS.m in Sources */ = {isa = PBXBuildFile; fileRef = 8712FF9215749A3800C01283 /* SamLibAuthor+IOS.m */; };
 		8712FF9515749D7D00C01283 /* failure.png in Resources */ = {isa = PBXBuildFile; fileRef = 8712FF9415749D7D00C01283 /* failure.png */; };
 		8712FF9715749DE400C01283 /* success.png in Resources */ = {isa = PBXBuildFile; fileRef = 8712FF9615749DE400C01283 /* success.png */; };
-		8712FF9B1574A02B00C01283 /* NewAuthorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8712FF991574A02B00C01283 /* NewAuthorViewController.m */; };
 		8712FFAC1574C02700C01283 /* NewAuthorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8712FFAD1574C02700C01283 /* NewAuthorViewController.xib */; };
 		8712FFC81574D8D300C01283 /* NoticeView.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8712FFBC1574D8D300C01283 /* NoticeView.bundle */; };
 		8712FFC91574D8D300C01283 /* UILabel+WBExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 8712FFBE1574D8D300C01283 /* UILabel+WBExtensions.m */; };
@@ -111,6 +110,15 @@
 		87F0669C158C63B200694FAC /* new-red.png in Resources */ = {isa = PBXBuildFile; fileRef = 87F06699158C63B200694FAC /* new-red.png */; };
 		87F066A5158C737C00694FAC /* SearchAuthorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F066A3158C737C00694FAC /* SearchAuthorViewController.m */; };
 		87F066A6158C737C00694FAC /* SearchAuthorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 87F066A4158C737C00694FAC /* SearchAuthorViewController.xib */; };
+		87F75CFB15919AB90046DA46 /* GoogleSearch.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F75CF615919AB90046DA46 /* GoogleSearch.m */; };
+		87F75CFC15919AB90046DA46 /* SamLibCacheNames.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F75CF815919AB90046DA46 /* SamLibCacheNames.m */; };
+		87F75CFD15919AB90046DA46 /* SamLibSearch.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F75CFA15919AB90046DA46 /* SamLibSearch.m */; };
+		87F75D0015919ACA0046DA46 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 87F75CFF15919ACA0046DA46 /* libsqlite3.dylib */; };
+		87F75D0C15919B500046DA46 /* FMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F75D0315919B500046DA46 /* FMDatabase.m */; };
+		87F75D0D15919B500046DA46 /* FMDatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F75D0515919B500046DA46 /* FMDatabaseAdditions.m */; };
+		87F75D0E15919B500046DA46 /* FMDatabasePool.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F75D0715919B500046DA46 /* FMDatabasePool.m */; };
+		87F75D0F15919B500046DA46 /* FMDatabaseQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F75D0915919B500046DA46 /* FMDatabaseQueue.m */; };
+		87F75D1015919B500046DA46 /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F75D0B15919B500046DA46 /* FMResultSet.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -126,8 +134,6 @@
 		8712FF9215749A3800C01283 /* SamLibAuthor+IOS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SamLibAuthor+IOS.m"; sourceTree = "<group>"; };
 		8712FF9415749D7D00C01283 /* failure.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = failure.png; path = resources/failure.png; sourceTree = "<group>"; };
 		8712FF9615749DE400C01283 /* success.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = success.png; path = resources/success.png; sourceTree = "<group>"; };
-		8712FF981574A02B00C01283 /* NewAuthorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewAuthorViewController.h; sourceTree = "<group>"; };
-		8712FF991574A02B00C01283 /* NewAuthorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewAuthorViewController.m; sourceTree = "<group>"; };
 		8712FFAD1574C02700C01283 /* NewAuthorViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NewAuthorViewController.xib; sourceTree = "<group>"; };
 		8712FFBC1574D8D300C01283 /* NoticeView.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = NoticeView.bundle; path = vendors/notice/NoticeView/WBNoticeView/NoticeView.bundle; sourceTree = "<group>"; };
 		8712FFBD1574D8D300C01283 /* UILabel+WBExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UILabel+WBExtensions.h"; path = "vendors/notice/NoticeView/WBNoticeView/UILabel+WBExtensions.h"; sourceTree = "<group>"; };
@@ -288,6 +294,23 @@
 		87F066A2158C737C00694FAC /* SearchAuthorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchAuthorViewController.h; sourceTree = "<group>"; };
 		87F066A3158C737C00694FAC /* SearchAuthorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchAuthorViewController.m; sourceTree = "<group>"; };
 		87F066A4158C737C00694FAC /* SearchAuthorViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SearchAuthorViewController.xib; sourceTree = "<group>"; };
+		87F75CF515919AB90046DA46 /* GoogleSearch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GoogleSearch.h; sourceTree = "<group>"; };
+		87F75CF615919AB90046DA46 /* GoogleSearch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GoogleSearch.m; sourceTree = "<group>"; };
+		87F75CF715919AB90046DA46 /* SamLibCacheNames.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SamLibCacheNames.h; sourceTree = "<group>"; };
+		87F75CF815919AB90046DA46 /* SamLibCacheNames.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SamLibCacheNames.m; sourceTree = "<group>"; };
+		87F75CF915919AB90046DA46 /* SamLibSearch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SamLibSearch.h; sourceTree = "<group>"; };
+		87F75CFA15919AB90046DA46 /* SamLibSearch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SamLibSearch.m; sourceTree = "<group>"; };
+		87F75CFF15919ACA0046DA46 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
+		87F75D0215919B500046DA46 /* FMDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FMDatabase.h; path = vendors/fmdb/src/FMDatabase.h; sourceTree = "<group>"; };
+		87F75D0315919B500046DA46 /* FMDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FMDatabase.m; path = vendors/fmdb/src/FMDatabase.m; sourceTree = "<group>"; };
+		87F75D0415919B500046DA46 /* FMDatabaseAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FMDatabaseAdditions.h; path = vendors/fmdb/src/FMDatabaseAdditions.h; sourceTree = "<group>"; };
+		87F75D0515919B500046DA46 /* FMDatabaseAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FMDatabaseAdditions.m; path = vendors/fmdb/src/FMDatabaseAdditions.m; sourceTree = "<group>"; };
+		87F75D0615919B500046DA46 /* FMDatabasePool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FMDatabasePool.h; path = vendors/fmdb/src/FMDatabasePool.h; sourceTree = "<group>"; };
+		87F75D0715919B500046DA46 /* FMDatabasePool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FMDatabasePool.m; path = vendors/fmdb/src/FMDatabasePool.m; sourceTree = "<group>"; };
+		87F75D0815919B500046DA46 /* FMDatabaseQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FMDatabaseQueue.h; path = vendors/fmdb/src/FMDatabaseQueue.h; sourceTree = "<group>"; };
+		87F75D0915919B500046DA46 /* FMDatabaseQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FMDatabaseQueue.m; path = vendors/fmdb/src/FMDatabaseQueue.m; sourceTree = "<group>"; };
+		87F75D0A15919B500046DA46 /* FMResultSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FMResultSet.h; path = vendors/fmdb/src/FMResultSet.h; sourceTree = "<group>"; };
+		87F75D0B15919B500046DA46 /* FMResultSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FMResultSet.m; path = vendors/fmdb/src/FMResultSet.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -295,6 +318,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				87F75D0015919ACA0046DA46 /* libsqlite3.dylib in Frameworks */,
 				872D9568157387BB00BCB4EC /* Security.framework in Frameworks */,
 				872D943415737B0400BCB4EC /* UIKit.framework in Frameworks */,
 				872D943615737B0400BCB4EC /* Foundation.framework in Frameworks */,
@@ -346,6 +370,7 @@
 		872D942415737B0400BCB4EC = {
 			isa = PBXGroup;
 			children = (
+				87F75CFF15919ACA0046DA46 /* libsqlite3.dylib */,
 				872D956D1573968C00BCB4EC /* resources */,
 				872D94AE1573857500BCB4EC /* vendors */,
 				872D94851573836500BCB4EC /* samlib */,
@@ -385,8 +410,6 @@
 				872D944315737B0400BCB4EC /* AppDelegate.m */,
 				872D944515737B0400BCB4EC /* MainViewController.h */,
 				872D944615737B0400BCB4EC /* MainViewController.m */,
-				8712FF981574A02B00C01283 /* NewAuthorViewController.h */,
-				8712FF991574A02B00C01283 /* NewAuthorViewController.m */,
 				87F066A2158C737C00694FAC /* SearchAuthorViewController.h */,
 				87F066A3158C737C00694FAC /* SearchAuthorViewController.m */,
 				87546F41157CB21200DE58DD /* UserViewController.h */,
@@ -489,6 +512,12 @@
 		872D94851573836500BCB4EC /* samlib */ = {
 			isa = PBXGroup;
 			children = (
+				87F75CF515919AB90046DA46 /* GoogleSearch.h */,
+				87F75CF615919AB90046DA46 /* GoogleSearch.m */,
+				87F75CF715919AB90046DA46 /* SamLibCacheNames.h */,
+				87F75CF815919AB90046DA46 /* SamLibCacheNames.m */,
+				87F75CF915919AB90046DA46 /* SamLibSearch.h */,
+				87F75CFA15919AB90046DA46 /* SamLibSearch.m */,
 				872D94861573836500BCB4EC /* AFHTTPClient+Kolyvan.h */,
 				872D94871573836500BCB4EC /* AFHTTPClient+Kolyvan.m */,
 				872D94881573836500BCB4EC /* SamLib.h */,
@@ -514,6 +543,7 @@
 		872D94AE1573857500BCB4EC /* vendors */ = {
 			isa = PBXGroup;
 			children = (
+				87F75D0115919B3D0046DA46 /* fmdb */,
 				870BA4571574F04400B71E07 /* FastCell.h */,
 				870BA4581574F04400B71E07 /* FastCell.m */,
 				8712FFBB1574D8B600C01283 /* notice */,
@@ -612,6 +642,23 @@
 				872D95891573AB5600BCB4EC /* SSPullToRefreshView.m */,
 			);
 			name = refresh;
+			sourceTree = "<group>";
+		};
+		87F75D0115919B3D0046DA46 /* fmdb */ = {
+			isa = PBXGroup;
+			children = (
+				87F75D0215919B500046DA46 /* FMDatabase.h */,
+				87F75D0315919B500046DA46 /* FMDatabase.m */,
+				87F75D0415919B500046DA46 /* FMDatabaseAdditions.h */,
+				87F75D0515919B500046DA46 /* FMDatabaseAdditions.m */,
+				87F75D0615919B500046DA46 /* FMDatabasePool.h */,
+				87F75D0715919B500046DA46 /* FMDatabasePool.m */,
+				87F75D0815919B500046DA46 /* FMDatabaseQueue.h */,
+				87F75D0915919B500046DA46 /* FMDatabaseQueue.m */,
+				87F75D0A15919B500046DA46 /* FMResultSet.h */,
+				87F75D0B15919B500046DA46 /* FMResultSet.m */,
+			);
+			name = fmdb;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -749,7 +796,6 @@
 				872D958B1573AB5600BCB4EC /* SSPullToRefreshSimpleContentView.m in Sources */,
 				872D958C1573AB5600BCB4EC /* SSPullToRefreshView.m in Sources */,
 				8712FF9315749A3800C01283 /* SamLibAuthor+IOS.m in Sources */,
-				8712FF9B1574A02B00C01283 /* NewAuthorViewController.m in Sources */,
 				8712FFC91574D8D300C01283 /* UILabel+WBExtensions.m in Sources */,
 				8712FFCA1574D8D300C01283 /* WBBaseNoticeView.m in Sources */,
 				8712FFCB1574D8D300C01283 /* WBErrorNoticeView.m in Sources */,
@@ -776,6 +822,14 @@
 				87E230C0158B5A600074EBF1 /* AuthorInfoViewController.m in Sources */,
 				87F06694158C5F1C00694FAC /* UIColor+Kolyvan.m in Sources */,
 				87F066A5158C737C00694FAC /* SearchAuthorViewController.m in Sources */,
+				87F75CFB15919AB90046DA46 /* GoogleSearch.m in Sources */,
+				87F75CFC15919AB90046DA46 /* SamLibCacheNames.m in Sources */,
+				87F75CFD15919AB90046DA46 /* SamLibSearch.m in Sources */,
+				87F75D0C15919B500046DA46 /* FMDatabase.m in Sources */,
+				87F75D0D15919B500046DA46 /* FMDatabaseAdditions.m in Sources */,
+				87F75D0E15919B500046DA46 /* FMDatabasePool.m in Sources */,
+				87F75D0F15919B500046DA46 /* FMDatabaseQueue.m in Sources */,
+				87F75D1015919B500046DA46 /* FMResultSet.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

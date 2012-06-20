@@ -52,7 +52,7 @@ typedef enum {
 @property (nonatomic, strong) NSArray *ignored;
 @property (nonatomic, strong) NSArray *authors;
 @property (nonatomic, strong) UIBarButtonItem *addButton;
-@property (nonatomic, strong) NewAuthorViewController *addAuthorViewController;
+//@property (nonatomic, strong) NewAuthorViewController *addAuthorViewController;
 @property (nonatomic, strong) AuthorViewController* authorViewController;
 @property (nonatomic, strong) TextViewController* textViewController;
 @property (nonatomic, strong) FavoritesViewController* favoritesViewController;
@@ -68,7 +68,7 @@ typedef enum {
 @synthesize ignored;
 @synthesize authors;
 @synthesize addButton;
-@synthesize addAuthorViewController;
+//@synthesize addAuthorViewController;
 @synthesize authorViewController;
 @synthesize textViewController;
 @synthesize favoritesViewController;
@@ -136,7 +136,7 @@ typedef enum {
     self.navigationItem.leftBarButtonItem = nil;
     self.navigationItem.rightBarButtonItem = nil;
     self.addButton = nil;
-    self.addAuthorViewController = nil;
+    //self.addAuthorViewController = nil;
     self.textViewController = nil;
     self.favoritesViewController = nil;
     self.userViewController = nil;
@@ -155,7 +155,7 @@ typedef enum {
 {
     [super didReceiveMemoryWarning];     
     
-    self.addAuthorViewController = nil;
+    //self.addAuthorViewController = nil;
     self.authorViewController = nil;
     self.textViewController = nil;
     self.favoritesViewController = nil;    
@@ -221,26 +221,11 @@ typedef enum {
 }
 
 - (void) goAddAuthor
-{
-    /*
-    if (!self.addAuthorViewController) {
-        self.addAuthorViewController = [[NewAuthorViewController alloc] init];
-        self.addAuthorViewController.delegate = self;
-    }
-    
-    UINavigationController *navigationController = [[UINavigationController alloc]
-                                                    initWithRootViewController:self.addAuthorViewController];
-    
-    [self presentViewController:navigationController 
-                       animated:YES 
-                     completion:NULL];
-    */
-    
-    
-    
+{    
     if (!self.searchAuthorViewController) {
         self.searchAuthorViewController = [[SearchAuthorViewController alloc] init];
-        //self.searchAuthorViewController.delegate = self;
+        self.searchAuthorViewController.delegate = self;
+        
     }
     
     UINavigationController *navigationController = [[UINavigationController alloc]
@@ -251,12 +236,16 @@ typedef enum {
                      completion:NULL];
 }
 
-- (void) addNewAuthor: (SamLibAuthor *) author
+- (void) searchAuthorResult: (SamLibAuthor *) author
 {
-    DDLogInfo(@"add author %@", author.path);
+    if (!self.authorViewController) {
+        self.authorViewController = [[AuthorViewController alloc] init];
+    }
+    self.authorViewController.author = author;
+    [self.navigationController pushViewController:self.authorViewController 
+                                         animated:YES];
     
-    [[SamLibModel shared] addAuthor:author]; 
-    [self prepareData];    
+    
 }
 
 - (void) goSettings

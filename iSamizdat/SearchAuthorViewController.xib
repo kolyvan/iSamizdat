@@ -126,6 +126,7 @@ AAgACAAIAAEAAQABAAE</bytes>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 						<string key="IBPlaceholder">Enter author's name or page</string>
 						<object class="IBUITextInputTraits" key="IBTextInputTraits">
+							<int key="IBUIAutocorrectionType">1</int>
 							<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 						</object>
 						<array key="IBScopeButtonTitles">
@@ -140,6 +141,7 @@ AAgACAAIAAEAAQABAAE</bytes>
 						<string key="NSFrame">{{150, 96}, {20, 20}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>

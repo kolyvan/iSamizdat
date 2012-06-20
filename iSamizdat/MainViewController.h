@@ -11,9 +11,9 @@
 // 
 
 #import <UIKit/UIKit.h>
-#import "NewAuthorViewController.h"
+#import "SearchAuthorViewController.h"
 #import "TableViewControllerEx.h"
 
-@interface MainViewController : TableViewControllerEx<NewAuthorViewDelegate>
+@interface MainViewController : TableViewControllerEx<SearchAuthorViewDelegate>
 
 @end

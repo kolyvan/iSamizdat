@@ -19,7 +19,7 @@
 #import "SamLibText.h"
 #import "CommentCell.h"
 #import "PostViewController.h"
-#import "SSPullToRefreshView+Kolyvan.h"
+//#import "SSPullToRefreshView+Kolyvan.h"
 
 @interface ActionSheetWithComment : UIActionSheet
 @property (readwrite, strong) SamLibComment * comment;
@@ -184,7 +184,8 @@
 - (void) sendPost: (PostData *) post
 {   
     _postData = post;        
-    [self.pullToRefreshView startLoadingAndForceExpand];      
+    //[self.pullToRefreshView startLoadingAndForceExpand];      
+    [self forceRefresh];
 }
 
 - (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex
@@ -195,7 +196,8 @@
         
         _postData = [[PostData alloc] init];
         _postData.msgid = comment.msgid;
-        [self.pullToRefreshView startLoadingAndForceExpand];          
+        //[self.pullToRefreshView startLoadingAndForceExpand];          
+        [self forceRefresh];
     }
 }
 

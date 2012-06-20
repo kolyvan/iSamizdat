@@ -95,22 +95,6 @@ static NSString * commentsPath()
     return path;
 }
 
-static NSString * indexPath()
-{
-    static NSString * path = nil;
-    
-    if (!path) {
-#ifdef _DEVELOPMENT_MODE_            
-        path = [@"~/tmp/samlib/index/" stringByExpandingTildeInPath];
-#else
-        path = [KxUtils.cacheDataPath() stringByAppendingPathComponent: @"index"];
-#endif      
-        KxUtils.ensureDirectory(path);                
-    }
-    
-    return path;
-}
-
 static NSString * settingsPath()
 {
     static NSString * path = nil;
@@ -200,8 +184,8 @@ static AFHTTPClient * httpClient(BOOL cleanup)
             NSIndexSet *codes = [NSIndexSet indexSetWithIndex:304];            
             [[AFHTTPRequestOperation class] addAcceptableStatusCodes: codes];
             
-            NSSet *contens = [NSSet setWithObject: @"text/html"];    
-            [[AFHTTPRequestOperation class] addAcceptableContentTypes: contens];
+            //NSSet *contens = [NSSet setWithObject: @"text/html"];    
+            //[[AFHTTPRequestOperation class] addAcceptableContentTypes: contens];
         });
         
         
@@ -422,9 +406,7 @@ SamLibAgent_t SamLibAgent = {
     samlibURL,
     authorsPath,
     textsPath,
-    commentsPath,
-    indexPath,        
-    //settingsPath,
+    commentsPath,  
     settings,
     saveSettings,
     

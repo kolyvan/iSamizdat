@@ -36,4 +36,6 @@
 - (void) handleStatus: (SamLibStatus) status 
             withError: (NSString *)error;
 
+- (void) forceRefresh;
+
 @end

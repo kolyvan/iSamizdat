@@ -17,9 +17,14 @@
 #import "AppDelegate.h"
 #import "SamLibModel.h"
 #import "SamLibAgent.h"
+#import "SamLibSearch.h"
+#import "DDLog.h"
+
+extern int ddLogLevel;
 
 @interface SearchAuthorViewController () {
-    NSArray *_searchResult;
+    NSArray *_result;
+    SamLibSearch *_search;
 }
 
 @property (nonatomic, strong) IBOutlet UITableView *tableView;
@@ -59,7 +64,7 @@
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    _searchResult = nil;    
+    _result = nil;    
     [self.tableView reloadData];
     self.searchBar.text = @"";
     [activityIndicator stopAnimating]; 
@@ -68,7 +73,10 @@
 - (void) viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
-    _searchResult = nil;
+
+    [_search cancel];
+    _search = nil;
+    _result = nil;    
 }
 
 - (void)viewDidUnload
@@ -79,6 +87,11 @@
     self.tableView.delegate = nil;
     self.tableView.dataSource = nil;
     self.searchBar.delegate = nil;
+}
+
+- (void) didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];  
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -93,33 +106,16 @@
     
     if (self.delegate && author)
         [self.delegate searchAuthorResult:author];
-    
 }
 
 - (void) goCancel
-{
-    SamLibAgent.cancelAll();
-    
+{   
     [self dismissViewControllerAnimated:YES 
                              completion:NULL];
 }
 
-- (void) goSearchByName: (NSString *)name
-{   
-    [SamLibAuthor fuzzySearchAuthorByName:name 
-                             minDistance1:0.2
-                             minDistance2:0.4 
-                                    block:^(NSArray *result) {  
-                                        
-                                        if (self.view.isHidden)
-                                            return;                                        
-                                        
-                                        [self finishSearch:result];            
-                                    }];
-}
-
-- (void) goSearchByPath: (NSString *)path
-{       
+- (NSString *) mkSearchPath: (NSString *)path
+{
     if ([path hasPrefix:@"http://"])
         path = [path drop:@"http://".length];
     
@@ -144,42 +140,14 @@
         
         path = [path butlast];        
     }
-
+    
     if ([path contains: @"."] ||
         [path contains: @"/"]) {
-        
-        //locString(@"Invalid path")        
-        [self finishSearch:nil];
-        return;
-    }
-    
-    SamLibAuthor *author = [[SamLibModel shared] findAuthor: path];
-    if (author) {
                 
-        [self finishSearchWithAuthor:author];        
-        return;
+        return nil;
     }
     
-    // the block will keep the reference to authors object
-    author = [[SamLibAuthor alloc] initWithPath:path];
-    
-    [author update:^(SamLibAuthor *unused, SamLibStatus status, NSString *error) {
-        
-        if (self.view.isHidden)
-            return;
-
-        if (status == SamLibStatusSuccess) {
-            
-            [self finishSearchWithAuthor:author];
-            
-        } else {
-            
-            [self finishSearch:nil];
-            
-            // todo: fuzzy search
-        }        
-
-    }]; 
+    return path;
 }
 
 
@@ -188,60 +156,78 @@
 - (void) startSearch
 {
     [self.searchBar resignFirstResponder];
+    
+    _result = nil;
+    _search = nil;    
+    [self.tableView reloadData];    
         
     NSString * s = self.searchBar.text;    
+    
     if (s.nonEmpty) {        
         
-        _searchResult = nil;
-        [self.tableView reloadData];    
-        [activityIndicator startAnimating];
+        BOOL byName = self.searchBar.selectedScopeButtonIndex == 0;
         
-        if (self.searchBar.selectedScopeButtonIndex == 0)        
-            [self goSearchByName: s];
-        else
-            [self goSearchByPath: s];
+        if (!byName) {
+            
+            s = [self mkSearchPath:s];            
+            if (!s.nonEmpty) {
+               
+                [[AppDelegate shared] errorNoticeInView:self.view 
+                                                  title:locString(@"Invalid path") 
+                                                message:@""];                
+                return;                
+            }
+        }  
+                
+        [activityIndicator startAnimating]; 
+        
+        _search = [SamLibSearch searchAuthor:s 
+                                      byName:byName
+                                        flag:FuzzySearchFlagAll
+                                       block:^(NSArray *result) {
+                                                                                                                                 
+                                           [self addSearchResult:result];                
+                                       }];
+            
     }    
 }
 
-- (void) finishSearchWithAuthor: (SamLibAuthor *) author
-{
-    NSDictionary *dict = KxUtils.dictionary(
-                                            author.path, @"path",
-                                            author.name, @"name",
-                                            author.title, @"info",                                                                                        
-                                            nil);
-    [self finishSearch:[NSArray arrayWithObject:dict]];
-}
-
-- (void) finishSearch: (NSArray *)result
-{
-    [activityIndicator stopAnimating]; 
+- (void) addSearchResult: (NSArray *)found
+{   
+    if (found.nonEmpty) {
     
-    if (result.nonEmpty) {                                            
-        
-        _searchResult = result;
+        // union and sort
+        NSArray *t = [SamLibSearch unionArray:found withArray:_result];    
+        _result = KX_RETAIN([SamLibSearch sortByDistance:t]);    
         [self.tableView reloadData];                                            
         
-        NSString *s = KxUtils.format(locString(@"Found: %ld"), result.count); 
-        [[AppDelegate shared] successNoticeInView:self.view 
-                                            title:s];
-        
     } else {
+    
+        [activityIndicator stopAnimating]; 
         
-        [[AppDelegate shared] errorNoticeInView:self.view 
-                                          title:locString(@"Not found") 
-                                        message:@""];
+        if (_result.nonEmpty) {                                            
+            
+            NSString *s = KxUtils.format(locString(@"Found: %ld"), _result.count); 
+            [[AppDelegate shared] successNoticeInView:self.view 
+                                                title:s];
+            
+        } else {
+            
+            [[AppDelegate shared] errorNoticeInView:self.view 
+                                              title:locString(@"Not found") 
+                                            message:@""];
+        }
     }
 }
 
 - (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar
 {
-    [self startSearch];
+//    [self startSearch];
 }
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)sender
-{
-    [self startSearch]; 
+{   
+   [self startSearch]; 
 }
 
 #pragma mark - Table view
@@ -253,7 +239,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {    
-    return _searchResult.count;
+    return _result.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -265,7 +251,7 @@
                                       reuseIdentifier:CellIdentifier];        
     }
     
-    NSDictionary *dict = [_searchResult objectAtIndex:indexPath.row]; 
+    NSDictionary *dict = [_result objectAtIndex:indexPath.row]; 
     
     cell.textLabel.text = [dict get:@"name"];
     cell.detailTextLabel.text = [dict get:@"info"];
@@ -276,9 +262,26 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (_searchResult.nonEmpty) {
-
+    if (_result.nonEmpty) {
         
+        NSDictionary *dict = [_result objectAtIndex:indexPath.row];
+        
+        SamLibModel *model = [SamLibModel shared];
+        
+        NSString *from = [dict get:@"from"];
+        NSString *path = [dict get:@"path"]; 
+        
+        if ([from isEqualToString:@"local"]) {
+            
+            [self goDone: [model findAuthor:path]];                     
+            
+        } else {
+            
+            SamLibAuthor *author = [SamLibAuthor fromDictionary:dict withPath:path];                        
+            [model addAuthor:author];                          
+            [self goDone: [model findAuthor:path]];                     
+            // [appDelegate reload: nil];
+        }
         
     }
 }

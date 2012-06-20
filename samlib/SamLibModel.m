@@ -13,7 +13,9 @@
 
 #import "KxArc.h"
 #import "KxMacros.h"
+#import "KxUtils.h"
 #import "NSArray+Kolyvan.h"
+#import "NSDictionary+Kolyvan.h"
 #import "NSString+Kolyvan.h"
 #import "SamLibModel.h"
 #import "SamLibAgent.h"
@@ -55,9 +57,18 @@ extern int ddLogLevel;
     return gModel;
 }
 
+- (id) init
+{
+    self = [super init];
+    if (self) {
+    }
+    return self;
+}
+
 - (void) dealloc
 {
     KX_RELEASE(_authors);
+    _authors = nil;
     KX_SUPER_DEALLOC();
 }
 
@@ -99,6 +110,9 @@ extern int ddLogLevel;
 
 - (void) deleteAuthor: (SamLibAuthor *) author
 {
+    for (SamLibText *text in author.texts)
+        [text removeTextFiles:YES andComments:YES];
+        
     SamLibAgent.removeAuthor(author.path); 
     
     NSMutableArray *ma = [_authors mutableCopy];
@@ -135,5 +149,7 @@ extern int ddLogLevel;
     
     return nil;
 }
+
+
 
 @end

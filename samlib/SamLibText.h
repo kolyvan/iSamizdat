@@ -53,6 +53,7 @@ typedef enum {
     
 } SamLibTextVote;
 
+
 // 
 @class SamLibComments;
 
@@ -169,5 +170,8 @@ typedef enum {
 
 //- (void) fetchVotes: (FetchVotesBlock) block;
 
+
+- (void) removeTextFiles: (BOOL) texts 
+             andComments: (BOOL) comments;
 
 @end

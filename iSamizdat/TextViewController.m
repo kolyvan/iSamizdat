@@ -27,7 +27,7 @@
 #import "CommentsViewController.h"
 #import "UIFont+Kolyvan.h"
 #import "DDLog.h"
-#import "SSPullToRefreshView+Kolyvan.h"
+//#import "SSPullToRefreshView+Kolyvan.h"
 
 extern int ddLogLevel;
 
@@ -500,7 +500,8 @@ enum {
 {
     if (buttonIndex != actionSheet.cancelButtonIndex) {
       
-        [self.pullToRefreshView startLoadingAndForceExpand];
+        //[self.pullToRefreshView startLoadingAndForceExpand];
+        [self forceRefresh];
     }
 }
 

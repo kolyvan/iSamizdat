@@ -27,7 +27,6 @@ typedef struct {
     NSString * (*authorsPath)();
     NSString * (*textsPath)();    
     NSString * (*commentsPath)();
-    NSString * (*indexPath)();    
     
     NSMutableDictionary * (*settings)();
     void (*saveSettings)();

@@ -14,6 +14,7 @@
 #import "AppDelegate.h"
 #import "SamLibAgent.h"
 #import "KxMacros.h"
+#import "SSPullToRefreshView+Kolyvan.h"
 
 @interface TableViewControllerEx()
 
@@ -140,6 +141,11 @@
         cell = [[UITableViewCell alloc] initWithStyle:style reuseIdentifier:cellIdentifier];                
     }
     return cell;
+}
+
+- (void) forceRefresh
+{
+    [self.pullToRefreshView startLoadingAndForceExpand];    
 }
 
 @end

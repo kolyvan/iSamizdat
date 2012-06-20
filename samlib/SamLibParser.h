@@ -27,6 +27,7 @@ typedef struct {
     NSArray* (*listOfGroups)();
     NSArray * (*scanAuthors)(NSString *html);
     NSString * (*captitalToPath)(unichar first);
+    NSString * (*cyrillicToLatin)(unichar first);
     
 } SamLibParser_t;
 

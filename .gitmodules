@@ -19,3 +19,6 @@
 [submodule "vendors/notice"]
 	path = vendors/notice
 	url = git://github.com/kolyvan/NoticeView.git
+[submodule "vendors/fmdb"]
+	path = vendors/fmdb
+	url = git://github.com/ccgus/fmdb.git

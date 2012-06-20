@@ -20,6 +20,8 @@
 #import "KxArc.h"
 #import "KxMacros.h"
 #import "DDLog.h"
+#import <wctype.h>
+#import <xlocale.h>
 
 extern int ddLogLevel;
 
@@ -827,6 +829,7 @@ static NSArray * scanAuthors(NSString *html)
 {
     // 
     // <DL><a href=/a/a_a/>А Аяма</a> "Ситком"(45k,8)</DL>
+    // DL><font color=gray size=-2>New</font><a href=/k/kolywan/>Колыван</a>
     
     NSScanner *scanner = [NSScanner scannerWithString: html];
     
@@ -837,24 +840,33 @@ static NSArray * scanAuthors(NSString *html)
     
     NSString *author = nil;
     while (!scanner.isAtEnd &&
-           nil != (author = nextTag(scanner, @"<DL><a href=/", @"</DL>"))) {
+           nil != (author = nextTag(scanner, @"<DL>", @"</DL>"))) {
 
-        NSScanner *scanner1 = [[NSScanner alloc] initWithString: author];
-
-        NSString *path = scanUpToTag(scanner1, @"/>");     
-        if (path.nonEmpty) {
-            NSString *name = scanUpToTag(scanner1, @"</a>");       
-            if (name.nonEmpty) {
-                NSString *info =  [author substringFromIndex:scanner1.scanLocation];
-                if (info.nonEmpty) {
-       
+         NSScanner *scanner1 = [[NSScanner alloc] initWithString: author];
+        
+        if (findTag(scanner1, @"<a href=/")) {
+                                  
+            NSString *path = scanUpToTag(scanner1, @"/>");     
+            if (path.nonEmpty) {
+                
+                path = [path drop:2];
+                
+                NSString *name = scanUpToTag(scanner1, @"</a>");       
+                if (name.nonEmpty) {
+                   
+                    //NSString *info =  [author substringFromIndex:scanner1.scanLocation];                    
+                    NSString *info =  nextTag(scanner1, @"\"", @"\"");
+                    if (!info.nonEmpty) info = @"";
+                                       
                     NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
                                           path, @"path", 
                                           name, @"name",
                                           info, @"info",
+                                          @"samlib", @"from",                                                                
                                           nil];
-        
+                    
                     [result push: dict];
+                    
                 }
             }
         } 
@@ -866,11 +878,22 @@ static NSArray * scanAuthors(NSString *html)
 }
 
 typedef struct {
-    unichar capital;
+    unichar letter;
     char * path;
 } IndexEntry;
 
-static NSString * captitalToPath(unichar first)
+static locale_t locale_ru() {
+    
+    static locale_t loc;    
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        loc = newlocale(LC_CTYPE_MASK , "ru_RU", NULL);
+    });
+    
+    return loc;
+}
+
+static NSString * cyrillicToLatin(unichar first)
 {   
     IndexEntry cyrillic [33] = {
         { 1040, "a" }, // А
@@ -879,11 +902,11 @@ static NSString * captitalToPath(unichar first)
         { 1043, "g" }, // Г
         { 1044, "d" }, // Д
         { 1045, "e" }, // Е
-        { 1025, "e/index_yo.shtml" }, // Ё
-        { 1046, "z/index_zh.shtml" }, // Ж
+        { 1025, "yo" }, // Ё
+        { 1046, "zh" }, // Ж
         { 1047, "z" }, // З
         { 1048, "i" }, // И
-        { 1049, "j/index_ij.shtml" }, // Й
+        { 1049, "ij" }, // Й
         { 1050, "k" }, // К
         { 1051, "l" }, // Л
         { 1052, "m" }, // М
@@ -892,17 +915,66 @@ static NSString * captitalToPath(unichar first)
         { 1055, "p" }, // П
         { 1056, "r" }, // Р
         { 1057, "s" }, // С
-        { 1058, "r" }, // Т
+        { 1058, "t" }, // Т
         { 1059, "u" }, // У
         { 1060, "f" }, // Ф
         { 1061, "h" }, // Х
         { 1062, "c" }, // Ц        
-        { 1063, "c/index_ch.shtml" }, // Ч
-        { 1064, "s/index_sh.shtml" }, // Ш
-        { 1065, "s/index_sw.shtml" }, // Щ
+        { 1063, "ch" }, // Ч
+        { 1064, "sh" }, // Ш
+        { 1065, "sw" }, // Щ
         { 1066, "x" }, // Ъ
         { 1067, "y" }, // Ы
         { 1068, "z" }, // Ь
+        { 1069, "ae" }, // Э
+        { 1070, "ju" }, // Ю
+        { 1071, "ja" }, // Я
+    };    
+    
+    first = towupper_l(first, locale_ru());
+    
+    for (int i = 0; i < 33; ++i) {
+        if (cyrillic[i].letter == first)
+            return [NSString stringWithCString:cyrillic[i].path 
+                                      encoding:NSASCIIStringEncoding];
+    }    
+    
+    return nil;
+}
+
+static NSString * captitalToPath(unichar first)
+{   
+    IndexEntry cyrillic [33] = {
+        { 1040, "a/" }, // А
+        { 1041, "b/" }, // Б  
+        { 1042, "w/" }, // В
+        { 1043, "g/" }, // Г
+        { 1044, "d/" }, // Д
+        { 1045, "e/" }, // Е
+        { 1025, "e/index_yo.shtml" }, // Ё
+        { 1046, "z/index_zh.shtml" }, // Ж
+        { 1047, "z" }, // З
+        { 1048, "i/" }, // И
+        { 1049, "j/index_ij.shtml" }, // Й
+        { 1050, "k/" }, // К
+        { 1051, "l/" }, // Л
+        { 1052, "m/" }, // М
+        { 1053, "n/" }, // Н
+        { 1054, "o/" }, // О
+        { 1055, "p/" }, // П
+        { 1056, "r/" }, // Р
+        { 1057, "s/" }, // С
+        { 1058, "t/" }, // Т
+        { 1059, "u/" }, // У
+        { 1060, "f/" }, // Ф
+        { 1061, "h/" }, // Х
+        { 1062, "c/" }, // Ц        
+        { 1063, "c/index_ch.shtml" }, // Ч
+        { 1064, "s/index_sh.shtml" }, // Ш
+        { 1065, "s/index_sw.shtml" }, // Щ
+        { 1066, "x/" }, // Ъ
+        { 1067, "y/" }, // Ы
+        { 1068, "z/" }, // Ь
         { 1069, "e/index_ae.shtml" }, // Э
         { 1070, "j/index_ju.shtml" }, // Ю
         { 1071, "j/index_ja.shtml" }, // Я
@@ -910,11 +982,15 @@ static NSString * captitalToPath(unichar first)
     
     if ((first > 47 && first < 58) || 
         (first > 64 && first < 91)) {
+                
+        first = towlower(first);
         return KxUtils.format(@"%c/index_%c.shtml", first, first);        
     }
-         
+    
+    first = towupper_l(first, locale_ru());
+    
     for (int i = 0; i < 33; ++i) {
-        if (cyrillic[i].capital == first)
+        if (cyrillic[i].letter == first)
             return [NSString stringWithCString:cyrillic[i].path 
                                       encoding:NSASCIIStringEncoding];
     }    
@@ -934,4 +1010,5 @@ SamLibParser_t SamLibParser = {
     listOfGroups,
     scanAuthors,
     captitalToPath,
+    cyrillicToLatin,
 };
