@@ -17,6 +17,8 @@
 #import "SamLibUser.h"
 #import "SamLibAgent.h"
 #import "AppDelegate.h"
+#import "UIFont+Kolyvan.h"
+#import "UIColor+Kolyvan.h"
 
 #define USER_SECTION 0
 #define ACCOUNT_SECTION 1
@@ -26,63 +28,6 @@
 #define LOGIN_ROW 0
 #define PASSWORD_ROW 1
 #define ENABLE_ROW 2 
-
-@interface UserViewTextCell : UITableViewCell 
-@property (readonly, nonatomic) UILabel * nameLabel;
-@property (readonly, nonatomic) UITextField * textField;
-@end
-
-@implementation UserViewTextCell
-@synthesize nameLabel = _nameLabel;
-@synthesize textField = _textField;
-
-- (id) initWithStyle:(UITableViewCellStyle)style 
-     reuseIdentifier:(NSString *)reuseIdentifier
-{
-    if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) 
-    {
-        _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, 10, 85, 21)];
-        _nameLabel.font = [UIFont boldSystemFontOfSize:15];        
-        [self.contentView addSubview:_nameLabel];
-        
-        _textField = [[UITextField alloc] initWithFrame:CGRectMake(105, 10, 180, 31)];
-        _textField.font = [UIFont systemFontOfSize:15];         
-        _textField.autocapitalizationType = NO;
-        _textField.autocorrectionType = NO;       
-        _textField.textColor = [UIColor colorWithRed:0 green:51.0/255 blue:102.0/255 alpha:1];
-        [self.contentView addSubview:_textField];
-    }
-    return self;
-}
-
-@end
-
-
-@interface UserViewSwitchCell : UITableViewCell
-@property (readonly, nonatomic) UILabel * nameLabel;
-@property (readonly, nonatomic) UISwitch * switchButton;
-@end
-
-@implementation UserViewSwitchCell
-@synthesize nameLabel = _nameLabel;
-@synthesize switchButton = _switchButton;
-
-- (id) initWithStyle:(UITableViewCellStyle)style 
-     reuseIdentifier:(NSString *)reuseIdentifier
-{
-    if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) 
-    {   
-        _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, 10, 85, 21)];
-        _nameLabel.font = [UIFont boldSystemFontOfSize:14];        
-        [self.contentView addSubview:_nameLabel];
-        
-        _switchButton = [[UISwitch alloc] initWithFrame:CGRectMake(210, 8, 60, 26)];
-        [self.contentView addSubview:_switchButton];        
-    }
-    return self;
-}
-
-@end
 
 ////
 
@@ -185,13 +130,13 @@
     }
     
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:ENABLE_ROW inSection: ACCOUNT_SECTION];
-    UserViewSwitchCell * cell = (UserViewSwitchCell *)[self.tableView cellForRowAtIndexPath:indexPath];
+    UITableViewCell * cell = [self.tableView cellForRowAtIndexPath:indexPath];
+    BOOL on = ((UISwitch *)cell.accessoryView).on;  
     
-    BOOL enableAccount = [[SamLibAgent.settings() get: @"user.enableAccount"] boolValue];
-    if (cell.switchButton.on != enableAccount) {
+    BOOL enableAccount = SamLibAgent.settingsBool(@"user.enableAccount", NO);
+    if (on != enableAccount) {
         
-        [SamLibAgent.settings() update: @"user.enableAccount" 
-                                 value: [NSNumber numberWithBool:cell.switchButton.on]];   
+        SamLibAgent.setSettingsBool(@"user.enableAccount", on, NO); 
         changed = YES;  
     }
     
@@ -210,10 +155,7 @@
         
         [[AppDelegate shared] checkLogin];
     }
- 
 }
-
-
 
 - (void) goBack
 {
@@ -247,37 +189,52 @@ titleForHeaderInSection:(NSInteger)section
     return locString(@"Samizdat account"); 
 }
 
-- (UserViewTextCell *) mkTextCell
+
+- (UITableViewCell *) mkTextCell
 {
     static NSString *CellIdentifier = @"TextCell";
-    UserViewTextCell *cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (!cell) {
-        cell = [[UserViewTextCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault 
+                                       reuseIdentifier:CellIdentifier];
     }    
-    [cell.textField addTarget:self 
-                       action:@selector(textFieldDoneEditing:) 
-             forControlEvents:UIControlEventEditingDidEndOnExit];    
+    
+    UITextField *textField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, 180, 21)];
+    textField.font = [UIFont systemFont14];         
+    textField.autocapitalizationType = NO;
+    textField.autocorrectionType = NO;       
+    textField.textColor = [UIColor secondaryTextColor];
+           
+    [textField addTarget:self 
+                  action:@selector(textFieldDoneEditing:) 
+        forControlEvents:UIControlEventEditingDidEndOnExit];    
+   
+    cell.accessoryView = textField;
+    
     return cell;
 }
 
-- (UserViewSwitchCell *) mkSwitchCell
+- (UITableViewCell *) mkSwitchCell
 {
     static NSString *CellIdentifier = @"SwitchCell";
-    UserViewSwitchCell *cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (!cell) {
-        cell = [[UserViewSwitchCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault 
+                                      reuseIdentifier:CellIdentifier];
     }    
-    //[cell.button addTarget:self 
-    //                action:@selector(textFieldDoneEditing:) 
-    //         forControlEvents:UIControlEventTouchUpInside];    
+    
+    UISwitch * button = [[UISwitch alloc] initWithFrame:CGRectZero]; 
+    cell.accessoryView = button;
+    
     return cell;
 }
 
 - (NSString *) textForRow: (NSInteger ) row inSection: (NSInteger) section
 {
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection: section];
-    UserViewTextCell * cell = (UserViewTextCell *)[self.tableView cellForRowAtIndexPath:indexPath];
-    return cell.textField.text;
+    UITableViewCell * cell = [self.tableView cellForRowAtIndexPath:indexPath];
+    UITextField *textField = (UITextField *)cell.accessoryView;
+    return textField.text;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -287,65 +244,65 @@ titleForHeaderInSection:(NSInteger)section
     if (indexPath.section == ACCOUNT_SECTION &&
         indexPath.row == ENABLE_ROW) {
         
-        UserViewSwitchCell *cell = [self mkSwitchCell];        
-        cell.nameLabel.text = locString(@"Enable");
-        BOOL f = [[SamLibAgent.settings() get: @"user.enableAccount"] boolValue];
-        cell.switchButton.on = f;
+        UITableViewCell *cell = [self mkSwitchCell];        
+        cell.textLabel.text = locString(@"Enable");
+        BOOL f = SamLibAgent.settingsBool(@"user.enableAccount", NO);
+        ((UISwitch *)cell.accessoryView).on = f;        
         return cell;
     }
     
-    UserViewTextCell *cell = [self mkTextCell];
+    UITableViewCell *cell = [self mkTextCell];
+    UITextField *textField = (UITextField *)cell.accessoryView;
     
     if (indexPath.section == USER_SECTION) {
         
         switch (indexPath.row) {
             case NAME_ROW:                
-                cell.nameLabel.text = locString(@"Name");
-                cell.textField.placeholder = locString(@"required");
-                cell.textField.keyboardType = UIKeyboardTypeDefault;
-                cell.textField.text = user.name.nonEmpty ? user.name : @"";
+                cell.textLabel.text = locString(@"Name");
+                textField.placeholder = locString(@"required");
+                textField.keyboardType = UIKeyboardTypeDefault;
+                textField.text = user.name.nonEmpty ? user.name : @"";
                 break;
                 
             case URL_ROW:                
-                cell.nameLabel.text = locString(@"URL");                
-                cell.textField.placeholder = locString(@"optional");
-                cell.textField.keyboardType = UIKeyboardTypeURL;
-                cell.textField.text = user.url.nonEmpty ? user.url : @"";
+                cell.textLabel.text = locString(@"URL");                
+                textField.placeholder = locString(@"optional");
+                textField.keyboardType = UIKeyboardTypeURL;
+                textField.text = user.url.nonEmpty ? user.url : @"";
                 break;
                 
             case EMAIL_ROW:                
-                cell.nameLabel.text = locString(@"Email");
-                cell.textField.placeholder = locString(@"optional");
-                cell.textField.keyboardType = UIKeyboardTypeEmailAddress;                
-                cell.textField.text = user.email.nonEmpty ? user.email : @"";                
+                cell.textLabel.text = locString(@"Email");
+                textField.placeholder = locString(@"optional");
+                textField.keyboardType = UIKeyboardTypeEmailAddress;                
+                textField.text = user.email.nonEmpty ? user.email : @"";                
                 break;
         }
         
-        cell.textField.secureTextEntry = NO;
+        textField.secureTextEntry = NO;
         
     } else {
         
         switch (indexPath.row) {
             case LOGIN_ROW:                
-                cell.nameLabel.text = locString(@"Login");
-                cell.textField.secureTextEntry = NO;                
-                cell.textField.keyboardType = UIKeyboardTypeASCIICapable;  
-                cell.textField.text = user.login.nonEmpty ? user.login : @"";                
+                cell.textLabel.text = locString(@"Login");
+                textField.secureTextEntry = NO;                
+                textField.keyboardType = UIKeyboardTypeASCIICapable;  
+                textField.text = user.login.nonEmpty ? user.login : @"";                
                 break;
                 
             case PASSWORD_ROW:
-                cell.nameLabel.text = locString(@"Password");
-                cell.textField.secureTextEntry = YES;
-                cell.textField.keyboardType = UIKeyboardTypeASCIICapable;                
-                cell.textField.text = (user.login.nonEmpty && user.pass.nonEmpty) ? user.pass : @"";                
+                cell.textLabel.text = locString(@"Password");
+                textField.secureTextEntry = YES;
+                textField.keyboardType = UIKeyboardTypeASCIICapable;                
+                textField.text = (user.login.nonEmpty && user.pass.nonEmpty) ? user.pass : @"";                
                 break;
                 
             case ENABLE_ROW:
                 break;
-                
         }
         
-        cell.textField.placeholder = @"";
+        textField.placeholder = @"";
     }
     
     return cell;

@@ -54,7 +54,7 @@ int ddLogLevel = LOG_LEVEL_WARN;
 {
     [self initLogger];
     
-    if ([[SamLibAgent.settings() get: @"user.enableAccount"] boolValue]) {
+    if (SamLibAgent.settingsBool(@"user.enableAccount", NO)) {
         DDLogInfo(@"restore SamLib session cookies");
         restoreSamLibSessionCookies();
     }
@@ -156,8 +156,7 @@ int ddLogLevel = LOG_LEVEL_WARN;
 {
     SamLibUser *user = [SamLibUser currentUser];
     
-    BOOL enableAccount = NO;     
-    enableAccount = [[SamLibAgent.settings() get: @"user.enableAccount"] boolValue];
+    BOOL enableAccount = SamLibAgent.settingsBool(@"user.enableAccount", NO);
            
     if (enableAccount) {
         
