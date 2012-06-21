@@ -147,15 +147,19 @@
     SamLibUser *user = [SamLibUser currentUser];        
     
     if (user.name.isEmpty) {
-                
-        UserViewController *userViewController = [[UserViewController alloc] init];        
-        UINavigationController *navigationController = [[UINavigationController alloc]
-                                                        initWithRootViewController:userViewController];        
         
-        userViewController.delegate = self;
-        [self presentViewController:navigationController 
-                           animated:YES 
-                         completion:NULL];
+        UIActionSheet *actionSheet;
+        actionSheet = [[UIActionSheet alloc] initWithTitle:locString(@"Select name for posting")
+                                                  delegate:self
+                                         cancelButtonTitle:locString(@"Don't send") 
+                                    destructiveButtonTitle:nil 
+                                         otherButtonTitles:
+                       locString(@"Anonymous"), 
+                       NSFullUserName(), 
+                       locString(@"Enter name"), 
+                       nil];
+        
+        [actionSheet showInView:self.view];
         
     } else {    
         
@@ -179,8 +183,37 @@
     }
 }
 
+- (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex
+{   
+    if (buttonIndex != actionSheet.cancelButtonIndex) {
+
+        if (0 == buttonIndex) {
+            
+            [SamLibUser currentUser].name = locString(@"Anonymous");
+            [self sendPressed];            
+            
+        } else if (1 == buttonIndex) {
+            
+            [SamLibUser currentUser].name = NSFullUserName();
+            [self sendPressed];            
+            
+        } else if (2 == buttonIndex) {  
+            
+            UserViewController *userViewController = [[UserViewController alloc] init];        
+            UINavigationController *navigationController = [[UINavigationController alloc]
+                                                            initWithRootViewController:userViewController];        
+            
+            userViewController.delegate = self;
+            [self presentViewController:navigationController 
+                               animated:YES 
+                             completion:NULL];
+        }
+    }
+}
+
 - (BOOL) userInfoChanged
 {
+    /*
     SamLibUser *user = [SamLibUser currentUser];        
     
     if (user.name.isEmpty) {
@@ -192,14 +225,10 @@
                                                   otherButtonTitles:nil];
         
         [alertView show];
-        
-        return NO;
-        
-    } else {    
-        
-        //[self sendPressed];            
-        return YES;        
+           
     }
+    */
+    return YES;            
 }
 
 -(void) keyboardWillShow:(NSNotification *)note

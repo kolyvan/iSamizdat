@@ -27,7 +27,7 @@
 - (void) sendPost: (PostData *) post;  
 @end
 
-@interface PostViewController : UIViewController<UITextViewDelegate, UserViewDelegate>
+@interface PostViewController : UIViewController<UITextViewDelegate, UserViewDelegate, UIActionSheetDelegate>
 
 @property (nonatomic) IBOutlet UITextView *textView;
 @property (nonatomic, strong) SamLibComment *comment;
