@@ -47,6 +47,12 @@ enum {
     self.navigationItem.leftBarButtonItem = backButton;
 }
 
+- (void) viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self.tableView reloadData];
+}
+
 - (void)viewDidUnload
 {
     [super viewDidUnload];
@@ -61,6 +67,16 @@ enum {
 - (void) goBack
 {
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void) controlEventValueChanged: (id) sender
+{
+    UISwitch * button = sender;
+    switch ([sender tag]) {
+        case CacheViewTextRow:      SamLibStorage.setAllowTexts(button.on); break;
+        case CacheViewCommentsRow:  SamLibStorage.setAllowComments(button.on); break;
+        case CacheViewNamesRow:     SamLibStorage.setAllowNames(button.on); break;
+    };        
 }
 
 #pragma mark - Table view data source
@@ -82,9 +98,12 @@ enum {
     if (!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle 
                                       reuseIdentifier:CellIdentifier];
+        UISwitch * button = [[UISwitch alloc] initWithFrame:CGRectZero]; 
+        [button addTarget:self 
+                   action:@selector(controlEventValueChanged:) 
+         forControlEvents:UIControlEventValueChanged]; 
+        cell.accessoryView = button;    
     }        
-    UISwitch * button = [[UISwitch alloc] initWithFrame:CGRectZero]; 
-    cell.accessoryView = button;    
     return cell;
 }
 
@@ -94,6 +113,7 @@ enum {
     cell = [self mkSwitchCell];
     
     UISwitch *button = (UISwitch *)cell.accessoryView;
+    button.tag = indexPath.row;    
     
     if (CacheViewTextRow == indexPath.row) {
         

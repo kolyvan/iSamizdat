@@ -16,6 +16,7 @@
 #import "SamLibModel.h"
 #import "SamLibAuthor.h"
 #import "SamLibUser.h"
+#import "SamLibStorage.h"
 #import "DDLog.h"
 #import "DDTTYLogger.h"
 #import "KxUtils.h"
@@ -77,7 +78,17 @@ int ddLogLevel = LOG_LEVEL_WARN;
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
     [[SamLibModel shared] save]; 
-     SamLibAgent.saveSettings();
+    
+    if (!SamLibStorage.allowTexts())
+        SamLibStorage.cleanupTexts();
+    
+    if (!SamLibStorage.allowComments())
+        SamLibStorage.cleanupComments();
+    
+    if (!SamLibStorage.allowNames())
+        SamLibStorage.cleanupNames();
+    
+    SamLibAgent.saveSettings();
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
