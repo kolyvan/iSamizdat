@@ -530,6 +530,14 @@ static NSString * prettyHtml (NSMutableArray *diffs)
     return [s stringByAppendingPathExtension: @"comments"];
 }
 
+- (NSString *) commentsFile
+{
+    NSFileManager * fm = [[NSFileManager alloc] init];    
+    BOOL r = [fm isReadableFileAtPath:self.commentsPath];    
+    KX_RELEASE(fm);    
+    return r ? self.commentsPath : nil;
+}
+
 - (NSString *) htmlFile
 {
     NSFileManager * fm = [[NSFileManager alloc] init];    
@@ -554,7 +562,6 @@ static NSString * prettyHtml (NSMutableArray *diffs)
     }
     return _cachedFileSize;
 }
-
 
 - (NSString *) diffFile
 {
@@ -761,6 +768,12 @@ static NSString * prettyHtml (NSMutableArray *diffs)
                                                     withText: self]); 
     }
     return _commentsObject;
+}
+
+- (void) freeCommentsObject
+{
+    KX_RELEASE(_commentsObject);
+    _commentsObject = nil;
 }
 
 - (NSString *) sizeWithDelta: (NSString *)sep

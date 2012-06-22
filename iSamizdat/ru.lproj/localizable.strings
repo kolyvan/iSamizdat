@@ -67,3 +67,7 @@
 "Select name for posting" = "Добавить комментарий от";
 "Don't send" = "Отменить";
 "Enter name" = "Ввести имя";
+"Cleanup cached" = "Удалить сохраненное";
+"Remove text and comments?" = "Удалить текст и комментарии?";
+"Remove" = "Удалить";
+

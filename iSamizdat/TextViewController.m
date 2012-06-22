@@ -16,6 +16,7 @@
 #import "KxMacros.h"
 #import "KxUtils.h"
 #import "SamLibText.h"
+#import "SamLibComments.h"
 #import "SamLibAuthor.h"
 #import "SamLibAuthor+IOS.h"
 #import "SamLibText+IOS.h"
@@ -27,7 +28,6 @@
 #import "CommentsViewController.h"
 #import "UIFont+Kolyvan.h"
 #import "DDLog.h"
-//#import "SSPullToRefreshView+Kolyvan.h"
 
 extern int ddLogLevel;
 
@@ -106,8 +106,8 @@ enum {
     RowGenre,
     RowComments,
     RowRead,
-    RowMyVote,
-    //RowMyMemo,
+    RowMyVote,    
+    RowCleanup, 
 };
 
 @interface TextViewController () {
@@ -228,6 +228,12 @@ enum {
         [ma push: $int(RowGenre)];  
     
     [ma push: $int(RowMyVote)];  
+    
+    if (_text.htmlFile.nonEmpty || 
+        _text.commentsFile.nonEmpty) {
+        
+        [ma push: $int(RowCleanup)];
+    }        
 
     _rows = [ma toArray];
 }
@@ -278,8 +284,23 @@ enum {
                                 destructiveButtonTitle:nil
                                      otherButtonTitles:locString(@"Download"), nil];
     
+    actionSheet.tag = 0;
     [actionSheet showInView:self.view];
 }
+
+- (void) goCleanup
+{
+    UIActionSheet *actionSheet;
+    actionSheet = [[UIActionSheet alloc] initWithTitle:locString(@"Remove text and comments?")
+                                              delegate:self
+                                     cancelButtonTitle:locString(@"Cancel") 
+                                destructiveButtonTitle:nil
+                                     otherButtonTitles:locString(@"Remove"), nil];
+    
+    actionSheet.tag = 1;
+    [actionSheet showInView:self.view];
+}
+
 
 #pragma mark - Table view data source
 
@@ -419,6 +440,23 @@ enum {
         cell.textLabel.text = locString(@"My vote");
         cell.detailTextLabel.text = [self textVoteString];
         return cell;
+        
+    } else if (RowCleanup == row) {
+        
+        UITableViewCell *cell = [self mkCell: @"CleanupCell" withStyle:UITableViewCellStyleDefault];
+        cell.textLabel.text = locString(@"Cleanup cached");
+        //cell.detailTextLabel.text = locString(@"cached text and comments");
+                
+        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+        button.frame = CGRectMake(0, 0, 24, 24);                    
+        [button addTarget:self 
+                   action:@selector(goCleanup) 
+         forControlEvents:UIControlEventTouchUpInside];                    
+        [button setBackgroundImage:[UIImage imageNamed:@"recycle"]
+                          forState:UIControlStateNormal];
+        cell.accessoryView = button;
+        
+        return cell;
     }        
     
     return nil;
@@ -462,10 +500,14 @@ enum {
         [self.navigationController pushViewController:self.voteViewController 
                                              animated:YES]; 
         
+        
+    } else if (RowCleanup == row) {
+        
+       
+          
     } else if (RowUpdate == row || RowDownload == row) {
 
     }
-
 }
 
 #pragma mark - VoteViewController delagate
@@ -500,8 +542,18 @@ enum {
 {
     if (buttonIndex != actionSheet.cancelButtonIndex) {
       
-        //[self.pullToRefreshView startLoadingAndForceExpand];
-        [self forceRefresh];
+        if (actionSheet.tag == 0) {
+            
+            [self forceRefresh];
+            
+        } else {
+            
+            [_text freeCommentsObject];
+            [_text removeTextFiles:YES andComments:YES];   
+            [self prepareData];
+            [self.tableView reloadData];
+            
+        }
     }
 }
 

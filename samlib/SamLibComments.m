@@ -367,27 +367,23 @@ static NSDate* mkDateFromComment(NSString *dt)
                                       if (!parameters && // parameters != nil on deleteComment call                                          
                                           buffer.count < maxCommens())
                                       {                                           
-                                          BOOL isContinue;
+                                          BOOL isContinue = YES;
                                           
                                           if (!force && _all.nonEmpty) {
-                                              
-                                              isContinue = NO;
-                                              for (SamLibComment *p in result) {
-                                                  
-                                                  BOOL exists = [_all exists:^(id p2) {
-                                                      return [p isEqualToComment: p2];
-                                                  }];
-                                                  if (!exists) {
-                                                      // found new comment, continue fetch
-                                                      isContinue = YES;
+                                                                                                                                          
+                                              for (SamLibComment *r in result) {
+                                                                                                    
+                                                  for (SamLibComment *l in _all)    
+                                                      if ([l isEqualToComment: r]) {
+                                                          // found old comment, stop fetch                                                            
+                                                          isContinue = NO;
+                                                          break;
+                                                      }
+                                                
+                                                  if (!isContinue)
                                                       break;
-                                                  }
                                               }
-                                              
-                                          } else {
-                                              isContinue = YES;
-                                          }
-                                       
+                                          }                                       
                                           
                                           if (isContinue) {
                                               [self update:path

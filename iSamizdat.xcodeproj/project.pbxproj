@@ -31,6 +31,8 @@
 		8712FFDB1574E84900C01283 /* round_back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8712FFD91574E84900C01283 /* round_back@2x.png */; };
 		8712FFDE1574E8D000C01283 /* back.png in Resources */ = {isa = PBXBuildFile; fileRef = 8712FFDC1574E8D000C01283 /* back.png */; };
 		8712FFDF1574E8D000C01283 /* back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8712FFDD1574E8D000C01283 /* back@2x.png */; };
+		8724CBD21594A9BC0054293E /* recycle.png in Resources */ = {isa = PBXBuildFile; fileRef = 8724CBD01594A9BC0054293E /* recycle.png */; };
+		8724CBD31594A9BC0054293E /* recycle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8724CBD11594A9BC0054293E /* recycle@2x.png */; };
 		872D943415737B0400BCB4EC /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 872D943315737B0400BCB4EC /* UIKit.framework */; };
 		872D943615737B0400BCB4EC /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 872D943515737B0400BCB4EC /* Foundation.framework */; };
 		872D943815737B0400BCB4EC /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 872D943715737B0400BCB4EC /* CoreGraphics.framework */; };
@@ -162,6 +164,8 @@
 		8712FFD91574E84900C01283 /* round_back@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "round_back@2x.png"; path = "resources/round_back@2x.png"; sourceTree = "<group>"; };
 		8712FFDC1574E8D000C01283 /* back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = back.png; path = resources/back.png; sourceTree = "<group>"; };
 		8712FFDD1574E8D000C01283 /* back@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "back@2x.png"; path = "resources/back@2x.png"; sourceTree = "<group>"; };
+		8724CBD01594A9BC0054293E /* recycle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = recycle.png; path = resources/recycle.png; sourceTree = "<group>"; };
+		8724CBD11594A9BC0054293E /* recycle@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "recycle@2x.png"; path = "resources/recycle@2x.png"; sourceTree = "<group>"; };
 		872D942F15737B0400BCB4EC /* iSamizdat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iSamizdat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		872D943315737B0400BCB4EC /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		872D943515737B0400BCB4EC /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -627,6 +631,8 @@
 		872D956D1573968C00BCB4EC /* resources */ = {
 			isa = PBXGroup;
 			children = (
+				8724CBD01594A9BC0054293E /* recycle.png */,
+				8724CBD11594A9BC0054293E /* recycle@2x.png */,
 				87F06697158C63B200694FAC /* new-brown.png */,
 				87F06698158C63B200694FAC /* new-gray.png */,
 				87F06699158C63B200694FAC /* new-red.png */,
@@ -773,6 +779,8 @@
 				87F066A6158C737C00694FAC /* SearchAuthorViewController.xib in Resources */,
 				87F75D1D1591EA5B0046DA46 /* SettingsViewController.xib in Resources */,
 				87F75D221591EFE10046DA46 /* CacheViewController.xib in Resources */,
+				8724CBD21594A9BC0054293E /* recycle.png in Resources */,
+				8724CBD31594A9BC0054293E /* recycle@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

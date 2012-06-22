@@ -15,6 +15,7 @@
 #import "SamLibAgent.h"
 #import "SamLibModel.h"
 #import "SamLibAuthor.h"
+#import "SamLibText.h"
 #import "SamLibUser.h"
 #import "SamLibStorage.h"
 #import "DDLog.h"
@@ -79,14 +80,20 @@ int ddLogLevel = LOG_LEVEL_WARN;
 {
     [[SamLibModel shared] save]; 
     
-    if (!SamLibStorage.allowTexts())
+    if (!SamLibStorage.allowTexts()) {
+        DDLogInfo(@"cleanup texts");
         SamLibStorage.cleanupTexts();
+    }        
     
-    if (!SamLibStorage.allowComments())
+    if (!SamLibStorage.allowComments()) {
+        DDLogInfo(@"cleanup comments");        
         SamLibStorage.cleanupComments();
+    }
     
-    if (!SamLibStorage.allowNames())
+    if (!SamLibStorage.allowNames()) {
+        DDLogInfo(@"cleanup names");                
         SamLibStorage.cleanupNames();
+    }
     
     SamLibAgent.saveSettings();
 }
@@ -108,8 +115,10 @@ int ddLogLevel = LOG_LEVEL_WARN;
 {
     self.errorNotice = nil;
     self.successNotice = nil;
-    
-    // todo: free comments objects in samlibtext
+
+    for (SamLibAuthor *author in [SamLibModel shared].authors)
+        for (SamLibText *text in author.texts)
+            [text freeCommentsObject];    
 }
 
 - (void) initLogger
