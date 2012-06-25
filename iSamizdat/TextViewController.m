@@ -267,8 +267,8 @@ enum {
 {
     [_text update:^(SamLibText *text, SamLibStatus status, NSString *error) {
         
-        block(status, error);        
-        
+        NSString *message = (status == SamLibStatusFailure) ? error : nil;
+        block(status, message);        
     }
          progress: nil
         formatter: ^(SamLibText *text, NSString * html) { 
@@ -340,8 +340,6 @@ enum {
         CGFloat h = [_text.title sizeWithFont:[UIFont boldSystemFont16] 
                             constrainedToSize:CGSizeMake(246, 9999) 
                                 lineBreakMode:UILineBreakModeWordWrap].height;
-        
-        NSLog(@"h = %.1f", h);
         
         return MAX(self.tableView.rowHeight, h + 20);
     }

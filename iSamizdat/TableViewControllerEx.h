@@ -22,7 +22,7 @@
 
 // abstract
 - (NSDate *) lastUpdateDate;
-- (void) refresh: (void(^)(SamLibStatus status, NSString *error)) block;
+- (void) refresh: (void(^)(SamLibStatus status, NSString *message)) block;
 - (void) prepareData;
 
 // actions
@@ -32,9 +32,10 @@
 - (id) mkCell: (NSString *) cellIdentifier
     withStyle: (UITableViewCellStyle) style;
 
-- (void) showNoticeAboutReloadResult: (NSString *) error;
+- (void) showSuccessNoticeAboutReloadResult: (NSString *) message;
+- (void) showFailureNoticeAboutReloadResult: (NSString *) message;
 - (void) handleStatus: (SamLibStatus) status 
-            withError: (NSString *)error;
+          withMessage: (NSString *)message;
 
 - (void) forceRefresh;
 

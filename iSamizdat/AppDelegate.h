@@ -26,6 +26,8 @@
 - (void) successNoticeInView:(UIView *) view
                        title:(NSString *) title;
 
+- (void) closeNotice;
+
 - (void) checkLogin;
 
 @end

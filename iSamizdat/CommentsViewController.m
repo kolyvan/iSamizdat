@@ -12,6 +12,7 @@
 
 #import "CommentsViewController.h"
 #import "KxMacros.h"
+#import "KxUtils.h"
 #import "NSString+Kolyvan.h"
 #import "SamLibComments.h"
 #import "SamLibComment+IOS.h"
@@ -19,7 +20,7 @@
 #import "SamLibText.h"
 #import "CommentCell.h"
 #import "PostViewController.h"
-//#import "SSPullToRefreshView+Kolyvan.h"
+
 
 @interface ActionSheetWithComment : UIActionSheet
 @property (readwrite, strong) SamLibComment * comment;
@@ -103,7 +104,7 @@
     return _comments.timestamp;
 }
 
-- (void) refresh: (void(^)(SamLibStatus status, NSString *error)) block
+- (void) refresh: (void(^)(SamLibStatus status, NSString *message)) block
 {
     if (_postData) {
         
@@ -114,16 +115,27 @@
                     isReply:!_postData.isEdit
                       block:^(SamLibComments *comments, SamLibStatus status, NSString *error) {
                           
-                          block(status, error);
+                          NSString *message;
+                          if (status == SamLibStatusSuccess)                                       
+                              message = locString(@"Send comment");
+                          else if (status == SamLibStatusFailure) 
+                              message = error;
+                              
+                          block(status, message);
                       }];
         } else {
             
             [_comments deleteComment:_postData.msgid 
                                block:^(SamLibComments *comments, SamLibStatus status, NSString *error) {
                                    
-                                  block(status, error);
+                                   NSString *message;
+                                   if (status == SamLibStatusSuccess)                                       
+                                       message = locString(@"Deleted comment");
+                                   else if (status == SamLibStatusFailure) 
+                                       message = error;
                                    
-                               }];   
+                                  block(status, message);                                   
+                               }];
         }        
         
         _postData = nil;
@@ -133,8 +145,13 @@
         [_comments update:YES 
                     block:^(SamLibComments *comments, SamLibStatus status, NSString *error) {
             
-            block(status, error);        
-            
+                        NSString *message;
+                        if (status == SamLibStatusSuccess)                            
+                            message = KxUtils.format(locString(@"New comments:%ld"), comments.numberOfNew);
+                        else if (status == SamLibStatusFailure)                            
+                            message = error;
+                        
+                        block(status, message);            
         }];        
     }
 }

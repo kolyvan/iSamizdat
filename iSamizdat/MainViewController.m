@@ -319,15 +319,15 @@ typedef enum {
                     self.content = [self mkContent];   
                 }
                 
-                NSString *errMsg = nil;
+                NSString *message = nil;
                 if (errors.nonEmpty) {
                     
                     status = SamLibStatusFailure;
-                    errMsg = [errors mkString: @"\n"];
+                    message = [errors mkString: @"\n"];
                     errors = nil; 
                 }
                 
-                block(status, errMsg);
+                block(status, message);
             }
         }];
     }

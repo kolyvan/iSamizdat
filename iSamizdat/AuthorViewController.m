@@ -205,18 +205,26 @@ extern int ddLogLevel;
 {   
      [_author update:^(SamLibAuthor *author, SamLibStatus status, NSString *error) {
         
-         if (status == SamLibStatusFailure)             
+         NSString *message;
+         
+         if (status == SamLibStatusFailure) {            
+             
              author.lastError = error;
-         else
+             message = error;
+             
+         } else {
              author.lastError = nil;
+         }
          
          if (status == SamLibStatusSuccess && 
              author.hasChangedSize) {
              
              [[NSNotificationCenter defaultCenter] postNotificationName:@"SamLibAuthorHasChangedSize" object:nil];
+             
+             message = locString(@"Update is available");
          }
          
-         block(status, error);
+         block(status, message);
      }];
 }
 

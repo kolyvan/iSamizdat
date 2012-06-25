@@ -14,7 +14,9 @@
 #import "AppDelegate.h"
 #import "SamLibAgent.h"
 #import "KxMacros.h"
+#import "NSString+Kolyvan.h"
 #import "SSPullToRefreshView+Kolyvan.h"
+//#import "WBNoticeView.h"
 
 @interface TableViewControllerEx()
 
@@ -51,6 +53,12 @@
     self.savedRightButton = nil;
 }
 
+- (void) viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [[AppDelegate shared] closeNotice];     
+}
+
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
@@ -77,35 +85,41 @@
     self.navigationItem.rightBarButtonItem = self.savedRightButton;    
 }
 
-- (void) showNoticeAboutReloadResult: (NSString *) error
-{
-    if (error) {
-        
-        [[AppDelegate shared] errorNoticeInView:self.view 
-                                          title:locString(@"Reload failure") 
-                                        message:error];        
-    } else {
-        
-        [[AppDelegate shared] successNoticeInView:self.view 
-                                            title:locString(@"Reload success")];
-    }
+- (void) showSuccessNoticeAboutReloadResult: (NSString *) message
+{        
+    [[AppDelegate shared] successNoticeInView:self.view 
+                                        title:message.nonEmpty ? message : locString(@"Reload success")];    
+}
+
+- (void) showFailureNoticeAboutReloadResult: (NSString *) message
+{   
+    [[AppDelegate shared] errorNoticeInView:self.view 
+                                      title:locString(@"Reload failure") 
+                                    message:message.nonEmpty ? message : @""];        
 }
 
 - (void) handleStatus: (SamLibStatus) status 
-            withError: (NSString *)error
+          withMessage: (NSString *)message
 {
     if (status == SamLibStatusFailure) {
         
-        [self performSelector:@selector(showNoticeAboutReloadResult:) 
-                   withObject:error ? error : @""
+        [self performSelector:@selector(showFailureNoticeAboutReloadResult:) 
+                   withObject:message
                    afterDelay:0.3];
         
     } else if (status == SamLibStatusSuccess) {            
         
-        [self performSelector:@selector(showNoticeAboutReloadResult:) 
-                   withObject:nil
+        [self performSelector:@selector(showSuccessNoticeAboutReloadResult:) 
+                   withObject:message
+                   afterDelay:0.3];
+        
+    }  else if (status == SamLibStatusNotModifed) {            
+        
+        [self performSelector:@selector(showSuccessNoticeAboutReloadResult:) 
+                   withObject:locString(@"Not modified")
                    afterDelay:0.3];
     }
+
     
     if (status != SamLibStatusNotModifed) {
         [self prepareData];
@@ -125,11 +139,11 @@
     
     [self.pullToRefreshView startLoading];  
     
-    [self refresh: ^(SamLibStatus status, NSString *error) {
+    [self refresh: ^(SamLibStatus status, NSString *message) {
         
         [self.pullToRefreshView finishLoading];
         self.navigationItem.rightBarButtonItem = self.savedRightButton;
-        [self handleStatus: status withError:error];        
+        [self handleStatus: status withMessage:message];        
     }];
 }
 

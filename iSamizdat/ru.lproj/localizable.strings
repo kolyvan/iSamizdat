@@ -71,3 +71,8 @@
 "Remove text and comments?" = "Удалить текст и комментарии?";
 "Remove" = "Удалить";
 "Text Info" = "Текст Инфо";
+"Not modified" = "Нет изменений";
+"Send comment" = "Комментарий отправлен";
+"Deleted comment" = "Комментарий удален";
+"New comments:%ld" = "Новых комментариев: %ld";
+

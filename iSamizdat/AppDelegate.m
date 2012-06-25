@@ -136,7 +136,7 @@ int ddLogLevel = LOG_LEVEL_WARN;
 - (void) errorNoticeInView:(UIView *) view
                      title:(NSString *) title
                    message:(NSString *) message
-{
+{   
     if (!self.errorNotice)
         self.errorNotice =  [[WBErrorNoticeView alloc] init];
     
@@ -149,16 +149,20 @@ int ddLogLevel = LOG_LEVEL_WARN;
 
 - (void) successNoticeInView:(UIView *) view
                        title:(NSString *) title
-{    
+{   
     if (!self.successNotice)
         self.successNotice =  [[WBSuccessNoticeView alloc] init];
     
     self.successNotice.view = view;
     self.successNotice.title = title;
     
-    [self.successNotice show];
-    
-    //[[WBSuccessNoticeView successNoticeInView:view title:title] show];
+    [self.successNotice show];    
+}
+
+- (void) closeNotice
+{
+    [self.successNotice close];
+    [self.errorNotice close];    
 }
 
 - (void) clearCookies
