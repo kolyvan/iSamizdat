@@ -231,8 +231,6 @@ enum {
             cell.imageView.image = nil;
             cell.textLabel.text = locString(@"No updates");
         }
-
-        
     }     
     
     return cell;

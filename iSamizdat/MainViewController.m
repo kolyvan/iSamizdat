@@ -47,6 +47,8 @@ typedef enum {
 @interface MainViewController () {
     NSInteger _modelVersion;
     BOOL _tableLoaded;
+    NSInteger _favoritesCount;
+    NSInteger _votedCount;
 }
 
 @property (nonatomic, strong) NSArray *content;
@@ -122,6 +124,15 @@ typedef enum {
                                                  name:@"SamLibAuthorHasChangedSize" 
                                                object:nil];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(samLibTextChanged:)
+                                                 name:@"samLibTextChanged" 
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(samLibTextChanged:)
+                                                 name:@"samLibTextChanged" 
+                                               object:nil];
 }
 
 - (void)viewDidUnload
@@ -166,18 +177,18 @@ typedef enum {
 
 - (BOOL) hasFavorites
 {
-    return YES;
+    return _favoritesCount > 0;
 }
 
 - (BOOL) hasVoted
 {
-    return YES;
+    return _votedCount > 0;
 }
 
 - (SectionNumber) sectionMap: (NSInteger) section
 {
-    //if (!self.hasFavorites)
-    //    section += 1;
+    if (!self.hasFavorites && !self.hasVoted)
+        section += 1;
     return section;
 }
 
@@ -208,12 +219,20 @@ typedef enum {
 
 - (NSArray *) mkContent
 {
+    _favoritesCount = 0;
+    _votedCount = 0;
+    
     NSMutableArray * ma = [NSMutableArray array];            
     for (SamLibAuthor *author in self.authors) {            
         [ma push:author];            
-        for (SamLibText *text in author.texts)
+        for (SamLibText *text in author.texts) {
             if (text.changedSize)
                 [ma push:text];
+            if (text.favorited)
+                ++_favoritesCount;
+            if (text.myVote != 0)
+                ++_votedCount;
+        }
     }
     return ma;
 }
@@ -265,13 +284,16 @@ typedef enum {
 
 - (void) samLibAuthorIgnoredChanged:(NSNotification *)notification
 {
-    DDLogInfo(@"Notification: SamLibAuthorIgnoredChanged");
     self.ignored = nil;
 }
 
 - (void) samLibAuthorHasChangedSize:(NSNotification *)notification
 {
-    DDLogInfo(@"Notification: samLibAuthorHasChangedSize");
+    self.content = nil;
+}
+
+- (void) samLibTextChanged:(NSNotification *)notification
+{
     self.content = nil;
 }
 
@@ -416,10 +438,10 @@ typedef enum {
         
         UITableViewCell *cell = [self mkMainCell];
         
-        if (indexPath.row == 0)        
-            cell.textLabel.text = locString(@"Favorites");
+        if (indexPath.row == 0 && self.hasFavorites)        
+            cell.textLabel.text = KxUtils.format(@"%@ (%ld)", locString(@"Favorites"), _favoritesCount);
         else
-            cell.textLabel.text = locString(@"Voted");
+            cell.textLabel.text = KxUtils.format(@"%@ (%ld)", locString(@"Voted"), _votedCount);
         
         return cell;
     }
@@ -500,7 +522,7 @@ typedef enum {
     
     if (section == FavoritesSectionNumber) {
         
-        if (indexPath.row == 0) {
+        if (indexPath.row == 0 && self.hasFavorites) {
             
             if (!self.favoritesViewController) {
                 self.favoritesViewController = [[FavoritesViewController alloc] init];        

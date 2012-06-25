@@ -91,7 +91,9 @@ extern int ddLogLevel;
     if (CGRectContainsPoint(bounds, loc)) {
 
         controller.text.favorited = !controller.text.favorited;
-        self.imageView.image = controller.text.image;        
+        self.imageView.image = controller.text.image;  
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"samLibTextChanged" object:nil];
     }
 }
 
@@ -576,9 +578,7 @@ enum {
 #pragma mark - VoteViewController delagate
 
 - (void) sendVote: (NSInteger) vote
-{
-    //NSLog(@"send vote: %d", vote);
-    
+{        
     NSInteger row = [_rows indexOfObject:$int(RowMyVote)];
     
     NSIndexPath *indexPath;
@@ -588,6 +588,9 @@ enum {
     
     cell.detailTextLabel.text = @"..";
     
+    if (0 == _text.myVote || 0 == vote)
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"samLibTextChanged" object:nil];
+    
     [_text vote: vote
          block: ^(SamLibText *text, SamLibStatus status, NSString *error) {             
 
@@ -595,7 +598,6 @@ enum {
                  cell.detailTextLabel.text = [self textVoteString];
              else
                  cell.detailTextLabel.text = @"ERR";
-             
          }];
 }
 
