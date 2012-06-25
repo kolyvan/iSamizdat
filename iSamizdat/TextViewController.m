@@ -26,6 +26,7 @@
 #import "FastCell.h"
 #import "TextReadViewController.h"
 #import "CommentsViewController.h"
+#import "AuthorViewController.h"
 #import "UIFont+Kolyvan.h"
 #import "DDLog.h"
 
@@ -86,10 +87,11 @@ extern int ddLogLevel;
         return;  // double tap
             
     CGPoint loc = [t locationInView:self];     
-    if (CGRectContainsPoint(self.imageView.frame, loc)) {
+    CGRect bounds = CGRectInset(self.imageView.frame, -10, -10);
+    if (CGRectContainsPoint(bounds, loc)) {
 
         controller.text.favorited = !controller.text.favorited;
-        self.imageView.image = controller.text.favoritedImage;        
+        self.imageView.image = controller.text.image;        
     }
 }
 
@@ -99,14 +101,16 @@ extern int ddLogLevel;
 
 enum {
     RowTitle,
+    RowAuthor,
     RowSize,
     RowUpdate,    
-    RowDownload,        
+    RowDownload,  
+    RowRating,
+    RowMyVote,    
     RowNote,
     RowGenre,
     RowComments,
     RowRead,
-    RowMyVote,    
     RowCleanup, 
 };
 
@@ -119,6 +123,7 @@ enum {
 @property (nonatomic, strong) TextReadViewController *textReadViewController;
 @property (nonatomic, strong) CommentsViewController *commentsViewController;
 @property (nonatomic, strong) VoteViewController *voteViewController;
+@property (nonatomic, strong) AuthorViewController *authorViewController;
 
 @end
 
@@ -128,6 +133,7 @@ enum {
 @synthesize textReadViewController;
 @synthesize commentsViewController;
 @synthesize voteViewController;
+@synthesize authorViewController;
 
 - (void) setText:(SamLibText *)text 
 {    
@@ -140,10 +146,13 @@ enum {
     }
 }
 
-
 - (id) init
 {
-    return [self initWithNibName:@"TextViewController" bundle:nil];
+    self = [self initWithNibName:@"TextViewController" bundle:nil];
+    if (self) {
+        self.title = locString(@"Text Info");
+    }
+    return self;
 }
 
 - (void)viewDidLoad
@@ -168,7 +177,7 @@ enum {
     [super viewWillAppear:animated];
     if (_needReload) {
         _needReload = NO;           
-        self.title = _text.author.name;        
+        //self.title = _text.title;   
         [self prepareData];       
         [self.tableView reloadData];
     }
@@ -182,6 +191,7 @@ enum {
     self.textReadViewController = nil;
     self.commentsViewController = nil;
     self.voteViewController = nil;
+    self.authorViewController = nil;
 }
 
 - (void) didReceiveMemoryWarning
@@ -190,6 +200,7 @@ enum {
     self.textReadViewController = nil;
     self.commentsViewController = nil;    
     self.voteViewController = nil;    
+    self.authorViewController = nil;
 }
 
 #pragma mark - private
@@ -198,8 +209,12 @@ enum {
 {
     NSMutableArray *ma = [NSMutableArray array];
     
+    NSLog(@"%@ prepareData", [self class]);
+    
     [ma push: $int(RowTitle)];
         
+    [ma push: $int(RowAuthor)];
+            
     [ma push: $int(RowSize)];
       
     [ma push: $int(RowComments)];
@@ -207,7 +222,7 @@ enum {
     // fixme: below is most likely wrong code
     if (_text.htmlFile.nonEmpty) {
         
-        if (_text.changedSize) // _text.canUpdate
+        if (_text.changedSize && _text.canUpdate)
             [ma push: $int(RowUpdate)];
         
         [ma push: $int(RowRead)];
@@ -223,9 +238,8 @@ enum {
     if (_text.note.nonEmpty)
         [ma push: $int(RowNote)];
         
-    if (_text.genre.nonEmpty ||
-        _text.type.nonEmpty)
-        [ma push: $int(RowGenre)];  
+    if (_text.ratingFloat > 0)
+        [ma push: $int(RowRating)];          
     
     [ma push: $int(RowMyVote)];  
     
@@ -234,6 +248,12 @@ enum {
         
         [ma push: $int(RowCleanup)];
     }        
+    
+    if (_text.genre.nonEmpty ||
+        _text.type.nonEmpty) {
+        
+        [ma push: $int(RowGenre)];          
+    }
 
     _rows = [ma toArray];
 }
@@ -315,6 +335,15 @@ enum {
     if (RowNote == row) {
         return [[NoteCell class] computeHeight:_text.note 
                                       forWidth:tableView.frame.size.width];
+    } else  if (RowTitle == row) { 
+              
+        CGFloat h = [_text.title sizeWithFont:[UIFont boldSystemFont16] 
+                            constrainedToSize:CGSizeMake(246, 9999) 
+                                lineBreakMode:UILineBreakModeWordWrap].height;
+        
+        NSLog(@"h = %.1f", h);
+        
+        return MAX(self.tableView.rowHeight, h + 20);
     }
     return self.tableView.rowHeight;
 }
@@ -363,14 +392,14 @@ enum {
         
         TitleCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"TitleCell"];    
         if (cell == nil) {
-            cell = [[TitleCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"TitleCell"];                
+            cell = [[TitleCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"TitleCell"];                
         }
         
         cell.controller = self;
         cell.textLabel.text = _text.title;
         cell.textLabel.numberOfLines = 0;
-        cell.imageView.image = _text.favoritedImage;
-        cell.detailTextLabel.text = [_text ratingWithDelta:@" "];
+        cell.imageView.image = _text.image;
+                        
         return cell;
         
     } else  if (RowSize == row) { 
@@ -421,7 +450,8 @@ enum {
         
     } else if (RowUpdate == row) {
         
-        UITableViewCell *cell = [self mkDownloadCell];                    
+        UITableViewCell *cell = [self mkDownloadCell];
+        //[self mkCell: @"UpdateCell" withStyle:UITableViewCellStyleDefault];  
         cell.textLabel.textColor = [UIColor blueColor];
         cell.textLabel.text = locString(@"Update is available");
         return cell; 
@@ -457,6 +487,22 @@ enum {
         cell.accessoryView = button;
         
         return cell;
+        
+    } else if (RowAuthor == row) {
+        
+        SamLibAuthor *author = _text.author;
+        UITableViewCell *cell = [self mkCell: @"AuthorCell" withStyle:UITableViewCellStyleDefault];                    
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        cell.textLabel.text = author.name.nonEmpty ? author.name : author.path;          
+        return cell;        
+        
+    } else if (RowRating == row) {
+
+        UITableViewCell *cell = [self mkCell: @"RatingCell" withStyle:UITableViewCellStyleValue1];
+        cell.textLabel.text = locString(@"Rating");     
+        cell.detailTextLabel.text = [_text ratingWithDelta:@" "];        
+        
+        return cell;                
     }        
     
     return nil;
@@ -501,13 +547,32 @@ enum {
                                              animated:YES]; 
         
         
-    } else if (RowCleanup == row) {
+    } else if (RowAuthor == row) {
         
-       
-          
-    } else if (RowUpdate == row || RowDownload == row) {
-
-    }
+        NSArray *controllers = self.navigationController.viewControllers;
+        
+        AuthorViewController *found;
+        for (UIViewController *vc in controllers) {
+            if ([vc isKindOfClass:[AuthorViewController class]]) {
+                found = (AuthorViewController *)vc;
+                break;
+            }
+        }
+        
+        if (found) {
+            
+            found.author = _text.author;
+            [self.navigationController popToViewController:found animated:YES];
+            
+        } else {
+            
+            if (!self.authorViewController)
+                self.authorViewController = [[AuthorViewController alloc] init];
+            self.authorViewController.author = _text.author;            
+            [self.navigationController pushViewController:self.authorViewController
+                                                 animated:YES];
+        }
+    } 
 }
 
 #pragma mark - VoteViewController delagate

@@ -16,7 +16,7 @@
 
     // fixes an issue with hidden content view (pullToRefresh)    
     UIScrollView *scrollView = self.scrollView;    
-    if (scrollView.contentSize.height > scrollView.frame.size.height) {
+    if ((scrollView.contentSize.height + 20) > scrollView.frame.size.height) {
         
         [scrollView setContentOffset:CGPointMake(0, -self.expandedHeight) 
                             animated:YES];

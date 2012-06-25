@@ -41,14 +41,18 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
     template = [template stringByReplacingOccurrencesOfString:@"text.css" 
                                                    withString:KxUtils.pathForResource(@"text.css")];
     
+    template = [template stringByReplacingOccurrencesOfString:@"<!-- TEXT_AUTHOR -->" 
+                                                   withString:text.author.name];   
+
+    template = [template stringByReplacingOccurrencesOfString:@"<!-- TEXT_NAME -->" 
+                                                   withString:text.title];    
+
+    NSString * date = [[NSDate date] formattedDatePattern:@"d MMM yyyy HH:mm Z" 
+                                                 timeZone:nil 
+                                                   locale:[[NSLocale alloc] initWithLocaleIdentifier:@"ru_RU"]];
+    
     template = [template stringByReplacingOccurrencesOfString:@"<!-- TEXT_DATE -->" 
-                                                   withString:text.dateModified];
-    
-    template = [template stringByReplacingOccurrencesOfString:@"<!-- TEXT_SIZE -->" 
-                                                   withString:[text sizeWithDelta:@" "]];
-    
-    template = [template stringByReplacingOccurrencesOfString:@"<!-- TEXT_RATING -->" 
-                                                   withString:[text ratingWithDelta:@" "]];
+                                                   withString:date];
     
     if (text.note.nonEmpty)
         template = [template stringByReplacingOccurrencesOfString:@"<!-- TEXT_NOTE -->" 
@@ -87,7 +91,11 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
 
 - (id) init
 {
-    return [self initWithNibName:@"TextReadViewController" bundle:nil];
+    self = [self initWithNibName:@"TextReadViewController" bundle:nil];
+    if (self) {
+        self.title = locString(@"Text");
+    }
+    return self;
 }
 
 - (void)viewDidLoad
@@ -103,7 +111,7 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
     if (_needReload) {        
         _needReload = NO;
         _needRestoreOffset = YES;
-        self.title = _text.author.name;
+        //self.title = _text.title;        
         [self reloadWebView];
         //DDLogInfo(@"reload text %@", _text.path);   
     }
@@ -182,6 +190,7 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
 
 - (void) prepareHTML
 {
+    /*
     [self selElement:@"textName" value:_text.title];    
     
     if (_text.group.nonEmpty)
@@ -202,6 +211,7 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
         [self selElement:@"textReload"
                    value:s];
     }
+    */ 
 }
 
 #pragma mark - UIWebView delegate
