@@ -26,6 +26,10 @@
 #import "NSString+Kolyvan.h"
 #import "WBSuccessNoticeView.h"
 #import "WBErrorNoticeView.h"
+#import "SHKFacebook.h"
+#import "SHKConfiguration.h"
+#import "SHKConfig.h"
+
 
 #if DEBUG
 int ddLogLevel = LOG_LEVEL_INFO;
@@ -69,6 +73,11 @@ int ddLogLevel = LOG_LEVEL_WARN;
     self.navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
     self.window.rootViewController = self.navigationController;
     [self.window makeKeyAndVisible];
+    
+    DefaultSHKConfigurator *configurator = [[SHKConfig alloc] init];
+    [SHKConfiguration sharedInstanceWithConfigurator:configurator];
+    KX_RELEASE(configurator);
+    
     return YES;
 }
 
@@ -273,6 +282,30 @@ int ddLogLevel = LOG_LEVEL_WARN;
         
     }    
         
+}
+
+#pragma mark - ShareKit facebook support
+
+- (BOOL)handleOpenURL:(NSURL*)url
+{
+	NSString* scheme = [url scheme];
+    if ([scheme hasPrefix:[NSString stringWithFormat:@"fb%@", SHKCONFIG(facebookAppId)]])
+        return [SHKFacebook handleOpenURL:url];
+    return YES;
+}
+
+- (BOOL)application:(UIApplication *)application 
+            openURL:(NSURL *)url 
+  sourceApplication:(NSString *)sourceApplication 
+         annotation:(id)annotation 
+{
+    return [self handleOpenURL:url];
+}
+
+- (BOOL)application:(UIApplication *)application 
+      handleOpenURL:(NSURL *)url 
+{
+    return [self handleOpenURL:url];  
 }
 
 @end

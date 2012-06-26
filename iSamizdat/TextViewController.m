@@ -29,6 +29,7 @@
 #import "AuthorViewController.h"
 #import "UIFont+Kolyvan.h"
 #import "DDLog.h"
+#import "SHK.h"
 
 extern int ddLogLevel;
 
@@ -114,6 +115,7 @@ enum {
     RowComments,
     RowRead,
     RowCleanup, 
+    RowShare,
 };
 
 @interface TextViewController () {
@@ -256,6 +258,8 @@ enum {
         
         [ma push: $int(RowGenre)];          
     }
+    
+    [ma push: $int(RowShare)];    
 
     _rows = [ma toArray];
 }
@@ -503,7 +507,14 @@ enum {
         cell.detailTextLabel.text = [_text ratingWithDelta:@" "];        
         
         return cell;                
-    }        
+        
+    } else if (RowShare == row) {
+        
+        UITableViewCell *cell = [self mkCell: @"ShareCell" withStyle:UITableViewCellStyleDefault];
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;        
+        cell.textLabel.text = locString(@"Share it");             
+        return cell;                        
+    } 
     
     return nil;
 }
@@ -572,6 +583,15 @@ enum {
             [self.navigationController pushViewController:self.authorViewController
                                                  animated:YES];
         }
+        
+    } else if (RowShare == row) {        
+
+        SHKItem *item = [SHKItem URL:[NSURL URLWithString: [@"http://" stringByAppendingString: _text.url]] 
+                               title:KxUtils.format(@"%@. %@.", _text.author.name, _text.title) 
+                         contentType:(SHKURLContentTypeWebpage)];
+        SHKActionSheet *actionSheet = [SHKActionSheet actionSheetForItem:item];
+        [SHK setRootViewController:self];
+        [actionSheet showInView:self.view];         
     } 
 }
 
