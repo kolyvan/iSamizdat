@@ -284,7 +284,7 @@ int ddLogLevel = LOG_LEVEL_WARN;
         
 }
 
-#pragma mark - ShareKit facebook support
+#pragma mark - SSO Facebook support
 
 - (BOOL)handleOpenURL:(NSURL*)url
 {

@@ -512,7 +512,7 @@ enum {
         
         UITableViewCell *cell = [self mkCell: @"ShareCell" withStyle:UITableViewCellStyleDefault];
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;        
-        cell.textLabel.text = locString(@"Share it");             
+        cell.textLabel.text = locString(@"Share It");             
         return cell;                        
     } 
     

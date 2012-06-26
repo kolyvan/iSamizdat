@@ -212,4 +212,10 @@
     return nil;
 }
 
+- (NSArray*)defaultFavoriteURLSharers 
+{
+    return [NSArray arrayWithObjects:@"SHKTwitter",@"SHKVkontakte",@"SHKFacebook",nil];
+}
+
+
 @end
