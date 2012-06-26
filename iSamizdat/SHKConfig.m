@@ -7,6 +7,7 @@
 //
 
 #import "SHKConfig.h"
+#import "KxMacros.h"
 
 @implementation SHKConfig
 
@@ -217,5 +218,9 @@
     return [NSArray arrayWithObjects:@"SHKTwitter",@"SHKVkontakte",@"SHKFacebook",nil];
 }
 
+- (NSString *)facebookURLShareDescription 
+{
+    return locString(@"Samizdat");
+}
 
 @end
