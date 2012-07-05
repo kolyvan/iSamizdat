@@ -25,6 +25,7 @@ extern int ddLogLevel;
 @interface SearchAuthorViewController () {
     NSArray *_result;
     SamLibSearch *_search;
+    BOOL _flagSelectignRow;
 }
 
 @property (nonatomic, strong) IBOutlet UITableView *tableView;
@@ -67,7 +68,8 @@ extern int ddLogLevel;
     _result = nil;    
     [self.tableView reloadData];
     self.searchBar.text = @"";
-    [activityIndicator stopAnimating]; 
+    [activityIndicator stopAnimating];
+    _flagSelectignRow = NO;
 }
 
 - (void) viewDidDisappear:(BOOL)animated
@@ -262,7 +264,9 @@ extern int ddLogLevel;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (_result.nonEmpty) {
+    if (_result.nonEmpty && !_flagSelectignRow) {
+        
+        _flagSelectignRow = YES;
         
         NSDictionary *dict = [_result objectAtIndex:indexPath.row];
         
