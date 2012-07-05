@@ -115,7 +115,6 @@ enum {
     RowComments,
     RowRead,
     RowCleanup, 
-    RowShare,
 };
 
 @interface TextViewController () {
@@ -152,7 +151,7 @@ enum {
 
 - (id) init
 {
-    self = [self initWithNibName:@"TextViewController" bundle:nil];
+    self = [self initWithNibName:@"TextViewController" bundle:nil];    
     if (self) {
         self.title = locString(@"Text Info");
     }
@@ -160,12 +159,12 @@ enum {
 }
 
 - (void)viewDidLoad
-{
+{    
     [super viewDidLoad];
     
     UIBarButtonItem *goButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction 
                                                                                target:self 
-                                                                               action:@selector(goSafari)];
+                                                                               action:@selector(goShare)];
     
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back.png"]
                                                                    style:UIBarButtonItemStylePlain                                                                                           target:nil                                                                                            action:nil];
@@ -173,7 +172,6 @@ enum {
 
     self.navigationItem.rightBarButtonItem = goButton;    
     self.navigationItem.backBarButtonItem = backButton;
-
 }
 
 - (void) viewWillAppear:(BOOL)animated 
@@ -257,8 +255,6 @@ enum {
         [ma push: $int(RowGenre)];          
     }
     
-    [ma push: $int(RowShare)];    
-
     _rows = [ma toArray];
 }
 
@@ -293,10 +289,15 @@ enum {
         return @"ERR";
 }
 
-- (void) goSafari
-{    
-    NSURL *url = [NSURL URLWithString: [@"http://" stringByAppendingString: _text.url]];
-    [UIApplication.sharedApplication openURL: url];                     
+- (void) goShare
+{   
+    SHKItem *item = [SHKItem URL:[NSURL URLWithString: [@"http://" stringByAppendingString: _text.url]] 
+                           title:KxUtils.format(@"%@. %@.", _text.author.name, _text.title) 
+                     contentType:(SHKURLContentTypeWebpage)];
+    SHKActionSheet *actionSheet = [SHKActionSheet actionSheetForItem:item];
+    [SHK setRootViewController:self];
+    [actionSheet showFromBarButtonItem:self.navigationItem.rightBarButtonItem 
+                              animated:YES]; 
 }
 
 - (void) goDownload
@@ -504,14 +505,7 @@ enum {
         cell.textLabel.text = locString(@"Rating");     
         cell.detailTextLabel.text = [_text ratingWithDelta:@" "];        
         
-        return cell;                
-        
-    } else if (RowShare == row) {
-        
-        UITableViewCell *cell = [self mkCell: @"ShareCell" withStyle:UITableViewCellStyleDefault];
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;        
-        cell.textLabel.text = locString(@"Share It");             
-        return cell;                        
+        return cell;
     } 
     
     return nil;
@@ -580,16 +574,7 @@ enum {
             self.authorViewController.author = _text.author;            
             [self.navigationController pushViewController:self.authorViewController
                                                  animated:YES];
-        }
-        
-    } else if (RowShare == row) {        
-
-        SHKItem *item = [SHKItem URL:[NSURL URLWithString: [@"http://" stringByAppendingString: _text.url]] 
-                               title:KxUtils.format(@"%@. %@.", _text.author.name, _text.title) 
-                         contentType:(SHKURLContentTypeWebpage)];
-        SHKActionSheet *actionSheet = [SHKActionSheet actionSheetForItem:item];
-        [SHK setRootViewController:self];
-        [actionSheet showInView:self.view];         
+        }   
     } 
 }
 

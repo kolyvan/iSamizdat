@@ -8,10 +8,12 @@
 
 #import "AuthorInfoViewController.h"
 #import "KxMacros.h"
+#import "KxUtils.h"
 #import "NSString+Kolyvan.h"
 #import "SamLibModel.h"
 #import "SamLibAuthor.h"
 #import "SamLibAuthor+IOS.h"
+#import "SHK.h"
 
 enum {
     RowName,
@@ -50,10 +52,10 @@ enum {
 {
     [super viewDidLoad];
     
-    UIBarButtonItem *infoButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction 
-                                                                                target:self 
-                                                                                action:@selector(goSafari)];
-    self.navigationItem.rightBarButtonItem = infoButton;    
+    UIBarButtonItem *goButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction 
+                                                                              target:self 
+                                                                              action:@selector(goShare)];
+    self.navigationItem.rightBarButtonItem = goButton;    
     
     self.title = locString(@"Info");
 }
@@ -78,10 +80,15 @@ enum {
     return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
 }
 
-- (void) goSafari
-{    
-    NSURL *url = [NSURL URLWithString: [@"http://" stringByAppendingString: _author.url]];
-    [UIApplication.sharedApplication openURL: url];                     
+- (void) goShare
+{   
+    SHKItem *item = [SHKItem URL:[NSURL URLWithString: [@"http://" stringByAppendingString: _author.url]] 
+                           title:KxUtils.format(@"%@. %@.", _author.name, _author.title) 
+                     contentType:(SHKURLContentTypeWebpage)];
+    SHKActionSheet *actionSheet = [SHKActionSheet actionSheetForItem:item];
+    [SHK setRootViewController:self];
+    [actionSheet showFromBarButtonItem:self.navigationItem.rightBarButtonItem 
+                              animated:YES]; 
 }
 
 - (void) goDelete
