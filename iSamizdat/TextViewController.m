@@ -594,8 +594,12 @@ enum {
     if (0 == _text.myVote || 0 == vote)
         [[NSNotificationCenter defaultCenter] postNotificationName:@"samLibTextChanged" object:nil];
     
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+    
     [_text vote: vote
          block: ^(SamLibText *text, SamLibStatus status, NSString *error) {             
+             
+             [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
 
              if (status == SamLibStatusSuccess)
                  cell.detailTextLabel.text = [self textVoteString];

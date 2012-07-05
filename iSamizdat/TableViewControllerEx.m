@@ -138,10 +138,13 @@
                                        withPullToRefreshView:self.pullToRefreshView]; 
     
     [self.pullToRefreshView startLoading];  
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     
     [self refresh: ^(SamLibStatus status, NSString *message) {
         
         [self.pullToRefreshView finishLoading];
+        [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+        
         self.navigationItem.rightBarButtonItem = self.savedRightButton;
         [self handleStatus: status withMessage:message];        
     }];
