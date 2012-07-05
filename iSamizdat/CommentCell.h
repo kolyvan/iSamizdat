@@ -37,7 +37,8 @@
      reuseIdentifier:(NSString *)reuseIdentifier;
 
 
-
+- (void) swipeOpen;
+- (void) swipeClose;
 
 
 @end

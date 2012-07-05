@@ -36,6 +36,8 @@
     BOOL _needReload;
     id _version;
     PostData *_postData;
+    UISwipeGestureRecognizer *_gestureRecognizer;
+    KX_WEAK CommentCell *_swipeCell; 
 }
 
 @property (nonatomic, strong) PostViewController *postViewController;
@@ -71,6 +73,13 @@
                                                                                target:self 
                                                                                action:@selector(replyPost)];
     self.navigationItem.rightBarButtonItem = addButton;
+    
+    
+    _gestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self 
+                                                                  action:@selector(handleSwipe:)];    
+    
+    _gestureRecognizer.direction = UISwipeGestureRecognizerDirectionRight  | UISwipeGestureRecognizerDirectionLeft; 
+    [self.tableView addGestureRecognizer:_gestureRecognizer];
 }
 
 - (void) viewWillAppear:(BOOL)animated 
@@ -85,18 +94,61 @@
     }
 }
 
+- (void) viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    _swipeCell = nil;
+}
+
 - (void)viewDidUnload
 {
     [super viewDidUnload];
     
     self.navigationItem.rightBarButtonItem = nil;    
     self.postViewController = nil;
+    
+    [self.tableView removeGestureRecognizer:_gestureRecognizer];
+    _gestureRecognizer = nil;
 }
 
 - (void) didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     self.postViewController = nil;    
+}
+
+- (void)handleSwipe:(UISwipeGestureRecognizer *)sender 
+{   
+    if (sender.state == UIGestureRecognizerStateEnded) {
+        
+        CGPoint pt = [sender locationInView: self.tableView];
+        NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint: pt];        
+        CommentCell *cell = (CommentCell *)[self.tableView cellForRowAtIndexPath:indexPath];
+                
+        CommentCell *swipeCell = _swipeCell;
+        
+        if (swipeCell == cell) {
+            
+            [swipeCell swipeClose];
+            _swipeCell = nil;
+            
+        } else {
+                           
+            [swipeCell swipeClose];
+            
+            if (cell.comment.deleteMsg.nonEmpty) {
+
+                _swipeCell = nil;
+                
+            } else {
+            
+                [cell swipeOpen];
+                _swipeCell = cell;
+            }            
+        }
+                
+        //NSLog(@"SWIPE! %d %d %d", sender.direction, indexPath.row, cell.comment.number);
+    } 
 }
 
 - (NSDate *) lastUpdateDate
@@ -220,7 +272,12 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView 
 {
-    [self.tableView setEditing:NO animated:NO]; // cancel any swiped cell
+    //[self.tableView setEditing:NO animated:NO]; // cancel any swiped cell
+    
+    CommentCell *swipeCell = _swipeCell;
+    if (swipeCell)
+        [swipeCell swipeClose];
+
 }
 
 #pragma mark - Table view data source
@@ -259,12 +316,14 @@
     
 }
 
+/*
 - (void)tableView:(UITableView *)tableView 
 commitEditingStyle:(UITableViewCellEditingStyle)editingStyle 
 forRowAtIndexPath:(NSIndexPath *)indexPath 
 {
     // just leave this method empty
 }
+ */
 
 
 @end

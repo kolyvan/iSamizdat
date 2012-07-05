@@ -15,6 +15,7 @@
 #import "KxUtils.h"
 #import "NSString+Kolyvan.h"
 #import "NSDate+Kolyvan.h"
+#import "NSArray+Kolyvan.h"
 #import "SamLibComment+IOS.h"
 #import "SamLibComments.h"
 #import "CommentsViewController.h"
@@ -23,6 +24,15 @@
 #import <objc/runtime.h>
 
 ////
+
+#define BUTTON_REPLY 1
+#define BUTTON_EDIT 2
+#define BUTTON_DELETE 3
+#define BUTTON_EMAIL 4
+#define BUTTON_URL 5
+#define BUTTON_SIZE 44
+#define BUTTON_INTERVAL_X 4
+#define BUTTON_INTERVAL_Y 4
 
 static void drawDashLine(CGPoint from, CGPoint to, UIColor *color) 
 {    
@@ -54,7 +64,6 @@ static void drawLine(CGPoint from, CGPoint to, UIColor *color, CGFloat width)
 
 @interface CommentCell() {
     int _wantTouches;
-    BOOL _swipe;  
 }
 @end
 
@@ -99,124 +108,171 @@ static void drawLine(CGPoint from, CGPoint to, UIColor *color, CGFloat width)
 {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) 
     {                
+        self.selectionStyle = UITableViewCellSelectionStyleNone;
 		self.backgroundColor = [UIColor whiteColor];
 		self.opaque = YES;
         
         // configure "backView"
         
-        UIButton* replyButton = [UIButton buttonWithType:UIButtonTypeRoundedRect]; //
-        replyButton.frame = CGRectMake(5, 5, 70, 30);
-        [replyButton setTitle:@"Reply" forState:UIControlStateNormal];        
-        [replyButton addTarget:self action:@selector(replyPressed) forControlEvents:UIControlEventTouchUpInside];        
-        replyButton.tag = 0;        
-        //replyButton.tintColor = [UIColor blueColor];            
+        UIButton* replyButton = [UIButton buttonWithType:UIButtonTypeCustom];
         
-        //Class $UIGlassButton = objc_getClass("UIGlassButton");        
-        //UIButton *deleteButton = [[$UIGlassButton alloc] initWithFrame:CGRectMake(75, 5, 60, 30)];                
+        [replyButton setImage:[UIImage imageNamed:@"reply"] forState:UIControlStateNormal];
+        [replyButton addTarget:self action:@selector(buttonPressed:) forControlEvents:UIControlEventTouchUpInside];         
+        replyButton.tag = BUTTON_REPLY;
         
-        UIButton* deleteButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-        deleteButton.frame = CGRectMake(85, 5, 70, 30);
-        [deleteButton setTitle:@"Delete" forState:UIControlStateNormal];        
-        [deleteButton addTarget:self action:@selector(deletePressed) forControlEvents:UIControlEventTouchUpInside];        
-        deleteButton.tag = 1;
-        deleteButton.tintColor = [UIColor redColor];
-        deleteButton.titleLabel.textColor = [UIColor redColor];    
+        UIButton* editButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [editButton setImage:[UIImage imageNamed:@"edit"] forState:UIControlStateNormal];
+        [editButton addTarget:self action:@selector(buttonPressed:) forControlEvents:UIControlEventTouchUpInside];        
+        editButton.tag = BUTTON_EDIT;
         
-        //static UIImage *redBackground;
-        //static dispatch_once_t onceToken;
-        //dispatch_once(&onceToken, ^{            
-        //    UIImage *image = [UIImage imageNamed:@"button_red.png"];
-        //    float w = image.size.width / 2, h = image.size.height / 2; 
-        //    redBackground = [image stretchableImageWithLeftCapWidth:w topCapHeight:h];            
-        //});        
-        //[deleteButton setBackgroundImage:redBackground forState:UIControlStateNormal];
+        UIButton* deleteButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [deleteButton setImage:[UIImage imageNamed:@"cross"] forState:UIControlStateNormal];
+        [deleteButton addTarget:self action:@selector(buttonPressed:) forControlEvents:UIControlEventTouchUpInside];                
+        deleteButton.tag = BUTTON_DELETE;
         
-        UIButton* editButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-        editButton.frame = CGRectMake(165, 5, 70, 30);
-        [editButton setTitle:@"Edit" forState:UIControlStateNormal];        
-        [editButton addTarget:self action:@selector(editPressed) forControlEvents:UIControlEventTouchUpInside];                
-        editButton.tag = 2;        
-
+        UIButton* emailButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [emailButton setImage:[UIImage imageNamed:@"email"] forState:UIControlStateNormal];
+        [emailButton addTarget:self action:@selector(buttonPressed:) forControlEvents:UIControlEventTouchUpInside];        
+        emailButton.tag = BUTTON_EMAIL;
+        
+        UIButton* urlButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [urlButton setImage:[UIImage imageNamed:@"url"] forState:UIControlStateNormal];
+        [urlButton addTarget:self action:@selector(buttonPressed:) forControlEvents:UIControlEventTouchUpInside];        
+        urlButton.tag = BUTTON_URL;
+                 
         [self.backView addSubview:replyButton];        
-        [self.backView addSubview:deleteButton];        
-        [self.backView addSubview:editButton];        
-        self.backView.hidden = YES;
-        self.backView.backgroundColor = [UIColor groupTableViewBackgroundColor];         
-        
-        //replyButton.hidden = YES;
-        //deleteButton.hidden = YES;
-        //editButton.hidden = YES;        
-        
-        //[self.contentView addSubview:replyButton];        
-        //[self.contentView addSubview:deleteButton];        
-        //[self.contentView addSubview:editButton];        
-        
+        [self.backView addSubview:editButton];                
+        [self.backView addSubview:deleteButton];                
+        [self.backView addSubview:emailButton];
+        [self.backView addSubview:urlButton];
+                
+        //self.backView.hidden = YES;
+        //self.backView.alpha = 0;
+        self.backView.backgroundColor = [UIColor underPageBackgroundColor]; // scrollViewTexturedBackgroundColor        
     }
     return self;
 }
 
-
 - (void) prepareForReuse 
 {
 	[super prepareForReuse];    
-    self.backView.hidden = YES;    
+    //self.backView.hidden = YES; 
+    //self.backView.alpha = 0;
 }
 
-- (void) setEditing:(BOOL)editing animated:(BOOL)animated {
-    // Do not call the super method. It shows a delete button by deafult
-	// [super setEditing:editing animated:animated];
+- (NSArray *) prepareButtons
+{        
+    NSMutableArray * buttons = [NSMutableArray array];
     
-    if (_comment.deleteMsg.nonEmpty)
-        return;
-	
-    if (editing) {
-        // swipe
-        
-        if (!_swipe) {
-            _swipe = YES;
-            
-            self.backView.hidden = NO;        
-            [self.backView viewWithTag:1].hidden = !_comment.canDelete;
-            [self.backView viewWithTag:2].hidden = !_comment.canEdit;            
-            //[self.backView viewWithTag:1].hidden = NO;
-            //[self.backView viewWithTag:2].hidden = NO;
-            
-            [UIView beginAnimations:@"" context:nil];
-            [UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
-            CGRect frame = self.contentView.frame;
-            // this makes visible just 10 points of the contentView
-            frame.origin.x = self.contentView.frame.size.width - 10;
-            self.contentView.frame = frame;
-            [UIView commitAnimations];
-        }
-        
-    } else {
-        
-        if (_swipe) {
-            // swipe finished
-            _swipe = NO;
-            [UIView beginAnimations:@"" context:nil];
-            [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
-            CGRect frame = self.contentView.frame;
-            frame.origin.x = 0;
-            self.contentView.frame = frame;
-            [UIView commitAnimations];        
-        }
-        else {
-            // ? [self setNeedsDisplay];
-        }
+    UIView *btn;    
+    btn = [self.backView viewWithTag:BUTTON_REPLY];
+    btn.hidden = YES;
+    [buttons push:btn];
+    
+    btn = [self.backView viewWithTag:BUTTON_EDIT];
+    btn.hidden = YES;    
+    
+    if (_comment.canEdit)
+        [buttons push:btn];
+
+    btn = [self.backView viewWithTag:BUTTON_DELETE];
+    btn.hidden = YES;    
+    if (_comment.canDelete)
+        [buttons push:btn];
+    
+    btn = [self.backView viewWithTag:BUTTON_URL];
+    btn.hidden = YES;    
+    if (_comment.link.nonEmpty)
+        [buttons push:btn];
+    
+    btn = [self.backView viewWithTag:BUTTON_EMAIL];
+    btn.hidden = YES;
+    [buttons push:btn];
+     
+    CGFloat width = buttons.count * (BUTTON_SIZE + BUTTON_INTERVAL_X);
+    
+    CGRect bounds = self.backView.bounds;
+    
+    CGFloat x = 0 + (bounds.size.width - width) / 2.0;
+    CGFloat y = 0 + (bounds.size.height - BUTTON_SIZE + BUTTON_INTERVAL_Y * 2) / 2.0;
+    
+    for (UIView * btn in buttons) {
+
+        btn.frame = CGRectMake(x, y, BUTTON_SIZE, BUTTON_SIZE);
+        x += (BUTTON_SIZE + BUTTON_INTERVAL_X); 
+        btn.alpha = 0;
+        btn.hidden = NO;
+        btn.transform = CGAffineTransformMakeScale(2, 2);       
     } 
+    
+    return buttons;
+}
+
+- (void) animateButtons: (NSArray *) buttons
+{
+    [UIView animateWithDuration:0.05 
+                          delay:0.02 
+                        options:UIViewAnimationOptionCurveEaseInOut | UIViewAnimationOptionTransitionNone
+                     animations:^{
+                         
+                         UIView * v = buttons.first;
+                         v.alpha = 1.0;
+                         
+                         //CGRect bounds = v.frame;
+                         //bounds.size = CGSizeMake(BUTTON_SIZE, BUTTON_SIZE);
+                         //v.frame = bounds;
+                         
+                         v.transform = CGAffineTransformIdentity;
+                     } 
+                     completion:^(BOOL finished) {
+                         if (finished && buttons.count > 1) {                            
+                             [self animateButtons: buttons.tail];                            
+                         }
+                     }];
+     
+}
+
+ 
+#define TRANSITION_OPTIONS UIViewAnimationOptionCurveEaseInOut | UIViewAnimationOptionTransitionCrossDissolve | UIViewAnimationOptionShowHideTransitionViews
+
+
+- (void) swipeOpen
+{   
+    NSArray *buttons = [self prepareButtons];
+        
+    [UIView transitionFromView:self.contentView 
+                        toView:self.backView
+                      duration:0.2
+                       options:TRANSITION_OPTIONS
+                    completion:^(BOOL finished){
+                        
+                        [self animateButtons: buttons];
+                    }];
 }
 
 - (void) swipeClose
+{        
+    [UIView transitionFromView:self.backView 
+                        toView:self.contentView
+                      duration:0.2
+                       options:TRANSITION_OPTIONS
+                    completion:nil];
+}
+
+- (void) buttonPressed: (id) sender
 {
-    UIView* view = self.superview;
-    if ([view isKindOfClass:[UITableView class]]) {
-        UITableView* table = (UITableView*)view;
-        [table setEditing:NO animated:YES];
+    NSInteger tag = [sender tag];
+    switch (tag) {
+        case BUTTON_REPLY:  [self replyPressed]; break;
+        case BUTTON_EDIT:   [self editPressed]; break;
+        case BUTTON_DELETE: [self deletePressed]; break;
+//        case BUTTON_EMAIL:  [self emailPressed]; break;            
+//        case BUTTON_URL:    [self urlPressed]; break;
+        default:
+            break;
     }
 }
- 
+
 - (void) replyPressed 
 {    
     [self swipeClose];       
