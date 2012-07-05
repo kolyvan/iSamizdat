@@ -60,7 +60,10 @@ extern int ddLogLevel;
 
 - (id) init
 {
-    return [self initWithNibName:@"AuthorViewController" bundle:nil];
+    self = [self initWithNibName:@"AuthorViewController" bundle:nil];
+    if (self) {
+    }
+    return self;
 }
 
 - (void)viewDidLoad
@@ -72,25 +75,41 @@ extern int ddLogLevel;
     
     UIBarButtonItem *infoButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemOrganize 
                                                                                 target:self 
-                                                                               action:@selector(goInfo)];
-    //UIButton * button = [UIButton buttonWithType: UIButtonTypeInfoLight];
-    //[button addTarget:self 
-    //           action:@selector(goSafari) 
-    // forControlEvents:UIControlEventTouchUpInside];        
-    //UIBarButtonItem *infoButton = [[UIBarButtonItem alloc] initWithCustomView:button];
-    
+                                                                               action:@selector(goInfo)];        
     
     self.navigationItem.backBarButtonItem = backButton;
     self.navigationItem.rightBarButtonItem = infoButton;    
+    
+    
+    UILabel *label = [[UILabel alloc] init];    
+    label.numberOfLines = 0;
+    label.font = [UIFont boldSystemFont16];
+    label.textColor = [UIColor whiteColor];
+    label.backgroundColor = [UIColor clearColor];
+    //label.shadowColor = [UIColor blackColor];
+    //label.shadowOffset = CGSizeMake(0,-1);
+    self.navigationItem.titleView = label;     
+    
 }
 
 - (void) viewWillAppear:(BOOL)animated 
-{    
+{   
     [super viewWillAppear:animated];
+        
     if (_needReload) {
         _needReload = NO;
-        self.title = _author.name;
         
+        // self.title = _author.name;
+                
+        CGRect rc;
+        UILabel *label = (UILabel *)self.navigationItem.titleView;
+        rc.size = self.navigationController.navigationBar.bounds.size;            
+        rc.size = [_author.name sizeWithFont:[UIFont boldSystemFont16] 
+                      constrainedToSize:CGSizeMake(rc.size.width - 110, rc.size.height - 4) 
+                          lineBreakMode:UILineBreakModeTailTruncation];
+        label.bounds = rc;
+        label.text = _author.name;  
+                
         [self prepareData];
         [self.tableView reloadData];
         
@@ -118,12 +137,18 @@ extern int ddLogLevel;
     
 }
 
+- (void) viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];    
+}
+
 - (void)viewDidUnload
 {
     [super viewDidUnload];
     
     self.navigationItem.backBarButtonItem = nil;
     self.navigationItem.rightBarButtonItem = nil;
+    self.navigationItem.titleView = nil;
     self.textViewController = nil;
     self.textGroupViewController = nil;
     self.authorInfoViewController = nil;
