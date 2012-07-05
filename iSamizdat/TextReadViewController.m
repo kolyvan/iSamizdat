@@ -68,6 +68,8 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
     BOOL _needReload;
     BOOL _needRestoreOffset;
     id _version;
+    BOOL _fullScreen;
+    UISwipeGestureRecognizer *gestureRecognizer; 
 }
 @property (nonatomic, strong) IBOutlet UIWebView * webView;
 @end
@@ -101,7 +103,14 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.webView.delegate = self;    
+    self.webView.delegate = self;
+        
+    gestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self 
+                                                                  action:@selector(handleSwipe:)];    
+
+    gestureRecognizer.direction = UISwipeGestureRecognizerDirectionRight  | UISwipeGestureRecognizerDirectionLeft; 
+    //gestureRecognizer.delegate = self;    
+    [self.webView addGestureRecognizer:gestureRecognizer];
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -120,6 +129,13 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
 - (void) viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+            
+    if (0)
+    [self performSelector:@selector(fullscreenMode:) 
+               withObject:[NSNumber numberWithBool:YES] 
+               afterDelay:1];    
+    
+    //[self fullscreenMode: YES];
 }
 
 - (void) viewWillDisappear:(BOOL)animated
@@ -133,13 +149,19 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
         offset = value / size;
     }
     _text.scrollOffset = offset;
-    //DDLogInfo(@"store offset %f", offset);    
+    //DDLogInfo(@"store offset %f", offset); 
+    
+    if (_fullScreen)
+        [self fullscreenMode: NO];
 }
 
 - (void)viewDidUnload
 {
     [super viewDidUnload];
     _webView.delegate = nil;
+    
+    [self.webView removeGestureRecognizer:gestureRecognizer];
+    gestureRecognizer = nil;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -148,6 +170,76 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
 }
 
 #pragma mark - private
+
+- (void)touchesEnded:(NSSet *)touches
+           withEvent:(UIEvent *)event
+{ 
+     DDLogInfo(@"touchesEnded");
+    
+    UITouch *t = [touches anyObject];
+    //if ([t tapCount] > 1)
+    //    return;  // double tap
+    CGPoint loc = [t locationInView:self.view];     
+    if (CGRectContainsPoint(self.view.bounds, loc)) {
+
+        DDLogInfo(@"TAP!");
+    }
+}
+
+- (void)handleSwipe:(UISwipeGestureRecognizer *)sender 
+{   
+    if (sender.state == UIGestureRecognizerStateEnded) {
+
+        [self fullscreenMode: !_fullScreen];        
+    } 
+}
+
+/*
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
+{
+    CGPoint pt = [touch locationInView:self.webView];
+    CGRect bounds = self.webView.bounds;
+    CGFloat w = bounds.size.width;
+    CGFloat l = bounds.origin.x + w * .33;
+    CGFloat r = bounds.origin.x + w * .66;    
+    
+    if ((pt.x > l) && (pt.x < r)) {
+        DDLogInfo(@"gestureRecognizer");
+        return YES;        
+    }
+    
+    return NO;
+}
+ */
+
+- (void) fullscreenMode: (BOOL) on
+{   
+    //self.wantsFullScreenLayout = YES;    
+    
+    _fullScreen = on;
+    
+    [UIView transitionWithView:self.view
+                      duration:0.2
+                       options:UIViewAnimationOptionTransitionNone
+                    animations:^{
+                        
+                        UIApplication *app = [UIApplication sharedApplication];
+                        
+                        CGRect bounds = [UIScreen mainScreen].bounds;    
+                        
+                        if (on) {        
+                            bounds.origin.y = -20;
+                            bounds.size.height += 20;  
+                        }
+                        
+                        [app setStatusBarHidden:on withAnimation:UIStatusBarAnimationSlide];    
+                        app.keyWindow.frame = bounds;
+                        //self.navigationController.navigationBarHidden = on;  
+                        [self.navigationController setNavigationBarHidden:on animated:YES];
+                        
+                    }
+                    completion:nil];
+}
 
 - (void) restoreOffset
 {
