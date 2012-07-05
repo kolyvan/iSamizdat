@@ -86,7 +86,7 @@ typedef enum {
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
+    if (self) {        
         self.title = locString(@"Samizdat");
     }
     return self;

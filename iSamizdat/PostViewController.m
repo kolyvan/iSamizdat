@@ -155,7 +155,7 @@
                                     destructiveButtonTitle:nil 
                                          otherButtonTitles:
                        locString(@"Anonymous"), 
-                       NSFullUserName(), 
+                       [[UIDevice currentDevice] name], // NSFullUserName
                        locString(@"Enter name"), 
                        nil];
         

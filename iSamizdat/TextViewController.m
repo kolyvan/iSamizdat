@@ -212,9 +212,7 @@ enum {
 - (void) prepareData
 {
     NSMutableArray *ma = [NSMutableArray array];
-    
-    NSLog(@"%@ prepareData", [self class]);
-    
+            
     [ma push: $int(RowTitle)];
         
     [ma push: $int(RowAuthor)];

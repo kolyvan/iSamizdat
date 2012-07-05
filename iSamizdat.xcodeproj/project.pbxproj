@@ -73,7 +73,6 @@
 		872D9568157387BB00BCB4EC /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 872D9567157387BB00BCB4EC /* Security.framework */; };
 		872D956F1573983A00BCB4EC /* emblem-system.png in Resources */ = {isa = PBXBuildFile; fileRef = 872D956E1573983A00BCB4EC /* emblem-system.png */; };
 		872D9571157399D600BCB4EC /* emblem-system@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 872D9570157399D600BCB4EC /* emblem-system@2x.png */; };
-		872D957415739B1C00BCB4EC /* localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 872D957615739B1C00BCB4EC /* localizable.strings */; };
 		872D958A1573AB5600BCB4EC /* SSPullToRefreshDefaultContentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D95851573AB5600BCB4EC /* SSPullToRefreshDefaultContentView.m */; };
 		872D958B1573AB5600BCB4EC /* SSPullToRefreshSimpleContentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D95871573AB5600BCB4EC /* SSPullToRefreshSimpleContentView.m */; };
 		872D958C1573AB5600BCB4EC /* SSPullToRefreshView.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D95891573AB5600BCB4EC /* SSPullToRefreshView.m */; };
@@ -92,6 +91,7 @@
 		87562830159987D000636465 /* Twitter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8756282E159987CB00636465 /* Twitter.framework */; };
 		87562833159987F400636465 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87562831159987ED00636465 /* CoreFoundation.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		87562836159989D800636465 /* SHKConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 87562835159989D800636465 /* SHKConfig.m */; };
+		8776096315A56FF80063A6F2 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8776096515A56FF80063A6F2 /* Localizable.strings */; };
 		8776CA2C157738670099C83D /* TableViewControllerEx.m in Sources */ = {isa = PBXBuildFile; fileRef = 8776CA2B157738670099C83D /* TableViewControllerEx.m */; };
 		8776CA34157751D50099C83D /* text.css in Resources */ = {isa = PBXBuildFile; fileRef = 8776CA32157751D50099C83D /* text.css */; };
 		8776CA35157751D50099C83D /* text.html in Resources */ = {isa = PBXBuildFile; fileRef = 8776CA33157751D50099C83D /* text.html */; };
@@ -293,8 +293,6 @@
 		872D9567157387BB00BCB4EC /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		872D956E1573983A00BCB4EC /* emblem-system.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "emblem-system.png"; path = "resources/emblem-system.png"; sourceTree = "<group>"; };
 		872D9570157399D600BCB4EC /* emblem-system@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "emblem-system@2x.png"; path = "resources/emblem-system@2x.png"; sourceTree = "<group>"; };
-		872D957515739B1C00BCB4EC /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/localizable.strings; sourceTree = "<group>"; };
-		872D957715739B2100BCB4EC /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/localizable.strings; sourceTree = "<group>"; };
 		872D95831573AB5600BCB4EC /* SSPullToRefresh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SSPullToRefresh.h; path = vendors/refresh/SSPullToRefresh.h; sourceTree = "<group>"; };
 		872D95841573AB5600BCB4EC /* SSPullToRefreshDefaultContentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SSPullToRefreshDefaultContentView.h; path = vendors/refresh/SSPullToRefreshDefaultContentView.h; sourceTree = "<group>"; };
 		872D95851573AB5600BCB4EC /* SSPullToRefreshDefaultContentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SSPullToRefreshDefaultContentView.m; path = vendors/refresh/SSPullToRefreshDefaultContentView.m; sourceTree = "<group>"; };
@@ -324,6 +322,9 @@
 		87562831159987ED00636465 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		87562834159989D800636465 /* SHKConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHKConfig.h; sourceTree = "<group>"; };
 		87562835159989D800636465 /* SHKConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SHKConfig.m; sourceTree = "<group>"; };
+		8776094515A565880063A6F2 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		8776096415A56FF80063A6F2 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		8776096615A56FFC0063A6F2 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8776CA2A157738670099C83D /* TableViewControllerEx.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableViewControllerEx.h; sourceTree = "<group>"; };
 		8776CA2B157738670099C83D /* TableViewControllerEx.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TableViewControllerEx.m; sourceTree = "<group>"; };
 		8776CA32157751D50099C83D /* text.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; name = text.css; path = resources/text.css; sourceTree = "<group>"; };
@@ -558,7 +559,7 @@
 				872D943C15737B0400BCB4EC /* InfoPlist.strings */,
 				872D943F15737B0400BCB4EC /* main.m */,
 				872D944115737B0400BCB4EC /* iSamizdat-Prefix.pch */,
-				872D957615739B1C00BCB4EC /* localizable.strings */,
+				8776096515A56FF80063A6F2 /* Localizable.strings */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -867,7 +868,6 @@
 				872D944D15737B0400BCB4EC /* MainViewController.xib in Resources */,
 				872D956F1573983A00BCB4EC /* emblem-system.png in Resources */,
 				872D9571157399D600BCB4EC /* emblem-system@2x.png in Resources */,
-				872D957415739B1C00BCB4EC /* localizable.strings in Resources */,
 				8712FF9515749D7D00C01283 /* failure.png in Resources */,
 				8712FF9715749DE400C01283 /* success.png in Resources */,
 				8712FFAC1574C02700C01283 /* NewAuthorViewController.xib in Resources */,
@@ -905,6 +905,7 @@
 				8724CBD21594A9BC0054293E /* recycle.png in Resources */,
 				8724CBD31594A9BC0054293E /* recycle@2x.png in Resources */,
 				87026F0A159986AB00998FD3 /* ShareKit.bundle in Resources */,
+				8776096315A56FF80063A6F2 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1010,6 +1011,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				872D943D15737B0400BCB4EC /* en */,
+				8776094515A565880063A6F2 /* ru */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -1022,13 +1024,13 @@
 			name = MainViewController.xib;
 			sourceTree = "<group>";
 		};
-		872D957615739B1C00BCB4EC /* localizable.strings */ = {
+		8776096515A56FF80063A6F2 /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				872D957515739B1C00BCB4EC /* en */,
-				872D957715739B2100BCB4EC /* ru */,
+				8776096415A56FF80063A6F2 /* en */,
+				8776096615A56FFC0063A6F2 /* ru */,
 			);
-			name = localizable.strings;
+			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
