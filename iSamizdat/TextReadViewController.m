@@ -70,6 +70,8 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
     id _version;
     BOOL _fullScreen;
     UISwipeGestureRecognizer *gestureRecognizer; 
+    UIPinchGestureRecognizer *pinchGestureRecognizer;
+    CGFloat _prevScale;
 }
 @property (nonatomic, strong) IBOutlet UIWebView * webView;
 @end
@@ -111,6 +113,10 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
     gestureRecognizer.direction = UISwipeGestureRecognizerDirectionRight  | UISwipeGestureRecognizerDirectionLeft; 
     //gestureRecognizer.delegate = self;    
     [self.webView addGestureRecognizer:gestureRecognizer];
+    
+    pinchGestureRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self 
+                                                                       action:@selector(handlePinch:)];  
+    [self.webView addGestureRecognizer:pinchGestureRecognizer];
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -124,6 +130,8 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
         [self reloadWebView];
         //DDLogInfo(@"reload text %@", _text.path);   
     }
+    
+    _prevScale = 1.0f;
 }
 
 - (void) viewDidAppear:(BOOL)animated
@@ -171,26 +179,24 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
 
 #pragma mark - private
 
-- (void)touchesEnded:(NSSet *)touches
-           withEvent:(UIEvent *)event
-{ 
-     DDLogInfo(@"touchesEnded");
-    
-    UITouch *t = [touches anyObject];
-    //if ([t tapCount] > 1)
-    //    return;  // double tap
-    CGPoint loc = [t locationInView:self.view];     
-    if (CGRectContainsPoint(self.view.bounds, loc)) {
-
-        DDLogInfo(@"TAP!");
-    }
-}
-
 - (void)handleSwipe:(UISwipeGestureRecognizer *)sender 
 {   
     if (sender.state == UIGestureRecognizerStateEnded) {
 
         [self fullscreenMode: !_fullScreen];        
+    } 
+}
+
+- (void)handlePinch:(UIPinchGestureRecognizer *)sender 
+{
+    if (sender.state == UIGestureRecognizerStateChanged) {
+               
+        if (fabs(_prevScale - sender.scale) > 0.05) {
+
+            _prevScale = sender.scale;
+            NSString *js = KxUtils.format(@"document.body.style.zoom = %.2f;", sender.scale);
+            [self.webView stringByEvaluatingJavaScriptFromString: js];
+        }
     } 
 }
 
