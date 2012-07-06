@@ -261,8 +261,6 @@ typedef enum {
     self.authorViewController.author = author;
     [self.navigationController pushViewController:self.authorViewController 
                                          animated:YES];
-    
-    
 }
 
 - (void) goSettings

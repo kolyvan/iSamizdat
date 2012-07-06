@@ -21,6 +21,7 @@
 #import "SamLibModel.h"
 #import "CommentCell.h"
 #import "PostViewController.h"
+#import "AuthorViewController.h"
 
 
 @interface ActionSheetWithComment : UIActionSheet
@@ -42,13 +43,14 @@
 }
 
 @property (nonatomic, strong) PostViewController *postViewController;
+@property (nonatomic, strong) AuthorViewController *authorViewController;
 
 @end
 
 @implementation CommentsViewController
 
 @synthesize comments = _comments;
-@synthesize postViewController;
+@synthesize postViewController, authorViewController;
 
 - (void) setComments:(SamLibComments *)comments
 {
@@ -107,6 +109,7 @@
     
     self.navigationItem.rightBarButtonItem = nil;    
     self.postViewController = nil;
+    self.authorViewController = nil;
     
     [self.tableView removeGestureRecognizer:_gestureRecognizer];
     _gestureRecognizer = nil;
@@ -115,7 +118,8 @@
 - (void) didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
-    self.postViewController = nil;    
+    self.postViewController = nil; 
+    self.authorViewController = nil;
 }
 
 - (void)handleSwipe:(UISwipeGestureRecognizer *)sender 
@@ -265,11 +269,18 @@
 {
     SamLibModel *model = [SamLibModel shared];
     SamLibAuthor *author = [model findAuthor:path];
-    if (author) {
-        
-    } else {
-        
+    if (!author) {
+    
+        author = [[SamLibAuthor alloc] initWithPath:path];
+        [model addAuthor:author];
     }
+        
+    if (!self.authorViewController) {
+        self.authorViewController = [[AuthorViewController alloc] init];
+    }
+    self.authorViewController.author = author;
+    [self.navigationController pushViewController:self.authorViewController 
+                                         animated:YES];
 }
 
 - (void) banComment: (SamLibComment *) comment
