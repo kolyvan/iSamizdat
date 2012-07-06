@@ -101,6 +101,13 @@ static NSString * substringFromPattern(NSString *s, NSString *pattern)
     return [[s substringFromIndex:range.location + range.length] trimmed];    
 }
 
+static NSString *decodeEmail(NSString *email)
+{    
+    NSArray * a = [[email split:@"&#"] tail];
+    a = [a map: ^(id elem) { return KxUtils.format(@"%c", [elem intValue]); }];
+    return [a mkString];
+}
+
 #pragma mark - private interface
 
 static KxTuple2* parseLink(NSString *link) 
@@ -371,7 +378,15 @@ static NSDictionary * parseComment(NSString *html)
         return nil;
     }
     
-    parseCommentName(name, dict);        
+    parseCommentName(name, dict);  
+    
+    // parse email    
+    int scanLoc = scanner.scanLocation;    
+    NSString *email = nextTag(scanner, @"(<u>", @"</u>)");
+    if (email.nonEmpty)
+        [dict updateOnly:@"email" valueNotNil:decodeEmail(email)];        
+    else
+        scanner.scanLocation = scanLoc;    
 
     // <small><i>2012/04/28 17:26  </i>  
     NSString *date = nextTag(scanner, @"<small><i>", @"</i>");
@@ -383,7 +398,7 @@ static NSDictionary * parseComment(NSString *html)
     //[dict updateOnly:@"timestamp" valueNotNil:timestamp];             
     [dict updateOnly:@"date" valueNotNil:[date trimmed]];             
     
-    int scanLoc = scanner.scanLocation;    
+    scanLoc = scanner.scanLocation;    
     
     if (findTag(scanner, @"?OPERATION=edit&MSGID="))
         [dict update:@"canEdit" value: [NSNumber numberWithBool:YES]];             
@@ -538,12 +553,8 @@ static NSDictionary * scanAuthorInfo(NSString *html)
         [dict updateOnce:@"email" with:^id{
             if ([line contains:@"<li><b>Aдpeс:"]) {
                 NSString * email = parseTag(line, @"<u>", @"</u>");                    
-                if (email) {
-                    // decode email                     
-                    NSArray * a = [[email split:@"&#"] tail];
-                    a = [a map: ^(id elem) { return KxUtils.format(@"%c", [elem intValue]); }];
-                    return [a mkString];
-                }
+                if (email.nonEmpty)
+                    return decodeEmail(email);
             }
             return nil;            
         }];

@@ -26,6 +26,7 @@ typedef void (^UpdateCommentsBlock)(SamLibComments *comments,
 @property (readonly, nonatomic) NSString * name;
 @property (readonly, nonatomic) NSString * link;
 @property (readonly, nonatomic) NSString * color;
+@property (readonly, nonatomic) NSString * email;
 @property (readonly, nonatomic) NSString * msgid;
 @property (readonly, nonatomic) NSString * replyto;
 @property (readonly, nonatomic) NSString * message;

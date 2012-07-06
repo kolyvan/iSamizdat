@@ -69,6 +69,7 @@ static NSDate* mkDateFromComment(NSString *dt)
 - (NSString *) name         { return [_dict get: @"name"]; }
 - (NSString *) link         { return [_dict get: @"link"]; }
 - (NSString *) color        { return [_dict get: @"color"]; }
+- (NSString *) email        { return [_dict get: @"email"]; }
 - (NSString *) msgid        { return [_dict get: @"msgid"]; }
 - (NSString *) replyto      { return [_dict get: @"replyto"]; }
 - (NSString *) message      { return [_dict get: @"message"]; }

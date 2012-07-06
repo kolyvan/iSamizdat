@@ -144,6 +144,10 @@ typedef enum {
 + (id) fromDictionary: (NSDictionary *) dict 
            withAuthor: (SamLibAuthor *) author;
 
++ (id) fromDictionary: (NSDictionary *) dict 
+           withAuthor: (SamLibAuthor *) author 
+           setChanged: (SamLibTextChanged) changed;
+
 - (id) initFromDictionary: (NSDictionary *) dict
                  withPath: (NSString *)path
                 andAuthor: (SamLibAuthor *) author;

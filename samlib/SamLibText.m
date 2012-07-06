@@ -279,6 +279,16 @@ static NSString * prettyHtml (NSMutableArray *diffs)
     return KX_AUTORELEASE(text);
 }
 
++ (id) fromDictionary: (NSDictionary *) dict 
+           withAuthor: (SamLibAuthor *) author 
+           setChanged: (SamLibTextChanged) changed
+{
+    SamLibText *text = [SamLibText fromDictionary: dict withAuthor:author];
+    if (text)
+        text->_changedFlag = changed;
+    return text;
+}
+
 - (id) initFromDictionary: (NSDictionary *) dict
                  withPath: (NSString *)path
                 andAuthor: (SamLibAuthor *) author;
