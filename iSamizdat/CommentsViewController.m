@@ -18,6 +18,7 @@
 #import "SamLibComment+IOS.h"
 #import "SamLibAuthor+IOS.h"
 #import "SamLibText.h"
+#import "SamLibModel.h"
 #import "CommentCell.h"
 #import "PostViewController.h"
 
@@ -97,7 +98,7 @@
 - (void) viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    _swipeCell = nil;
+    [self cancelSwipeAnimated: NO];
 }
 
 - (void)viewDidUnload
@@ -129,12 +130,12 @@
         
         if (swipeCell == cell) {
             
-            [swipeCell swipeClose];
+            [swipeCell swipeCloseAnimated:YES];
             _swipeCell = nil;
             
         } else {
                            
-            [swipeCell swipeClose];
+            [swipeCell swipeCloseAnimated:YES];
             
             if (cell.comment.deleteMsg.nonEmpty) {
 
@@ -151,6 +152,14 @@
     } 
 }
 
+- (void) cancelSwipeAnimated: (BOOL) animated
+{
+    CommentCell *swipeCell = _swipeCell;
+    if (swipeCell)
+        [swipeCell swipeCloseAnimated:animated];
+    _swipeCell = nil;
+}
+
 - (NSDate *) lastUpdateDate
 {
     return _comments.timestamp;
@@ -158,6 +167,8 @@
 
 - (void) refresh: (void(^)(SamLibStatus status, NSString *message)) block
 {
+    [self cancelSwipeAnimated:NO];
+    
     if (_postData) {
         
         if (_postData.message != nil) {
@@ -250,6 +261,22 @@
     [actionSheet showInView:self.view];
 }
 
+- (void) goAuthor: (NSString *) path
+{
+    SamLibModel *model = [SamLibModel shared];
+    SamLibAuthor *author = [model findAuthor:path];
+    if (author) {
+        
+    } else {
+        
+    }
+}
+
+- (void) banComment: (SamLibComment *) comment
+{
+    
+}
+
 - (void) sendPost: (PostData *) post
 {   
     _postData = post;        
@@ -272,12 +299,7 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView 
 {
-    //[self.tableView setEditing:NO animated:NO]; // cancel any swiped cell
-    
-    CommentCell *swipeCell = _swipeCell;
-    if (swipeCell)
-        [swipeCell swipeClose];
-
+    [self cancelSwipeAnimated: YES];
 }
 
 #pragma mark - Table view data source
@@ -307,7 +329,8 @@
     return cell;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath 
+{
     
     SamLibComment *comment = [_comments.all objectAtIndex:indexPath.row];    
     

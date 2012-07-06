@@ -18,6 +18,7 @@
 #import "NSArray+Kolyvan.h"
 #import "SamLibComment+IOS.h"
 #import "SamLibComments.h"
+#import "SamLibModel.h"
 #import "CommentsViewController.h"
 #import "TextLine.h"
 #import "UIFont+Kolyvan.h"
@@ -25,14 +26,20 @@
 
 ////
 
-#define BUTTON_REPLY 1
-#define BUTTON_EDIT 2
-#define BUTTON_DELETE 3
-#define BUTTON_EMAIL 4
-#define BUTTON_URL 5
-#define BUTTON_SIZE 44
-#define BUTTON_INTERVAL_X 4
-#define BUTTON_INTERVAL_Y 4
+enum {
+    BUTTON_REPLY    = 1,
+    BUTTON_EDIT,
+    BUTTON_DELETE,
+    BUTTON_EMAIL,
+    BUTTON_URL,
+    BUTTON_AUTHOR_ADD,       
+    BUTTON_AUTHOR_GO, 
+    BUTTON_BAN,    
+};
+
+#define BUTTON_SIZE 36
+#define BUTTON_INTERVAL_X 8
+#define BUTTON_INTERVAL_Y 8
 
 static void drawDashLine(CGPoint from, CGPoint to, UIColor *color) 
 {    
@@ -64,6 +71,7 @@ static void drawLine(CGPoint from, CGPoint to, UIColor *color, CGFloat width)
 
 @interface CommentCell() {
     int _wantTouches;
+    NSMutableArray *_buttons;
 }
 @end
 
@@ -112,43 +120,8 @@ static void drawLine(CGPoint from, CGPoint to, UIColor *color, CGFloat width)
 		self.backgroundColor = [UIColor whiteColor];
 		self.opaque = YES;
         
-        // configure "backView"
-        
-        UIButton* replyButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        
-        [replyButton setImage:[UIImage imageNamed:@"reply"] forState:UIControlStateNormal];
-        [replyButton addTarget:self action:@selector(buttonPressed:) forControlEvents:UIControlEventTouchUpInside];         
-        replyButton.tag = BUTTON_REPLY;
-        
-        UIButton* editButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [editButton setImage:[UIImage imageNamed:@"edit"] forState:UIControlStateNormal];
-        [editButton addTarget:self action:@selector(buttonPressed:) forControlEvents:UIControlEventTouchUpInside];        
-        editButton.tag = BUTTON_EDIT;
-        
-        UIButton* deleteButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [deleteButton setImage:[UIImage imageNamed:@"cross"] forState:UIControlStateNormal];
-        [deleteButton addTarget:self action:@selector(buttonPressed:) forControlEvents:UIControlEventTouchUpInside];                
-        deleteButton.tag = BUTTON_DELETE;
-        
-        UIButton* emailButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [emailButton setImage:[UIImage imageNamed:@"email"] forState:UIControlStateNormal];
-        [emailButton addTarget:self action:@selector(buttonPressed:) forControlEvents:UIControlEventTouchUpInside];        
-        emailButton.tag = BUTTON_EMAIL;
-        
-        UIButton* urlButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [urlButton setImage:[UIImage imageNamed:@"url"] forState:UIControlStateNormal];
-        [urlButton addTarget:self action:@selector(buttonPressed:) forControlEvents:UIControlEventTouchUpInside];        
-        urlButton.tag = BUTTON_URL;
-                 
-        [self.backView addSubview:replyButton];        
-        [self.backView addSubview:editButton];                
-        [self.backView addSubview:deleteButton];                
-        [self.backView addSubview:emailButton];
-        [self.backView addSubview:urlButton];
-                
-        //self.backView.hidden = YES;
-        //self.backView.alpha = 0;
-        self.backView.backgroundColor = [UIColor underPageBackgroundColor]; // scrollViewTexturedBackgroundColor        
+        // configure "backView"               
+        self.backView.backgroundColor = [UIColor scrollViewTexturedBackgroundColor]; //underPageBackgroundColor
     }
     return self;
 }
@@ -156,72 +129,136 @@ static void drawLine(CGPoint from, CGPoint to, UIColor *color, CGFloat width)
 - (void) prepareForReuse 
 {
 	[super prepareForReuse];    
-    //self.backView.hidden = YES; 
-    //self.backView.alpha = 0;
+    
+    _buttons = nil;
+
+    for (UIView *v in self.backView.subviews)
+        [v removeFromSuperview];
 }
 
-- (NSArray *) prepareButtons
-{        
-    NSMutableArray * buttons = [NSMutableArray array];
-    
-    UIView *btn;    
-    btn = [self.backView viewWithTag:BUTTON_REPLY];
-    btn.hidden = YES;
-    [buttons push:btn];
-    
-    btn = [self.backView viewWithTag:BUTTON_EDIT];
-    btn.hidden = YES;    
-    
-    if (_comment.canEdit)
-        [buttons push:btn];
++ (CGFloat) minimumHeight
+{
+   return ([UIFont boldSystemFont16].lineHeight + 5) + BUTTON_SIZE + BUTTON_INTERVAL_Y;
+}
 
-    btn = [self.backView viewWithTag:BUTTON_DELETE];
-    btn.hidden = YES;    
-    if (_comment.canDelete)
-        [buttons push:btn];
+- (void) prepareBackView
+{      
+    if (self.backView.subviews.isEmpty) {
+        
+        const char * names[8] = {
+            "comment", "edit", "cross", "email", "url", "author_add", "author_go", "ban"
+        };
+        
+        for (int i = 0; i < 8; ++i) {
+            
+            NSString *name = [NSString stringWithCString:names[i] encoding:NSUTF8StringEncoding];            
+            UIButton* button = [UIButton buttonWithType:UIButtonTypeCustom];            
+            [button setImage:[UIImage imageNamed:name] forState:UIControlStateNormal];
+            [button addTarget:self action:@selector(buttonPressed:) forControlEvents:UIControlEventTouchUpInside];         
+            button.tag = i + 1;
+            [self.backView addSubview:button]; 
+        } 
+    }
     
-    btn = [self.backView viewWithTag:BUTTON_URL];
-    btn.hidden = YES;    
-    if (_comment.link.nonEmpty)
-        [buttons push:btn];
+    if (!_buttons) {
+        
+        NSMutableArray *buttons = [NSMutableArray array];
+        
+        const NSInteger AUTHOR_GO =  1;
+        const NSInteger AUTHOR_ADD = 2;
+        
+        NSInteger authorFlag = 0;
+        
+        for (UIView * v in self.backView.subviews) {
+            
+            if ([v isKindOfClass:[UIButton class]]) {
+                
+                v.hidden = YES;
+                
+                switch (v.tag) {
+                    case BUTTON_REPLY:  
+                        [buttons push:v]; 
+                        break;
+                        
+                    case BUTTON_EDIT:
+                        if (_comment.canEdit)
+                            [buttons push:v];
+                        break;
+                        
+                    case BUTTON_DELETE:
+                        if (_comment.canDelete)
+                            [buttons push:v];
+                        break;
+                        
+                    case BUTTON_URL:  
+                        if (_comment.link.nonEmpty) {
+                            [buttons push:v]; 
+                            
+                            if (_comment.isSamizdat) {
+                                
+                                NSString *path = _comment.link.lastPathComponent;
+                                id author = [[SamLibModel shared] findAuthor:path];
+                                authorFlag = author ? AUTHOR_GO : AUTHOR_ADD;                            
+                            }
+                        }
+                        break;
+                        
+                    case BUTTON_EMAIL:  
+                        if (_comment.email.nonEmpty)
+                            [buttons push:v]; 
+                        break;
+                        
+                    case BUTTON_AUTHOR_ADD:
+                        if (authorFlag == AUTHOR_ADD) 
+                            [buttons push:v]; 
+                        break;                    
+                        
+                    case BUTTON_AUTHOR_GO:
+                        if (authorFlag == AUTHOR_GO) 
+                            [buttons push:v]; 
+                        break;
+                        
+                    case BUTTON_BAN:  
+                        [buttons push:v];
+                        break;    
+                        
+                    default:
+                        break;
+                }            
+            }        
+        }        
+         _buttons = [NSArray arrayWithArray:buttons];
+    }    
     
-    btn = [self.backView viewWithTag:BUTTON_EMAIL];
-    btn.hidden = YES;
-    [buttons push:btn];
-     
-    CGFloat width = buttons.count * (BUTTON_SIZE + BUTTON_INTERVAL_X);
+    CGRect bounds;
+    bounds = self.contentView.frame;
+    bounds.origin.y += ([UIFont boldSystemFont16].lineHeight + 5);
+    bounds.size.height = BUTTON_SIZE + BUTTON_INTERVAL_Y;
+    self.backView.frame = bounds;
+  
+    CGFloat width = _buttons.count * (BUTTON_SIZE + BUTTON_INTERVAL_X);            
+    CGFloat x = (bounds.size.width - width) / 2.0;
+    CGFloat y = BUTTON_INTERVAL_Y / 2;
     
-    CGRect bounds = self.backView.bounds;
-    
-    CGFloat x = 0 + (bounds.size.width - width) / 2.0;
-    CGFloat y = 0 + (bounds.size.height - BUTTON_SIZE + BUTTON_INTERVAL_Y * 2) / 2.0;
-    
-    for (UIView * btn in buttons) {
-
+    for (UIView * btn in _buttons) {
+        
         btn.frame = CGRectMake(x, y, BUTTON_SIZE, BUTTON_SIZE);
         x += (BUTTON_SIZE + BUTTON_INTERVAL_X); 
         btn.alpha = 0;
         btn.hidden = NO;
         btn.transform = CGAffineTransformMakeScale(2, 2);       
-    } 
-    
-    return buttons;
+    }  
 }
 
 - (void) animateButtons: (NSArray *) buttons
 {
-    [UIView animateWithDuration:0.05 
+    [UIView animateWithDuration:0.04 
                           delay:0.02 
                         options:UIViewAnimationOptionCurveEaseInOut | UIViewAnimationOptionTransitionNone
                      animations:^{
                          
                          UIView * v = buttons.first;
                          v.alpha = 1.0;
-                         
-                         //CGRect bounds = v.frame;
-                         //bounds.size = CGSizeMake(BUTTON_SIZE, BUTTON_SIZE);
-                         //v.frame = bounds;
-                         
                          v.transform = CGAffineTransformIdentity;
                      } 
                      completion:^(BOOL finished) {
@@ -229,66 +266,74 @@ static void drawLine(CGPoint from, CGPoint to, UIColor *color, CGFloat width)
                              [self animateButtons: buttons.tail];                            
                          }
                      }];
-     
 }
-
  
-#define TRANSITION_OPTIONS UIViewAnimationOptionCurveEaseInOut | UIViewAnimationOptionTransitionCrossDissolve | UIViewAnimationOptionShowHideTransitionViews
+#define TRANSITION_OPTIONS UIViewAnimationOptionCurveEaseInOut | UIViewAnimationOptionTransitionCrossDissolve 
 
+//| UIViewAnimationOptionShowHideTransitionViews
 
 - (void) swipeOpen
 {   
-    NSArray *buttons = [self prepareButtons];
-        
-    [UIView transitionFromView:self.contentView 
-                        toView:self.backView
-                      duration:0.2
-                       options:TRANSITION_OPTIONS
-                    completion:^(BOOL finished){
-                        
-                        [self animateButtons: buttons];
-                    }];
+    [self prepareBackView];
+     
+    [UIView animateWithDuration:0.2 
+                          delay:0 
+                        options:TRANSITION_OPTIONS 
+                     animations:^{
+                         
+                         [self bringSubviewToFront: self.backView];
+                     } 
+                     completion:^(BOOL finished){
+                         
+                         [self animateButtons: _buttons];
+                     }];
+    
 }
 
-- (void) swipeClose
-{        
-    [UIView transitionFromView:self.backView 
-                        toView:self.contentView
-                      duration:0.2
-                       options:TRANSITION_OPTIONS
-                    completion:nil];
+- (void) swipeCloseAnimated: (BOOL) animated
+{   
+    if (animated) {
+        
+        [UIView animateWithDuration:0.2 
+                              delay:0 
+                            options:TRANSITION_OPTIONS 
+                         animations:^{
+                             
+                             [self bringSubviewToFront: self.contentView];
+                         } 
+                         completion:nil];
+        
+    } else {
+        
+        [self bringSubviewToFront: self.contentView];
+    }    
 }
 
 - (void) buttonPressed: (id) sender
 {
+    [self swipeCloseAnimated: YES];
+    
     NSInteger tag = [sender tag];
     switch (tag) {
-        case BUTTON_REPLY:  [self replyPressed]; break;
-        case BUTTON_EDIT:   [self editPressed]; break;
-        case BUTTON_DELETE: [self deletePressed]; break;
-//        case BUTTON_EMAIL:  [self emailPressed]; break;            
-//        case BUTTON_URL:    [self urlPressed]; break;
+        case BUTTON_REPLY:      [_delegate replyPost: _comment]; break;
+        case BUTTON_EDIT:       [_delegate editPost: _comment]; break;
+        case BUTTON_DELETE:     [_delegate deletePost: _comment]; break;
+        case BUTTON_EMAIL:      [self openUrl: KxUtils.format(@"mailto:%@", _comment.email)]; break;            
+        case BUTTON_URL:        [self openUrl: _comment.link]; break;
+            
+        case BUTTON_AUTHOR_ADD: //fallback
+        case BUTTON_AUTHOR_GO:  [_delegate goAuthor:_comment.link.lastPathComponent]; break; 
+        
+        case BUTTON_BAN:        [_delegate banComment:_comment]; break; 
         default:
             break;
     }
 }
 
-- (void) replyPressed 
-{    
-    [self swipeClose];       
-    [_delegate replyPost: _comment];    
-}
-
-- (void) deletePressed 
-{   
-    [self swipeClose];
-    [_delegate deletePost: _comment];    
-}
-
-- (void) editPressed 
-{    
-    [self swipeClose];
-    [_delegate editPost: _comment];    
+- (void) openUrl: (NSString *) s;
+{
+    NSURL *url = [NSURL URLWithString: s];
+    [UIApplication.sharedApplication openURL: url];  
 }
 
 + (CGFloat) heightForComment:(SamLibComment *) comment 
@@ -316,16 +361,20 @@ static void drawLine(CGPoint from, CGPoint to, UIColor *color, CGFloat width)
         
     }
     
-    if (!comment.deleteMsg.nonEmpty) {
+    if (comment.deleteMsg.nonEmpty) {
+        
+        return height;
+        
+    } else {
         
         height += 2;
         NSString * date = [comment.timestamp shortRelativeFormatted]; 
         height += [date sizeWithFont:[UIFont systemFont12] 
                    constrainedToSize:CGSizeMake(widthr, 999999) 
                        lineBreakMode:UILineBreakModeTailTruncation].height;
-    }
-    
-	return height;
+        
+        return MAX(height, [self minimumHeight]);
+    }	
 }
 
 - (void) drawContentView:(CGRect)rect 
@@ -346,10 +395,10 @@ static void drawLine(CGPoint from, CGPoint to, UIColor *color, CGFloat width)
     [[UIColor colorWithWhite:0.8 alpha:1] set];
 	CGContextFillRect(context, CGRectMake(0, y, rect.size.width, headerHeight));
     
-    // draw number
+    // render number
     
     if (_comment.isNew)
-        [[UIColor orangeColor] set];
+        [[UIColor blueColor] set];
     else        
         [[UIColor blackColor] set];
     
@@ -362,30 +411,31 @@ static void drawLine(CGPoint from, CGPoint to, UIColor *color, CGFloat width)
     [number drawInRect:CGRectMake(w - size.width, 
                                   y + 3, 
                                   size.width, 
-                                  rect.size.height - y) 
+                                  headerHeight) 
               withFont:[UIFont systemFont12] 
          lineBreakMode:UILineBreakModeTailTruncation];    
     
-    ///
-    
+    // render name
     
     if (_comment.name.nonEmpty) 
     {   
         TextLine *nameLine = _comment.nameLine;
-        y += [nameLine drawInRect:CGRectMake(x, y + 2, w - size.width, rect.size.height - y) 
-                         withFont:[UIFont boldSystemFont16] 
-                         andColor:_comment.nameColor].height;
+        [nameLine drawInRect:CGRectMake(x, y + 2, w - size.width, headerHeight) 
+                    withFont:[UIFont boldSystemFont16] 
+                    andColor:_comment.nameColor];
         
     } else if (_comment.deleteMsg.nonEmpty) {
         
         [[UIColor darkGrayColor] set]; 
         NSString *s = KxUtils.format(@"deleted %@", _comment.deleteMsg);
-        y += [s drawInRect:CGRectMake(x, y + 2, w - size.width, rect.size.height - y) 
-                  withFont:[UIFont systemFont12]  
-             lineBreakMode:UILineBreakModeTailTruncation].height;
-        
-        
+        [s drawInRect:CGRectMake(x, y + 2, w - size.width, headerHeight) 
+             withFont:[UIFont systemFont12]  
+        lineBreakMode:UILineBreakModeTailTruncation];
     }
+    
+    y += headerHeight;
+    
+    // render reply
     
     if (_comment.replyto.nonEmpty) {
         
@@ -401,6 +451,8 @@ static void drawLine(CGPoint from, CGPoint to, UIColor *color, CGFloat width)
         }
     }    
     
+    // render message
+    
     if (_comment.message.nonEmpty) {
         
         y +=10;
@@ -413,6 +465,8 @@ static void drawLine(CGPoint from, CGPoint to, UIColor *color, CGFloat width)
         }
         
     }
+    
+    // render timestamp
     
     if (!_comment.deleteMsg.nonEmpty) {
         
@@ -433,6 +487,7 @@ static void drawLine(CGPoint from, CGPoint to, UIColor *color, CGFloat width)
 {
     if (self.wantTouches) {
         
+        /*
         if (_comment.link.nonEmpty) {
             
             if (CGRectContainsPoint(_comment.nameLine.bounds, loc)) {
@@ -443,6 +498,7 @@ static void drawLine(CGPoint from, CGPoint to, UIColor *color, CGFloat width)
                 
             }
         }
+        */
         
         for (TextLine *line in [_comment messageLines]) {
             
@@ -450,8 +506,7 @@ static void drawLine(CGPoint from, CGPoint to, UIColor *color, CGFloat width)
                 
                 if (CGRectContainsPoint(line.bounds, loc)) {
                     
-                    NSURL *url = [NSURL URLWithString: line.link];
-                    [UIApplication.sharedApplication openURL: url];                     
+                    [self openUrl:line.link];
                     break;
                     
                 }

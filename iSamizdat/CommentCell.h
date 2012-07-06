@@ -21,6 +21,8 @@
 - (void) replyPost: (SamLibComment *) comment;
 - (void) deletePost: (SamLibComment *) comment;
 - (void) editPost: (SamLibComment *) comment;
+- (void) goAuthor: (NSString *) path;
+- (void) banComment: (SamLibComment *) comment;
 
 @end
 
@@ -38,7 +40,7 @@
 
 
 - (void) swipeOpen;
-- (void) swipeClose;
+- (void) swipeCloseAnimated: (BOOL) animated;
 
 
 @end
