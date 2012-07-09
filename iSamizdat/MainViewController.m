@@ -28,7 +28,7 @@
 #import "FavoritesViewController.h"
 #import "VotedViewController.h"
 #import "UserViewController.h"
-#import "SearchAuthorViewController.h"
+#import "SearchViewController.h"
 #import "SettingsViewController.h"
 #import "UIFont+Kolyvan.h"
 #import "UIColor+Kolyvan.h"
@@ -61,7 +61,7 @@ typedef enum {
 //@property (nonatomic, strong) UserViewController *userViewController;
 @property (nonatomic, strong) SettingsViewController *settingsViewController;
 @property (nonatomic, strong) VotedViewController* votedViewController;
-@property (nonatomic, strong) SearchAuthorViewController *searchAuthorViewController;
+@property (nonatomic, strong) SearchViewController *searchViewController;
 
 @end
 
@@ -76,7 +76,7 @@ typedef enum {
 @synthesize favoritesViewController;
 @synthesize settingsViewController;
 @synthesize votedViewController;
-@synthesize searchAuthorViewController;
+@synthesize searchViewController;
 
 - (id) init
 {
@@ -151,7 +151,7 @@ typedef enum {
     self.favoritesViewController = nil;
     self.settingsViewController = nil;
     self.votedViewController = nil;
-    self.searchAuthorViewController = nil;
+    self.searchViewController = nil;
     
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
@@ -170,7 +170,7 @@ typedef enum {
     self.favoritesViewController = nil;    
     self.settingsViewController = nil;
     self.votedViewController = nil;    
-    self.searchAuthorViewController = nil;    
+    self.searchViewController = nil;    
 }
 
 #pragma mark - private functions
@@ -239,14 +239,14 @@ typedef enum {
 
 - (void) goAddAuthor
 {    
-    if (!self.searchAuthorViewController) {
-        self.searchAuthorViewController = [[SearchAuthorViewController alloc] init];
-        self.searchAuthorViewController.delegate = self;
+    if (!self.searchViewController) {
+        self.searchViewController = [[SearchViewController alloc] init];
+        self.searchViewController.delegate = self;
         
     }
     
     UINavigationController *navigationController = [[UINavigationController alloc]
-                                                    initWithRootViewController:self.searchAuthorViewController];
+                                                    initWithRootViewController:self.searchViewController];
     
     [self presentViewController:navigationController 
                        animated:YES 

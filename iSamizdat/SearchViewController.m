@@ -6,7 +6,7 @@
 //  Copyright (c) 2012 Konstantin Boukreev . All rights reserved.
 //
 
-#import "SearchAuthorViewController.h"
+#import "SearchViewController.h"
 #import "SamLibAuthor.h"
 #import "NSArray+Kolyvan.h"
 #import "NSDictionary+Kolyvan.h"
@@ -22,7 +22,7 @@
 
 extern int ddLogLevel;
 
-@interface SearchAuthorViewController () {
+@interface SearchViewController () {
     NSArray *_result;
     SamLibSearch *_search;
     BOOL _flagSelectignRow;
@@ -34,38 +34,41 @@ extern int ddLogLevel;
 
 @end
 
-@implementation SearchAuthorViewController
+@implementation SearchViewController
 
 @synthesize tableView, searchBar, activityIndicator, delegate;
 
 - (id) init
 {
-    return [self initWithNibName:@"SearchAuthorViewController" bundle:nil];
+    return [self initWithNibName:@"SearchViewController" bundle:nil];
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
+    
     UIBarButtonItem *cancelButton;
     cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
                                                                  target:self 
                                                                  action:@selector(goCancel)];
     
-    self.navigationItem.leftBarButtonItem = cancelButton;
-
+    self.navigationItem.leftBarButtonItem = cancelButton;     
     
     self.title = locString(@"Search");
+     
     
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.searchBar.delegate = self;
+    
+//    self.navigationController
 }
 
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    _result = nil;    
+    //_result = nil;    
     [self.tableView reloadData];
     self.searchBar.text = @"";
     [activityIndicator stopAnimating];
@@ -74,7 +77,16 @@ extern int ddLogLevel;
 
 - (void) viewDidAppear:(BOOL)animated
 {
-    [self.searchBar becomeFirstResponder];   
+  //  [self activateSearchBar: YES];
+    [self.searchBar becomeFirstResponder];
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
+}
+
+- (void) viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [self activateSearchBar: NO];
+    [self.navigationController setNavigationBarHidden:NO animated:NO];
 }
 
 - (void) viewDidDisappear:(BOOL)animated
@@ -103,7 +115,8 @@ extern int ddLogLevel;
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-    return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
+//    return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
+    return (interfaceOrientation == UIDeviceOrientationPortrait);
 }
 
 - (void) goDone: (SamLibAuthor *)author
@@ -111,8 +124,8 @@ extern int ddLogLevel;
     [self dismissViewControllerAnimated:YES 
                              completion:NULL];
     
-    if (self.delegate && author)
-        [self.delegate searchAuthorResult:author];
+   // if (self.delegate && author)
+   //     [self.delegate searchAuthorResult:author];
 }
 
 - (void) goCancel
@@ -160,46 +173,92 @@ extern int ddLogLevel;
 
 #pragma mark - Search bar
 
-- (void) startSearch
+- (void) activateSearchBar: (BOOL) activate
 {
-    [self.searchBar resignFirstResponder];
+    if (activate) {
+      
+        [self.searchBar becomeFirstResponder];                
+        self.searchBar.showsScopeBar = YES;
+        
+    } else {
+
+        [self.searchBar resignFirstResponder];        
+        self.searchBar.showsScopeBar = NO;        
+    }
     
+    [self.searchBar sizeToFit];
+    CGFloat h = self.searchBar.frame.size.height;
+    CGRect frame = self.tableView.frame;
+    frame.size.height += frame.origin.y - h;     
+    frame.origin.y = h;     
+    self.tableView.frame = frame;    
+}
+
+- (void) searchAuthor: (NSString *)pattern 
+           deepSearch: (BOOL) deepSearch 
+{   
+    BOOL byName = YES;
+    
+    if (pattern.first > 96 && pattern.first < 123) {
+        
+        NSString *path = [self mkSearchPath:pattern];
+        if (!path.nonEmpty) {
+            
+            [[AppDelegate shared] errorNoticeInView:self.view 
+                                              title:locString(@"Invalid path") 
+                                            message:pattern]; 
+            
+            if (deepSearch)                
+                [activityIndicator stopAnimating];
+            
+            return;
+
+        } else {
+            
+            byName = NO;
+            pattern = path;
+        }
+    }
+  
+    _search = [SamLibSearch searchAuthor:pattern 
+                                  byName:byName
+                                    flag:deepSearch ? FuzzySearchFlagAll : FuzzySearchFlagLocal
+                               block:^(NSArray *result) {
+                                   
+                                   [self addSearchResult:result 
+                                              deepSearch: deepSearch];                
+                               }];
+
+
+}
+
+- (void) startSearch: (NSString *)pattern 
+          deepSearch: (BOOL) deepSearch 
+{
     _result = nil;
+    [_search cancel];
     _search = nil;    
-    [self.tableView reloadData];    
-        
-    NSString * s = self.searchBar.text;    
+    [self.tableView reloadData];   
     
-    if (s.nonEmpty) {        
+    if (deepSearch) {
         
-        BOOL byName = self.searchBar.selectedScopeButtonIndex == 0;
+        [activityIndicator startAnimating];  
+        [self activateSearchBar: NO];        
+    }
+    
+    if (pattern.nonEmpty) {        
         
-        if (!byName) {
+        if (0 == self.searchBar.selectedScopeButtonIndex)  {
             
-            s = [self mkSearchPath:s];            
-            if (!s.nonEmpty) {
-               
-                [[AppDelegate shared] errorNoticeInView:self.view 
-                                                  title:locString(@"Invalid path") 
-                                                message:@""];                
-                return;                
-            }
-        }  
-                
-        [activityIndicator startAnimating]; 
-        
-        _search = [SamLibSearch searchAuthor:s 
-                                      byName:byName
-                                        flag:FuzzySearchFlagAll
-                                       block:^(NSArray *result) {
-                                                                                                                                 
-                                           [self addSearchResult:result];                
-                                       }];
+            [self searchAuthor:pattern deepSearch:deepSearch];
             
+        } else {
+        }
     }    
 }
 
-- (void) addSearchResult: (NSArray *)found
+- (void) addSearchResult: (NSArray *)found 
+              deepSearch: (BOOL) deepSearch 
 {   
     if (found.nonEmpty) {
     
@@ -209,32 +268,39 @@ extern int ddLogLevel;
         [self.tableView reloadData];                                            
         
     } else {
-    
-        [activityIndicator stopAnimating]; 
         
-        if (_result.nonEmpty) {                                            
+        if (deepSearch) {
             
-            NSString *s = KxUtils.format(locString(@"Found: %ld"), _result.count); 
-            [[AppDelegate shared] successNoticeInView:self.view 
-                                                title:s];
-            
-        } else {
-            
-            [[AppDelegate shared] errorNoticeInView:self.view 
-                                              title:locString(@"Not found") 
-                                            message:@""];
+            [activityIndicator stopAnimating];             
+                    
+            if (!_result.nonEmpty) {                                            
+                                
+                [[AppDelegate shared] errorNoticeInView:self.view 
+                                                  title:locString(@"Not found") 
+                                                message:@""];
+            }
         }
     }
 }
 
-- (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar
+- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar
+{    
+    [self activateSearchBar: YES];
+}
+
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
 {
-//    [self startSearch];
+    [self startSearch: searchText deepSearch:NO]; 
 }
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)sender
-{   
-   [self startSearch]; 
+{     
+    [self startSearch: sender.text deepSearch:YES]; 
+}
+
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
+{    
+    [self goCancel];
 }
 
 #pragma mark - Table view
@@ -262,7 +328,7 @@ extern int ddLogLevel;
     
     cell.textLabel.text = [dict get:@"name"];
     cell.detailTextLabel.text = [dict get:@"info"];
-    cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
+    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
    
     return cell;
 }
