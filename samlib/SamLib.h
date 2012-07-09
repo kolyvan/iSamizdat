@@ -38,6 +38,7 @@ extern void storeSamLibSessionCookies(BOOL save);
 extern void restoreSamLibSessionCookies();
 extern int levenshteinDistance(unichar* s1, int n, unichar *s2, int m);
 extern int levenshteinDistanceNS(NSString* s1, unichar *s2, int m);
+extern int levenshteinDistanceNS2(NSString* s1, NSString *s2);
 
 ////
 

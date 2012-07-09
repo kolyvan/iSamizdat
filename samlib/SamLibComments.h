@@ -89,4 +89,6 @@ typedef void (^UpdateCommentsBlock)(SamLibComments *comments,
         block: (UpdateCommentsBlock) block;
 
 
+- (SamLibComment *) findCommentByMsgid: (NSString *) msgid;
+
 @end

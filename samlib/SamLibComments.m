@@ -425,8 +425,7 @@ static NSDate* mkDateFromComment(NSString *dt)
 
 - (void) deleteComment: (NSString *) msgid 
                  block: (UpdateCommentsBlock) block
-{   
-
+{
     _numberOfNew = 0;            
     NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:
                                 @"delete", @"OPERATION", msgid, @"MSGID", nil];
@@ -514,7 +513,8 @@ static NSDate* mkDateFromComment(NSString *dt)
 
                              if (status == SamLibStatusSuccess) {
                                  
-                                 if (SamLibParser.scanCommentsResponse(data)) {
+                                 SamLibParserPostCommentResponse r = SamLibParser.scanCommentsResponse(data);
+                                 if (SamLibParserPostCommentResponseSuccess == r) {
                                  
                                      NSArray *comments = SamLibParser.scanComments(data);
                                      if (comments.nonEmpty) {
@@ -529,7 +529,20 @@ static NSDate* mkDateFromComment(NSString *dt)
                                                                       
                                  } else {
                                  
-                                     data = locString(@"too many comments");
+                                     switch (r) {
+                                         case SamLibParserPostCommentResponseTooMany:                                             
+                                             data = locString(@"too many comments");
+                                             break;
+                                             
+                                         case SamLibParserPostCommentResponseAccessDenied:
+                                             data = locString(@"access denied");
+                                             break;
+                                             
+                                         default:
+                                             data = locString(@"unknown error");
+                                             break;
+                                     }
+                                     
                                      status = SamLibStatusFailure;                                 
                                  }
                              }
@@ -537,6 +550,14 @@ static NSDate* mkDateFromComment(NSString *dt)
                              block(self, status, data);
                          });
     
+}
+
+- (SamLibComment *) findCommentByMsgid: (NSString *) msgid
+{
+    for (SamLibComment * comment in _all)
+        if ([comment.msgid isEqualToString:msgid])
+            return comment;
+    return nil;
 }
 
 @end

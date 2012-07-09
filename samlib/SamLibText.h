@@ -122,6 +122,7 @@ typedef enum {
 @property (readonly) BOOL isRemoved;
 
 @property (readonly) NSString * key;
+
 @property (readonly, KX_PROP_WEAK) SamLibAuthor * author;
 
 @property (readonly, nonatomic, KX_PROP_STRONG) NSDate * filetime;
@@ -180,5 +181,7 @@ typedef enum {
 
 - (void) removeTextFiles: (BOOL) texts 
              andComments: (BOOL) comments;
+
+- (NSString *) makeKey: (NSString *) sep;
 
 @end

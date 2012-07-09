@@ -154,6 +154,17 @@ int levenshteinDistanceNS(NSString* s1, unichar *s2, int m)
     return levenshteinDistance(buffer1, n, s2, m);
 }
 
+int levenshteinDistanceNS2(NSString* s1, NSString *s2)
+{
+    int n = s2.length;
+    
+    unichar buffer2[n];
+    [s2 getCharacters:buffer2 
+                range:NSMakeRange(0, n)];
+    
+    return levenshteinDistanceNS(s1, buffer2, n);
+}
+
 /////
 
 @implementation SamLibBase

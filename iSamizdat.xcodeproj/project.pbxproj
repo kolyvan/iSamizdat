@@ -111,6 +111,7 @@
 		8776CA4615776EC50099C83D /* FavoritesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8776CA4415776EC50099C83D /* FavoritesViewController.m */; };
 		8776CA4715776EC50099C83D /* FavoritesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8776CA4515776EC50099C83D /* FavoritesViewController.xib */; };
 		878850C015AAB157002B6F8D /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 878850BF15AAB157002B6F8D /* libz.dylib */; };
+		878850C315AAB1F2002B6F8D /* SamLibModerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 878850C215AAB1F2002B6F8D /* SamLibModerator.m */; };
 		87E230AC158B0AC70074EBF1 /* TextGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87E230AA158B0AC70074EBF1 /* TextGroupViewController.m */; };
 		87E230AD158B0AC70074EBF1 /* TextGroupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 87E230AB158B0AC70074EBF1 /* TextGroupViewController.xib */; };
 		87E230B0158B1D490074EBF1 /* download.png in Resources */ = {isa = PBXBuildFile; fileRef = 87E230AF158B1D490074EBF1 /* download.png */; };
@@ -358,6 +359,8 @@
 		8776CA4415776EC50099C83D /* FavoritesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FavoritesViewController.m; sourceTree = "<group>"; };
 		8776CA4515776EC50099C83D /* FavoritesViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FavoritesViewController.xib; sourceTree = "<group>"; };
 		878850BF15AAB157002B6F8D /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		878850C115AAB1F2002B6F8D /* SamLibModerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SamLibModerator.h; sourceTree = "<group>"; };
+		878850C215AAB1F2002B6F8D /* SamLibModerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SamLibModerator.m; sourceTree = "<group>"; };
 		87E230A9158B0AC70074EBF1 /* TextGroupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextGroupViewController.h; sourceTree = "<group>"; };
 		87E230AA158B0AC70074EBF1 /* TextGroupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextGroupViewController.m; sourceTree = "<group>"; };
 		87E230AB158B0AC70074EBF1 /* TextGroupViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TextGroupViewController.xib; sourceTree = "<group>"; };
@@ -642,6 +645,8 @@
 		872D94851573836500BCB4EC /* samlib */ = {
 			isa = PBXGroup;
 			children = (
+				878850C115AAB1F2002B6F8D /* SamLibModerator.h */,
+				878850C215AAB1F2002B6F8D /* SamLibModerator.m */,
 				87F75D161591E3580046DA46 /* SamLibStorage.h */,
 				87F75D171591E3580046DA46 /* SamLibStorage.m */,
 				87F75CF515919AB90046DA46 /* GoogleSearch.h */,
@@ -1024,6 +1029,7 @@
 				87F75D1C1591EA5B0046DA46 /* SettingsViewController.m in Sources */,
 				87F75D211591EFE10046DA46 /* CacheViewController.m in Sources */,
 				87562836159989D800636465 /* SHKConfig.m in Sources */,
+				878850C315AAB1F2002B6F8D /* SamLibModerator.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

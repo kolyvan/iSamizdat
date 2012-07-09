@@ -14,6 +14,15 @@
 
 extern NSString * removeHTMLComments(NSString *s);
 
+typedef enum {
+    
+    SamLibParserPostCommentResponseSuccess,
+    SamLibParserPostCommentResponseTooMany,    
+    SamLibParserPostCommentResponseAccessDenied,        
+    SamLibParserPostCommentResponseUnknownError,            
+    
+} SamLibParserPostCommentResponse;
+
 typedef struct {
     
     NSDictionary * (*scanAuthorInfo)(NSString *html);
@@ -21,7 +30,7 @@ typedef struct {
     NSArray *  (*scanTexts)(NSString *html);
     NSString * (*scanTextData)(NSString *html);        
     NSArray * (*scanComments)(NSString *html);    
-    BOOL (*scanCommentsResponse)(NSString *html);    
+    SamLibParserPostCommentResponse (*scanCommentsResponse)(NSString *html);    
     BOOL (*scanLoginResponse)(NSString * response);
     NSDictionary * (*scanTextPage)(NSString *html);
     NSArray* (*listOfGroups)();

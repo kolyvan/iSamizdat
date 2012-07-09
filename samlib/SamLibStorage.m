@@ -149,6 +149,19 @@ static NSString * namesPath()
     return path;
 }
 
+static NSString * bansPath()
+{
+    NSString * path = nil;
+
+#ifdef _DEVELOPMENT_MODE_            
+        path = [@"~/tmp/samlib/bans" stringByExpandingTildeInPath];
+#else
+        path = [KxUtils.privateDataPath() stringByAppendingPathComponent: @"bans"];
+#endif      
+
+    return path;
+}
+
 static unsigned long long sizeOfTexts()
 { 
     return sizeOfFolder(textsPath());
@@ -300,6 +313,7 @@ SamLibStorage_t SamLibStorage = {
     textsPath,
     commentsPath,
     namesPath,
+    bansPath,
     
     enumerateFolder,
     

@@ -177,7 +177,7 @@ static NSString * prettyHtml (NSMutableArray *diffs)
 
 - (NSString *) key
 {
-    return KxUtils.format(@"%@.%@", _author.path, [_path stringByDeletingPathExtension]);    
+    return [self makeKey:@"."];
 }
 
  - (NSInteger) sizeInt
@@ -858,6 +858,11 @@ static NSString * prettyHtml (NSMutableArray *diffs)
     if (comments)
         [fm removeItemAtPath:self.commentsPath error:nil];            
     KX_RELEASE(fm);    
+}
+
+- (NSString *) makeKey: (NSString *) sep;
+{
+    return KxUtils.format(@"%@%@%@", _author.path, sep, [_path stringByDeletingPathExtension]);    
 }
 
 @end

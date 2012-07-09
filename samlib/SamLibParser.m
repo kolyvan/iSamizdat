@@ -412,6 +412,8 @@ static NSDictionary * parseComment(NSString *html)
     if (findTag(scanner, @"MSGID=")) {
         NSString * msgid = scanUpToTag(scanner, @"\"");
         [dict updateOnly:@"msgid" valueNotNil:msgid];             
+    } else {
+        scanner.scanLocation = scanLoc;
     }
     
     if (findTag(scanner, @"</small></i>") &&
@@ -658,9 +660,27 @@ static NSArray * scanComments(NSString *html)
     return nil;
 }
 
-static BOOL scanCommentsResponse(NSString *response)
-{
-    return ![response contains:@"<B>Извините, слишком много сообщений подряд. Разрешено не более 2</B>"];    
+static SamLibParserPostCommentResponse scanCommentsResponse(NSString *response)
+{    
+    if ([response contains:@"<TITLE>*** UNEXPECTED ERROR ***</TITLE>"]) {
+        
+        if ([response contains:@"<B>Извините, сюда могут писать только"] ||
+            [response contains:@"<B>Извините, Вы слишком недавно на сайте, сюда могут писать только"] ||
+            [response contains:@"<B>Извините, но сюда могут писать только авторы журнала, имеющие"] ||
+            [response contains:@"<B>Извините, сюда могут писать только автор и модератор"])
+            
+            return SamLibParserPostCommentResponseAccessDenied;
+            
+        return SamLibParserPostCommentResponseUnknownError;
+    }
+
+    if ([response contains:@"<TITLE>*** ДОБАВЛЕНИЕ КОММЕНТАРИЯ ***</TITLE>"]) {    
+
+        if ([response contains:@"<B>Извините, слишком много сообщений подряд. Разрешено не более 2</B>"])
+            return SamLibParserPostCommentResponseTooMany;    
+    }
+    
+    return SamLibParserPostCommentResponseSuccess;
 }
 
 static BOOL scanLoginResponse(NSString * response)
