@@ -69,6 +69,7 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
     BOOL _needRestoreOffset;
     id _version;
     BOOL _fullScreen;
+    BOOL _prevNavBarTranslucent;
     UISwipeGestureRecognizer *gestureRecognizer; 
     UIPinchGestureRecognizer *pinchGestureRecognizer;
     CGFloat _prevScale;
@@ -117,6 +118,7 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
     pinchGestureRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self 
                                                                        action:@selector(handlePinch:)];  
     [self.webView addGestureRecognizer:pinchGestureRecognizer];
+
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -144,6 +146,9 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
                afterDelay:1];    
     
     //[self fullscreenMode: YES];
+    
+    _prevNavBarTranslucent = self.navigationController.navigationBar.translucent;
+    self.navigationController.navigationBar.translucent = YES;
 }
 
 - (void) viewWillDisappear:(BOOL)animated
@@ -161,6 +166,8 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
     
     if (_fullScreen)
         [self fullscreenMode: NO];
+    
+    self.navigationController.navigationBar.translucent = _prevNavBarTranslucent;
 }
 
 - (void)viewDidUnload
