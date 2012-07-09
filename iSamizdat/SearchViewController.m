@@ -251,12 +251,26 @@ extern int ddLogLevel;
            deepSearch: (BOOL) deepSearch 
 {      
     _search = [SamLibSearch searchText:pattern 
-                                byName: !deepSearch
+                                byName: YES
                                    block:^(NSArray *result) {
                                        
                                        [self addSearchResult:result 
-                                                  deepSearch: deepSearch];                
+                                                  deepSearch: NO];                                       
+                                       
                                    }];
+    
+    if (deepSearch) {
+        
+        _search = [SamLibSearch searchText:pattern 
+                                    byName: NO
+                                     block:^(NSArray *result) {
+                                         
+                                         [self addSearchResult:result 
+                                                    deepSearch: deepSearch];                                       
+                                         
+                                     }];
+        
+    }
 }
 
 - (void) startSearch: (NSString *)pattern 
