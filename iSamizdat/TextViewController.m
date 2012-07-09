@@ -72,36 +72,6 @@ extern int ddLogLevel;
 
 ////
 
-@interface TitleCell : UITableViewCell
-@property (nonatomic, KX_PROP_WEAK) TextViewController *controller;
-@end
-
-@implementation TitleCell
-
-@synthesize controller;
-
-- (void)touchesEnded:(NSSet *)touches
-           withEvent:(UIEvent *)event
-{   
-    UITouch *t = [touches anyObject];
-    if ([t tapCount] > 1)
-        return;  // double tap
-            
-    CGPoint loc = [t locationInView:self];     
-    CGRect bounds = CGRectInset(self.imageView.frame, -10, -10);
-    if (CGRectContainsPoint(bounds, loc)) {
-
-        controller.text.favorited = !controller.text.favorited;
-        self.imageView.image = controller.text.image;  
-        
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"samLibTextChanged" object:nil];
-    }
-}
-
-@end
-
-////
-
 enum {
     RowTitle,
     RowAuthor,
@@ -362,16 +332,8 @@ enum {
     UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];    
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault 
-                                      reuseIdentifier:CellIdentifier];   
-        
-        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];        
-        button.frame = CGRectMake(0, 0, 24, 24);        
-        [button addTarget:self 
-                   action:@selector(goDownload) 
-        forControlEvents:UIControlEventTouchUpInside];        
-        [button setBackgroundImage:[UIImage imageNamed:@"download.png"]
-                          forState:UIControlStateNormal];
-        cell.accessoryView = button;
+                                      reuseIdentifier:CellIdentifier];        
+        cell.accessoryView = [[UIImageView alloc] initWithImage: [UIImage imageNamed:@"download.png"]];
     }
     return cell;    
 }
@@ -392,17 +354,12 @@ enum {
         return cell;
         
     } else  if (RowTitle == row) { 
-        
-        TitleCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"TitleCell"];    
-        if (cell == nil) {
-            cell = [[TitleCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"TitleCell"];                
-        }
-        
-        cell.controller = self;
+       
+        UITableViewCell *cell = [self mkCell: @"TitleCell" withStyle:UITableViewCellStyleDefault];                   
         cell.textLabel.text = _text.title;
         cell.textLabel.numberOfLines = 0;
-        cell.imageView.image = _text.image;
-                        
+        //[cell.textLabel sizeToFit];       
+        cell.accessoryView = [[UIImageView alloc] initWithImage: _text.image];                          
         return cell;
         
     } else  if (RowSize == row) { 
@@ -454,7 +411,6 @@ enum {
     } else if (RowUpdate == row) {
         
         UITableViewCell *cell = [self mkDownloadCell];
-        //[self mkCell: @"UpdateCell" withStyle:UITableViewCellStyleDefault];  
         cell.textLabel.textColor = [UIColor blueColor];
         cell.textLabel.text = locString(@"Update is available");
         return cell; 
@@ -478,17 +434,7 @@ enum {
         
         UITableViewCell *cell = [self mkCell: @"CleanupCell" withStyle:UITableViewCellStyleDefault];
         cell.textLabel.text = locString(@"Cleanup cached");
-        //cell.detailTextLabel.text = locString(@"cached text and comments");
-                
-        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-        button.frame = CGRectMake(0, 0, 24, 24);                    
-        [button addTarget:self 
-                   action:@selector(goCleanup) 
-         forControlEvents:UIControlEventTouchUpInside];                    
-        [button setBackgroundImage:[UIImage imageNamed:@"recycle"]
-                          forState:UIControlStateNormal];
-        cell.accessoryView = button;
-        
+        cell.accessoryView = [[UIImageView alloc] initWithImage: [UIImage imageNamed:@"recycle"]];                        
         return cell;
         
     } else if (RowAuthor == row) {
@@ -518,7 +464,18 @@ enum {
 {
     NSInteger row = [[_rows objectAtIndex:indexPath.row] integerValue];     
     
-    if (RowRead == row) {
+    if (RowTitle == row) {
+        
+        UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+        
+        _text.favorited = !_text.favorited;
+        //cell.imageView.image = _text.image;  
+        ((UIImageView *)cell.accessoryView).image = _text.image;
+               
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"samLibTextChanged" object:nil];
+        
+    } else if (RowRead == row) {
         
         if (!self.textReadViewController) {
             self.textReadViewController = [[TextReadViewController alloc] init];
@@ -575,7 +532,18 @@ enum {
             [self.navigationController pushViewController:self.authorViewController
                                                  animated:YES];
         }   
-    } 
+        
+    }  else if (RowUpdate == row ||
+                RowDownload == row) {
+        
+        [self goDownload];
+        
+    } else if (RowCleanup == row) {
+        
+        [self goCleanup];
+    }
+    
+    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 #pragma mark - VoteViewController delagate

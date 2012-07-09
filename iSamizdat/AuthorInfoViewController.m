@@ -204,20 +204,17 @@ enum {
         if (cell == nil) {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault 
                                           reuseIdentifier:CellIdentifier];  
+                        
+            UIImage *image = [UIImage imageNamed:@"delete.png"];
+            UIImageView *imageView = [[UIImageView alloc] initWithImage: image];            
+            cell.accessoryView = imageView;  
+            cell.imageView.image = image;
             
-            
-            UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-            button.frame = CGRectMake(0, 0, 24, 24);                    
-            [button addTarget:self 
-                       action:@selector(goDelete) 
-             forControlEvents:UIControlEventTouchUpInside];                    
-            [button setBackgroundImage:[UIImage imageNamed:@"delete.png"]
-                               forState:UIControlStateNormal];
-            cell.accessoryView = button;  
-            //cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;            
-            cell.textLabel.text = locString(@"Delete");                
-            //cell.textLabel.textColor = [UIColor redColor];
+            cell.textLabel.text = locString(@"Delete");     
+            cell.textLabel.textColor = [UIColor redColor];
+            cell.textLabel.textAlignment = UITextAlignmentCenter;
         }
+        
     } else if (RowStatus == row) {    
         
         cell = [self mkCell: @"StatusCell" withStyle:UITableViewCellStyleDefault];                
@@ -247,6 +244,9 @@ enum {
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (RowRemove == indexPath.row) {   
+        [self goDelete];
+    }
 }
 
 @end
