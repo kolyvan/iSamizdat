@@ -28,9 +28,12 @@ typedef enum {
 
 @interface SamLibSearch : NSObject
 
-+ (id) searchAuthor: (NSString *) name 
++ (id) searchAuthor: (NSString *) pattern 
              byName: (BOOL) byName
                flag: (FuzzySearchFlag) flag
+              block: (AsyncSearchResult) block;
+
++ (id) searchText: (NSString *) pattern 
               block: (AsyncSearchResult) block;
 
 - (void) cancel;

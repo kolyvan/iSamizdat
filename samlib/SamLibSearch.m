@@ -22,6 +22,7 @@
 #import "SamLibModel.h"
 #import "SamLibParser.h"
 #import "SamLibAuthor.h"
+#import "SamLibText.h"
 #import "SamLibCacheNames.h"
 #import "GoogleSearch.h"
 #import "DDLog.h"
@@ -77,7 +78,7 @@ static NSDictionary * mapGoogleResult(NSDictionary * dict, NSString * baseURL)
                               nil);
 }
 
-static NSArray * searchAuthor(NSString * pattern,
+static NSArray * fuzzySearch(NSString * pattern,
                               NSString * key,
                               NSArray * array)
 {
@@ -242,7 +243,7 @@ static NSString * mkPathFromName(NSString *name)
                                   nil);
     }];
     
-    return searchAuthor(pattern, key, authors); 
+    return fuzzySearch(pattern, key, authors); 
 }
 
 - (NSArray *) cacheSearchAuthor: (NSString *)pattern
@@ -261,7 +262,7 @@ static NSString * mkPathFromName(NSString *name)
     NSArray *result = [self->isa unionArray:section withArray: like]; 
     DDLogInfo(@"loaded from cache: %d", result.count);    
     if (result.nonEmpty)
-        return searchAuthor(pattern, key, result);    
+        return fuzzySearch(pattern, key, result);    
     return nil;
 }
 
@@ -308,7 +309,7 @@ static NSString * mkPathFromName(NSString *name)
                            if (authors.nonEmpty) {
                                
                                [_cacheNames addBatch:authors];
-                               result = searchAuthor(pattern, key, authors);                             
+                               result = fuzzySearch(pattern, key, authors);                             
                                DDLogInfo(@"found in google: %d", result.count);               
                            }                         
                        } 
@@ -338,7 +339,7 @@ static NSString * mkPathFromName(NSString *name)
                                   if (authors.nonEmpty) {
                                       
                                       [_cacheNames addBatch:authors];                                      
-                                      result = searchAuthor(pattern, key, authors);
+                                      result = fuzzySearch(pattern, key, authors);
                                       DDLogInfo(@"found in samlib: %d", result.count);                                      
                                   }
                               }
@@ -499,6 +500,54 @@ static NSString * mkPathFromName(NSString *name)
     }    
 }
 
+- (void) searchText: (NSString *) pattern 
+              block: (AsyncSearchResult) block
+{
+    pattern = pattern.lowercaseString;
+    
+    NSMutableArray *found = [NSMutableArray array];
+    
+    NSArray *authors = [SamLibModel shared].authors;
+    
+    for (SamLibAuthor *author in authors) {
+    
+        NSArray *texts = [author.texts map:^(id elem) {
+            SamLibText *text = elem;
+
+            return  KxUtils.dictionary(text.title.lowercaseString, @"name", 
+                                       text.key, @"key",
+                                       author.name, @"info",                            
+                                       nil);
+        }];
+          
+        [found addObjectsFromArray: fuzzySearch(pattern, @"name", texts)]; 
+        
+        /*
+        for (SamLibText *text in author.texts) {
+            
+            if ([text.group rangeOfString:pattern].location != NSNotFound ||
+                [text.genre rangeOfString:pattern].location != NSNotFound ||                                                    
+                [text.type rangeOfString:pattern].location != NSNotFound ||                                    
+                [text.note rangeOfString:pattern].location != NSNotFound) {
+                
+                [found addObject: KxUtils.dictionary(text.title, @"name", 
+                                                     text.key, @"key",
+                                                     @"", @"info",
+                                                     [NSNumber numberWithFloat:0], @"distance",
+                                                     nil)];
+            }
+        }
+        */
+       
+    }
+    
+    if (found.nonEmpty)
+        block(found);
+    
+    block(nil);  // fire about finish
+    
+}
+
 + (id) searchAuthor: (NSString *) pattern
              byName: (BOOL) byName
                flag: (FuzzySearchFlag) flag
@@ -507,6 +556,15 @@ static NSString * mkPathFromName(NSString *name)
     NSAssert(pattern.nonEmpty, @"empty pattern");
     SamLibSearch *p = [[SamLibSearch alloc] init];    
     [p searchAuthor:pattern byName:byName flag:flag block:block];    
+    return KX_AUTORELEASE(p);
+}
+
++ (id) searchText: (NSString *) pattern 
+            block: (AsyncSearchResult) block
+{
+    NSAssert(pattern.nonEmpty, @"empty pattern");
+    SamLibSearch *p = [[SamLibSearch alloc] init];    
+    [p searchText:pattern block:block];    
     return KX_AUTORELEASE(p);
 }
 
@@ -552,5 +610,8 @@ static NSString * mkPathFromName(NSString *name)
     [result appendAll: r];
     return result;
 }
+
+
+
 
 @end
