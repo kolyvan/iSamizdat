@@ -487,9 +487,9 @@
 		872D942415737B0400BCB4EC = {
 			isa = PBXGroup;
 			children = (
-				878850BF15AAB157002B6F8D /* libz.dylib */,
 				87026EF11599860A00998FD3 /* ShareKit.xcodeproj */,
 				87F75CFF15919ACA0046DA46 /* libsqlite3.dylib */,
+				878850BF15AAB157002B6F8D /* libz.dylib */,
 				872D956D1573968C00BCB4EC /* resources */,
 				872D94AE1573857500BCB4EC /* vendors */,
 				872D94851573836500BCB4EC /* samlib */,

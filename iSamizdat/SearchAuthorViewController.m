@@ -72,6 +72,11 @@ extern int ddLogLevel;
     _flagSelectignRow = NO;
 }
 
+- (void) viewDidAppear:(BOOL)animated
+{
+    [self.searchBar becomeFirstResponder];   
+}
+
 - (void) viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
