@@ -110,6 +110,7 @@
 		8776CA42157767460099C83D /* UIFont+Kolyvan.m in Sources */ = {isa = PBXBuildFile; fileRef = 8776CA41157767460099C83D /* UIFont+Kolyvan.m */; };
 		8776CA4615776EC50099C83D /* FavoritesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8776CA4415776EC50099C83D /* FavoritesViewController.m */; };
 		8776CA4715776EC50099C83D /* FavoritesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8776CA4515776EC50099C83D /* FavoritesViewController.xib */; };
+		878850C015AAB157002B6F8D /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 878850BF15AAB157002B6F8D /* libz.dylib */; };
 		87E230AC158B0AC70074EBF1 /* TextGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87E230AA158B0AC70074EBF1 /* TextGroupViewController.m */; };
 		87E230AD158B0AC70074EBF1 /* TextGroupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 87E230AB158B0AC70074EBF1 /* TextGroupViewController.xib */; };
 		87E230B0158B1D490074EBF1 /* download.png in Resources */ = {isa = PBXBuildFile; fileRef = 87E230AF158B1D490074EBF1 /* download.png */; };
@@ -356,6 +357,7 @@
 		8776CA4315776EC50099C83D /* FavoritesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FavoritesViewController.h; sourceTree = "<group>"; };
 		8776CA4415776EC50099C83D /* FavoritesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FavoritesViewController.m; sourceTree = "<group>"; };
 		8776CA4515776EC50099C83D /* FavoritesViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FavoritesViewController.xib; sourceTree = "<group>"; };
+		878850BF15AAB157002B6F8D /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		87E230A9158B0AC70074EBF1 /* TextGroupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextGroupViewController.h; sourceTree = "<group>"; };
 		87E230AA158B0AC70074EBF1 /* TextGroupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextGroupViewController.m; sourceTree = "<group>"; };
 		87E230AB158B0AC70074EBF1 /* TextGroupViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TextGroupViewController.xib; sourceTree = "<group>"; };
@@ -411,6 +413,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				878850C015AAB157002B6F8D /* libz.dylib in Frameworks */,
 				87562833159987F400636465 /* CoreFoundation.framework in Frameworks */,
 				8756282D159987BB00636465 /* CoreLocation.framework in Frameworks */,
 				87562830159987D000636465 /* Twitter.framework in Frameworks */,
@@ -481,6 +484,7 @@
 		872D942415737B0400BCB4EC = {
 			isa = PBXGroup;
 			children = (
+				878850BF15AAB157002B6F8D /* libz.dylib */,
 				87026EF11599860A00998FD3 /* ShareKit.xcodeproj */,
 				87F75CFF15919ACA0046DA46 /* libsqlite3.dylib */,
 				872D956D1573968C00BCB4EC /* resources */,
