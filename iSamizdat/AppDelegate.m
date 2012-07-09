@@ -12,6 +12,10 @@
 
 #import "AppDelegate.h"
 #import "MainViewController.h"
+#import "FavoritesViewController.h"
+#import "VotedViewController.h"
+#import "SearchViewController.h"
+#import "SettingsViewController.h"
 #import "SamLibAgent.h"
 #import "SamLibModel.h"
 #import "SamLibAuthor.h"
@@ -39,7 +43,6 @@ int ddLogLevel = LOG_LEVEL_WARN;
 
 @interface AppDelegate()
 
-@property (strong, nonatomic) UINavigationController *navigationController;
 @property (strong, nonatomic) WBErrorNoticeView * errorNotice;
 @property (strong, nonatomic) WBSuccessNoticeView * successNotice;
 @end
@@ -47,7 +50,6 @@ int ddLogLevel = LOG_LEVEL_WARN;
 @implementation AppDelegate
 
 @synthesize window = _window;
-@synthesize navigationController;
 @synthesize errorNotice;
 @synthesize successNotice;
 
@@ -66,12 +68,26 @@ int ddLogLevel = LOG_LEVEL_WARN;
     }
     
     DDLogInfo(@"logged as %@", [SamLibUser loggedUserName]);
-    
-    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 
-    MainViewController *viewController = [[MainViewController alloc] init];
-    self.navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
-    self.window.rootViewController = self.navigationController;
+   // [[UINavigationBar appearance] setBarStyle: UIBarStyleBlack];
+    
+    MainViewController *vc0 = [[MainViewController alloc] init];
+    FavoritesViewController *vc1 = [[FavoritesViewController alloc] init];
+    VotedViewController *vc2 = [[VotedViewController alloc] init];
+    SearchViewController *vc3 = [[SearchViewController alloc] init]; 
+    SettingsViewController *vc4 = [[SettingsViewController alloc] init];      
+    
+    UITabBarController *tabBarContrller = [[UITabBarController alloc] init];
+    tabBarContrller.viewControllers = KxUtils.array(
+                                                    [[UINavigationController alloc] initWithRootViewController:vc0],
+                                                    [[UINavigationController alloc] initWithRootViewController:vc1],
+                                                    [[UINavigationController alloc] initWithRootViewController:vc2],
+                                                    [[UINavigationController alloc] initWithRootViewController:vc3],                                                    
+                                                    [[UINavigationController alloc] initWithRootViewController:vc4],                                                    
+                                                    nil);
+
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];    
+    self.window.rootViewController = tabBarContrller;    
     [self.window makeKeyAndVisible];
     
     DefaultSHKConfigurator *configurator = [[SHKConfig alloc] init];

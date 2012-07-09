@@ -33,18 +33,19 @@
 
 @interface UserViewController () {
 }
-
+//@property (readwrite
+@property (nonatomic, strong) UIBarButtonItem *backButton;
 @end
 
 @implementation UserViewController
 
-@synthesize delegate;
+@synthesize delegate, backButton;
 
 - (id) init
 {
     self = [self initWithNibName:@"UserViewController" bundle:nil];
     if (self) {
-        self.title = locString(@"User info");
+        self.title = locString(@"User Info");
     }
     return self;
 }
@@ -56,20 +57,21 @@
                                                                                 target:self 
                                                                                 action:@selector(goSave)];
     
-    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back.png"]
+    
+    self.backButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back.png"]
                                                                    style:UIBarButtonItemStylePlain
                                                                   target:self
                                                                   action:@selector(goBack)];
-
-    //saveButton.enabled = NO;
-    self.navigationItem.rightBarButtonItem = saveButton;
-    self.navigationItem.leftBarButtonItem = backButton;    
+    //self.navigationItem.leftBarButtonItem = backButton; 
+    self.navigationItem.rightBarButtonItem = saveButton;    
 }
 
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];    
     [self.tableView reloadData];
+    
+    self.navigationItem.leftBarButtonItem = self.delegate ? backButton : nil; 
 }
 
 - (void)viewDidUnload
@@ -86,8 +88,7 @@
 
 - (IBAction) textFieldDoneEditing: (id) sender
 {
-    [sender resignFirstResponder];
-    
+    [sender resignFirstResponder];    
     //self.navigationItem.rightBarButtonItem.enabled = YES;
 }
 
@@ -187,7 +188,6 @@ titleForHeaderInSection:(NSInteger)section
         return locString(@"Post comment as");
     return locString(@"Samizdat account"); 
 }
-
 
 - (UITableViewCell *) mkTextCell
 {

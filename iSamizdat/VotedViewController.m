@@ -37,6 +37,7 @@
     self =  [self initWithNibName:@"VotedViewController" bundle:nil];
     if (self) {
         self.title = locString(@"Voted");
+        self.tabBarItem = [[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemTopRated tag: 2];        
     }
     return self;
 }
@@ -44,13 +45,16 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.navigationController.navigationBarHidden = YES;
 }
 
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [self.navigationController setNavigationBarHidden:YES animated:YES];
     [self prepareData];
     [self.tableView reloadData];
+    
 }
 
 - (void)viewDidUnload
@@ -189,6 +193,7 @@
     self.textViewController.text = text;
     [self.navigationController pushViewController:self.textViewController 
                                          animated:YES];
+    [self.navigationController setNavigationBarHidden:NO animated:YES];    
 }
 
 

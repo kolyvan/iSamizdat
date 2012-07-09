@@ -33,6 +33,9 @@ enum {
     self = [self initWithNibName:@"SettingsViewController" bundle:nil];
     if (self) {
         self.title = locString(@"Settings");
+        self.tabBarItem = [[UITabBarItem alloc] initWithTitle:locString(@"Settings")
+                                                        image:[UIImage imageNamed:@"emblem-system"] 
+                                                          tag:5];
     }
     return self;
 }
@@ -40,12 +43,7 @@ enum {
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back.png"]
-                                                                   style:UIBarButtonItemStylePlain
-                                                                  target:self
-                                                                  action:@selector(goBack)];
-    self.navigationItem.leftBarButtonItem = backButton;    
+    self.navigationController.navigationBarHidden = YES;    
 }
 
 - (void)viewDidUnload
@@ -54,6 +52,12 @@ enum {
     self.navigationItem.rightBarButtonItem = nil;
     self.userViewController = nil;
     self.cacheViewController = nil;
+}
+
+- (void) viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self.navigationController setNavigationBarHidden:YES animated:YES];
 }
 
 - (void) didReceiveMemoryWarning
@@ -97,11 +101,11 @@ enum {
   
     if (SettingsViewUserRow == indexPath.row) {
         
-        cell.textLabel.text = locString(@"User info");
+        cell.textLabel.text = locString(@"User Info");
         
     } else if (SettingsViewCacheRow == indexPath.row) {
 
-        cell.textLabel.text = locString(@"Cache settings");
+        cell.textLabel.text = locString(@"Cache Settings");
     }
     
     return cell;
@@ -127,6 +131,8 @@ enum {
         [self.navigationController pushViewController:self.cacheViewController 
                                              animated:YES]; 
     }
+    
+    [self.navigationController setNavigationBarHidden:NO animated:YES];    
 }
 
 @end

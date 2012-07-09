@@ -35,7 +35,8 @@
 {
     self =  [self initWithNibName:@"FavoritesViewController" bundle:nil];
     if (self) {
-        self.title = locString(@"Favorites");
+        self.title = locString(@"Favorites");        
+        self.tabBarItem = [[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemBookmarks tag: 1]; 
     }
     return self;
 }
@@ -43,11 +44,13 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.navigationController.navigationBarHidden = YES;
 }
 
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [self.navigationController setNavigationBarHidden:YES animated:YES];    
     [self prepareData];
     [self.tableView reloadData];
 }
@@ -123,6 +126,7 @@
     self.textViewController.text = text;
     [self.navigationController pushViewController:self.textViewController 
                                                  animated:YES];
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
 }
 
 

@@ -91,8 +91,6 @@
     if (_needReload) {
         _needReload = NO;           
         self.title = _comments.text.title;
-        //self.title = _comments.text.author.shortName;        
-        //[self prepareData];       
         [self.tableView reloadData];
     }
 }
@@ -151,8 +149,6 @@
                 _swipeCell = cell;
             }            
         }
-                
-        //NSLog(@"SWIPE! %d %d %d", sender.direction, indexPath.row, cell.comment.number);
     } 
 }
 
@@ -262,7 +258,7 @@
                                          destructiveButtonTitle:locString(@"Delete") 
                                               otherButtonTitles:nil];
     actionSheet.comment = comment;    
-    [actionSheet showInView:self.view];
+    [actionSheet showFromTabBar:self.tabBarController.tabBar];
 }
 
 - (void) goAuthor: (NSString *) path

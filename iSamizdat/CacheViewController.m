@@ -36,15 +36,7 @@ enum {
 
 - (void)viewDidLoad
 {
-    [super viewDidLoad];
-    
-    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back.png"]
-                                                                   style:UIBarButtonItemStylePlain
-                                                                  target:self
-                                                                  action:@selector(goBack)];
-
-    //self.navigationItem.rightBarButtonItem = saveButton;
-    self.navigationItem.leftBarButtonItem = backButton;
+    [super viewDidLoad];    
 }
 
 - (void) viewWillAppear:(BOOL)animated

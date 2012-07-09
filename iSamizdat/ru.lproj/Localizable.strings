@@ -39,7 +39,8 @@
 "Login" = "Логин";
 "Password" = "Пароль";
 "Enable" = "Включить";
-"User info" = "Пользователь";
+"User Info" = "Пользователь";
+"Cache Settings" = "Кэширование";
 "Post comment as"= "Отправлять комментарий как";
 "Samizdat account" = "Регистрация на Самиздат";
 "Warning" = "Внимание";
@@ -79,8 +80,10 @@
 "Remove text and comments?" = "Удалить текст и комментарии?";
 "Remove" = "Удалить";
 "Text Info" = "Текст Инфо";
+"Author Info" = "Автор Инфо";
 "Not modified" = "Нет изменений";
 "Send comment" = "Комментарий отправлен";
 "Deleted comment" = "Комментарий удален";
 "New comments:%ld" = "Новых комментариев: %ld";
 "Share It" = "Поделиться";
+"Add comment" = "Добавить";

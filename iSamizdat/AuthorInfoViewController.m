@@ -45,7 +45,11 @@ enum {
 
 - (id) init
 {
-    return [self initWithNibName:@"AuthorInfoViewController" bundle:nil];
+    self =  [self initWithNibName:@"AuthorInfoViewController" bundle:nil];
+    if (self) {
+        self.title = locString(@"Author Info");
+    }
+    return self;
 }
 
 - (void)viewDidLoad
@@ -56,8 +60,6 @@ enum {
                                                                               target:self 
                                                                               action:@selector(goShare)];
     self.navigationItem.rightBarButtonItem = goButton;    
-    
-    self.title = locString(@"Info");
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -100,7 +102,7 @@ enum {
                                          destructiveButtonTitle:locString(@"Delete") 
                                               otherButtonTitles:nil];
 
-    [actionSheet showInView:self.view];
+    [actionSheet showFromTabBar:self.tabBarController.tabBar];
 }
 
 - (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex

@@ -25,11 +25,6 @@
 #import "AppDelegate.h"
 #import "AuthorViewController.h"
 #import "TextViewController.h"
-#import "FavoritesViewController.h"
-#import "VotedViewController.h"
-#import "UserViewController.h"
-#import "SearchViewController.h"
-#import "SettingsViewController.h"
 #import "UIFont+Kolyvan.h"
 #import "UIColor+Kolyvan.h"
 #import "DDLog.h"
@@ -37,10 +32,9 @@
 extern int ddLogLevel;
 
 typedef enum {
-    
-    FavoritesSectionNumber  = 0,
-    AuthorSectionNumber     = 1,
-    IgnoredSectionNumber    = 2,    
+
+    AuthorSectionNumber     = 0,
+    IgnoredSectionNumber    = 1,    
     
 } SectionNumber;
 
@@ -54,13 +48,8 @@ typedef enum {
 @property (nonatomic, strong) NSArray *content;
 @property (nonatomic, strong) NSArray *ignored;
 @property (nonatomic, strong) NSArray *authors;
-@property (nonatomic, strong) UIBarButtonItem *addButton;
 @property (nonatomic, strong) AuthorViewController* authorViewController;
 @property (nonatomic, strong) TextViewController* textViewController;
-@property (nonatomic, strong) FavoritesViewController* favoritesViewController;
-@property (nonatomic, strong) SettingsViewController *settingsViewController;
-@property (nonatomic, strong) VotedViewController* votedViewController;
-@property (nonatomic, strong) SearchViewController *searchViewController;
 
 @end
 
@@ -69,24 +58,15 @@ typedef enum {
 @synthesize content;
 @synthesize ignored;
 @synthesize authors;
-@synthesize addButton;
 @synthesize authorViewController;
 @synthesize textViewController;
-@synthesize favoritesViewController;
-@synthesize settingsViewController;
-@synthesize votedViewController;
-@synthesize searchViewController;
 
 - (id) init
 {
-    return [self initWithNibName:@"MainViewController" bundle:nil];
-}
-
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {        
+    self = [super initWithNibName:@"MainViewController" bundle:nil];
+    if (self) {
         self.title = locString(@"Samizdat");
+        self.tabBarItem = [[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemMostViewed tag: 0];                
     }
     return self;
 }
@@ -94,25 +74,9 @@ typedef enum {
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    UIBarButtonItem *settingsButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"emblem-system.png"]
-                                                                       style:UIBarButtonItemStylePlain
-                                                                      target:self 
-                                                                      action:@selector(goSettings)];
-
-
-    self.addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd 
-                                                                   target:self 
-                                                                   action:@selector(goAddAuthor)];
-    
-    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back.png"]
-                                                                   style:UIBarButtonItemStylePlain                                                                                           target:nil                                                                                            action:nil];
-
-    
-    self.navigationItem.backBarButtonItem = backButton;
-    self.navigationItem.leftBarButtonItem = settingsButton;    
-    self.navigationItem.rightBarButtonItem = self.addButton;
-    
+   
+    self.navigationController.navigationBarHidden = YES;
+       
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(samLibAuthorIgnoredChanged:)
                                                  name:@"SamLibAuthorIgnoredChanged" 
@@ -145,20 +109,16 @@ typedef enum {
     self.navigationItem.backBarButtonItem = nil;
     self.navigationItem.leftBarButtonItem = nil;
     self.navigationItem.rightBarButtonItem = nil;
-    self.addButton = nil;
     self.authorViewController = nil;
     self.textViewController = nil;
-    self.favoritesViewController = nil;
-    self.settingsViewController = nil;
-    self.votedViewController = nil;
-    self.searchViewController = nil;
     
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void) viewWillAppear:(BOOL)animated
 {
-    [self prepareData];    
+    [self prepareData];        
+    [self.navigationController setNavigationBarHidden:YES animated:YES];    
 }
 
 - (void) didReceiveMemoryWarning
@@ -167,30 +127,9 @@ typedef enum {
 
     self.authorViewController = nil;
     self.textViewController = nil;
-    self.favoritesViewController = nil;    
-    self.settingsViewController = nil;
-    self.votedViewController = nil;    
-    self.searchViewController = nil;    
 }
 
 #pragma mark - private functions
-
-- (BOOL) hasFavorites
-{
-    return _favoritesCount > 0;
-}
-
-- (BOOL) hasVoted
-{
-    return _votedCount > 0;
-}
-
-- (SectionNumber) sectionMap: (NSInteger) section
-{
-    if (!self.hasFavorites && !self.hasVoted)
-        section += 1;
-    return section;
-}
 
 - (void) prepareData
 {
@@ -235,36 +174,6 @@ typedef enum {
         }
     }
     return ma;
-}
-
-- (void) goAddAuthor
-{    
-    if (!self.searchViewController)
-        self.searchViewController = [[SearchViewController alloc] init];        
-    
-    UINavigationController *navigationController = [[UINavigationController alloc]
-                                                    initWithRootViewController:self.searchViewController];
-    
-    [self presentViewController:navigationController 
-                       animated:YES 
-                     completion:NULL];
-}
-
-- (void) goSettings
-{      
-    if (!self.settingsViewController) {
-        self.settingsViewController = [[SettingsViewController alloc] init];        
-    }
-    
-    UINavigationController *navigationController = [[UINavigationController alloc]
-                                                    initWithRootViewController:self.settingsViewController];
-
-    
-    [self presentViewController:navigationController 
-                       animated:YES 
-                     completion:NULL];
-    
-    //[self.navigationController pushViewController:self.userViewController animated:YES];     
 }
 
 - (void) samLibAuthorIgnoredChanged:(NSNotification *)notification
@@ -357,34 +266,22 @@ typedef enum {
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     NSInteger sections = 1;
-    if (self.hasFavorites || self.hasVoted)
-        sections += 1;
     if (self.ignored.nonEmpty)
         sections += 1;        
     return sections;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{   
-    section = [self sectionMap:section];
-    
-    if (section == AuthorSectionNumber)
-        return locString(@"Authors");
-    
-    else if (section == IgnoredSectionNumber)
+{           
+    if (section == IgnoredSectionNumber)
         return locString(@"Ignored");
     
     return @"";
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    section = [self sectionMap:section];
-    
-    if (section == FavoritesSectionNumber)
-        return (self.hasFavorites ? 1 : 0) + (self.hasVoted ? 1 : 0);
-    
-    else if (section == AuthorSectionNumber)
+{    
+    if (section == AuthorSectionNumber)
         return self.content.count;
     
     else if (section == IgnoredSectionNumber)
@@ -417,20 +314,8 @@ typedef enum {
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSInteger section = [self sectionMap:indexPath.section];
-
-    if (section == FavoritesSectionNumber) {
-        
-        UITableViewCell *cell = [self mkMainCell];
-        
-        if (indexPath.row == 0 && self.hasFavorites)        
-            cell.textLabel.text = KxUtils.format(@"%@ (%ld)", locString(@"Favorites"), _favoritesCount);
-        else
-            cell.textLabel.text = KxUtils.format(@"%@ (%ld)", locString(@"Voted"), _votedCount);
-        
-        return cell;
-    }
-        
+    NSInteger section = indexPath.section;
+           
     if (section == AuthorSectionNumber) {        
         
         id obj = [self.content objectAtIndex:indexPath.row]; 
@@ -477,7 +362,7 @@ typedef enum {
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath 
 {  
-     NSInteger section = [self sectionMap:indexPath.section];
+     NSInteger section = indexPath.section;
     if (section == AuthorSectionNumber) {
         id obj = [self.content objectAtIndex:indexPath.row];         
         if ([obj isKindOfClass:[SamLibText class]]) {         
@@ -489,7 +374,7 @@ typedef enum {
 
 - (NSInteger)tableView:(UITableView *)tableView indentationLevelForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSInteger section = [self sectionMap:indexPath.section];
+    NSInteger section = indexPath.section;
     if (section == AuthorSectionNumber) {
         id obj = [self.content objectAtIndex:indexPath.row];         
         if ([obj isKindOfClass:[SamLibText class]]) {         
@@ -503,29 +388,9 @@ typedef enum {
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSInteger section = [self sectionMap:indexPath.section];
+    NSInteger section = indexPath.section;
     
-    if (section == FavoritesSectionNumber) {
-        
-        if (indexPath.row == 0 && self.hasFavorites) {
-            
-            if (!self.favoritesViewController) {
-                self.favoritesViewController = [[FavoritesViewController alloc] init];        
-            }
-            [self.navigationController pushViewController:self.favoritesViewController 
-                                                 animated:YES];
-            
-        } else {
-        
-            if (!self.votedViewController) {
-                self.votedViewController = [[VotedViewController alloc] init];        
-            }
-            [self.navigationController pushViewController:self.votedViewController 
-                                                 animated:YES];
-            
-        }
-        
-    } else if (section == AuthorSectionNumber) {
+   if (section == AuthorSectionNumber) {
         
         id obj = [self.content objectAtIndex:indexPath.row];         
         if ([obj isKindOfClass:[SamLibAuthor class]]) {         
@@ -533,6 +398,7 @@ typedef enum {
             if (!self.authorViewController) {
                 self.authorViewController = [[AuthorViewController alloc] init];
             }
+                                    
             self.authorViewController.author = obj;
             [self.navigationController pushViewController:self.authorViewController 
                                                  animated:YES];
@@ -542,6 +408,7 @@ typedef enum {
             if (!self.textViewController) {
                 self.textViewController = [[TextViewController alloc] init];
             }
+                                    
             self.textViewController.text = obj;
             [self.navigationController pushViewController:self.textViewController 
                                                  animated:YES];
@@ -557,8 +424,10 @@ typedef enum {
         self.authorViewController.author = author;
         [self.navigationController pushViewController:self.authorViewController 
                                                  animated:YES];
-
     } 
+    
+    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+    [self.navigationController setNavigationBarHidden: NO animated:YES];
 }
 
 @end

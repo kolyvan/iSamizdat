@@ -60,7 +60,7 @@
                                                object:nil];
     
     
-    self.sendButton = [[UIBarButtonItem alloc] initWithTitle:@"Send"
+    self.sendButton = [[UIBarButtonItem alloc] initWithTitle:locString(@"Add comment")
                                                        style:UIBarButtonItemStylePlain 
                                                       target:self 
                                                       action:@selector(sendPressed)];
@@ -111,7 +111,6 @@
         } else {    
             self.textView.text = @"";
         }
-        
     }
         
     self.sendButton.enabled = self.textView.text.nonEmpty;
@@ -164,8 +163,8 @@
                        [[UIDevice currentDevice] name], // NSFullUserName
                        locString(@"Enter name"), 
                        nil];
-        
-        [actionSheet showInView:self.view];
+
+        [actionSheet showFromTabBar:self.tabBarController.tabBar];
         
     } else {    
         
@@ -184,8 +183,7 @@
             }
         }
         
-        self.comment = nil;    
-        
+        self.comment = nil;
     }
 }
 

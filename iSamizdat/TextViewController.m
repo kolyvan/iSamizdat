@@ -149,7 +149,6 @@ enum {
     [super viewWillAppear:animated];
     if (_needReload) {
         _needReload = NO;           
-        //self.title = _text.title;   
         [self prepareData];       
         [self.tableView reloadData];
     }
@@ -245,7 +244,6 @@ enum {
             return mkHTMLPage(text, html); 
         } 
      ];
-
 }
 
 - (NSString *) textVoteString
@@ -280,7 +278,7 @@ enum {
                                      otherButtonTitles:locString(@"Download"), nil];
     
     actionSheet.tag = 0;
-    [actionSheet showInView:self.view];
+    [actionSheet showFromTabBar:self.tabBarController.tabBar];
 }
 
 - (void) goCleanup
@@ -293,7 +291,7 @@ enum {
                                      otherButtonTitles:locString(@"Remove"), nil];
     
     actionSheet.tag = 1;
-    [actionSheet showInView:self.view];
+    [actionSheet showFromTabBar:self.tabBarController.tabBar];
 }
 
 
@@ -359,7 +357,7 @@ enum {
         cell.textLabel.text = _text.title;
         cell.textLabel.numberOfLines = 0;
         //[cell.textLabel sizeToFit];       
-        cell.accessoryView = [[UIImageView alloc] initWithImage: _text.image];                          
+        cell.accessoryView = [[UIImageView alloc] initWithImage: _text.favoritedImage];                          
         return cell;
         
     } else  if (RowSize == row) { 
@@ -469,9 +467,7 @@ enum {
         UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
         
         _text.favorited = !_text.favorited;
-        //cell.imageView.image = _text.image;  
-        ((UIImageView *)cell.accessoryView).image = _text.image;
-               
+        ((UIImageView *)cell.accessoryView).image = _text.favoritedImage;               
         
         [[NSNotificationCenter defaultCenter] postNotificationName:@"samLibTextChanged" object:nil];
         

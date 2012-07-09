@@ -48,29 +48,21 @@ extern int ddLogLevel;
 
 - (id) init
 {
-    return [self initWithNibName:@"SearchViewController" bundle:nil];
+    self = [super initWithNibName:@"SearchViewController" bundle:nil];
+    if (self) {
+        self.title = locString(@"Search");
+        self.tabBarItem = [[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemSearch tag: 3];
+    }
+    return self;
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    
-    UIBarButtonItem *cancelButton;
-    cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
-                                                                 target:self 
-                                                                 action:@selector(goCancel)];
-    
-    self.navigationItem.leftBarButtonItem = cancelButton;     
-    
-    self.title = locString(@"Search");
-     
-    
+        
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.searchBar.delegate = self;
-    
-//    self.navigationController
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -147,9 +139,7 @@ extern int ddLogLevel;
 {   
     self.searchBar.text = @"";
     _result = nil;
-        
-    [self dismissViewControllerAnimated:YES 
-                             completion:NULL];
+    [self activateSearchBar: NO];
 }
 
 - (void) activateSearchBar: (BOOL) activate
@@ -402,7 +392,6 @@ extern int ddLogLevel;
             SamLibText *text = [model findTextByKey:key];
             [self goDone: text];         
         }
-        
     }
 }
 

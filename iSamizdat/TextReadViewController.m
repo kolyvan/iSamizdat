@@ -128,7 +128,6 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
     if (_needReload) {        
         _needReload = NO;
         _needRestoreOffset = YES;
-        //self.title = _text.title;        
         [self reloadWebView];
         //DDLogInfo(@"reload text %@", _text.path);   
     }
@@ -139,12 +138,10 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
 - (void) viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-            
-    if (0)
-    [self performSelector:@selector(fullscreenMode:) 
-               withObject:[NSNumber numberWithBool:YES] 
-               afterDelay:1];    
     
+    //[self performSelector:@selector(fullscreenMode:) 
+    //           withObject:[NSNumber numberWithBool:YES] 
+    //           afterDelay:1];        
     //[self fullscreenMode: YES];
     
     _prevNavBarTranslucent = self.navigationController.navigationBar.translucent;
@@ -246,9 +243,9 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
                         }
                         
                         [app setStatusBarHidden:on withAnimation:UIStatusBarAnimationSlide];    
-                        app.keyWindow.frame = bounds;
-                        //self.navigationController.navigationBarHidden = on;  
+                        app.keyWindow.frame = bounds;                        
                         [self.navigationController setNavigationBarHidden:on animated:YES];
+                        [self.tabBarController.tabBar setHidden:on];
                         
                     }
                     completion:nil];
