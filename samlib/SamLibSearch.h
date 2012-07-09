@@ -34,6 +34,7 @@ typedef enum {
               block: (AsyncSearchResult) block;
 
 + (id) searchText: (NSString *) pattern 
+           byName: (BOOL) byName
               block: (AsyncSearchResult) block;
 
 - (void) cancel;

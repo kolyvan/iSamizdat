@@ -501,6 +501,7 @@ static NSString * mkPathFromName(NSString *name)
 }
 
 - (void) searchText: (NSString *) pattern 
+           byName: (BOOL) byName
               block: (AsyncSearchResult) block
 {
     pattern = pattern.lowercaseString;
@@ -511,34 +512,58 @@ static NSString * mkPathFromName(NSString *name)
     
     for (SamLibAuthor *author in authors) {
     
-        NSArray *texts = [author.texts map:^(id elem) {
-            SamLibText *text = elem;
-
-            return  KxUtils.dictionary(text.title.lowercaseString, @"name", 
-                                       text.key, @"key",
-                                       author.name, @"info",                            
-                                       nil);
-        }];
-          
-        [found addObjectsFromArray: fuzzySearch(pattern, @"name", texts)]; 
-        
-        /*
-        for (SamLibText *text in author.texts) {
+        if (byName) {
             
-            if ([text.group rangeOfString:pattern].location != NSNotFound ||
-                [text.genre rangeOfString:pattern].location != NSNotFound ||                                                    
-                [text.type rangeOfString:pattern].location != NSNotFound ||                                    
-                [text.note rangeOfString:pattern].location != NSNotFound) {
+            NSArray *texts = [author.texts map:^(id elem) {
+                SamLibText *text = elem;
                 
-                [found addObject: KxUtils.dictionary(text.title, @"name", 
-                                                     text.key, @"key",
-                                                     @"", @"info",
-                                                     [NSNumber numberWithFloat:0], @"distance",
-                                                     nil)];
+                return  KxUtils.dictionary(text.title.lowercaseString, @"name", 
+                                           text.key, @"key",
+                                           author.name, @"info",                            
+                                           nil);
+            }];
+            
+            [found addObjectsFromArray: fuzzySearch(pattern, @"name", texts)]; 
+            
+        } else  {
+        
+            for (SamLibText *text in author.texts) {
+                
+                NSString *info = nil;
+                CGFloat distance = 0;
+                
+                if (text.group.nonEmpty && 
+                    [text.group.lowercaseString rangeOfString:pattern].location != NSNotFound) {
+                    
+                    info = text.group;               
+                    distance = 0.3;
+                
+                } else if (text.genre.nonEmpty && 
+                           [text.genre.lowercaseString rangeOfString:pattern].location != NSNotFound) {
+                    
+                    info = text.genre;
+                    distance = 0.2;                    
+                    
+                } else if (text.note.nonEmpty) { 
+                    
+                    NSString *note = text.note;
+                    NSRange r = [note.lowercaseString rangeOfString:pattern];
+                    if (r.location != NSNotFound) {
+                        r.location = (r.location < 20) ? 0 : r.location - 10;
+                        r.length = MIN(40, note.length - r.location);                    
+                        info = [note substringWithRange:r];;  
+                        distance = 0.1;
+                    }
+                }
+                
+                if (info.nonEmpty)
+                    [found addObject: KxUtils.dictionary(text.title, @"name", 
+                                                         text.key, @"key",
+                                                         info, @"info",
+                                                         [NSNumber numberWithFloat:distance], @"distance",
+                                                         nil)];
             }
         }
-        */
-       
     }
     
     if (found.nonEmpty)
@@ -560,11 +585,12 @@ static NSString * mkPathFromName(NSString *name)
 }
 
 + (id) searchText: (NSString *) pattern 
+           byName: (BOOL) byName
             block: (AsyncSearchResult) block
 {
     NSAssert(pattern.nonEmpty, @"empty pattern");
     SamLibSearch *p = [[SamLibSearch alloc] init];    
-    [p searchText:pattern block:block];    
+    [p searchText:pattern byName:byName block:block];    
     return KX_AUTORELEASE(p);
 }
 
