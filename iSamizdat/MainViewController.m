@@ -58,7 +58,6 @@ typedef enum {
 @property (nonatomic, strong) AuthorViewController* authorViewController;
 @property (nonatomic, strong) TextViewController* textViewController;
 @property (nonatomic, strong) FavoritesViewController* favoritesViewController;
-//@property (nonatomic, strong) UserViewController *userViewController;
 @property (nonatomic, strong) SettingsViewController *settingsViewController;
 @property (nonatomic, strong) VotedViewController* votedViewController;
 @property (nonatomic, strong) SearchViewController *searchViewController;
@@ -147,6 +146,7 @@ typedef enum {
     self.navigationItem.leftBarButtonItem = nil;
     self.navigationItem.rightBarButtonItem = nil;
     self.addButton = nil;
+    self.authorViewController = nil;
     self.textViewController = nil;
     self.favoritesViewController = nil;
     self.settingsViewController = nil;
@@ -239,11 +239,8 @@ typedef enum {
 
 - (void) goAddAuthor
 {    
-    if (!self.searchViewController) {
-        self.searchViewController = [[SearchViewController alloc] init];
-        self.searchViewController.delegate = self;
-        
-    }
+    if (!self.searchViewController)
+        self.searchViewController = [[SearchViewController alloc] init];        
     
     UINavigationController *navigationController = [[UINavigationController alloc]
                                                     initWithRootViewController:self.searchViewController];
@@ -251,16 +248,6 @@ typedef enum {
     [self presentViewController:navigationController 
                        animated:YES 
                      completion:NULL];
-}
-
-- (void) searchAuthorResult: (SamLibAuthor *) author
-{
-    if (!self.authorViewController) {
-        self.authorViewController = [[AuthorViewController alloc] init];
-    }
-    self.authorViewController.author = author;
-    [self.navigationController pushViewController:self.authorViewController 
-                                         animated:YES];
 }
 
 - (void) goSettings

@@ -9,11 +9,5 @@
 #import <UIKit/UIKit.h>
 #import "KxArc.h"
 
-@class SamLibAuthor;
-@protocol SearchViewDelegate <NSObject>
-- (void) searchAuthorResult: (SamLibAuthor *) author;
-@end
-
 @interface SearchViewController : UIViewController<UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate>
-@property (nonatomic, KX_PROP_WEAK) id<SearchViewDelegate> delegate;
 @end

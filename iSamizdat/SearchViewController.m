@@ -7,7 +7,6 @@
 //
 
 #import "SearchViewController.h"
-#import "SamLibAuthor.h"
 #import "NSArray+Kolyvan.h"
 #import "NSDictionary+Kolyvan.h"
 #import "NSString+Kolyvan.h"
@@ -18,6 +17,10 @@
 #import "SamLibModel.h"
 #import "SamLibAgent.h"
 #import "SamLibSearch.h"
+#import "SamLibAuthor.h"
+#import "SamLibText.h"
+#import "AuthorViewController.h"
+#import "TextViewController.h"
 #import "DDLog.h"
 
 extern int ddLogLevel;
@@ -31,12 +34,17 @@ extern int ddLogLevel;
 @property (nonatomic, strong) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) IBOutlet UISearchBar *searchBar;
 @property (nonatomic, strong) IBOutlet UIActivityIndicatorView *activityIndicator;
+@property (nonatomic, strong) AuthorViewController* authorViewController;
+@property (nonatomic, strong) TextViewController* textViewController;
 
 @end
 
 @implementation SearchViewController
 
-@synthesize tableView, searchBar, activityIndicator, delegate;
+@synthesize tableView, searchBar, activityIndicator;
+@synthesize authorViewController;
+@synthesize textViewController;
+
 
 - (id) init
 {
@@ -67,17 +75,16 @@ extern int ddLogLevel;
 
 - (void) viewWillAppear:(BOOL)animated
 {
-    [super viewWillAppear:animated];
-    //_result = nil;    
-    [self.tableView reloadData];
-    self.searchBar.text = @"";
+    [super viewWillAppear:animated];    
     [activityIndicator stopAnimating];
     _flagSelectignRow = NO;
+    
+    if (!_result) // clear table
+        [self.tableView reloadData];
 }
 
 - (void) viewDidAppear:(BOOL)animated
 {
-  //  [self activateSearchBar: YES];
     [self.searchBar becomeFirstResponder];
     [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
@@ -87,15 +94,9 @@ extern int ddLogLevel;
     [super viewWillDisappear:animated];
     [self activateSearchBar: NO];
     [self.navigationController setNavigationBarHidden:NO animated:NO];
-}
-
-- (void) viewDidDisappear:(BOOL)animated
-{
-    [super viewDidDisappear:animated];
-
+    
     [_search cancel];
     _search = nil;
-    _result = nil;    
 }
 
 - (void)viewDidUnload
@@ -106,11 +107,15 @@ extern int ddLogLevel;
     self.tableView.delegate = nil;
     self.tableView.dataSource = nil;
     self.searchBar.delegate = nil;
+    self.authorViewController = nil;
+    self.textViewController = nil;
 }
 
 - (void) didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];  
+    self.authorViewController = nil;
+    self.textViewController = nil;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -119,19 +124,53 @@ extern int ddLogLevel;
     return (interfaceOrientation == UIDeviceOrientationPortrait);
 }
 
-- (void) goDone: (SamLibAuthor *)author
-{
-    [self dismissViewControllerAnimated:YES 
-                             completion:NULL];
+- (void) goDone: (id) found
+{    
+    if ([found isKindOfClass:[SamLibAuthor class]]) {
     
-   // if (self.delegate && author)
-   //     [self.delegate searchAuthorResult:author];
+        if (!self.authorViewController)
+            self.authorViewController = [[AuthorViewController alloc] init];        
+        self.authorViewController.author = found;
+        [self.navigationController pushViewController:self.authorViewController 
+                                             animated:YES];
+    } else if ([found isKindOfClass:[SamLibText class]]) {
+            
+        if (!self.textViewController)
+            self.textViewController = [[TextViewController alloc] init];        
+        self.textViewController.text = found;
+        [self.navigationController pushViewController:self.textViewController 
+                                             animated:YES];
+    }
 }
 
 - (void) goCancel
 {   
+    self.searchBar.text = @"";
+    _result = nil;
+        
     [self dismissViewControllerAnimated:YES 
                              completion:NULL];
+}
+
+- (void) activateSearchBar: (BOOL) activate
+{
+    if (activate) {
+      
+        [self.searchBar becomeFirstResponder];                
+        self.searchBar.showsScopeBar = YES;
+        
+    } else {
+
+        [self.searchBar resignFirstResponder];        
+        self.searchBar.showsScopeBar = NO;        
+    }
+    
+    [self.searchBar sizeToFit];
+    CGFloat h = self.searchBar.frame.size.height;
+    CGRect frame = self.tableView.frame;
+    frame.size.height += frame.origin.y - h;     
+    frame.origin.y = h;     
+    self.tableView.frame = frame;    
 }
 
 - (NSString *) mkSearchPath: (NSString *)path
@@ -163,35 +202,11 @@ extern int ddLogLevel;
     
     if ([path contains: @"."] ||
         [path contains: @"/"]) {
-                
+        
         return nil;
     }
     
     return path;
-}
-
-
-#pragma mark - Search bar
-
-- (void) activateSearchBar: (BOOL) activate
-{
-    if (activate) {
-      
-        [self.searchBar becomeFirstResponder];                
-        self.searchBar.showsScopeBar = YES;
-        
-    } else {
-
-        [self.searchBar resignFirstResponder];        
-        self.searchBar.showsScopeBar = NO;        
-    }
-    
-    [self.searchBar sizeToFit];
-    CGFloat h = self.searchBar.frame.size.height;
-    CGRect frame = self.tableView.frame;
-    frame.size.height += frame.origin.y - h;     
-    frame.origin.y = h;     
-    self.tableView.frame = frame;    
 }
 
 - (void) searchAuthor: (NSString *)pattern 
@@ -232,6 +247,17 @@ extern int ddLogLevel;
 
 }
 
+- (void) searchText: (NSString *)pattern 
+           deepSearch: (BOOL) deepSearch 
+{      
+    _search = [SamLibSearch searchText:pattern 
+                                   block:^(NSArray *result) {
+                                       
+                                       [self addSearchResult:result 
+                                                  deepSearch: deepSearch];                
+                                   }];
+}
+
 - (void) startSearch: (NSString *)pattern 
           deepSearch: (BOOL) deepSearch 
 {
@@ -248,12 +274,10 @@ extern int ddLogLevel;
     
     if (pattern.nonEmpty) {        
         
-        if (0 == self.searchBar.selectedScopeButtonIndex)  {
-            
-            [self searchAuthor:pattern deepSearch:deepSearch];
-            
-        } else {
-        }
+        if (0 == self.searchBar.selectedScopeButtonIndex)            
+            [self searchAuthor:pattern deepSearch:deepSearch];            
+        else            
+            [self searchText:pattern deepSearch:deepSearch];        
     }    
 }
 
@@ -283,6 +307,8 @@ extern int ddLogLevel;
     }
 }
 
+#pragma mark - Search bar
+
 - (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar
 {    
     [self activateSearchBar: YES];
@@ -304,11 +330,6 @@ extern int ddLogLevel;
 }
 
 #pragma mark - Table view
-
-//- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-//{   
-//    return _author ? _author.name : locString(@"Search result");
-//}
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {    
@@ -343,19 +364,28 @@ extern int ddLogLevel;
         
         SamLibModel *model = [SamLibModel shared];
         
-        NSString *from = [dict get:@"from"];
-        NSString *path = [dict get:@"path"]; 
+        if (0 == self.searchBar.selectedScopeButtonIndex) {
         
-        if ([from isEqualToString:@"local"]) {
+            NSString *from = [dict get:@"from"];
+            NSString *path = [dict get:@"path"]; 
             
-            [self goDone: [model findAuthor:path]];                     
+            if ([from isEqualToString:@"local"]) {
+                
+                [self goDone: [model findAuthor:path]];                     
+                
+            } else {
+                
+                SamLibAuthor *author = [SamLibAuthor fromDictionary:dict withPath:path];                        
+                [model addAuthor:author];                          
+                [self goDone: [model findAuthor:path]];                     
+                // [appDelegate reload: nil];
+            }
             
         } else {
             
-            SamLibAuthor *author = [SamLibAuthor fromDictionary:dict withPath:path];                        
-            [model addAuthor:author];                          
-            [self goDone: [model findAuthor:path]];                     
-            // [appDelegate reload: nil];
+            NSString *key = [dict get:@"key"];
+            SamLibText *text = [model findTextByKey:key];
+            [self goDone: text];         
         }
         
     }
