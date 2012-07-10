@@ -119,6 +119,10 @@
 		87E230C1158B5A600074EBF1 /* AuthorInfoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 87E230BF158B5A600074EBF1 /* AuthorInfoViewController.xib */; };
 		87E37DE715AC28DD0009B377 /* SamLibHistory.m in Sources */ = {isa = PBXBuildFile; fileRef = 87E37DE615AC28DD0009B377 /* SamLibHistory.m */; };
 		87E37DE915AC28F20009B377 /* censored.bin in Resources */ = {isa = PBXBuildFile; fileRef = 87E37DE815AC28F20009B377 /* censored.bin */; };
+		87E37DF215AC2A810009B377 /* HistoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87E37DF015AC2A810009B377 /* HistoryViewController.m */; };
+		87E37DF315AC2A810009B377 /* HistoryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 87E37DF115AC2A810009B377 /* HistoryViewController.xib */; };
+		87E37DF615AC2D0A0009B377 /* book.png in Resources */ = {isa = PBXBuildFile; fileRef = 87E37DF415AC2D0A0009B377 /* book.png */; };
+		87E37DF715AC2D0A0009B377 /* comments.png in Resources */ = {isa = PBXBuildFile; fileRef = 87E37DF515AC2D0A0009B377 /* comments.png */; };
 		87EE1E5315885C130015BA99 /* VoteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87EE1E5115885C130015BA99 /* VoteViewController.m */; };
 		87EE1E5415885C130015BA99 /* VoteViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 87EE1E5215885C130015BA99 /* VoteViewController.xib */; };
 		87EE1E5815886C9F0015BA99 /* VotedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87EE1E5615886C9F0015BA99 /* VotedViewController.m */; };
@@ -373,6 +377,11 @@
 		87E37DE515AC28DD0009B377 /* SamLibHistory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SamLibHistory.h; sourceTree = "<group>"; };
 		87E37DE615AC28DD0009B377 /* SamLibHistory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SamLibHistory.m; sourceTree = "<group>"; };
 		87E37DE815AC28F20009B377 /* censored.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; name = censored.bin; path = resources/censored.bin; sourceTree = "<group>"; };
+		87E37DEF15AC2A810009B377 /* HistoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoryViewController.h; sourceTree = "<group>"; };
+		87E37DF015AC2A810009B377 /* HistoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HistoryViewController.m; sourceTree = "<group>"; };
+		87E37DF115AC2A810009B377 /* HistoryViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HistoryViewController.xib; sourceTree = "<group>"; };
+		87E37DF415AC2D0A0009B377 /* book.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = book.png; path = resources/book.png; sourceTree = "<group>"; };
+		87E37DF515AC2D0A0009B377 /* comments.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = comments.png; path = resources/comments.png; sourceTree = "<group>"; };
 		87EE1E5015885C130015BA99 /* VoteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VoteViewController.h; sourceTree = "<group>"; };
 		87EE1E5115885C130015BA99 /* VoteViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VoteViewController.m; sourceTree = "<group>"; };
 		87EE1E5215885C130015BA99 /* VoteViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VoteViewController.xib; sourceTree = "<group>"; };
@@ -570,6 +579,8 @@
 				87EE1E5115885C130015BA99 /* VoteViewController.m */,
 				87EE1E5515886C9F0015BA99 /* VotedViewController.h */,
 				87EE1E5615886C9F0015BA99 /* VotedViewController.m */,
+				87E37DEF15AC2A810009B377 /* HistoryViewController.h */,
+				87E37DF015AC2A810009B377 /* HistoryViewController.m */,
 				87546F25157C888000DE58DD /* CommentCell.h */,
 				87546F26157C888000DE58DD /* CommentCell.m */,
 				87546F29157C895C00DE58DD /* TextLine.h */,
@@ -611,6 +622,7 @@
 				8712FFD01574DA7900C01283 /* AuthorViewController.xib */,
 				87EE1E5215885C130015BA99 /* VoteViewController.xib */,
 				87EE1E5715886C9F0015BA99 /* VotedViewController.xib */,
+				87E37DF115AC2A810009B377 /* HistoryViewController.xib */,
 			);
 			name = views;
 			sourceTree = "<group>";
@@ -748,6 +760,8 @@
 		872D956D1573968C00BCB4EC /* resources */ = {
 			isa = PBXGroup;
 			children = (
+				87E37DF415AC2D0A0009B377 /* book.png */,
+				87E37DF515AC2D0A0009B377 /* comments.png */,
 				87E37DE815AC28F20009B377 /* censored.bin */,
 				8708A8ED15A6B3FF008D1893 /* author_add.png */,
 				8708A8EE15A6B3FF008D1893 /* author_go.png */,
@@ -956,6 +970,9 @@
 				8708A8F115A6B3FF008D1893 /* author_go.png in Resources */,
 				8708A8F215A6B3FF008D1893 /* ban.png in Resources */,
 				87E37DE915AC28F20009B377 /* censored.bin in Resources */,
+				87E37DF315AC2A810009B377 /* HistoryViewController.xib in Resources */,
+				87E37DF615AC2D0A0009B377 /* book.png in Resources */,
+				87E37DF715AC2D0A0009B377 /* comments.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1040,6 +1057,7 @@
 				87562836159989D800636465 /* SHKConfig.m in Sources */,
 				878850C315AAB1F2002B6F8D /* SamLibModerator.m in Sources */,
 				87E37DE715AC28DD0009B377 /* SamLibHistory.m in Sources */,
+				87E37DF215AC2A810009B377 /* HistoryViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

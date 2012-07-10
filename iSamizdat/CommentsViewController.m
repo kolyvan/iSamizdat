@@ -19,6 +19,7 @@
 #import "SamLibAuthor+IOS.h"
 #import "SamLibText.h"
 #import "SamLibModel.h"
+#import "SamLibHistory.h"
 #import "CommentCell.h"
 #import "PostViewController.h"
 #import "AuthorViewController.h"
@@ -92,6 +93,7 @@
         _needReload = NO;           
         self.title = _comments.text.title;
         [self.tableView reloadData];
+        [[SamLibHistory shared] addComments:_comments];
     }
 }
 

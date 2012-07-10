@@ -16,6 +16,7 @@
 #import "VotedViewController.h"
 #import "SearchViewController.h"
 #import "SettingsViewController.h"
+#import "HistoryViewController.h"
 #import "SamLibAgent.h"
 #import "SamLibModel.h"
 #import "SamLibHistory.h"
@@ -74,18 +75,23 @@ int ddLogLevel = LOG_LEVEL_WARN;
     
     MainViewController *vc0 = [[MainViewController alloc] init];
     FavoritesViewController *vc1 = [[FavoritesViewController alloc] init];
-    VotedViewController *vc2 = [[VotedViewController alloc] init];
+    HistoryViewController *vc2 = [[HistoryViewController alloc] init];
     SearchViewController *vc3 = [[SearchViewController alloc] init]; 
-    SettingsViewController *vc4 = [[SettingsViewController alloc] init];      
+    SettingsViewController *vc4 = [[SettingsViewController alloc] init];    
+    VotedViewController *vc5 = [[VotedViewController alloc] init];    
+
+    NSArray * controllers = KxUtils.array(
+                                          [[UINavigationController alloc] initWithRootViewController:vc0],
+                                          [[UINavigationController alloc] initWithRootViewController:vc1],
+                                          [[UINavigationController alloc] initWithRootViewController:vc2],
+                                          [[UINavigationController alloc] initWithRootViewController:vc3],                                                    
+                                          [[UINavigationController alloc] initWithRootViewController:vc4],
+                                          [[UINavigationController alloc] initWithRootViewController:vc5],                                                    
+                                          nil);
     
     UITabBarController *tabBarContrller = [[UITabBarController alloc] init];
-    tabBarContrller.viewControllers = KxUtils.array(
-                                                    [[UINavigationController alloc] initWithRootViewController:vc0],
-                                                    [[UINavigationController alloc] initWithRootViewController:vc1],
-                                                    [[UINavigationController alloc] initWithRootViewController:vc2],
-                                                    [[UINavigationController alloc] initWithRootViewController:vc3],                                                    
-                                                    [[UINavigationController alloc] initWithRootViewController:vc4],                                                    
-                                                    nil);
+    tabBarContrller.viewControllers = controllers;
+    tabBarContrller.customizableViewControllers = controllers; 
 
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];    
     self.window.rootViewController = tabBarContrller;    

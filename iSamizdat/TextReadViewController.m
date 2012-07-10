@@ -15,6 +15,7 @@
 #import "SamLibText+IOS.h"
 #import "SamLibAuthor.h"
 #import "SamLibAuthor+IOS.h"
+#import "SamLibHistory.h"
 #import "KxUtils.h"
 #import "NSString+Kolyvan.h"
 #import "NSDate+Kolyvan.h"
@@ -129,6 +130,7 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
         _needReload = NO;
         _needRestoreOffset = YES;
         [self reloadWebView];
+        [[SamLibHistory shared] addText:_text];
         //DDLogInfo(@"reload text %@", _text.path);   
     }
     

@@ -64,7 +64,7 @@ typedef enum {
     self = [super initWithNibName:@"MainViewController" bundle:nil];
     if (self) {
         self.title = locString(@"Samizdat");
-        self.tabBarItem = [[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemMostViewed tag: 0];                
+        self.tabBarItem = [[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemFeatured tag: 0];                
     }
     return self;
 }

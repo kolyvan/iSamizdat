@@ -53,8 +53,7 @@
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:YES animated:YES];
     [self prepareData];
-    [self.tableView reloadData];
-    
+    [self.tableView reloadData];    
 }
 
 - (void)viewDidUnload
