@@ -16,7 +16,8 @@ typedef struct {
     NSString * (*textsPath)();    
     NSString * (*commentsPath)();
     NSString * (*namesPath)();    
-    NSString * (*bansPath)();        
+    NSString * (*bansPath)();  
+    NSString * (*historyPath)();      
 
     void (*enumerateFolder)(NSString *folder, EnumerateFolderBlock block);
     

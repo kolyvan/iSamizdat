@@ -31,7 +31,8 @@ typedef enum {
     SamLibTextChangedGenre       = 1 << 6,          
     SamLibTextChangedGroup       = 1 << 7,
     SamLibTextChangedType        = 1 << 8,    
-    SamLibTextChangedRemoved     = 1 << 9,    
+    SamLibTextChangedRemoved     = 1 << 9,  
+    SamLibTextChangedNew        = 1 << 10,      
     
 } SamLibTextChanged;
 
@@ -120,6 +121,7 @@ typedef enum {
 @property (readonly) BOOL changedGroup;
 @property (readonly) BOOL changedType;
 @property (readonly) BOOL isRemoved;
+@property (readonly) BOOL isNew;
 
 @property (readonly) NSString * key;
 
@@ -145,10 +147,6 @@ typedef enum {
 + (id) fromDictionary: (NSDictionary *) dict 
            withAuthor: (SamLibAuthor *) author;
 
-+ (id) fromDictionary: (NSDictionary *) dict 
-           withAuthor: (SamLibAuthor *) author 
-           setChanged: (SamLibTextChanged) changed;
-
 - (id) initFromDictionary: (NSDictionary *) dict
                  withPath: (NSString *)path
                 andAuthor: (SamLibAuthor *) author;
@@ -158,6 +156,7 @@ typedef enum {
 - (NSDictionary *) toDictionary;
 
 - (void) flagAsRemoved;
+- (void) flagAsNew;
 
 - (void) update: (UpdateTextBlock) block 
        progress: (AsyncProgressBlock) progress

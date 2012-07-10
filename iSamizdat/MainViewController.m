@@ -41,8 +41,6 @@ typedef enum {
 @interface MainViewController () {
     NSInteger _modelVersion;
     BOOL _tableLoaded;
-    NSInteger _favoritesCount;
-    NSInteger _votedCount;
 }
 
 @property (nonatomic, strong) NSArray *content;
@@ -158,19 +156,13 @@ typedef enum {
 
 - (NSArray *) mkContent
 {
-    _favoritesCount = 0;
-    _votedCount = 0;
     
     NSMutableArray * ma = [NSMutableArray array];            
     for (SamLibAuthor *author in self.authors) {            
         [ma push:author];            
         for (SamLibText *text in author.texts) {
-            if (text.changedSize)
-                [ma push:text];
-            if (text.favorited)
-                ++_favoritesCount;
-            if (text.myVote != 0)
-                ++_votedCount;
+            if (text.changedSize || (text.isNew && text.flagNew != nil))
+                [ma push:text];           
         }
     }
     return ma;
@@ -324,7 +316,10 @@ typedef enum {
             
             UITableViewCell *cell = [self mkTextCell];
             SamLibText *text = obj;
-            cell.detailTextLabel.text = KxUtils.format(@"%+ldk", text.deltaSize);
+            if (text.changedSize)
+                cell.detailTextLabel.text = KxUtils.format(@"%+ldk", text.deltaSize);
+            else
+                cell.detailTextLabel.text = locString(@"new");
             cell.textLabel.text = text.title;
             cell.textLabel.textColor = [UIColor secondaryTextColor];  
             return cell;            

@@ -258,9 +258,9 @@ extern int ddLogLevel;
             [t updateFromDictionary:d];
         else { 
             SamLibText *new = [SamLibText fromDictionary:d 
-                                              withAuthor:self 
-                                              setChanged:SamLibTextChangedSize];
-            [newTexts push: new];        
+                                              withAuthor:self];
+            [new flagAsNew];
+            [newTexts push: new];
         }
     }
     

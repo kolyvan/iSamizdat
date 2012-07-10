@@ -18,6 +18,7 @@
 #import "SettingsViewController.h"
 #import "SamLibAgent.h"
 #import "SamLibModel.h"
+#import "SamLibHistory.h"
 #import "SamLibAuthor.h"
 #import "SamLibText.h"
 #import "SamLibUser.h"
@@ -104,6 +105,7 @@ int ddLogLevel = LOG_LEVEL_WARN;
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
     [[SamLibModel shared] save]; 
+    [[SamLibHistory shared] save]; 
     
     if (!SamLibStorage.allowTexts()) {
         DDLogInfo(@"cleanup texts");

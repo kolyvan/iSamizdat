@@ -152,6 +152,7 @@ static NSString * prettyHtml (NSMutableArray *diffs)
 - (BOOL) changedGroup       { return 0 != (_changedFlag & SamLibTextChangedGroup); }
 - (BOOL) changedType        { return 0 != (_changedFlag & SamLibTextChangedType); }
 - (BOOL) isRemoved          { return 0 != (_changedFlag & SamLibTextChangedRemoved); }
+- (BOOL) isNew              { return 0 != (_changedFlag & SamLibTextChangedNew); }
 
 - (void) setChangedFlag:(SamLibTextChanged)changedFlag
 {
@@ -277,16 +278,6 @@ static NSString * prettyHtml (NSMutableArray *diffs)
                                                     andAuthor:author];
     
     return KX_AUTORELEASE(text);
-}
-
-+ (id) fromDictionary: (NSDictionary *) dict 
-           withAuthor: (SamLibAuthor *) author 
-           setChanged: (SamLibTextChanged) changed
-{
-    SamLibText *text = [SamLibText fromDictionary: dict withAuthor:author];
-    if (text)
-        text->_changedFlag = changed;
-    return text;
 }
 
 - (id) initFromDictionary: (NSDictionary *) dict
@@ -466,6 +457,11 @@ static NSString * prettyHtml (NSMutableArray *diffs)
 - (void) flagAsRemoved
 {
     self.changedFlag = SamLibTextChangedRemoved;
+}
+
+- (void) flagAsNew
+{
+    self.changedFlag = SamLibTextChangedNew;
 }
 
 - (NSDictionary *) toDictionary

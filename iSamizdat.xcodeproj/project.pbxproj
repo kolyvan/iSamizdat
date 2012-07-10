@@ -117,6 +117,8 @@
 		87E230B0158B1D490074EBF1 /* download.png in Resources */ = {isa = PBXBuildFile; fileRef = 87E230AF158B1D490074EBF1 /* download.png */; };
 		87E230C0158B5A600074EBF1 /* AuthorInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87E230BE158B5A600074EBF1 /* AuthorInfoViewController.m */; };
 		87E230C1158B5A600074EBF1 /* AuthorInfoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 87E230BF158B5A600074EBF1 /* AuthorInfoViewController.xib */; };
+		87E37DE715AC28DD0009B377 /* SamLibHistory.m in Sources */ = {isa = PBXBuildFile; fileRef = 87E37DE615AC28DD0009B377 /* SamLibHistory.m */; };
+		87E37DE915AC28F20009B377 /* censored.bin in Resources */ = {isa = PBXBuildFile; fileRef = 87E37DE815AC28F20009B377 /* censored.bin */; };
 		87EE1E5315885C130015BA99 /* VoteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87EE1E5115885C130015BA99 /* VoteViewController.m */; };
 		87EE1E5415885C130015BA99 /* VoteViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 87EE1E5215885C130015BA99 /* VoteViewController.xib */; };
 		87EE1E5815886C9F0015BA99 /* VotedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87EE1E5615886C9F0015BA99 /* VotedViewController.m */; };
@@ -368,6 +370,9 @@
 		87E230BD158B5A600074EBF1 /* AuthorInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AuthorInfoViewController.h; sourceTree = "<group>"; };
 		87E230BE158B5A600074EBF1 /* AuthorInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AuthorInfoViewController.m; sourceTree = "<group>"; };
 		87E230BF158B5A600074EBF1 /* AuthorInfoViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AuthorInfoViewController.xib; sourceTree = "<group>"; };
+		87E37DE515AC28DD0009B377 /* SamLibHistory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SamLibHistory.h; sourceTree = "<group>"; };
+		87E37DE615AC28DD0009B377 /* SamLibHistory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SamLibHistory.m; sourceTree = "<group>"; };
+		87E37DE815AC28F20009B377 /* censored.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; name = censored.bin; path = resources/censored.bin; sourceTree = "<group>"; };
 		87EE1E5015885C130015BA99 /* VoteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VoteViewController.h; sourceTree = "<group>"; };
 		87EE1E5115885C130015BA99 /* VoteViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VoteViewController.m; sourceTree = "<group>"; };
 		87EE1E5215885C130015BA99 /* VoteViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VoteViewController.xib; sourceTree = "<group>"; };
@@ -645,6 +650,8 @@
 		872D94851573836500BCB4EC /* samlib */ = {
 			isa = PBXGroup;
 			children = (
+				87E37DE515AC28DD0009B377 /* SamLibHistory.h */,
+				87E37DE615AC28DD0009B377 /* SamLibHistory.m */,
 				878850C115AAB1F2002B6F8D /* SamLibModerator.h */,
 				878850C215AAB1F2002B6F8D /* SamLibModerator.m */,
 				87F75D161591E3580046DA46 /* SamLibStorage.h */,
@@ -741,6 +748,7 @@
 		872D956D1573968C00BCB4EC /* resources */ = {
 			isa = PBXGroup;
 			children = (
+				87E37DE815AC28F20009B377 /* censored.bin */,
 				8708A8ED15A6B3FF008D1893 /* author_add.png */,
 				8708A8EE15A6B3FF008D1893 /* author_go.png */,
 				8708A8EF15A6B3FF008D1893 /* ban.png */,
@@ -947,6 +955,7 @@
 				8708A8F015A6B3FF008D1893 /* author_add.png in Resources */,
 				8708A8F115A6B3FF008D1893 /* author_go.png in Resources */,
 				8708A8F215A6B3FF008D1893 /* ban.png in Resources */,
+				87E37DE915AC28F20009B377 /* censored.bin in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1030,6 +1039,7 @@
 				87F75D211591EFE10046DA46 /* CacheViewController.m in Sources */,
 				87562836159989D800636465 /* SHKConfig.m in Sources */,
 				878850C315AAB1F2002B6F8D /* SamLibModerator.m in Sources */,
+				87E37DE715AC28DD0009B377 /* SamLibHistory.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
