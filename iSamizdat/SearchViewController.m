@@ -77,7 +77,7 @@ extern int ddLogLevel;
 
 - (void) viewDidAppear:(BOOL)animated
 {
-    [self.searchBar becomeFirstResponder];
+    //[self.searchBar becomeFirstResponder];
     [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
 

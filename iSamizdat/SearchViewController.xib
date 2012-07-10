@@ -40,7 +40,7 @@
 					<object class="IBUITableView" id="747573251">
 						<reference key="NSNextResponder" ref="191373211"/>
 						<int key="NSvFlags">274</int>
-						<string key="NSFrame">{{1, 88}, {320, 372}}</string>
+						<string key="NSFrame">{{1, 44}, {320, 416}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="929996459"/>
@@ -62,13 +62,14 @@
 					<object class="IBUISearchBar" id="115447720">
 						<reference key="NSNextResponder" ref="191373211"/>
 						<int key="NSvFlags">290</int>
-						<string key="NSFrameSize">{320, 88}</string>
+						<string key="NSFrameSize">{320, 44}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="747573251"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<int key="IBUIContentMode">3</int>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
+						<string key="IBPlaceholder">samizdat</string>
 						<bool key="IBShowsCancelButton">YES</bool>
 						<object class="IBUITextInputTraits" key="IBTextInputTraits">
 							<int key="IBUIAutocorrectionType">1</int>
@@ -78,7 +79,6 @@
 							<string>Author</string>
 							<string>Text</string>
 						</array>
-						<bool key="IBShowsScopeBar">YES</bool>
 					</object>
 					<object class="IBUIActivityIndicatorView" id="929996459">
 						<reference key="NSNextResponder" ref="191373211"/>
@@ -86,6 +86,7 @@
 						<string key="NSFrame">{{150, 96}, {20, 20}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
