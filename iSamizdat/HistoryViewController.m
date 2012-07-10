@@ -31,7 +31,7 @@
 {
     self =  [self initWithNibName:@"HistoryViewController" bundle:nil];
     if (self) {
-        self.title = locString(@"History");
+        self.title = locString(@"Recent");
         self.tabBarItem = [[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemRecents tag: 4];        
     }
     return self;
@@ -41,14 +41,14 @@
 {
     [super viewDidLoad];
     
-    self.navigationController.navigationBarHidden = YES;
+    //self.navigationController.navigationBarHidden = YES;
 }
 
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     [self.tableView reloadData];
-    [self.navigationController setNavigationBarHidden:YES animated:YES];    
+    //[self.navigationController setNavigationBarHidden:YES animated:YES];    
 }
 
 - (void)viewDidUnload
@@ -132,7 +132,7 @@
         }        
         
         [self.navigationController pushViewController:viewController animated:YES];
-        [self.navigationController setNavigationBarHidden:NO animated:YES]; 
+        //[self.navigationController setNavigationBarHidden:NO animated:YES]; 
     }
 }
 

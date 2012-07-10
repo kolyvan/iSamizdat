@@ -43,7 +43,7 @@ enum {
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.navigationController.navigationBarHidden = YES;    
+    //self.navigationController.navigationBarHidden = YES;    
 }
 
 - (void)viewDidUnload
@@ -57,7 +57,7 @@ enum {
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self.navigationController setNavigationBarHidden:YES animated:YES];
+    //[self.navigationController setNavigationBarHidden:YES animated:YES];
 }
 
 - (void) didReceiveMemoryWarning
@@ -132,7 +132,7 @@ enum {
                                              animated:YES]; 
     }
     
-    [self.navigationController setNavigationBarHidden:NO animated:YES];    
+    //[self.navigationController setNavigationBarHidden:NO animated:YES];    
 }
 
 @end

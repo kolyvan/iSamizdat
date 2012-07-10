@@ -81,11 +81,11 @@ int ddLogLevel = LOG_LEVEL_WARN;
     VotedViewController *vc5 = [[VotedViewController alloc] init];    
 
     NSArray * controllers = KxUtils.array(
-                                          [[UINavigationController alloc] initWithRootViewController:vc0],
+                                          [[UINavigationController alloc] initWithRootViewController:vc0],                                          
                                           [[UINavigationController alloc] initWithRootViewController:vc1],
                                           [[UINavigationController alloc] initWithRootViewController:vc2],
-                                          [[UINavigationController alloc] initWithRootViewController:vc3],                                                    
-                                          [[UINavigationController alloc] initWithRootViewController:vc4],
+                                          [[UINavigationController alloc] initWithRootViewController:vc3],
+                                          [[UINavigationController alloc] initWithRootViewController:vc4],                                          
                                           [[UINavigationController alloc] initWithRootViewController:vc5],                                                    
                                           nil);
     

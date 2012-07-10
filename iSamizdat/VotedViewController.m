@@ -45,13 +45,13 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.navigationController.navigationBarHidden = YES;
+    //self.navigationController.navigationBarHidden = YES;
 }
 
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self.navigationController setNavigationBarHidden:YES animated:YES];
+    //[self.navigationController setNavigationBarHidden:YES animated:YES];
     [self prepareData];
     [self.tableView reloadData];    
 }
@@ -192,7 +192,7 @@
     self.textViewController.text = text;
     [self.navigationController pushViewController:self.textViewController 
                                          animated:YES];
-    [self.navigationController setNavigationBarHidden:NO animated:YES];    
+    //[self.navigationController setNavigationBarHidden:NO animated:YES];    
 }
 
 

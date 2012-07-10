@@ -73,7 +73,7 @@ typedef enum {
 {
     [super viewDidLoad];
    
-    self.navigationController.navigationBarHidden = YES;
+    //self.navigationController.navigationBarHidden = YES;
        
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(samLibAuthorIgnoredChanged:)
@@ -116,7 +116,7 @@ typedef enum {
 - (void) viewWillAppear:(BOOL)animated
 {
     [self prepareData];        
-    [self.navigationController setNavigationBarHidden:YES animated:YES];    
+    //[self.navigationController setNavigationBarHidden:YES animated:YES];    
 }
 
 - (void) didReceiveMemoryWarning
@@ -422,7 +422,7 @@ typedef enum {
     } 
     
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
-    [self.navigationController setNavigationBarHidden: NO animated:YES];
+    //[self.navigationController setNavigationBarHidden: NO animated:YES];
 }
 
 @end
