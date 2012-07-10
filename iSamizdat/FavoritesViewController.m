@@ -22,7 +22,7 @@
 #import "TextViewController.h"
 
 @interface FavoritesViewController () {
-    NSArray *_texts;
+    NSMutableArray *_texts;
 }
 @property (nonatomic, strong) TextViewController* textViewController;
 @end
@@ -88,8 +88,9 @@
         }
     }
     
-    if (ma.nonEmpty)
-        _texts = [ma copy];
+    //if (ma.nonEmpty)
+    //    _texts = [ma copy];
+    _texts = ma;
 }
 
 #pragma mark - Table view data source
@@ -129,5 +130,16 @@
     //[self.navigationController setNavigationBarHidden:NO animated:YES];
 }
 
+- (void)tableView:(UITableView *)tableView 
+commitEditingStyle:(UITableViewCellEditingStyle)editingStyle 
+forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    SamLibText *text = [_texts objectAtIndex:indexPath.row];      
+    text.favorited = NO;        
+    [_texts removeObjectAtIndex:indexPath.row];
+    [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] 
+                     withRowAnimation:UITableViewRowAnimationAutomatic];        
+    
+}
 
 @end

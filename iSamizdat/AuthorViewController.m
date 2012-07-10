@@ -69,15 +69,18 @@ extern int ddLogLevel;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-        
+   
+    /*
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back.png"]
                                                                    style:UIBarButtonItemStylePlain                                                                                           target:nil                                                                                            action:nil];
     
+    self.navigationItem.backBarButtonItem = backButton;
+    */ 
+    
     UIBarButtonItem *infoButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemOrganize 
                                                                                 target:self 
-                                                                               action:@selector(goInfo)];        
-    
-    self.navigationItem.backBarButtonItem = backButton;
+                                                                               action:@selector(goInfo)];            
+
     self.navigationItem.rightBarButtonItem = infoButton;    
     
     
@@ -99,7 +102,7 @@ extern int ddLogLevel;
     if (_needReload) {
         _needReload = NO;
         
-        // self.title = _author.name;
+        self.title = _author.name;
                 
         CGRect rc;
         UILabel *label = (UILabel *)self.navigationItem.titleView;

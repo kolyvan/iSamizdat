@@ -123,7 +123,7 @@ enum {
 {
     self = [self initWithNibName:@"TextViewController" bundle:nil];    
     if (self) {
-        self.title = locString(@"Text Info");
+        //self.title = locString(@"Text Info");
     }
     return self;
 }
@@ -136,7 +136,12 @@ enum {
                                                                                target:self 
                                                                                action:@selector(goShare)];
     
+    /*
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back.png"]
+                                                                   style:UIBarButtonItemStylePlain                                                                                           target:nil                                                                                            action:nil];
+   */  
+    
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@""                                    
                                                                    style:UIBarButtonItemStylePlain                                                                                           target:nil                                                                                            action:nil];
     
 
@@ -149,6 +154,7 @@ enum {
     [super viewWillAppear:animated];
     if (_needReload) {
         _needReload = NO;           
+        self.navigationItem.backBarButtonItem.title = _text.title;
         [self prepareData];       
         [self.tableView reloadData];
     }
@@ -182,7 +188,10 @@ enum {
             
     [ma push: $int(RowTitle)];
         
-    [ma push: $int(RowAuthor)];
+    NSArray * controllers = self.navigationController.viewControllers;
+    UIViewController *backView =[controllers objectAtIndex: controllers.count - 2];
+    if (![backView isKindOfClass:[AuthorViewController class]])
+        [ma push: $int(RowAuthor)];
             
     [ma push: $int(RowSize)];
       

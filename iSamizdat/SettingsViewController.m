@@ -10,6 +10,9 @@
 #import "KxMacros.h"
 #import "UserViewController.h"
 #import "CacheViewController.h"
+#import "DDLog.h"
+
+extern int ddLogLevel;
 
 enum {
 

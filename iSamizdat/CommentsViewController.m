@@ -73,7 +73,7 @@
 {
     [super viewDidLoad];
     
-    UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd 
+    UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose 
                                                                                target:self 
                                                                                action:@selector(replyPost)];
     self.navigationItem.rightBarButtonItem = addButton;
@@ -91,7 +91,7 @@
     [super viewWillAppear:animated];
     if (_needReload) {
         _needReload = NO;           
-        self.title = _comments.text.title;
+        //self.title = _comments.text.title;
         [self.tableView reloadData];
         [[SamLibHistory shared] addComments:_comments];
     }

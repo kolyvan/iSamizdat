@@ -43,7 +43,7 @@ typedef enum {
     BOOL _tableLoaded;
 }
 
-@property (nonatomic, strong) NSArray *content;
+@property (nonatomic, strong) NSMutableArray *content;
 @property (nonatomic, strong) NSArray *ignored;
 @property (nonatomic, strong) NSArray *authors;
 @property (nonatomic, strong) AuthorViewController* authorViewController;
@@ -74,6 +74,16 @@ typedef enum {
     [super viewDidLoad];
    
     //self.navigationController.navigationBarHidden = YES;
+    
+    /*
+    UIBarButtonItem *editButton = [[UIBarButtonItem alloc] initWithTitle:locString(@"Edit") 
+                                                                   style:UIBarButtonItemStyleBordered 
+                                                                  target:self 
+                                                                  action:@selector(toggleEdit)];
+    
+    self.navigationItem.rightBarButtonItem = editButton;
+     */  
+    
        
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(samLibAuthorIgnoredChanged:)
@@ -104,8 +114,8 @@ typedef enum {
     self.ignored = nil;
     self.authors = nil;
     
-    self.navigationItem.backBarButtonItem = nil;
-    self.navigationItem.leftBarButtonItem = nil;
+//    self.navigationItem.backBarButtonItem = nil;
+//    self.navigationItem.leftBarButtonItem = nil;
     self.navigationItem.rightBarButtonItem = nil;
     self.authorViewController = nil;
     self.textViewController = nil;
@@ -117,6 +127,11 @@ typedef enum {
 {
     [self prepareData];        
     //[self.navigationController setNavigationBarHidden:YES animated:YES];    
+}
+
+- (void) viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];    
 }
 
 - (void) didReceiveMemoryWarning
@@ -147,25 +162,38 @@ typedef enum {
             return ((SamLibAuthor *)elem).ignored;
         }];    
         
-        self.ignored = result.first;  
-        self.authors = result.second;        
-        self.content = [self mkContent];        
+        self.ignored = result.first;                  
+        self.authors = [result.second sortWith:^(SamLibAuthor *l, SamLibAuthor *r){                   
+            return [l.name compare:r.name];
+        }];
+        
+        self.content = [self mkContent];
+        [self refreshBadgeValue];        
         [self.tableView reloadData]; 
     }
 }
 
-- (NSArray *) mkContent
-{
-    
+- (NSMutableArray *) mkContent
+{   
     NSMutableArray * ma = [NSMutableArray array];            
     for (SamLibAuthor *author in self.authors) {            
         [ma push:author];            
         for (SamLibText *text in author.texts) {
-            if (text.changedSize || (text.isNew && text.flagNew != nil))
-                [ma push:text];           
+            if (text.changedSize || (text.isNew && text.flagNew != nil)) {
+                [ma push:text];                
+            }
         }
     }
     return ma;
+}
+
+- (void) refreshBadgeValue
+{
+    NSInteger count = 0;
+    for (id obj in self.content)
+        if ([obj isKindOfClass:[SamLibText class]]) 
+             ++count;    
+    self.tabBarItem.badgeValue = count > 0 ? KxUtils.format(@"%d", count) : nil;
 }
 
 - (void) samLibAuthorIgnoredChanged:(NSNotification *)notification
@@ -183,13 +211,25 @@ typedef enum {
     self.content = nil;
 }
 
+- (void) toggleEdit
+{
+    [self.tableView setEditing:!self.tableView.editing animated:YES];
+    
+    if (self.tableView.editing) {
+        self.navigationItem.rightBarButtonItem.title = locString(@"Done");
+    } else {
+        self.navigationItem.rightBarButtonItem.title = locString(@"Edit");        
+    }
+}
+
 #pragma mark - refresh 
 
 - (void) goStop
 {
     [super goStop];
     
-    self.content = [self mkContent];  
+    self.content = [self mkContent]; 
+    [self refreshBadgeValue];
     [self.tableView reloadData];     
 }
 
@@ -224,7 +264,8 @@ typedef enum {
                 
                 if (reloaded > 0) {
                     status = SamLibStatusSuccess;   
-                    self.content = [self mkContent];   
+                    self.content = [self mkContent]; 
+                    [self refreshBadgeValue];        
                 }
                 
                 NSString *message = nil;
@@ -379,8 +420,6 @@ typedef enum {
     return 0;
 }
 
-#pragma mark - Table view delegate
-
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSInteger section = indexPath.section;
@@ -423,6 +462,48 @@ typedef enum {
     
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
     //[self.navigationController setNavigationBarHidden: NO animated:YES];
+}
+
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView 
+           editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    id obj = [self.content objectAtIndex:indexPath.row]; 
+    if ([obj isKindOfClass:[SamLibAuthor class]]) 
+        return UITableViewCellEditingStyleDelete;
+    return UITableViewCellEditingStyleNone;
+}
+
+- (void)tableView:(UITableView *)tableView 
+commitEditingStyle:(UITableViewCellEditingStyle)editingStyle 
+forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    id obj = [self.content objectAtIndex:indexPath.row];    
+    if ([obj isKindOfClass:[SamLibAuthor class]]) {    
+        
+        // build lists
+        NSMutableIndexSet *indexSet = [NSMutableIndexSet indexSet];
+        NSMutableArray *indexArray = [NSMutableArray array];
+        
+        [indexSet addIndex:indexPath.row];
+        [indexArray addObject:indexPath];
+        
+        SamLibAuthor *author = obj;        
+        for (NSInteger n = indexPath.row + 1; n < self.content.count; ++n) {
+            
+            id p = [self.content objectAtIndex:n];
+            if ([p isKindOfClass:[SamLibAuthor class]]) 
+                break;
+            
+            [indexSet addIndex:n];
+            [indexArray addObject:[NSIndexPath indexPathForRow:n inSection:indexPath.section]];            
+        }
+        
+        // remove         
+        [self.content removeObjectsAtIndexes:indexSet];
+        [tableView deleteRowsAtIndexPaths:indexArray 
+                         withRowAnimation:UITableViewRowAnimationAutomatic];        
+        [[SamLibModel shared] deleteAuthor: author];        
+    }
 }
 
 @end

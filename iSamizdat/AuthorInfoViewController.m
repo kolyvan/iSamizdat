@@ -16,15 +16,18 @@
 #import "SHK.h"
 
 enum {
-    RowName,
+    RowName,          
     RowRating,    
     RowStatus,    
     RowUpdated,
     RowSize,
     RowVisitors,
     RowIgnore,    
-    RowRemove,        
+    
+    FirstSectionCount,
 };
+
+#define RowRemove 0  
 
 @interface AuthorInfoViewController () {
     BOOL _needReload;
@@ -47,7 +50,7 @@ enum {
 {
     self =  [self initWithNibName:@"AuthorInfoViewController" bundle:nil];
     if (self) {
-        self.title = locString(@"Author Info");
+        //self.title = locString(@"Author Info");
     }
     return self;
 }
@@ -126,12 +129,14 @@ enum {
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 1;
+    return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 8;
+    if (section == 0)
+        return FirstSectionCount;
+    return 1;
 }
 
 - (id) mkCell: (NSString *) cellIdentifier
@@ -147,98 +152,103 @@ enum {
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell;
-      
     NSInteger row = indexPath.row;
     
-    if (RowName == row) {
-        
-        cell = [self mkCell: @"NameCell" withStyle:UITableViewCellStyleSubtitle];        
-        cell.textLabel.text = _author.name;
-        cell.detailTextLabel.text = _author.title;  
-        
-    } else if (RowRating == row) {
-        
-        cell = [self mkCell: @"Cell" withStyle:UITableViewCellStyleValue1];        
-        cell.textLabel.text = locString(@"Rating");
-        cell.detailTextLabel.text = _author.rating;
-        
-    } else if (RowUpdated == row) {
-        
-        cell = [self mkCell: @"Cell" withStyle:UITableViewCellStyleValue1];        
-        cell.textLabel.text = locString(@"Updated");
-        cell.detailTextLabel.text = _author.updated;
-        
-    } else if (RowSize == row) {     
-
-        cell = [self mkCell: @"Cell" withStyle:UITableViewCellStyleValue1];                
-        cell.textLabel.text = locString(@"Amount");
-        cell.detailTextLabel.text = _author.size;
-        
-    } else if (RowVisitors == row) {    
-        
-        cell = [self mkCell: @"Cell" withStyle:UITableViewCellStyleValue1];                
-        cell.textLabel.text = locString(@"Visitors");
-        cell.detailTextLabel.text = _author.visitors;
-        
-    } else if (RowIgnore == row) {
-        
-        static NSString *CellIdentifier = @"IgnoreCell";        
-        cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];    
-        if (cell == nil) {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault 
-                                          reuseIdentifier:CellIdentifier];  
+    if (0 == indexPath.section) {
+              
+        if (RowName == row) {
             
-            UISwitch * button = [[UISwitch alloc] initWithFrame:CGRectZero]; 
+            cell = [self mkCell: @"NameCell" withStyle:UITableViewCellStyleSubtitle];        
+            cell.textLabel.text = _author.name;
+            cell.detailTextLabel.text = _author.title;  
             
-            [button addTarget:self 
-                       action:@selector(goIgnore:) 
-             forControlEvents:UIControlEventValueChanged ];
-            cell.accessoryView = button;
-            cell.textLabel.text = locString(@"Ignore");               
-        }
-        
-        ((UISwitch *)cell.accessoryView).on = _author.ignored;
-        
-    } else if (RowRemove == row) {        
-        
-        static NSString *CellIdentifier = @"RemoveCell";
-        cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];    
-        if (cell == nil) {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault 
-                                          reuseIdentifier:CellIdentifier];  
-                        
-            UIImage *image = [UIImage imageNamed:@"delete.png"];
-            UIImageView *imageView = [[UIImageView alloc] initWithImage: image];            
-            cell.accessoryView = imageView;  
-            cell.imageView.image = image;
+        } else if (RowRating == row) {
             
-            cell.textLabel.text = locString(@"Delete");     
-            cell.textLabel.textColor = [UIColor redColor];
-            cell.textLabel.textAlignment = UITextAlignmentCenter;
-        }
-        
-    } else if (RowStatus == row) {    
-        
-        cell = [self mkCell: @"StatusCell" withStyle:UITableViewCellStyleDefault];                
-        
-        if (_author.lastError.nonEmpty) {
+            cell = [self mkCell: @"Cell" withStyle:UITableViewCellStyleValue1];        
+            cell.textLabel.text = locString(@"Rating");
+            cell.detailTextLabel.text = _author.rating;
             
-            cell.imageView.image = [UIImage imageNamed:@"failure.png"];
-            cell.textLabel.text = _author.lastError;
-            cell.textLabel.textColor = [UIColor redColor];
+        } else if (RowUpdated == row) {
             
-        } else if (_author.hasChangedSize) {
-            
-            cell.imageView.image = [UIImage imageNamed:@"success.png"];                
+            cell = [self mkCell: @"Cell" withStyle:UITableViewCellStyleValue1];        
             cell.textLabel.text = locString(@"Updated");
-            cell.textLabel.textColor = [UIColor blueColor];
+            cell.detailTextLabel.text = _author.updated;
             
-        } else {
-            cell.imageView.image = nil;
-            cell.textLabel.text = locString(@"No updates");
+        } else if (RowSize == row) {     
+            
+            cell = [self mkCell: @"Cell" withStyle:UITableViewCellStyleValue1];                
+            cell.textLabel.text = locString(@"Amount");
+            cell.detailTextLabel.text = _author.size;
+            
+        } else if (RowVisitors == row) {    
+            
+            cell = [self mkCell: @"Cell" withStyle:UITableViewCellStyleValue1];                
+            cell.textLabel.text = locString(@"Visitors");
+            cell.detailTextLabel.text = _author.visitors;
+            
+        } else if (RowIgnore == row) {
+            
+            static NSString *CellIdentifier = @"IgnoreCell";        
+            cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];    
+            if (cell == nil) {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault 
+                                              reuseIdentifier:CellIdentifier];  
+                
+                UISwitch * button = [[UISwitch alloc] initWithFrame:CGRectZero]; 
+                
+                [button addTarget:self 
+                           action:@selector(goIgnore:) 
+                 forControlEvents:UIControlEventValueChanged ];
+                cell.accessoryView = button;
+                cell.textLabel.text = locString(@"Ignore");               
+            }
+            
+            ((UISwitch *)cell.accessoryView).on = _author.ignored;            
+                   
+        } else if (RowStatus == row) {    
+            
+            cell = [self mkCell: @"StatusCell" withStyle:UITableViewCellStyleDefault];                
+            
+            if (_author.lastError.nonEmpty) {
+                
+                cell.imageView.image = [UIImage imageNamed:@"failure.png"];
+                cell.textLabel.text = _author.lastError;
+                cell.textLabel.textColor = [UIColor redColor];
+                
+            } else if (_author.hasChangedSize) {
+                
+                cell.imageView.image = [UIImage imageNamed:@"success.png"];                
+                cell.textLabel.text = locString(@"Updated");
+                cell.textLabel.textColor = [UIColor blueColor];
+                
+            } else {
+                cell.imageView.image = nil;
+                cell.textLabel.text = locString(@"No updates");
+            }
+        }   
+        
+    } else if (1 == indexPath.section) {
+        
+        if (RowRemove == row) {        
+            
+            static NSString *CellIdentifier = @"RemoveCell";
+            cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];    
+            if (cell == nil) {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault 
+                                              reuseIdentifier:CellIdentifier];  
+                
+                UIImage *image = [UIImage imageNamed:@"delete.png"];
+                UIImageView *imageView = [[UIImageView alloc] initWithImage: image];            
+                cell.accessoryView = imageView;  
+                cell.imageView.image = image;
+                
+                cell.textLabel.text = locString(@"Delete");     
+                cell.textLabel.textColor = [UIColor redColor];
+                cell.textLabel.textAlignment = UITextAlignmentCenter;
+            }
         }
-    }     
-    
+    }
+        
     return cell;
 }
 
@@ -246,9 +256,14 @@ enum {
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (RowRemove == indexPath.row) {   
+    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    if (1 == indexPath.section &&
+        RowRemove == indexPath.row) {   
+        
         [self goDelete];
-    }
+        
+    } 
 }
 
 @end

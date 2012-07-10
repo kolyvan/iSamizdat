@@ -76,9 +76,14 @@ extern int ddLogLevel;
 }
 
 - (void) viewDidAppear:(BOOL)animated
-{
+{    
     //[self.searchBar becomeFirstResponder];
-    [self.navigationController setNavigationBarHidden:YES animated:NO];
+    
+    if (![NSStringFromClass([self.parentViewController class]) isEqualToString:@"UIMoreNavigationController"]){
+                
+        [self.navigationController setNavigationBarHidden:YES animated:NO];
+    }
+    
 }
 
 - (void) viewWillDisappear:(BOOL)animated
