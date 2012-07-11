@@ -95,7 +95,11 @@
         cache = [[NSMutableDictionary alloc] init];
     });
             
-    NSString *text = KxUtils.format(@"%ld", number);
+    NSString *text;
+    if (number > 9)
+        text = @"X";
+    else
+        text = KxUtils.format(@"%ld", number);
     
     return [cache get:text orSet:^id{
         
@@ -124,6 +128,8 @@
         
         //[[UIColor darkTextColor] set]; 
         [[UIColor colorWithRed:R green:G blue:B alpha:1] set]; 
+        rect.origin.x += 1;
+        rect.size.width -= 1; 
         [text drawInRect:rect
                 withFont:[UIFont boldSystemFontOfSize:20] 
            lineBreakMode:UILineBreakModeTailTruncation 
