@@ -134,6 +134,8 @@
 		87F066A6158C737C00694FAC /* SearchViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 87F066A4158C737C00694FAC /* SearchViewController.xib */; };
 		87F70BB615AD482400B202C7 /* TextContainerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F70BB515AD482400B202C7 /* TextContainerController.m */; };
 		87F70BD715AD7BA000B202C7 /* safari.png in Resources */ = {isa = PBXBuildFile; fileRef = 87F70BD615AD7BA000B202C7 /* safari.png */; };
+		87F70BD915AD88A800B202C7 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 87F70BD815AD88A800B202C7 /* icon.png */; };
+		87F70BDB15AD88AB00B202C7 /* icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 87F70BDA15AD88AB00B202C7 /* icon@2x.png */; };
 		87F75CFB15919AB90046DA46 /* GoogleSearch.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F75CF615919AB90046DA46 /* GoogleSearch.m */; };
 		87F75CFC15919AB90046DA46 /* SamLibCacheNames.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F75CF815919AB90046DA46 /* SamLibCacheNames.m */; };
 		87F75CFD15919AB90046DA46 /* SamLibSearch.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F75CFA15919AB90046DA46 /* SamLibSearch.m */; };
@@ -397,6 +399,8 @@
 		87F70BB415AD482400B202C7 /* TextContainerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextContainerController.h; sourceTree = "<group>"; };
 		87F70BB515AD482400B202C7 /* TextContainerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextContainerController.m; sourceTree = "<group>"; };
 		87F70BD615AD7BA000B202C7 /* safari.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = safari.png; path = resources/safari.png; sourceTree = "<group>"; };
+		87F70BD815AD88A800B202C7 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
+		87F70BDA15AD88AB00B202C7 /* icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon@2x.png"; sourceTree = "<group>"; };
 		87F75CF515919AB90046DA46 /* GoogleSearch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GoogleSearch.h; sourceTree = "<group>"; };
 		87F75CF615919AB90046DA46 /* GoogleSearch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GoogleSearch.m; sourceTree = "<group>"; };
 		87F75CF715919AB90046DA46 /* SamLibCacheNames.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SamLibCacheNames.h; sourceTree = "<group>"; };
@@ -503,6 +507,8 @@
 				87026EF11599860A00998FD3 /* ShareKit.xcodeproj */,
 				87F75CFF15919ACA0046DA46 /* libsqlite3.dylib */,
 				878850BF15AAB157002B6F8D /* libz.dylib */,
+				87F70BDA15AD88AB00B202C7 /* icon@2x.png */,
+				87F70BD815AD88A800B202C7 /* icon.png */,
 				872D956D1573968C00BCB4EC /* resources */,
 				872D94AE1573857500BCB4EC /* vendors */,
 				872D94851573836500BCB4EC /* samlib */,
@@ -970,6 +976,8 @@
 				87E37DF615AC2D0A0009B377 /* book.png in Resources */,
 				87E37DF715AC2D0A0009B377 /* comments.png in Resources */,
 				87F70BD715AD7BA000B202C7 /* safari.png in Resources */,
+				87F70BD915AD88A800B202C7 /* icon.png in Resources */,
+				87F70BDB15AD88AB00B202C7 /* icon@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -240,8 +240,12 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
                         CGRect bounds = [UIScreen mainScreen].bounds;    
                         
                         if (on) {        
+                            
+                            CGFloat tabbarHeight = self.tabBarController.tabBar.bounds.size.height;                            
+                                                                 
                             bounds.origin.y = -20;
-                            bounds.size.height += 20;  
+                            bounds.size.height += 20;
+                            bounds.size.height += tabbarHeight;
                         }
                         
                         [app setStatusBarHidden:on withAnimation:UIStatusBarAnimationSlide];    
