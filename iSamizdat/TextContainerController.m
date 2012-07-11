@@ -70,7 +70,9 @@
     _activeVC = nil;
     _textViewController = nil;
     _textReadViewController = nil;
-    _commentsViewController = nil;    
+    _commentsViewController = nil;   
+    
+     [self resetObserverNavigationRightButton: NO];
 }
 
 - (void) didReceiveMemoryWarning
@@ -145,6 +147,8 @@
 
 - (void) flipVC: (UIViewController *) toVC aminated: (BOOL) animated
 {
+    [self resetObserverNavigationRightButton: NO];
+    
     UIViewController *fromVC = _activeVC;    
     
     [self addChildViewController:toVC];    
@@ -181,6 +185,35 @@
     
     _activeVC = toVC;    
     self.navigationItem.rightBarButtonItem = _activeVC.navigationItem.rightBarButtonItem;  
+    
+    [self resetObserverNavigationRightButton: YES];
+}
+
+- (void) resetObserverNavigationRightButton: (BOOL) observer
+{
+    if (observer) {
+    
+        [_activeVC.navigationItem addObserver:self 
+                                   forKeyPath:@"rightBarButtonItem" 
+                                      options:NSKeyValueObservingOptionNew 
+                                      context:NULL];
+    } else {
+        
+        [_activeVC.navigationItem removeObserver:self 
+                                      forKeyPath:@"rightBarButtonItem"];    
+    }
+}
+
+- (void)observeValueForKeyPath: (NSString*)keyPath
+                      ofObject: (id)object
+                        change: (NSDictionary*)change
+                       context: (void*)context
+{
+    
+    if (_activeVC.navigationItem == object &&
+        [keyPath isEqualToString: @"rightBarButtonItem"]) {
+        self.navigationItem.rightBarButtonItem = [change objectForKey: NSKeyValueChangeNewKey];
+    }    
 }
 
 - (TextViewController *) textViewController
@@ -214,3 +247,4 @@
 }
 
 @end
+	
