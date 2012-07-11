@@ -71,6 +71,8 @@ int ddLogLevel = LOG_LEVEL_WARN;
     
     DDLogInfo(@"logged as %@", [SamLibUser loggedUserName]);
 
+    [self checkFirstRun];
+    
    // [[UINavigationBar appearance] setBarStyle: UIBarStyleBlack];
     
     MainViewController *vc0 = [[MainViewController alloc] init];
@@ -307,6 +309,35 @@ int ddLogLevel = LOG_LEVEL_WARN;
         
     }    
         
+}
+
+- (void) checkFirstRun
+{
+    if (SamLibAgent.settingsBool(@"app.firstRun", YES)) {
+        
+        SamLibAgent.setSettingsBool(@"app.firstRun", NO, YES);
+        
+        SamLibModel * model = [SamLibModel shared];
+        if (model.authors.count == 0) {
+            
+            // add defaults authors            
+            NSDictionary *dict;
+            SamLibAuthor *author;
+            
+            dict = KxUtils.dictionary(@"Буревой Андрей", @"name",nil);            
+            author = [SamLibAuthor fromDictionary:dict withPath:@"burewojandrej"];
+            [model addAuthor:author];     
+            
+            dict = KxUtils.dictionary(@"Колыван", @"name",nil);            
+            author = [SamLibAuthor fromDictionary:dict withPath:@"kolywan"];
+            [model addAuthor:author];     
+            
+            dict = KxUtils.dictionary(@"Смирнов Артур", @"name",nil);            
+            author = [SamLibAuthor fromDictionary:dict withPath:@"smirnow_artur_sergeewich"];
+            [model addAuthor:author];     
+
+        }
+    }
 }
 
 #pragma mark - SSO Facebook support
