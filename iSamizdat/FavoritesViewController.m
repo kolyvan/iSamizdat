@@ -124,7 +124,7 @@
     if (!self.textContainerController)
         self.textContainerController = [[TextContainerController alloc] init];    
     self.textContainerController.text = text;
-    self.textContainerController.selectedIndex = TextInfoViewSelected;
+    self.textContainerController.selected = TextInfoViewSelected;
 
     [self.navigationController pushViewController:self.textContainerController 
                                          animated:YES];

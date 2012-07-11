@@ -114,7 +114,7 @@
         if (!self.textContainerController)
             self.textContainerController = [[TextContainerController alloc] init];    
         self.textContainerController.text = text;
-        self.textContainerController.selectedIndex = isText ? TextReadViewSelected : TextCommentsViewSelected;
+        self.textContainerController.selected = isText ? TextReadViewSelected : TextCommentsViewSelected;
         
         [self.navigationController pushViewController:self.textContainerController 
                                              animated:YES];

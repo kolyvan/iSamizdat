@@ -117,7 +117,7 @@
     }
     
     self.textContainerController.text = [_texts objectAtIndex:indexPath.row];
-    self.textContainerController.selectedIndex = TextInfoViewSelected;
+    self.textContainerController.selected = TextInfoViewSelected;
     [self.navigationController pushViewController:self.textContainerController 
                                          animated:YES]; 
 

@@ -27,7 +27,7 @@
 @implementation TextContainerController
 
 @synthesize text = _text;
-@synthesize selectedIndex = _selectedIndex;
+@synthesize selected = _selected;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -85,18 +85,22 @@
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-
-    UIViewController *vc = [self viewControllerByIndex: _selectedIndex];
-    if (vc != _activeVC)
-        [self flipVC:vc aminated:NO];
-    
-    UISegmentedControl *segm = (UISegmentedControl *)self.navigationItem.titleView;
-    segm.selectedSegmentIndex = _selectedIndex;    
+    [self setSelected:_selected animated:NO];    
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
+}
+
+- (void) setSelected: (NSInteger) selected animated: (BOOL) animated
+{
+    UIViewController *vc = [self viewControllerByIndex: selected];
+    if (vc != _activeVC)
+        [self flipVC:vc aminated:animated];
+    _selected = selected;
+    UISegmentedControl *segm = (UISegmentedControl *)self.navigationItem.titleView;
+    segm.selectedSegmentIndex = selected; 
 }
 
 #pragma mark - private 
@@ -124,10 +128,11 @@
 - (void) segmentedChanged: (UISegmentedControl *) sender
 {
     NSInteger selected = sender.selectedSegmentIndex;    
-    if (_selectedIndex == selected)
+    if (_selected == selected)
         return;    
     UIViewController *toVC = [self viewControllerByIndex: selected];
     [self flipVC:toVC aminated: YES];  
+    _selected = selected;
 }
 
 - (void) flipVC: (UIViewController *) toVC aminated: (BOOL) animated
@@ -160,8 +165,7 @@
         [fromVC removeFromParentViewController];
     }
 
-    _activeVC = toVC;                    
-    _selectedIndex =_activeVC.view.tag;  
+    _activeVC = toVC;                      
     self.navigationItem.rightBarButtonItem = _activeVC.navigationItem.rightBarButtonItem;  
 }
 

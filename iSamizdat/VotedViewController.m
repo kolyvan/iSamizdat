@@ -190,7 +190,7 @@
     }
     SamLibText *text = [_texts objectAtIndex:indexPath.row];    
     self.textContainerController.text = text;
-    self.textContainerController.selectedIndex = TextInfoViewSelected;
+    self.textContainerController.selected = TextInfoViewSelected;
     [self.navigationController pushViewController:self.textContainerController 
                                          animated:YES];
     

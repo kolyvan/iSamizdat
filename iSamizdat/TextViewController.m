@@ -26,6 +26,7 @@
 #import "FastCell.h"
 #import "TextReadViewController.h"
 #import "AuthorViewController.h"
+#import "TextContainerController.h"
 #import "UIFont+Kolyvan.h"
 #import "DDLog.h"
 #import "SHK.h"
@@ -141,7 +142,7 @@ enum {
         _needReload = NO;                   
         [self prepareData];       
         [self.tableView reloadData];
-    }
+    }    
 }
 
 - (void)viewDidUnload
@@ -468,7 +469,6 @@ enum {
         [self.navigationController pushViewController:self.voteViewController 
                                              animated:YES]; 
         
-        
     } else if (RowAuthor == row) {
         
         NSArray *controllers = self.navigationController.viewControllers;
@@ -503,7 +503,16 @@ enum {
     } else if (RowCleanup == row) {
         
         [self goCleanup];
-    }
+        
+    } else if (RowRead == row ||
+               RowComments == row) {        
+        
+        if ([self.parentViewController isKindOfClass:[TextContainerController class]]) {
+            TextContainerController *container = (TextContainerController *)self.parentViewController; 
+            [container setSelected:RowRead == row ? TextReadViewSelected  : TextCommentsViewSelected
+                          animated:YES];
+        }
+    } 
     
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }

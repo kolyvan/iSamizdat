@@ -17,6 +17,8 @@
 @interface TextContainerController : UIViewController
 
 @property (readwrite, nonatomic, strong) SamLibText *text;
-@property (readwrite, nonatomic) NSInteger selectedIndex;
+@property (readwrite, nonatomic) NSInteger selected;
+
+- (void) setSelected: (NSInteger) selected animated: (BOOL) animated;
 
 @end

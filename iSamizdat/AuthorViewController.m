@@ -319,7 +319,7 @@ extern int ddLogLevel;
         }
         
         self.textContainerController.text = obj;
-        self.textContainerController.selectedIndex = TextInfoViewSelected;
+        self.textContainerController.selected = TextInfoViewSelected;
         [self.navigationController pushViewController:self.textContainerController 
                                              animated:YES]; 
         
