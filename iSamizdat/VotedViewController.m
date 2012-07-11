@@ -20,17 +20,17 @@
 #import "SamLibText.h"
 #import "SamLibText+IOS.h"
 #import "SamLibAuthor.h"
-#import "TextViewController.h"
+#import "TextContainerController.h"
 
 @interface VotedViewController () {
     NSArray *_texts;
 }
-@property (nonatomic, strong) TextViewController* textViewController;
+@property (nonatomic, strong) TextContainerController* textContainerController;
 @end
 
 @implementation VotedViewController
 
-@synthesize textViewController;
+@synthesize textContainerController;
 
 - (id) init
 {
@@ -59,14 +59,14 @@
 - (void)viewDidUnload
 {
     [super viewDidUnload];
-    self.textViewController = nil;
+    self.textContainerController = nil;
     _texts = nil;
 }
 
 - (void) didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];         
-    self.textViewController = nil;    
+    self.textContainerController = nil;    
 }
 
 #pragma mark - private
@@ -185,13 +185,15 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {            
-    if (!self.textViewController) {
-        self.textViewController = [[TextViewController alloc] init];
+    if (!self.textContainerController) {
+        self.textContainerController = [[TextContainerController alloc] init];
     }
     SamLibText *text = [_texts objectAtIndex:indexPath.row];    
-    self.textViewController.text = text;
-    [self.navigationController pushViewController:self.textViewController 
+    self.textContainerController.text = text;
+    self.textContainerController.selectedIndex = TextInfoViewSelected;
+    [self.navigationController pushViewController:self.textContainerController 
                                          animated:YES];
+    
     //[self.navigationController setNavigationBarHidden:NO animated:YES];    
 }
 

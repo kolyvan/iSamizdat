@@ -24,7 +24,6 @@
 #import "PostViewController.h"
 #import "AuthorViewController.h"
 
-
 @interface ActionSheetWithComment : UIActionSheet
 @property (readwrite, strong) SamLibComment * comment;
 @end
@@ -91,10 +90,11 @@
     [super viewWillAppear:animated];
     if (_needReload) {
         _needReload = NO;           
-        //self.title = _comments.text.title;
-        [self.tableView reloadData];
-        [[SamLibHistory shared] addComments:_comments];
+        [self.tableView reloadData];        
     }
+    
+    if (_comments.all.count > 0)
+        [[SamLibHistory shared] addComments:_comments];
 }
 
 - (void) viewWillDisappear:(BOOL)animated
@@ -347,15 +347,5 @@
                                withWidth:tableView.frame.size.width];
     
 }
-
-/*
-- (void)tableView:(UITableView *)tableView 
-commitEditingStyle:(UITableViewCellEditingStyle)editingStyle 
-forRowAtIndexPath:(NSIndexPath *)indexPath 
-{
-    // just leave this method empty
-}
- */
-
 
 @end

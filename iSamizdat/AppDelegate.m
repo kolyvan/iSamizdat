@@ -95,6 +95,7 @@ int ddLogLevel = LOG_LEVEL_WARN;
 
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];    
     self.window.rootViewController = tabBarContrller;    
+    //self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:vc0];    
     [self.window makeKeyAndVisible];
     
     DefaultSHKConfigurator *configurator = [[SHKConfig alloc] init];

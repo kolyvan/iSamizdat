@@ -83,7 +83,6 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
 @synthesize text = _text;
 @synthesize webView = _webView;
 
-
 - (void) setText:(SamLibText *)text 
 {
     if (text != _text || 
@@ -119,7 +118,6 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
     pinchGestureRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self 
                                                                        action:@selector(handlePinch:)];  
     [self.webView addGestureRecognizer:pinchGestureRecognizer];
-
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -129,10 +127,12 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
     if (_needReload) {        
         _needReload = NO;
         _needRestoreOffset = YES;
-        [self reloadWebView];
-        [[SamLibHistory shared] addText:_text];
+        [self reloadWebView];        
         //DDLogInfo(@"reload text %@", _text.path);   
     }
+    
+    if (_text.htmlFile.nonEmpty)
+        [[SamLibHistory shared] addText:_text];
     
     _prevScale = 1.0f;
 }

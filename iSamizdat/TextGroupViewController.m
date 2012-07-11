@@ -16,18 +16,18 @@
 #import "SamLibText.h"
 #import "SamLibText+IOS.h"
 #import "UIFont+Kolyvan.h"
-#import "TextViewController.h"
+#import "TextContainerController.h"
 
 @interface TextGroupViewController () {
     BOOL _needReload;
 }
-@property (readwrite, nonatomic, strong) TextViewController* textViewController;
+@property (readwrite, nonatomic, strong) TextContainerController* textContainerController;
 @end
 
 @implementation TextGroupViewController
 
 @synthesize texts = _texts;
-@synthesize textViewController;
+@synthesize textContainerController;
 
 - (void) setTexts:(NSArray *)texts
 {
@@ -62,13 +62,13 @@
 {
     [super viewDidUnload];
     self.texts = nil;
-    self.textViewController = nil;
+    self.textContainerController = nil;
 }
 
 - (void) didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];         
-    self.textViewController = nil; 
+    self.textContainerController = nil; 
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -112,12 +112,13 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (!self.textViewController) {
-        self.textViewController = [[TextViewController alloc] init];
+    if (!self.textContainerController) {
+        self.textContainerController = [[TextContainerController alloc] init];
     }
     
-    self.textViewController.text = [_texts objectAtIndex:indexPath.row];
-    [self.navigationController pushViewController:self.textViewController 
+    self.textContainerController.text = [_texts objectAtIndex:indexPath.row];
+    self.textContainerController.selectedIndex = TextInfoViewSelected;
+    [self.navigationController pushViewController:self.textContainerController 
                                          animated:YES]; 
 
 }

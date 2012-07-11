@@ -25,7 +25,6 @@
 #import "NSDate+Kolyvan.h"
 #import "FastCell.h"
 #import "TextReadViewController.h"
-#import "CommentsViewController.h"
 #import "AuthorViewController.h"
 #import "UIFont+Kolyvan.h"
 #import "DDLog.h"
@@ -93,8 +92,6 @@ enum {
     NSArray *_rows;
 }
 
-@property (nonatomic, strong) TextReadViewController *textReadViewController;
-@property (nonatomic, strong) CommentsViewController *commentsViewController;
 @property (nonatomic, strong) VoteViewController *voteViewController;
 @property (nonatomic, strong) AuthorViewController *authorViewController;
 
@@ -103,8 +100,6 @@ enum {
 @implementation TextViewController
 
 @synthesize text = _text;
-@synthesize textReadViewController;
-@synthesize commentsViewController;
 @synthesize voteViewController;
 @synthesize authorViewController;
 
@@ -123,7 +118,6 @@ enum {
 {
     self = [self initWithNibName:@"TextViewController" bundle:nil];    
     if (self) {
-        //self.title = locString(@"Text Info");
     }
     return self;
 }
@@ -135,26 +129,16 @@ enum {
     UIBarButtonItem *goButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction 
                                                                                target:self 
                                                                                action:@selector(goShare)];
-    
-    /*
-    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back.png"]
-                                                                   style:UIBarButtonItemStylePlain                                                                                           target:nil                                                                                            action:nil];
-   */  
-    
-    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@""                                    
-                                                                   style:UIBarButtonItemStylePlain                                                                                           target:nil                                                                                            action:nil];
-    
 
     self.navigationItem.rightBarButtonItem = goButton;    
-    self.navigationItem.backBarButtonItem = backButton;
+   
 }
 
 - (void) viewWillAppear:(BOOL)animated 
 {    
     [super viewWillAppear:animated];
     if (_needReload) {
-        _needReload = NO;           
-        self.navigationItem.backBarButtonItem.title = _text.title;
+        _needReload = NO;                   
         [self prepareData];       
         [self.tableView reloadData];
     }
@@ -164,18 +148,13 @@ enum {
 {
     [super viewDidUnload];
     self.navigationItem.rightBarButtonItem = nil;
-    self.navigationItem.backBarButtonItem = nil;
-    self.textReadViewController = nil;
-    self.commentsViewController = nil;
     self.voteViewController = nil;
     self.authorViewController = nil;
 }
 
 - (void) didReceiveMemoryWarning
 {
-    [super didReceiveMemoryWarning];         
-    self.textReadViewController = nil;
-    self.commentsViewController = nil;    
+    [super didReceiveMemoryWarning];            
     self.voteViewController = nil;    
     self.authorViewController = nil;
 }
@@ -402,7 +381,6 @@ enum {
     } else if (RowComments == row) {
         
         UITableViewCell *cell = [self mkCell: @"CommentsCell" withStyle:UITableViewCellStyleValue1];                    
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         cell.textLabel.text = locString(@"Comments");
         cell.detailTextLabel.text = [_text commentsWithDelta: @" "];  
         return cell;
@@ -410,7 +388,6 @@ enum {
     } else if (RowRead == row) {
         
         UITableViewCell *cell = [self mkCell: @"ReadCell" withStyle:UITableViewCellStyleValue1];                    
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         cell.textLabel.text = locString(@"The text from");
         cell.detailTextLabel.text = _text.dateModified;          
         return cell;
@@ -479,27 +456,7 @@ enum {
         ((UIImageView *)cell.accessoryView).image = _text.favoritedImage;               
         
         [[NSNotificationCenter defaultCenter] postNotificationName:@"samLibTextChanged" object:nil];
-        
-    } else if (RowRead == row) {
-        
-        if (!self.textReadViewController) {
-            self.textReadViewController = [[TextReadViewController alloc] init];
-        }
-        
-        self.textReadViewController.text = _text;
-        [self.navigationController pushViewController:self.textReadViewController 
-                                             animated:YES]; 
-        
-    } else if (RowComments == row) {
-        
-        if (!self.commentsViewController) {
-            self.commentsViewController = [[CommentsViewController alloc] init];
-        }
-        
-        self.commentsViewController.comments = [_text commentsObject:YES];
-        [self.navigationController pushViewController:self.commentsViewController 
-                                             animated:YES]; 
-        
+    
     } else if (RowMyVote == row) {
         
         if (!self.voteViewController) {

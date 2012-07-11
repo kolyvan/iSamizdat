@@ -19,7 +19,7 @@
 #import "NSString+Kolyvan.h"
 #import "NSArray+Kolyvan.h"
 #import "NSDictionary+Kolyvan.h"
-#import "TextViewController.h"
+#import "TextContainerController.h"
 #import "TextGroupViewController.h"
 #import "AuthorInfoViewController.h"
 #import "AppDelegate.h"
@@ -34,7 +34,7 @@ extern int ddLogLevel;
     NSArray * _textVersions;
     NSArray *_sections;
 }
-@property (nonatomic, strong) TextViewController *textViewController;
+@property (nonatomic, strong) TextContainerController *textContainerController;
 @property (nonatomic, strong) TextGroupViewController * textGroupViewController;
 @property (nonatomic, strong) AuthorInfoViewController* authorInfoViewController;
 @end
@@ -42,7 +42,7 @@ extern int ddLogLevel;
 @implementation AuthorViewController
 
 @synthesize author = _author;
-@synthesize textViewController;
+@synthesize textContainerController;
 @synthesize textGroupViewController;
 @synthesize authorInfoViewController;
 
@@ -69,20 +69,12 @@ extern int ddLogLevel;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-   
-    /*
-    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back.png"]
-                                                                   style:UIBarButtonItemStylePlain                                                                                           target:nil                                                                                            action:nil];
-    
-    self.navigationItem.backBarButtonItem = backButton;
-    */ 
-    
+       
     UIBarButtonItem *infoButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemOrganize 
                                                                                 target:self 
                                                                                action:@selector(goInfo)];            
 
-    self.navigationItem.rightBarButtonItem = infoButton;    
-    
+    self.navigationItem.rightBarButtonItem = infoButton;        
     
     UILabel *label = [[UILabel alloc] init];    
     label.numberOfLines = 0;
@@ -152,7 +144,7 @@ extern int ddLogLevel;
     self.navigationItem.backBarButtonItem = nil;
     self.navigationItem.rightBarButtonItem = nil;
     self.navigationItem.titleView = nil;
-    self.textViewController = nil;
+    self.textContainerController = nil;
     self.textGroupViewController = nil;
     self.authorInfoViewController = nil;
 }
@@ -160,7 +152,7 @@ extern int ddLogLevel;
 - (void) didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];         
-    self.textViewController = nil;
+    self.textContainerController = nil;
     self.textGroupViewController = nil;
     self.authorInfoViewController = nil;    
 }
@@ -322,12 +314,13 @@ extern int ddLogLevel;
     
     if ([obj isKindOfClass:[SamLibText class]]) {
 
-        if (!self.textViewController) {
-            self.textViewController = [[TextViewController alloc] init];
+        if (!self.textContainerController) {
+            self.textContainerController = [[TextContainerController alloc] init];
         }
         
-        self.textViewController.text = obj;
-        [self.navigationController pushViewController:self.textViewController 
+        self.textContainerController.text = obj;
+        self.textContainerController.selectedIndex = TextInfoViewSelected;
+        [self.navigationController pushViewController:self.textContainerController 
                                              animated:YES]; 
         
     } else if ([obj isKindOfClass:[NSString class]]) {

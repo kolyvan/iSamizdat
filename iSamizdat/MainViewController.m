@@ -74,17 +74,7 @@ typedef enum {
     [super viewDidLoad];
    
     //self.navigationController.navigationBarHidden = YES;
-    
-    /*
-    UIBarButtonItem *editButton = [[UIBarButtonItem alloc] initWithTitle:locString(@"Edit") 
-                                                                   style:UIBarButtonItemStyleBordered 
-                                                                  target:self 
-                                                                  action:@selector(toggleEdit)];
-    
-    self.navigationItem.rightBarButtonItem = editButton;
-     */  
-    
-       
+          
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(samLibAuthorIgnoredChanged:)
                                                  name:@"SamLibAuthorIgnoredChanged" 
@@ -103,7 +93,8 @@ typedef enum {
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(samLibTextChanged:)
                                                  name:@"samLibTextChanged" 
-                                               object:nil];
+                                               object:nil];    
+    
 }
 
 - (void)viewDidUnload
@@ -114,9 +105,6 @@ typedef enum {
     self.ignored = nil;
     self.authors = nil;
     
-//    self.navigationItem.backBarButtonItem = nil;
-//    self.navigationItem.leftBarButtonItem = nil;
-    self.navigationItem.rightBarButtonItem = nil;
     self.authorViewController = nil;
     self.textViewController = nil;
     
@@ -140,6 +128,11 @@ typedef enum {
 
     self.authorViewController = nil;
     self.textViewController = nil;
+}
+
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
+    return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);    
 }
 
 #pragma mark - private functions

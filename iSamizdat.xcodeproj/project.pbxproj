@@ -135,6 +135,7 @@
 		87F0669C158C63B200694FAC /* new-red.png in Resources */ = {isa = PBXBuildFile; fileRef = 87F06699158C63B200694FAC /* new-red.png */; };
 		87F066A5158C737C00694FAC /* SearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F066A3158C737C00694FAC /* SearchViewController.m */; };
 		87F066A6158C737C00694FAC /* SearchViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 87F066A4158C737C00694FAC /* SearchViewController.xib */; };
+		87F70BB615AD482400B202C7 /* TextContainerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F70BB515AD482400B202C7 /* TextContainerController.m */; };
 		87F75CFB15919AB90046DA46 /* GoogleSearch.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F75CF615919AB90046DA46 /* GoogleSearch.m */; };
 		87F75CFC15919AB90046DA46 /* SamLibCacheNames.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F75CF815919AB90046DA46 /* SamLibCacheNames.m */; };
 		87F75CFD15919AB90046DA46 /* SamLibSearch.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F75CFA15919AB90046DA46 /* SamLibSearch.m */; };
@@ -398,6 +399,8 @@
 		87F066A2158C737C00694FAC /* SearchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchViewController.h; sourceTree = "<group>"; };
 		87F066A3158C737C00694FAC /* SearchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchViewController.m; sourceTree = "<group>"; };
 		87F066A4158C737C00694FAC /* SearchViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SearchViewController.xib; sourceTree = "<group>"; };
+		87F70BB415AD482400B202C7 /* TextContainerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextContainerController.h; sourceTree = "<group>"; };
+		87F70BB515AD482400B202C7 /* TextContainerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextContainerController.m; sourceTree = "<group>"; };
 		87F75CF515919AB90046DA46 /* GoogleSearch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GoogleSearch.h; sourceTree = "<group>"; };
 		87F75CF615919AB90046DA46 /* GoogleSearch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GoogleSearch.m; sourceTree = "<group>"; };
 		87F75CF715919AB90046DA46 /* SamLibCacheNames.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SamLibCacheNames.h; sourceTree = "<group>"; };
@@ -581,6 +584,8 @@
 				87EE1E5615886C9F0015BA99 /* VotedViewController.m */,
 				87E37DEF15AC2A810009B377 /* HistoryViewController.h */,
 				87E37DF015AC2A810009B377 /* HistoryViewController.m */,
+				87F70BB415AD482400B202C7 /* TextContainerController.h */,
+				87F70BB515AD482400B202C7 /* TextContainerController.m */,
 				87546F25157C888000DE58DD /* CommentCell.h */,
 				87546F26157C888000DE58DD /* CommentCell.m */,
 				87546F29157C895C00DE58DD /* TextLine.h */,
@@ -1058,6 +1063,7 @@
 				878850C315AAB1F2002B6F8D /* SamLibModerator.m in Sources */,
 				87E37DE715AC28DD0009B377 /* SamLibHistory.m in Sources */,
 				87E37DF215AC2A810009B377 /* HistoryViewController.m in Sources */,
+				87F70BB615AD482400B202C7 /* TextContainerController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

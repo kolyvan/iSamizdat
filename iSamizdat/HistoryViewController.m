@@ -15,17 +15,15 @@
 #import "SamLibText.h"
 #import "SamLibText+IOS.h"
 #import "SamLibAuthor.h"
-#import "TextReadViewController.h"
-#import "CommentsViewController.h"
+#import "TextContainerController.h"
 
 @interface HistoryViewController ()
-@property (nonatomic, strong) TextReadViewController *textReadViewController;
-@property (nonatomic, strong) CommentsViewController *commentsViewController;
+@property (nonatomic, strong) TextContainerController *textContainerController;
 @end
 
 @implementation HistoryViewController
 
-@synthesize textReadViewController, commentsViewController;
+@synthesize textContainerController;
 
 - (id) init
 {
@@ -39,8 +37,7 @@
 
 - (void)viewDidLoad
 {
-    [super viewDidLoad];
-    
+    [super viewDidLoad];    
     //self.navigationController.navigationBarHidden = YES;
 }
 
@@ -54,20 +51,18 @@
 - (void)viewDidUnload
 {
     [super viewDidUnload];
-    self.textReadViewController = nil; 
-    self.commentsViewController = nil;    
+    self.textContainerController = nil; 
 }
 
 - (void) didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];         
-    self.textReadViewController = nil; 
-    self.commentsViewController = nil;
+    self.textContainerController = nil; 
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+    return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
 }
 
 #pragma mark - Table view data source
@@ -114,24 +109,15 @@
     
     if (text) {
         
-        UIViewController *viewController;        
-    
-        if (p.category == SamLibHistoryCategoryText) {
-            
-            if (!self.textReadViewController)
-                self.textReadViewController = [[TextReadViewController alloc] init];    
-            self.textReadViewController.text = text;
-            viewController = self.textReadViewController;
-            
-        } else {
-            
-            if (!self.commentsViewController)
-                self.commentsViewController = [[CommentsViewController alloc] init];    
-            self.commentsViewController.comments = [text commentsObject:YES];
-            viewController = self.commentsViewController;            
-        }        
+        BOOL isText = p.category == SamLibHistoryCategoryText;
         
-        [self.navigationController pushViewController:viewController animated:YES];
+        if (!self.textContainerController)
+            self.textContainerController = [[TextContainerController alloc] init];    
+        self.textContainerController.text = text;
+        self.textContainerController.selectedIndex = isText ? TextReadViewSelected : TextCommentsViewSelected;
+        
+        [self.navigationController pushViewController:self.textContainerController 
+                                             animated:YES];
         //[self.navigationController setNavigationBarHidden:NO animated:YES]; 
     }
 }

@@ -117,8 +117,7 @@ extern int ddLogLevel;
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-//    return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
-    return (interfaceOrientation == UIDeviceOrientationPortrait);
+    return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
 }
 
 - (void) goDone: (id) found
