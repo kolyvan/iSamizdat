@@ -534,6 +534,14 @@ extern int ddLogLevel;
     [_allBans removeObjectAtIndex:index];
 }
 
+- (SamLibBan *) findByName: (NSString *) name
+{
+    for (SamLibBan *ban in _allBans)
+        if ([ban.name isEqualToString:name])
+            return ban;
+    return nil;
+}
+
 - (void) save
 {
     id newHash = self.version;

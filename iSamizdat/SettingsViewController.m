@@ -14,6 +14,7 @@
 #import "KxMacros.h"
 #import "UserViewController.h"
 #import "CacheViewController.h"
+#import "SamLibModerator.h"
 #import "DDLog.h"
 
 extern int ddLogLevel;
@@ -22,6 +23,7 @@ enum {
 
     SettingsViewUserRow,
     SettingsViewCacheRow,
+    SettingsViewFilterRow,    
     
     SettingsViewNumberOfRows,
 };
@@ -84,6 +86,31 @@ enum {
     [self dismissViewControllerAnimated:YES completion:NULL];
 }
 
+- (void) switchCellValueChanged: (UISwitch *) sender
+{
+    SamLibModerator *moderator = [SamLibModerator shared];
+    
+    SamLibBan *ban = [moderator findByName:@"censored"];
+    if (ban) 
+        ban.enabled = sender.on;
+    else {
+        
+        SamLibBanRule *rule = [[SamLibBanRule alloc] initFromPattern:@"censored" 
+                                                            category:SamLibBanCategoryText];        
+        rule.option = SamLibBanRuleOptionLink;
+        
+        ban = [[SamLibBan alloc] initWithName:@"censored" 
+                                        rules:[NSArray arrayWithObject:rule] 
+                                    tolerance:1 
+                                         path:@""];
+        ban.enabled = YES;
+        
+        [moderator addBan:ban];
+    }
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SamLibFilterSettingsChanged" object:nil];
+}
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -96,23 +123,54 @@ enum {
     return SettingsViewNumberOfRows;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell *) mkCell: (NSString *)cellIdentifier
 {
-    static NSString *CellIdentifier = @"Cell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];    
+    UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];    
     if (!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault 
-                                      reuseIdentifier:CellIdentifier];
+                                      reuseIdentifier:cellIdentifier];
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }    
+    return cell;
+}
+
+- (UITableViewCell *) mkSwitchCell: (NSString *)cellIdentifier
+{
+    UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    if (!cell) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault 
+                                      reuseIdentifier:cellIdentifier];
+        UISwitch * button = [[UISwitch alloc] initWithFrame:CGRectZero]; 
+        [button addTarget:self 
+                   action:@selector(switchCellValueChanged:) 
+         forControlEvents:UIControlEventValueChanged]; 
+        cell.accessoryView = button;    
+    }  
+    return cell;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell;
   
     if (SettingsViewUserRow == indexPath.row) {
         
+        cell = [self mkCell: @"Cell"];
         cell.textLabel.text = locString(@"User Info");
         
     } else if (SettingsViewCacheRow == indexPath.row) {
 
+        cell = [self mkCell: @"Cell"];        
         cell.textLabel.text = locString(@"Cache Settings");
+
+    } else if (SettingsViewFilterRow == indexPath.row) {
+        
+        cell = [self mkSwitchCell: @"SwitchCell"];        
+        UISwitch *button = (UISwitch *)cell.accessoryView;        
+        cell.textLabel.text = locString(@"Filter bad language");
+        
+        SamLibBan *ban = [[SamLibModerator shared] findByName:@"censored"];        
+        button.on = ban.enabled;        
     }
     
     return cell;

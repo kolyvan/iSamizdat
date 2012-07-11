@@ -13,6 +13,7 @@
 #import "SamLibComments.h"
 
 @class TextLine;
+@class SamLibBan;
 
 @interface SamLibComment (IOS)
 

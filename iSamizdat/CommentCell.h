@@ -23,6 +23,7 @@
 - (void) editPost: (SamLibComment *) comment;
 - (void) goAuthor: (NSString *) path;
 - (void) banComment: (SamLibComment *) comment;
+- (NSString *) findBanForComment: (SamLibComment *) comment;
 
 @end
 
@@ -41,6 +42,5 @@
 
 - (void) swipeOpen;
 - (void) swipeCloseAnimated: (BOOL) animated;
-
 
 @end

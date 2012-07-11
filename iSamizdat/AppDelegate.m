@@ -20,6 +20,7 @@
 #import "SamLibAgent.h"
 #import "SamLibModel.h"
 #import "SamLibHistory.h"
+#import "SamLibModerator.h"
 #import "SamLibAuthor.h"
 #import "SamLibText.h"
 #import "SamLibUser.h"
@@ -114,6 +115,7 @@ int ddLogLevel = LOG_LEVEL_WARN;
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
     [[SamLibModel shared] save]; 
+    [[SamLibModerator shared] save];
     [[SamLibHistory shared] save]; 
     
     if (!SamLibStorage.allowTexts()) {

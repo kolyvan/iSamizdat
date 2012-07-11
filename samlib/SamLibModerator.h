@@ -88,6 +88,7 @@ typedef enum {
 - (void) addBan: (SamLibBan *) ban;
 - (void) removeBan: (SamLibBan *) ban;
 - (void) removeBanAtIndex:(NSUInteger)index;
+- (SamLibBan *) findByName: (NSString *) name;
 
 - (void) save;
 

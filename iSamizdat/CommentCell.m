@@ -13,12 +13,14 @@
 #import "CommentCell.h"
 #import "KxArc.h"
 #import "KxUtils.h"
+#import "KxMacros.h"
 #import "NSString+Kolyvan.h"
 #import "NSDate+Kolyvan.h"
 #import "NSArray+Kolyvan.h"
 #import "SamLibComment+IOS.h"
 #import "SamLibComments.h"
 #import "SamLibModel.h"
+#import "SamLibModerator.h"
 #import "CommentsViewController.h"
 #import "TextLine.h"
 #import "UIFont+Kolyvan.h"
@@ -72,6 +74,7 @@ static void drawLine(CGPoint from, CGPoint to, UIColor *color, CGFloat width)
 @interface CommentCell() {
     int _wantTouches;
     NSMutableArray *_buttons;
+    NSString *_banned;
 }
 @end
 
@@ -85,6 +88,9 @@ static void drawLine(CGPoint from, CGPoint to, UIColor *color, CGFloat width)
     if (comment != _comment) {
         _comment = comment;
         _wantTouches = -1;
+        
+        _banned = [_delegate findBanForComment:_comment];
+        
         [self setNeedsDisplay];        
     }
 }
@@ -324,7 +330,11 @@ static void drawLine(CGPoint from, CGPoint to, UIColor *color, CGFloat width)
         case BUTTON_AUTHOR_ADD: //fallback
         case BUTTON_AUTHOR_GO:  [_delegate goAuthor:_comment.link.lastPathComponent]; break; 
         
-        case BUTTON_BAN:        [_delegate banComment:_comment]; break; 
+        case BUTTON_BAN:        //[_delegate banComment:_comment]; break; 
+            
+            _banned = _banned ? nil : @"filtered" ;
+            [self setNeedsDisplay];
+            
         default:
             break;
     }
@@ -367,11 +377,16 @@ static void drawLine(CGPoint from, CGPoint to, UIColor *color, CGFloat width)
         
     } else {
         
-        height += 2;
-        NSString * date = [comment.timestamp shortRelativeFormatted]; 
-        height += [date sizeWithFont:[UIFont systemFont12] 
-                   constrainedToSize:CGSizeMake(widthr, 999999) 
-                       lineBreakMode:UILineBreakModeTailTruncation].height;
+        //if ([comment findBanForPath:@""]) {
+        //} else 
+        {
+            
+            height += 2;
+            NSString * date = [comment.timestamp shortRelativeFormatted]; 
+            height += [date sizeWithFont:[UIFont systemFont12] 
+                       constrainedToSize:CGSizeMake(widthr, 999999) 
+                           lineBreakMode:UILineBreakModeTailTruncation].height;
+        }
         
         return MAX(height, [self minimumHeight]);
     }	
@@ -427,45 +442,66 @@ static void drawLine(CGPoint from, CGPoint to, UIColor *color, CGFloat width)
     } else if (_comment.deleteMsg.nonEmpty) {
         
         [[UIColor darkGrayColor] set]; 
-        NSString *s = KxUtils.format(@"deleted %@", _comment.deleteMsg);
+        NSString *s = KxUtils.format(locString(@"deleted %@"), _comment.deleteMsg);
         [s drawInRect:CGRectMake(x, y + 2, w - size.width, headerHeight) 
              withFont:[UIFont systemFont12]  
         lineBreakMode:UILineBreakModeTailTruncation];
     }
     
     y += headerHeight;
-    
-    // render reply
-    
-    if (_comment.replyto.nonEmpty) {
+
+    if (_banned) {
         
-        y += 10;        
+        [[UIColor grayColor] set];
         
-        [[UIColor grayColor] set];         
+        y += 10;
         
-        for (TextLine * line in [_comment replytoLines]) {
+        NSString *s = _banned;
+        
+        float dx = [s sizeWithFont:[UIFont systemFont14] 
+                    constrainedToSize:CGSizeMake(w, 999999) 
+                        lineBreakMode:UILineBreakModeClip].width;
+
+        dx = (w - dx) * .5;
+        
+        y += [s drawInRect:CGRectMake(x + dx, y, w  - dx, rect.size.height - y)
+                  withFont:[UIFont systemFont14]  
+             lineBreakMode:UILineBreakModeClip].height;
+        
+    } else {
+        
+        // render reply
+        
+        if (_comment.replyto.nonEmpty) {
             
-            y += [line drawInRect:CGRectMake(x + 10, y, w - 10, rect.size.height - y)  
-                         withFont:[UIFont systemFont12] 
-                         andColor:nil].height;
-        }
-    }    
-    
-    // render message
-    
-    if (_comment.message.nonEmpty) {
-        
-        y +=10;
-        
-        for (TextLine * line in [_comment messageLines]) {
+            y += 10;        
             
-            y += [line drawInRect:CGRectMake(x, y, w, rect.size.height - y)  
-                         withFont:[UIFont systemFont14] 
-                         andColor:line.link.nonEmpty ? [UIColor blueColor] : [UIColor blackColor]].height;
-        }
+            [[UIColor grayColor] set];         
+            
+            for (TextLine * line in [_comment replytoLines]) {
+                
+                y += [line drawInRect:CGRectMake(x + 10, y, w - 10, rect.size.height - y)  
+                             withFont:[UIFont systemFont12] 
+                             andColor:nil].height;
+            }
+        }    
         
-    }
-    
+        // render message
+        
+        if (_comment.message.nonEmpty) {
+            
+            y +=10;
+            
+            for (TextLine * line in [_comment messageLines]) {
+                
+                y += [line drawInRect:CGRectMake(x, y, w, rect.size.height - y)  
+                             withFont:[UIFont systemFont14] 
+                             andColor:line.link.nonEmpty ? [UIColor blueColor] : [UIColor blackColor]].height;
+            }
+            
+        }
+    }   
+        
     // render timestamp
     
     if (!_comment.deleteMsg.nonEmpty) {
@@ -486,20 +522,7 @@ static void drawLine(CGPoint from, CGPoint to, UIColor *color, CGFloat width)
 - (void) touchUpInside:(CGPoint)loc
 {
     if (self.wantTouches) {
-        
-        /*
-        if (_comment.link.nonEmpty) {
-            
-            if (CGRectContainsPoint(_comment.nameLine.bounds, loc)) {
-                
-                NSURL *url = [NSURL URLWithString: _comment.link];
-                [UIApplication.sharedApplication openURL: url];                     
-                return;
-                
-            }
-        }
-        */
-        
+               
         for (TextLine *line in [_comment messageLines]) {
             
             if (line.link.nonEmpty) {

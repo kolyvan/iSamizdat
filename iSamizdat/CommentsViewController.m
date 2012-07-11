@@ -14,12 +14,16 @@
 #import "KxMacros.h"
 #import "KxUtils.h"
 #import "NSString+Kolyvan.h"
+#import "NSArray+Kolyvan.h"
+#import "NSDictionary+Kolyvan.h"
+#import "NSData+Kolyvan.h"
 #import "SamLibComments.h"
 #import "SamLibComment+IOS.h"
 #import "SamLibAuthor+IOS.h"
 #import "SamLibText.h"
 #import "SamLibModel.h"
 #import "SamLibHistory.h"
+#import "SamLibModerator.h"
 #import "CommentCell.h"
 #import "PostViewController.h"
 #import "AuthorViewController.h"
@@ -40,6 +44,7 @@
     PostData *_postData;
     UISwipeGestureRecognizer *_gestureRecognizer;
     KX_WEAK CommentCell *_swipeCell; 
+    NSMutableDictionary *_cacheBanned;
 }
 
 @property (nonatomic, strong) PostViewController *postViewController;
@@ -59,7 +64,8 @@
         
         _version = comments.version;
         _comments = comments;
-        _needReload = YES;        
+        _needReload = YES;    
+        _cacheBanned = nil;
     }
 }
 
@@ -82,25 +88,30 @@
                                                                   action:@selector(handleSwipe:)];    
     
     _gestureRecognizer.direction = UISwipeGestureRecognizerDirectionRight  | UISwipeGestureRecognizerDirectionLeft; 
-    [self.tableView addGestureRecognizer:_gestureRecognizer];
+    [self.tableView addGestureRecognizer:_gestureRecognizer];  
+        
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(filterSettingsChanged:)
+                                                 name:@"SamLibFilterSettingsChanged" 
+                                               object:nil];    
 }
 
 - (void) viewWillAppear:(BOOL)animated 
 {    
     [super viewWillAppear:animated];
     if (_needReload) {
-        _needReload = NO;           
+        _needReload = NO; 
         [self.tableView reloadData];        
-    }
-    
-    if (_comments.all.count > 0)
-        [[SamLibHistory shared] addComments:_comments];
+    }   
 }
 
 - (void) viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
     [self cancelSwipeAnimated: NO];
+    
+    if (_comments.all.count > 0)
+        [[SamLibHistory shared] addComments:_comments];
 }
 
 - (void)viewDidUnload
@@ -113,6 +124,8 @@
     
     [self.tableView removeGestureRecognizer:_gestureRecognizer];
     _gestureRecognizer = nil;
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void) didReceiveMemoryWarning
@@ -120,6 +133,7 @@
     [super didReceiveMemoryWarning];
     self.postViewController = nil; 
     self.authorViewController = nil;
+    _cacheBanned = nil;
 }
 
 - (void)handleSwipe:(UISwipeGestureRecognizer *)sender 
@@ -309,6 +323,44 @@
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView 
 {
     [self cancelSwipeAnimated: YES];
+}
+
+- (void) filterSettingsChanged:(NSNotification *)notification
+{
+    _cacheBanned = nil;
+    _needReload = YES;
+}
+
+- (NSString *) findBanForComment: (SamLibComment *) comment;
+{
+    if (!comment.msgid.nonEmpty)
+        return nil;
+    
+    SamLibModerator *moderator = [SamLibModerator shared];
+    
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        
+        NSData *d = [NSData dataWithContentsOfFile:KxUtils.pathForResource(@"censored.bin")];
+        NSString *s = [NSString stringWithUTF8String:d.gunzip.bytes];
+        NSArray *a = s.split;
+        if (a.nonEmpty) {
+            [moderator registerLinkToPattern:@"censored" pattern:a];
+        }            
+    });
+   
+    if (!_cacheBanned)
+        _cacheBanned = [[NSMutableDictionary alloc] init];
+    
+    NSString *path = [_comments.text makeKey:@"/"];
+    
+    id r = [_cacheBanned get:comment.msgid orSet:^id{  
+        
+        NSString *s = [moderator testForBan:comment withPath:path].name;
+        return s ? s : [NSNull null];        
+    }];
+    
+    return r == [NSNull null] ? nil : r;
 }
 
 #pragma mark - Table view data source
