@@ -156,5 +156,14 @@ static char gKey;
     return [UIColor darkTextColor];
 }
 
+- (NSString *) filter
+{
+    return [self.extDict get:@"filter"];
+}
+
+- (void) setFilter: (NSString *) filter
+{
+    [self.extDict toggle:@"filter" value:filter];
+}
 
 @end

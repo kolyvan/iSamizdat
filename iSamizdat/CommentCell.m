@@ -74,7 +74,6 @@ static void drawLine(CGPoint from, CGPoint to, UIColor *color, CGFloat width)
 @interface CommentCell() {
     int _wantTouches;
     NSMutableArray *_buttons;
-    NSString *_banned;
 }
 @end
 
@@ -88,9 +87,6 @@ static void drawLine(CGPoint from, CGPoint to, UIColor *color, CGFloat width)
     if (comment != _comment) {
         _comment = comment;
         _wantTouches = -1;
-        
-        _banned = [_delegate findBanForComment:_comment];
-        
         [self setNeedsDisplay];        
     }
 }
@@ -331,9 +327,10 @@ static void drawLine(CGPoint from, CGPoint to, UIColor *color, CGFloat width)
         case BUTTON_AUTHOR_GO:  [_delegate goAuthor:_comment.link.lastPathComponent]; break; 
         
         case BUTTON_BAN:        //[_delegate banComment:_comment]; break; 
-            
-            _banned = _banned ? nil : @"filtered" ;
-            [self setNeedsDisplay];
+
+            _comment.filter = _comment.filter.length > 0 ? @"" : locString(@"hidden comment"); 
+            [self.delegate cellNeedReload: self];            
+            //[self setNeedsDisplay];
             
         default:
             break;
@@ -354,42 +351,40 @@ static void drawLine(CGPoint from, CGPoint to, UIColor *color, CGFloat width)
     
     height += [UIFont boldSystemFont16].lineHeight;
     
-    if (comment.replyto.nonEmpty) {
-        
-        height += 10;        
-        for (TextLine * line in [comment replytoLines]) {
-            height += [line computeSize:widthr - 10 withFont:[UIFont systemFont12]].height;
-        }
-    }
-    
-    if (comment.message.nonEmpty) {
-        
-        height += 10;                
-        for (TextLine * line in [comment messageLines]) {
-            height += [line computeSize:widthr withFont:[UIFont systemFont14]].height;
-        }
-        
-    }
-    
     if (comment.deleteMsg.nonEmpty) {
+
+         return height;        
         
-        return height;
+    } else if (comment.filter.length > 0) {
+        
+        return self.minimumHeight;
         
     } else {
-        
-        //if ([comment findBanForPath:@""]) {
-        //} else 
-        {
+                    
+        if (comment.replyto.nonEmpty) {
             
-            height += 2;
-            NSString * date = [comment.timestamp shortRelativeFormatted]; 
-            height += [date sizeWithFont:[UIFont systemFont12] 
-                       constrainedToSize:CGSizeMake(widthr, 999999) 
-                           lineBreakMode:UILineBreakModeTailTruncation].height;
+            height += 10;        
+            for (TextLine * line in [comment replytoLines]) {
+                height += [line computeSize:widthr - 10 withFont:[UIFont systemFont12]].height;
+            }
         }
-        
-        return MAX(height, [self minimumHeight]);
-    }	
+    
+        if (comment.message.nonEmpty) {
+            
+            height += 10;                
+            for (TextLine * line in [comment messageLines]) {
+                height += [line computeSize:widthr withFont:[UIFont systemFont14]].height;
+            }
+        }
+    }
+    
+    height += 2;
+    NSString * date = [comment.timestamp shortRelativeFormatted]; 
+    height += [date sizeWithFont:[UIFont systemFont12] 
+               constrainedToSize:CGSizeMake(widthr, 999999) 
+                   lineBreakMode:UILineBreakModeTailTruncation].height;
+    
+    return MAX(height, self.minimumHeight);
 }
 
 - (void) drawContentView:(CGRect)rect 
@@ -442,7 +437,7 @@ static void drawLine(CGPoint from, CGPoint to, UIColor *color, CGFloat width)
     } else if (_comment.deleteMsg.nonEmpty) {
         
         [[UIColor darkGrayColor] set]; 
-        NSString *s = KxUtils.format(locString(@"deleted %@"), _comment.deleteMsg);
+        NSString *s = KxUtils.format(locString(@" - deleted %@"), _comment.deleteMsg);
         [s drawInRect:CGRectMake(x, y + 2, w - size.width, headerHeight) 
              withFont:[UIFont systemFont12]  
         lineBreakMode:UILineBreakModeTailTruncation];
@@ -450,23 +445,23 @@ static void drawLine(CGPoint from, CGPoint to, UIColor *color, CGFloat width)
     
     y += headerHeight;
 
-    if (_banned) {
+    if (_comment.filter.length > 0) {
         
         [[UIColor grayColor] set];
         
         y += 10;
         
-        NSString *s = _banned;
+        NSString *s = _comment.filter;
         
         float dx = [s sizeWithFont:[UIFont systemFont14] 
-                    constrainedToSize:CGSizeMake(w, 999999) 
+                    constrainedToSize:CGSizeMake(w, 20) 
                         lineBreakMode:UILineBreakModeClip].width;
 
         dx = (w - dx) * .5;
         
-        y += [s drawInRect:CGRectMake(x + dx, y, w  - dx, rect.size.height - y)
+        [s drawInRect:CGRectMake(x + dx, y, w  - dx, rect.size.height - y)
                   withFont:[UIFont systemFont14]  
-             lineBreakMode:UILineBreakModeClip].height;
+             lineBreakMode:UILineBreakModeClip];
         
     } else {
         

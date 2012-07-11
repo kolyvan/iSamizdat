@@ -44,7 +44,6 @@
     PostData *_postData;
     UISwipeGestureRecognizer *_gestureRecognizer;
     KX_WEAK CommentCell *_swipeCell; 
-    NSMutableDictionary *_cacheBanned;
 }
 
 @property (nonatomic, strong) PostViewController *postViewController;
@@ -65,7 +64,6 @@
         _version = comments.version;
         _comments = comments;
         _needReload = YES;    
-        _cacheBanned = nil;
     }
 }
 
@@ -89,11 +87,11 @@
     
     _gestureRecognizer.direction = UISwipeGestureRecognizerDirectionRight  | UISwipeGestureRecognizerDirectionLeft; 
     [self.tableView addGestureRecognizer:_gestureRecognizer];  
-        
+    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(filterSettingsChanged:)
                                                  name:@"SamLibFilterSettingsChanged" 
-                                               object:nil];    
+                                               object:nil];  
 }
 
 - (void) viewWillAppear:(BOOL)animated 
@@ -102,7 +100,7 @@
     if (_needReload) {
         _needReload = NO; 
         [self.tableView reloadData];        
-    }   
+    } 
 }
 
 - (void) viewWillDisappear:(BOOL)animated
@@ -125,7 +123,7 @@
     [self.tableView removeGestureRecognizer:_gestureRecognizer];
     _gestureRecognizer = nil;
     
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];    
 }
 
 - (void) didReceiveMemoryWarning
@@ -133,7 +131,6 @@
     [super didReceiveMemoryWarning];
     self.postViewController = nil; 
     self.authorViewController = nil;
-    _cacheBanned = nil;
 }
 
 - (void)handleSwipe:(UISwipeGestureRecognizer *)sender 
@@ -327,14 +324,16 @@
 
 - (void) filterSettingsChanged:(NSNotification *)notification
 {
-    _cacheBanned = nil;
+    for (SamLibComment *comment in _comments.all)
+        comment.filter = nil;
+    
     _needReload = YES;
 }
 
 - (NSString *) findBanForComment: (SamLibComment *) comment;
 {
     if (!comment.msgid.nonEmpty)
-        return nil;
+        return @"";
     
     SamLibModerator *moderator = [SamLibModerator shared];
     
@@ -348,19 +347,17 @@
             [moderator registerLinkToPattern:@"censored" pattern:a];
         }            
     });
-   
-    if (!_cacheBanned)
-        _cacheBanned = [[NSMutableDictionary alloc] init];
     
     NSString *path = [_comments.text makeKey:@"/"];
-    
-    id r = [_cacheBanned get:comment.msgid orSet:^id{  
-        
-        NSString *s = [moderator testForBan:comment withPath:path].name;
-        return s ? s : [NSNull null];        
-    }];
-    
-    return r == [NSNull null] ? nil : r;
+    NSString *name = [moderator testForBan:comment withPath:path].name;
+    return  name ? name : @""; 
+}
+
+- (void) cellNeedReload: (UITableViewCell *)cell
+{
+    NSIndexPath * indexPath = [self.tableView indexPathForCell: cell];
+    [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
+                          withRowAnimation:YES];
 }
 
 #pragma mark - Table view data source
@@ -385,15 +382,21 @@
                                   reuseIdentifier:CellIdentifier];
     }
     
+    SamLibComment *comment = [_comments.all objectAtIndex:indexPath.row];   
+    //if (!comment.filter)
+    //    comment.filter = [self findBanForComment: comment];
+    
     cell.delegate = self;
-    cell.comment = [_comments.all objectAtIndex:indexPath.row];    
+    cell.comment = comment;    
     return cell;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath 
-{
-    
-    SamLibComment *comment = [_comments.all objectAtIndex:indexPath.row];    
+{    
+    SamLibComment *comment = [_comments.all objectAtIndex:indexPath.row];  
+
+    if (!comment.filter)
+        comment.filter = [self findBanForComment: comment];
     
     return [CommentCell heightForComment:comment 
                                withWidth:tableView.frame.size.width];

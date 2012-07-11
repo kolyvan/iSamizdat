@@ -38,8 +38,8 @@
 - (CGSize) computeSize: (CGFloat) width 
               withFont: (UIFont *) font
 {
-    if (_width != width || font != _font) {
-        
+    if (_width != width || font != _font) 
+    {        
         _font = font;
         _width = width;
         
@@ -81,7 +81,7 @@
     }
     
     _origin = bounds.origin;
-    _size = sz;
+    //_size = sz;
     return sz;
 }
 

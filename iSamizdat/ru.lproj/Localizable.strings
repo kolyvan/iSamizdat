@@ -91,3 +91,5 @@
 "Add comment" = "Добавить";
 "Recent" = "Последние";
 "Filter bad language" = "Фильтр мата";
+" - deleted %@" = " - удаленно %@";
+"hidden comment" = "комментарий скрыт";

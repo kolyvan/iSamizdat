@@ -23,7 +23,7 @@
 - (void) editPost: (SamLibComment *) comment;
 - (void) goAuthor: (NSString *) path;
 - (void) banComment: (SamLibComment *) comment;
-- (NSString *) findBanForComment: (SamLibComment *) comment;
+- (void) cellNeedReload: (UITableViewCell *)cell;
 
 @end
 
