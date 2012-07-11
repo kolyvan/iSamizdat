@@ -21,6 +21,7 @@
     CommentsViewController * _commentsViewController;    
     UIViewController *_activeVC;
     SamLibText *_text;
+    BOOL _animated;
 }
 @end
 
@@ -85,6 +86,9 @@
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    //UISegmentedControl *segm = (UISegmentedControl *)self.navigationItem.titleView;
+    //[segm setEnabled:YES];        
+    _animated = NO;
     [self setSelected:_selected animated:NO];    
 }
 
@@ -128,7 +132,7 @@
 - (void) segmentedChanged: (UISegmentedControl *) sender
 {
     NSInteger selected = sender.selectedSegmentIndex;    
-    if (_selected == selected)
+    if (_selected == selected || _animated)
         return;    
     UIViewController *toVC = [self viewControllerByIndex: selected];
     [self flipVC:toVC aminated: YES];  
@@ -148,24 +152,30 @@
     
     if (animated) {
                     
+        //UISegmentedControl *segm = (UISegmentedControl *)self.navigationItem.titleView;
+        //[segm setEnabled:NO];                
+        _animated = YES;
+        
         [self transitionFromViewController:fromVC
                           toViewController:toVC
-                                  duration:0.4
+                                  duration:0.3
                                    options:UIViewAnimationOptionTransitionFlipFromLeft
                                 animations:nil
                                 completion:^(BOOL done){
                                     
                                     [toVC didMoveToParentViewController:self];
                                     [fromVC removeFromParentViewController];
+                                    //[segm setEnabled:YES];
+                                    _animated = NO;                                    
                                 }];
     } else {
-            
+        
         [self.view addSubview: toVC.view];        
         [toVC didMoveToParentViewController:self];        
         [fromVC removeFromParentViewController];
     }
-
-    _activeVC = toVC;                      
+    
+    _activeVC = toVC;    
     self.navigationItem.rightBarButtonItem = _activeVC.navigationItem.rightBarButtonItem;  
 }
 
