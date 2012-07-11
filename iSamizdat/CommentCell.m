@@ -146,7 +146,7 @@ static void drawLine(CGPoint from, CGPoint to, UIColor *color, CGFloat width)
     if (self.backView.subviews.isEmpty) {
         
         const char * names[8] = {
-            "comment", "edit", "cross", "email", "url", "author_add", "author_go", "ban"
+            "comment", "edit", "cross", "email", "safari", "author_add", "author_go", "ban"
         };
         
         for (int i = 0; i < 8; ++i) {

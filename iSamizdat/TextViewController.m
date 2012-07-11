@@ -419,7 +419,7 @@ enum {
         
         UITableViewCell *cell = [self mkCell: @"CleanupCell" withStyle:UITableViewCellStyleDefault];
         cell.textLabel.text = locString(@"Cleanup cached");
-        cell.accessoryView = [[UIImageView alloc] initWithImage: [UIImage imageNamed:@"recycle"]];                        
+        cell.accessoryView = [[UIImageView alloc] initWithImage: [UIImage imageNamed:@"trash"]];                        
         return cell;
         
     } else if (RowAuthor == row) {
