@@ -14,4 +14,4 @@ Join at [testflightapp.com](http://tflig.ht/NnV9SA)
 
 Screenshots:
 
-![main view](http://dl.dropbox.com/u/80472203/ios/main.png =320x480)
+![main view](http://dl.dropbox.com/u/80472203/ios/main_sm.png "Main View")
