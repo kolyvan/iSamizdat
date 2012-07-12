@@ -20,6 +20,7 @@
 #import "NSString+Kolyvan.h"
 #import "NSDate+Kolyvan.h"
 #import "NSDictionary+Kolyvan.h"
+#import "AppDelegate.h"
 #import "KxMacros.h"
 #import "DDLog.h"
 
@@ -76,12 +77,15 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
     CGFloat _prevScale;
 }
 @property (nonatomic, strong) IBOutlet UIWebView * webView;
+@property (nonatomic, strong) SSPullToRefreshView *pullToRefreshView;
+@property (nonatomic, strong) UIBarButtonItem *stopButton;
 @end
 
 @implementation TextReadViewController
 
 @synthesize text = _text;
 @synthesize webView = _webView;
+@synthesize pullToRefreshView, stopButton;
 
 - (void) setText:(SamLibText *)text 
 {
@@ -118,6 +122,14 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
     pinchGestureRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self 
                                                                        action:@selector(handlePinch:)];  
     [self.webView addGestureRecognizer:pinchGestureRecognizer];
+    
+    self.pullToRefreshView = [[SSPullToRefreshView alloc] initWithScrollView:self.webView.scrollView
+                                                                    delegate:self];
+        
+    self.stopButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemStop 
+                                                                    target:self 
+                                                                    action:@selector(goStop)];
+
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -146,8 +158,8 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
     //           afterDelay:1];        
     //[self fullscreenMode: YES];
     
-    _prevNavBarTranslucent = self.navigationController.navigationBar.translucent;
-    self.navigationController.navigationBar.translucent = YES;
+    //_prevNavBarTranslucent = self.navigationController.navigationBar.translucent;
+    //self.navigationController.navigationBar.translucent = YES;
 }
 
 - (void) viewWillDisappear:(BOOL)animated
@@ -166,7 +178,7 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
     if (_fullScreen)
         [self fullscreenMode: NO];
     
-    self.navigationController.navigationBar.translucent = _prevNavBarTranslucent;
+    //self.navigationController.navigationBar.translucent = _prevNavBarTranslucent;
 }
 
 - (void)viewDidUnload
@@ -176,11 +188,89 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
     
     [self.webView removeGestureRecognizer:gestureRecognizer];
     gestureRecognizer = nil;
+    
+    self.pullToRefreshView = nil;
+    self.stopButton = nil;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
+}
+
+#pragma mark - pull to refresh
+
+- (void) showSuccessNoticeAboutReloadResult: (NSString *) message
+{        
+    [[AppDelegate shared] successNoticeInView:self.view 
+                                        title:message.nonEmpty ? message : locString(@"Reload success")];    
+}
+
+- (void) showFailureNoticeAboutReloadResult: (NSString *) message
+{   
+    [[AppDelegate shared] errorNoticeInView:self.view 
+                                      title:locString(@"Reload failure") 
+                                    message:message.nonEmpty ? message : @""];        
+}
+
+- (void) handleStatus: (SamLibStatus) status 
+          withMessage: (NSString *)message
+{
+    if (status == SamLibStatusFailure) {
+        
+        [self performSelector:@selector(showFailureNoticeAboutReloadResult:) 
+                   withObject:message
+                   afterDelay:0.3];
+        
+    } else if (status == SamLibStatusSuccess) {            
+        
+        [self performSelector:@selector(showSuccessNoticeAboutReloadResult:) 
+                   withObject:message
+                   afterDelay:0.3];
+        
+    }  else if (status == SamLibStatusNotModifed) {            
+        
+        [self performSelector:@selector(showSuccessNoticeAboutReloadResult:) 
+                   withObject:locString(@"Not modified")
+                   afterDelay:0.3];
+    }
+    
+    if (status == SamLibStatusSuccess) {
+        [self reloadWebView];
+    }
+}
+
+- (IBAction) goStop
+{
+    SamLibAgent.cancelAll();
+    [self.pullToRefreshView finishLoading];
+    self.navigationItem.rightBarButtonItem = nil;    
+}
+
+- (void)pullToRefreshViewDidStartLoading:(SSPullToRefreshView *)view 
+{   
+    self.navigationItem.rightBarButtonItem = self.stopButton;
+    
+    [self.pullToRefreshView.contentView setLastUpdatedAt:_text.timestamp
+                                   withPullToRefreshView:self.pullToRefreshView]; 
+    
+    [self.pullToRefreshView startLoading];  
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+           
+    [_text update:^(SamLibText *text, SamLibStatus status, NSString *error) {
+                        
+        [self.pullToRefreshView finishLoading];
+        [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;        
+        self.navigationItem.rightBarButtonItem = nil;
+        
+        NSString *message = (status == SamLibStatusFailure) ? error : nil;
+        [self handleStatus: status withMessage:message];        
+    }
+         progress: nil
+        formatter: ^(SamLibText *text, NSString * html) { 
+            return mkHTMLPage(text, html); 
+        } 
+     ];
 }
 
 #pragma mark - private

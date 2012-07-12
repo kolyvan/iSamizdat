@@ -11,10 +11,11 @@
 // 
 
 #import <UIKit/UIKit.h>
+#import "SSPullToRefreshView+Kolyvan.h"
 
 @class SamLibText;
 
-@interface TextReadViewController : UIViewController<UIWebViewDelegate>
+@interface TextReadViewController : UIViewController<UIWebViewDelegate, SSPullToRefreshViewDelegate>
 @property (nonatomic, strong) SamLibText *text;
 @end
 

@@ -212,7 +212,8 @@
     
     if (_activeVC.navigationItem == object &&
         [keyPath isEqualToString: @"rightBarButtonItem"]) {
-        self.navigationItem.rightBarButtonItem = [change objectForKey: NSKeyValueChangeNewKey];
+        id value = [change objectForKey: NSKeyValueChangeNewKey];
+        self.navigationItem.rightBarButtonItem = value == [NSNull null] ? nil : value;
     }    
 }
 
