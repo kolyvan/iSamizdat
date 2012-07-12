@@ -207,6 +207,7 @@ extern int ddLogLevel;
            deepSearch: (BOOL) deepSearch 
 {   
     BOOL byName = YES;
+    FuzzySearchFlag searchFlag;
     
     if (pattern.first > 96 && pattern.first < 123) {
         
@@ -224,14 +225,19 @@ extern int ddLogLevel;
 
         } else {
             
+            searchFlag = deepSearch ? FuzzySearchFlagCache|FuzzySearchFlagLocal|FuzzySearchFlagDirect : FuzzySearchFlagLocal;
             byName = NO;
             pattern = path;
         }
+
+    } else {
+        
+        searchFlag = deepSearch ? FuzzySearchFlagAll : FuzzySearchFlagLocal;
     }
   
     _search = [SamLibSearch searchAuthor:pattern 
                                   byName:byName
-                                    flag:deepSearch ? FuzzySearchFlagAll : FuzzySearchFlagLocal
+                                    flag:searchFlag
                                block:^(NSArray *result) {
                                    
                                    [self addSearchResult:result 
