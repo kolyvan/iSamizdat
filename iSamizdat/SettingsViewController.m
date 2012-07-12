@@ -12,6 +12,7 @@
 
 #import "SettingsViewController.h"
 #import "KxMacros.h"
+#import "SamLibAgent.h"
 #import "UserViewController.h"
 #import "CacheViewController.h"
 #import "SamLibModerator.h"
@@ -23,7 +24,8 @@ enum {
 
     SettingsViewUserRow,
     SettingsViewCacheRow,
-    SettingsViewFilterRow,    
+    SettingsViewFilterRow,   
+    SettingsViewMaxCommentsRow,       
     
     SettingsViewNumberOfRows,
 };
@@ -111,6 +113,11 @@ enum {
     [[NSNotificationCenter defaultCenter] postNotificationName:@"SamLibFilterSettingsChanged" object:nil];
 }
 
+- (void) sliderCellValueChanged: (UISlider *)slider
+{
+    SamLibAgent.setSettingsInt(@"comments.maxsize", (int)slider.value, 100);
+}
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -149,6 +156,22 @@ enum {
     return cell;
 }
 
+- (UITableViewCell *) mkSliderCell: (NSString *)cellIdentifier
+{
+    UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    if (!cell) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault 
+                                      reuseIdentifier:cellIdentifier];
+        UISlider * slider = [[UISlider alloc] initWithFrame:CGRectMake(0,0, 80, 30)]; 
+        [slider addTarget:self 
+                   action:@selector(sliderCellValueChanged:) 
+         forControlEvents:UIControlEventValueChanged]; 
+        cell.accessoryView = slider;    
+        //[slider sizeToFit];
+    }  
+    return cell;
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell;
@@ -171,6 +194,17 @@ enum {
         
         SamLibBan *ban = [[SamLibModerator shared] findByName:@"censored"];        
         button.on = ban.enabled;        
+        
+    } else if (SettingsViewMaxCommentsRow == indexPath.row) {
+        
+        cell = [self mkSliderCell: @"SlideCell"];        
+        UISlider *slider = (UISlider *)cell.accessoryView;        
+        cell.textLabel.text = locString(@"Max comments load");
+        
+        slider.continuous = NO;
+        slider.maximumValue = 200;
+        slider.minimumValue = 20;        
+        slider.value = SamLibAgent.settingsInt(@"comments.maxsize", 100); //;                
     }
     
     return cell;
