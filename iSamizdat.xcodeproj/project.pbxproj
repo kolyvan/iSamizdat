@@ -109,6 +109,7 @@
 		8776CA4715776EC50099C83D /* FavoritesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8776CA4515776EC50099C83D /* FavoritesViewController.xib */; };
 		878850C015AAB157002B6F8D /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 878850BF15AAB157002B6F8D /* libz.dylib */; };
 		878850C315AAB1F2002B6F8D /* SamLibModerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 878850C215AAB1F2002B6F8D /* SamLibModerator.m */; };
+		87D8FAF215AED08800CE14D9 /* unban.png in Resources */ = {isa = PBXBuildFile; fileRef = 87D8FAF115AED08800CE14D9 /* unban.png */; };
 		87E230AC158B0AC70074EBF1 /* TextGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87E230AA158B0AC70074EBF1 /* TextGroupViewController.m */; };
 		87E230AD158B0AC70074EBF1 /* TextGroupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 87E230AB158B0AC70074EBF1 /* TextGroupViewController.xib */; };
 		87E230B0158B1D490074EBF1 /* download.png in Resources */ = {isa = PBXBuildFile; fileRef = 87E230AF158B1D490074EBF1 /* download.png */; };
@@ -365,6 +366,7 @@
 		878850BF15AAB157002B6F8D /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		878850C115AAB1F2002B6F8D /* SamLibModerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SamLibModerator.h; sourceTree = "<group>"; };
 		878850C215AAB1F2002B6F8D /* SamLibModerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SamLibModerator.m; sourceTree = "<group>"; };
+		87D8FAF115AED08800CE14D9 /* unban.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = unban.png; path = resources/unban.png; sourceTree = "<group>"; };
 		87E230A9158B0AC70074EBF1 /* TextGroupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextGroupViewController.h; sourceTree = "<group>"; };
 		87E230AA158B0AC70074EBF1 /* TextGroupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextGroupViewController.m; sourceTree = "<group>"; };
 		87E230AB158B0AC70074EBF1 /* TextGroupViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TextGroupViewController.xib; sourceTree = "<group>"; };
@@ -767,6 +769,7 @@
 		872D956D1573968C00BCB4EC /* resources */ = {
 			isa = PBXGroup;
 			children = (
+				87D8FAF115AED08800CE14D9 /* unban.png */,
 				87F70BD615AD7BA000B202C7 /* safari.png */,
 				87E37DF415AC2D0A0009B377 /* book.png */,
 				87E37DF515AC2D0A0009B377 /* comments.png */,
@@ -978,6 +981,7 @@
 				87F70BD715AD7BA000B202C7 /* safari.png in Resources */,
 				87F70BD915AD88A800B202C7 /* icon.png in Resources */,
 				87F70BDB15AD88AB00B202C7 /* icon@2x.png in Resources */,
+				87D8FAF215AED08800CE14D9 /* unban.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

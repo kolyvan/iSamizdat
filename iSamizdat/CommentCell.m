@@ -36,7 +36,8 @@ enum {
     BUTTON_URL,
     BUTTON_AUTHOR_ADD,       
     BUTTON_AUTHOR_GO, 
-    BUTTON_BAN,    
+    BUTTON_BAN, 
+    BUTTON_UNBAN,     
 };
 
 #define BUTTON_SIZE 36
@@ -147,11 +148,11 @@ static void drawLine(CGPoint from, CGPoint to, UIColor *color, CGFloat width)
 {      
     if (self.backView.subviews.isEmpty) {
         
-        const char * names[8] = {
-            "comment", "edit", "cross", "email", "safari", "author_add", "author_go", "ban"
+        const char * names[9] = {
+            "comment", "edit", "cross", "email", "safari", "author_add", "author_go", "ban", "unban"
         };
         
-        for (int i = 0; i < 8; ++i) {
+        for (int i = 0; i < 9; ++i) {
             
             NSString *name = [NSString stringWithCString:names[i] encoding:NSUTF8StringEncoding];            
             UIButton* button = [UIButton buttonWithType:UIButtonTypeCustom];            
@@ -221,8 +222,14 @@ static void drawLine(CGPoint from, CGPoint to, UIColor *color, CGFloat width)
                         break;
                         
                     case BUTTON_BAN:  
-                        [buttons push:v];
-                        break;    
+                        if (!_comment.isHidden)
+                            [buttons push:v];
+                        break;                            
+                        
+                    case BUTTON_UNBAN:  
+                        if (_comment.isHidden || _comment.filter.length > 0)                        
+                            [buttons push:v];
+                        break;        
                         
                     default:
                         break;
@@ -326,12 +333,8 @@ static void drawLine(CGPoint from, CGPoint to, UIColor *color, CGFloat width)
         case BUTTON_AUTHOR_ADD: //fallback
         case BUTTON_AUTHOR_GO:  [_delegate goAuthor:_comment.link.lastPathComponent]; break; 
         
-        case BUTTON_BAN:        //[_delegate banComment:_comment]; break; 
-
-            _comment.filter = _comment.filter.length > 0 ? @"" : locString(@"hidden comment"); 
-            [self.delegate cellNeedReload: self];            
-            //[self setNeedsDisplay];
-            
+        case BUTTON_BAN:        //fallback
+        case BUTTON_UNBAN:      [self.delegate toggleCommentCell:self];                        
         default:
             break;
     }
@@ -355,7 +358,8 @@ static void drawLine(CGPoint from, CGPoint to, UIColor *color, CGFloat width)
 
          return height;        
         
-    } else if (comment.filter.length > 0) {
+    } else if (comment.isHidden ||
+               comment.filter.length > 0) {
         
         return self.minimumHeight;
         
@@ -445,14 +449,15 @@ static void drawLine(CGPoint from, CGPoint to, UIColor *color, CGFloat width)
     
     y += headerHeight;
 
-    if (_comment.filter.length > 0) {
-        
+    if (_comment.isHidden ||
+        _comment.filter.length > 0) {
+                        
         [[UIColor grayColor] set];
         
         y += 10;
         
-        NSString *s = _comment.filter;
-        
+        //NSString *s = _comment.filter.length > 0 ? _comment.filter : locString(@"hidden comment");
+        NSString *s = _comment.isHidden ? locString(@"hidden comment") : _comment.filter;
         float dx = [s sizeWithFont:[UIFont systemFont14] 
                     constrainedToSize:CGSizeMake(w, 20) 
                         lineBreakMode:UILineBreakModeClip].width;

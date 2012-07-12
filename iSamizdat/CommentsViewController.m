@@ -353,11 +353,25 @@
     return  name ? name : @""; 
 }
 
-- (void) cellNeedReload: (UITableViewCell *)cell
+- (void) toggleCommentCell: (CommentCell *)cell
 {
+    SamLibComment *comment = cell.comment;
+    
+    BOOL hidden;
+    if (comment.filter.length > 0) {
+        
+        comment.filter = @""; // clear filter
+        hidden = NO;
+    }        
+    else
+        hidden = !comment.isHidden;
+    
+    [_comments setHiddenFlag:hidden forComment:comment];
+    
     NSIndexPath * indexPath = [self.tableView indexPathForCell: cell];
     [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
                           withRowAnimation:YES];
+
 }
 
 #pragma mark - Table view data source
@@ -395,7 +409,7 @@
 {    
     SamLibComment *comment = [_comments.all objectAtIndex:indexPath.row];  
 
-    if (!comment.filter)
+    if (!comment.filter && !comment.isHidden)
         comment.filter = [self findBanForComment: comment];
     
     return [CommentCell heightForComment:comment 

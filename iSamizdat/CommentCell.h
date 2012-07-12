@@ -15,6 +15,7 @@
 #import "FastCell.h"
 
 @class SamLibComment;
+@class CommentCell;
 
 @protocol CommentCellDelegate <NSObject>
 
@@ -23,7 +24,7 @@
 - (void) editPost: (SamLibComment *) comment;
 - (void) goAuthor: (NSString *) path;
 - (void) banComment: (SamLibComment *) comment;
-- (void) cellNeedReload: (UITableViewCell *)cell;
+- (void) toggleCommentCell: (CommentCell *)cell;
 
 @end
 

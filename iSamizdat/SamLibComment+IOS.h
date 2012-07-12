@@ -22,7 +22,4 @@
 - (TextLine *) nameLine;
 - (UIColor *) nameColor;
 
-- (NSString *) filter;
-- (void) setFilter: (NSString *) filter;
-
 @end

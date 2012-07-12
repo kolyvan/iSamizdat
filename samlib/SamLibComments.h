@@ -36,6 +36,8 @@ typedef void (^UpdateCommentsBlock)(SamLibComments *comments,
 @property (readonly, nonatomic) BOOL canDelete;
 @property (readonly, nonatomic) NSInteger msgidNumber;
 @property (readwrite, nonatomic) BOOL isNew;
+@property (readonly, nonatomic) BOOL isHidden;
+@property (readwrite, nonatomic, KX_PROP_STRONG) NSString *filter;
 
 + (id) fromDictionary: (NSDictionary *) dict;
 
@@ -88,7 +90,9 @@ typedef void (^UpdateCommentsBlock)(SamLibComments *comments,
       isReply: (BOOL) isReply
         block: (UpdateCommentsBlock) block;
 
-
 - (SamLibComment *) findCommentByMsgid: (NSString *) msgid;
+
+- (void) setHiddenFlag: (BOOL) isHidden 
+            forComment: (SamLibComment *) comment;
 
 @end

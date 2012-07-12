@@ -54,6 +54,7 @@ static NSDate* mkDateFromComment(NSString *dt)
     NSDate * _timestamp;
     NSInteger _msgidNumber;
     BOOL _isNew;
+    NSString *_filter;
 }
 @end
 
@@ -61,8 +62,9 @@ static NSDate* mkDateFromComment(NSString *dt)
 
 @synthesize timestamp = _timestamp;
 @synthesize isNew = _isNew;
+@synthesize filter = _filter;
 
-@dynamic number, deleteMsg, name, link, color, msgid, replyto, message, isSamizdat;
+@dynamic number, deleteMsg, name, link, color, msgid, replyto, message, isSamizdat, isHidden;
 
 - (NSInteger) number        { return [[_dict get:@"num"] integerValue]; }
 - (NSString *) deleteMsg    { return [_dict get: @"deleteMsg"]; }
@@ -141,6 +143,26 @@ static NSDate* mkDateFromComment(NSString *dt)
     return  self.number == other.number;    
 }
 
+
+- (BOOL) isHidden
+{
+    return [[_dict get:@"hidden"] boolValue];
+}
+
+- (BOOL) updateHidden: (BOOL) flag
+{
+    BOOL b = self.isHidden;
+    if (b != flag) {
+    
+        NSMutableDictionary *d = [_dict mutableCopy];
+        [d update:@"hidden" value:[NSNumber numberWithBool:flag]];
+        KX_RELEASE(_dict);
+        _dict = d;
+        return YES;
+    }
+    return NO;
+}
+
 @end
 
 ////
@@ -153,7 +175,6 @@ static NSDate* mkDateFromComment(NSString *dt)
 @implementation SamLibComments
 
 @synthesize text = _text;
-//@synthesize all = _all;
 @synthesize lastModified = _lastModified;
 @synthesize isDirty = _isDirty;
 @synthesize numberOfNew = _numberOfNew;
@@ -558,6 +579,15 @@ static NSDate* mkDateFromComment(NSString *dt)
         if ([comment.msgid isEqualToString:msgid])
             return comment;
     return nil;
+}
+
+- (void) setHiddenFlag: (BOOL) isHidden 
+            forComment: (SamLibComment *) comment
+{
+    if ([comment updateHidden:isHidden]) {
+        _version++;
+        _isDirty = YES;        
+    }
 }
 
 @end
