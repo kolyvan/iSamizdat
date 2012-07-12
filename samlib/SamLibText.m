@@ -344,7 +344,10 @@ static NSString * prettyHtml (NSMutableArray *diffs)
     NSString *rating     = getStringFromDict(dict, @"rating", _path);
     
     self.flagNew = getStringFromDict(dict, @"flagNew", _path); 
-    self.dateModified = getStringFromDict(dict, @"dateModified", _path);     
+    
+    NSString *dm = getStringFromDict(dict, @"dateModified", _path);     
+    if (dm || allowNil)
+        self.dateModified = dm;
     
     SamLibTextChanged s = SamLibTextChangedNone;
     

@@ -190,7 +190,7 @@ enum {
      
     // fixme: below is most likely wrong code
     if (_text.htmlFile.nonEmpty) {
-        
+
         if (_text.changedSize && _text.canUpdate)
             [ma push: $int(RowUpdate)];
         
@@ -401,7 +401,7 @@ enum {
         
         UITableViewCell *cell = [self mkCell: @"ReadCell" withStyle:UITableViewCellStyleValue1];                    
         cell.textLabel.text = locString(@"The text from");
-        cell.detailTextLabel.text = _text.dateModified;          
+        cell.detailTextLabel.text = _text.dateModified.nonEmpty ? _text.dateModified : @"?";          
         return cell;
         
     } else if (RowUpdate == row) {
