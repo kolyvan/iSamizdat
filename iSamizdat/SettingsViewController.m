@@ -12,10 +12,10 @@
 
 #import "SettingsViewController.h"
 #import "KxMacros.h"
-#import "SamLibAgent.h"
 #import "UserViewController.h"
 #import "CacheViewController.h"
 #import "SamLibModerator.h"
+#import "SamLibComments.h"
 #import "DDLog.h"
 
 extern int ddLogLevel;
@@ -29,6 +29,11 @@ enum {
     
     SettingsViewNumberOfRows,
 };
+
+#define FIRST_PAGE_COMMENTS_NUMBER 10
+#define NEXT_PAGE_COMMENTS_NUMBER  40
+#define MIN_COMMENTS_PAGES 1
+#define MAX_COMMENTS_PAGES 6
 
 @interface SettingsViewController ()
 @property (nonatomic, strong) UserViewController *userViewController;
@@ -115,7 +120,8 @@ enum {
 
 - (void) sliderCellValueChanged: (UISlider *)slider
 {
-    SamLibAgent.setSettingsInt(@"comments.maxsize", (int)slider.value, 100);
+    NSUInteger value = ceil(slider.value - 1) * NEXT_PAGE_COMMENTS_NUMBER + FIRST_PAGE_COMMENTS_NUMBER;    
+    [SamLibComments setMaxComments: value];
 }
 
 #pragma mark - Table view data source
@@ -202,9 +208,11 @@ enum {
         cell.textLabel.text = locString(@"Max comments load");
         
         slider.continuous = NO;
-        slider.maximumValue = 200;
-        slider.minimumValue = 20;        
-        slider.value = SamLibAgent.settingsInt(@"comments.maxsize", 100); //;                
+        slider.maximumValue = MAX_COMMENTS_PAGES;
+        slider.minimumValue = MIN_COMMENTS_PAGES;        
+        
+        CGFloat x = [SamLibComments maxComments];        
+        slider.value = ((x - FIRST_PAGE_COMMENTS_NUMBER) / NEXT_PAGE_COMMENTS_NUMBER) + 1; 
     }
     
     return cell;

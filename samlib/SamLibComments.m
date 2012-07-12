@@ -29,15 +29,8 @@
 
 extern int ddLogLevel;
 
-static NSInteger maxCommens()
-{
-    static NSInteger value;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        value = SamLibAgent.settingsInt(@"comments.maxsize", 100);
-    });
-    return value;
-}
+static NSUInteger gMaxCommens;
+
 
 static NSDate* mkDateFromComment(NSString *dt)
 {
@@ -298,7 +291,9 @@ static NSDate* mkDateFromComment(NSString *dt)
 - (void) updateComments: (NSArray *) result
 {           
     if (_all.nonEmpty) {  
-          
+        
+        NSUInteger maxComments = [self->isa maxComments];
+        
         NSMutableArray *ma = [result mutableCopy];
         
         // add all old comments not found in new 
@@ -311,13 +306,13 @@ static NSDate* mkDateFromComment(NSString *dt)
         }
         
         NSArray *final;
-        if (ma.count < maxCommens()) {
+        if (ma.count < maxComments) {
             
             final = ma;
             
         } else {
         
-            final = [ma take: maxCommens()];
+            final = [ma take: maxComments];
         }
                         
         // determine and count new
@@ -378,7 +373,7 @@ static NSDate* mkDateFromComment(NSString *dt)
                                       if (lastModified.nonEmpty)
                                           self.lastModified = lastModified;
                                       
-                                      //DDLogInfo(@"fetched %ld comments", comments.count);                                      
+                                      DDLogInfo(@"fetched %ld comments", comments.count);                                      
                                       
                                       NSArray *result = [comments map:^id(id elem) {
                                           return [SamLibComment fromDictionary:elem];  
@@ -387,7 +382,7 @@ static NSDate* mkDateFromComment(NSString *dt)
                                       [buffer appendAll: result];
                                       
                                       if (!parameters && // parameters != nil on deleteComment call                                          
-                                          buffer.count < maxCommens())
+                                          buffer.count < [self->isa maxComments])
                                       {                                           
                                           BOOL isContinue = YES;
                                           
@@ -588,6 +583,21 @@ static NSDate* mkDateFromComment(NSString *dt)
         _version++;
         _isDirty = YES;        
     }
+}
+
++ (NSUInteger) maxComments
+{
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        gMaxCommens = SamLibAgent.settingsInt(@"comments.maxsize", 100);
+    });
+    return gMaxCommens;
+}
+
++ (void) setMaxComments: (NSUInteger) value;
+{
+    gMaxCommens = value;
+    SamLibAgent.setSettingsInt(@"comments.maxsize", value, 100);
 }
 
 @end

@@ -95,4 +95,8 @@ typedef void (^UpdateCommentsBlock)(SamLibComments *comments,
 - (void) setHiddenFlag: (BOOL) isHidden 
             forComment: (SamLibComment *) comment;
 
++ (NSUInteger) maxComments;
++ (void) setMaxComments: (NSUInteger) value;
+
+
 @end
