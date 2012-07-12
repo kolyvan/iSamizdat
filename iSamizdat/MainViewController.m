@@ -24,7 +24,7 @@
 #import "KxTuple2.h"
 #import "AppDelegate.h"
 #import "AuthorViewController.h"
-#import "TextViewController.h"
+#import "TextContainerController.h"
 #import "UIFont+Kolyvan.h"
 #import "UIColor+Kolyvan.h"
 #import "DDLog.h"
@@ -46,8 +46,8 @@ typedef enum {
 @property (nonatomic, strong) NSMutableArray *content;
 @property (nonatomic, strong) NSArray *ignored;
 @property (nonatomic, strong) NSArray *authors;
-@property (nonatomic, strong) AuthorViewController* authorViewController;
-@property (nonatomic, strong) TextViewController* textViewController;
+@property (nonatomic, strong) AuthorViewController *authorViewController;
+@property (nonatomic, strong) TextContainerController *textContainerController;
 
 @end
 
@@ -57,7 +57,7 @@ typedef enum {
 @synthesize ignored;
 @synthesize authors;
 @synthesize authorViewController;
-@synthesize textViewController;
+@synthesize textContainerController;
 
 - (id) init
 {
@@ -106,7 +106,7 @@ typedef enum {
     self.authors = nil;
     
     self.authorViewController = nil;
-    self.textViewController = nil;
+    self.textContainerController = nil;
     
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
@@ -127,7 +127,7 @@ typedef enum {
     [super didReceiveMemoryWarning];     
 
     self.authorViewController = nil;
-    self.textViewController = nil;
+    self.textContainerController = nil;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -432,12 +432,13 @@ typedef enum {
             
         } else if ([obj isKindOfClass:[SamLibText class]]) {
             
-            if (!self.textViewController) {
-                self.textViewController = [[TextViewController alloc] init];
+            if (!self.textContainerController) {
+                self.textContainerController = [[TextContainerController alloc] init];
             }
                                     
-            self.textViewController.text = obj;
-            [self.navigationController pushViewController:self.textViewController 
+            self.textContainerController.text = obj;
+            self.textContainerController.selected = TextInfoViewSelected;
+            [self.navigationController pushViewController:self.textContainerController 
                                                  animated:YES];
         }
         

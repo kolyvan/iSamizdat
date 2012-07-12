@@ -464,6 +464,11 @@ static NSString * prettyHtml (NSMutableArray *diffs)
     self.changedFlag = SamLibTextChangedNew;
 }
 
+- (void) flagAsChangedNone
+{
+    self.changedFlag = SamLibTextChangedNone;
+}
+
 - (NSDictionary *) toDictionary
 {
     NSMutableDictionary * dict = [NSMutableDictionary dictionaryWithCapacity:19];

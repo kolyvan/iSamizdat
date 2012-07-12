@@ -157,6 +157,7 @@ typedef enum {
 
 - (void) flagAsRemoved;
 - (void) flagAsNew;
+- (void) flagAsChangedNone;
 
 - (void) update: (UpdateTextBlock) block 
        progress: (AsyncProgressBlock) progress

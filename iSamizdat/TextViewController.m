@@ -139,10 +139,21 @@ enum {
 {    
     [super viewWillAppear:animated];
     if (_needReload) {
-        _needReload = NO;                   
+        _needReload = NO;  
         [self prepareData];       
         [self.tableView reloadData];
     }    
+}
+
+- (void) viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    
+    if (_text.changedSize || (_text.isNew && _text.flagNew != nil)) {
+        
+        [_text flagAsChangedNone];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"samLibTextChanged" object:nil];        
+    }
 }
 
 - (void)viewDidUnload
