@@ -227,7 +227,7 @@ static void drawLine(CGPoint from, CGPoint to, UIColor *color, CGFloat width)
                         break;                            
                         
                     case BUTTON_UNBAN:  
-                        if (_comment.isHidden || _comment.filter.length > 0)                        
+                        if (_comment.isHidden)                        
                             [buttons push:v];
                         break;        
                         
@@ -358,8 +358,7 @@ static void drawLine(CGPoint from, CGPoint to, UIColor *color, CGFloat width)
 
          return height;        
         
-    } else if (comment.isHidden ||
-               comment.filter.length > 0) {
+    } else if (comment.isHidden) {
         
         return self.minimumHeight;
         
@@ -449,15 +448,13 @@ static void drawLine(CGPoint from, CGPoint to, UIColor *color, CGFloat width)
     
     y += headerHeight;
 
-    if (_comment.isHidden ||
-        _comment.filter.length > 0) {
+    if (_comment.isHidden) {
                         
         [[UIColor grayColor] set];
         
         y += 10;
-        
-        //NSString *s = _comment.filter.length > 0 ? _comment.filter : locString(@"hidden comment");
-        NSString *s = _comment.isHidden ? locString(@"hidden comment") : _comment.filter;
+
+        NSString *s = locString(@"hidden comment");
         float dx = [s sizeWithFont:[UIFont systemFont14] 
                     constrainedToSize:CGSizeMake(w, 20) 
                         lineBreakMode:UILineBreakModeClip].width;
@@ -537,7 +534,5 @@ static void drawLine(CGPoint from, CGPoint to, UIColor *color, CGFloat width)
         }   
     }
 }
-
-
 
 @end

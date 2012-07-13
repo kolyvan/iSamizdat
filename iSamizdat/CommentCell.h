@@ -23,7 +23,6 @@
 - (void) deletePost: (SamLibComment *) comment;
 - (void) editPost: (SamLibComment *) comment;
 - (void) goAuthor: (NSString *) path;
-- (void) banComment: (SamLibComment *) comment;
 - (void) toggleCommentCell: (CommentCell *)cell;
 
 @end

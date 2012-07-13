@@ -114,8 +114,6 @@ enum {
         
         [moderator addBan:ban];
     }
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"SamLibFilterSettingsChanged" object:nil];
 }
 
 - (void) sliderCellValueChanged: (UISlider *)slider

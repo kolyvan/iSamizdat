@@ -87,11 +87,6 @@
     
     _gestureRecognizer.direction = UISwipeGestureRecognizerDirectionRight  | UISwipeGestureRecognizerDirectionLeft; 
     [self.tableView addGestureRecognizer:_gestureRecognizer];  
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(filterSettingsChanged:)
-                                                 name:@"SamLibFilterSettingsChanged" 
-                                               object:nil];  
 }
 
 - (void) viewWillAppear:(BOOL)animated 
@@ -121,9 +116,7 @@
     self.authorViewController = nil;
     
     [self.tableView removeGestureRecognizer:_gestureRecognizer];
-    _gestureRecognizer = nil;
-    
-    [[NSNotificationCenter defaultCenter] removeObserver:self];    
+    _gestureRecognizer = nil;   
 }
 
 - (void) didReceiveMemoryWarning
@@ -192,8 +185,11 @@
                       block:^(SamLibComments *comments, SamLibStatus status, NSString *error) {
                           
                           NSString *message;
-                          if (status == SamLibStatusSuccess)                                       
+                          if (status == SamLibStatusSuccess)  {                                      
                               message = locString(@"Send comment");
+                              if (comments.numberOfNew > 0)
+                                  [self filterComments];
+                          }
                           else if (status == SamLibStatusFailure) 
                               message = error;
                               
@@ -205,8 +201,11 @@
                                block:^(SamLibComments *comments, SamLibStatus status, NSString *error) {
                                    
                                    NSString *message;
-                                   if (status == SamLibStatusSuccess)                                       
+                                   if (status == SamLibStatusSuccess)  {                                     
                                        message = locString(@"Deleted comment");
+                                       if (comments.numberOfNew > 0)
+                                           [self filterComments];
+                                   }
                                    else if (status == SamLibStatusFailure) 
                                        message = error;
                                    
@@ -222,13 +221,42 @@
                     block:^(SamLibComments *comments, SamLibStatus status, NSString *error) {
             
                         NSString *message;
-                        if (status == SamLibStatusSuccess)                            
+                        if (status == SamLibStatusSuccess)  {                          
                             message = KxUtils.format(locString(@"New comments:%ld"), comments.numberOfNew);
+                            if (comments.numberOfNew > 0)
+                                [self filterComments];
+                        }
                         else if (status == SamLibStatusFailure)                            
                             message = error;
                         
                         block(status, message);            
         }];        
+    }
+}
+
+- (void) filterComments
+{    
+    SamLibModerator *moderator = [SamLibModerator shared];
+             
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        
+        NSData *d = [NSData dataWithContentsOfFile:KxUtils.pathForResource(@"censored.bin")];
+        NSString *s = [NSString stringWithUTF8String:d.gunzip.bytes];
+        NSArray *a = s.split;
+        if (a.nonEmpty) {
+            [moderator registerLinkToPattern:@"censored" pattern:a];
+        }            
+    });
+    
+    NSString *path = [_comments.text makeKey:@"/"]; 
+    for (SamLibComment *comment in _comments.all) { 
+        
+        if (comment.isNew && comment.msgid.nonEmpty) {
+            
+            if ([moderator testForBan:comment withPath:path] != nil)
+                [_comments setHiddenFlag:YES forComment:comment];
+        }
     }
 }
 
@@ -292,11 +320,6 @@
                                          animated:YES];
 }
 
-- (void) banComment: (SamLibComment *) comment
-{
-    
-}
-
 - (void) sendPost: (PostData *) post
 {   
     _postData = post;        
@@ -322,51 +345,10 @@
     [self cancelSwipeAnimated: YES];
 }
 
-- (void) filterSettingsChanged:(NSNotification *)notification
-{
-    for (SamLibComment *comment in _comments.all)
-        comment.filter = nil;
-    
-    _needReload = YES;
-}
-
-- (NSString *) findBanForComment: (SamLibComment *) comment;
-{
-    if (!comment.msgid.nonEmpty)
-        return @"";
-    
-    SamLibModerator *moderator = [SamLibModerator shared];
-    
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        
-        NSData *d = [NSData dataWithContentsOfFile:KxUtils.pathForResource(@"censored.bin")];
-        NSString *s = [NSString stringWithUTF8String:d.gunzip.bytes];
-        NSArray *a = s.split;
-        if (a.nonEmpty) {
-            [moderator registerLinkToPattern:@"censored" pattern:a];
-        }            
-    });
-    
-    NSString *path = [_comments.text makeKey:@"/"];
-    NSString *name = [moderator testForBan:comment withPath:path].name;
-    return  name ? name : @""; 
-}
-
 - (void) toggleCommentCell: (CommentCell *)cell
 {
-    SamLibComment *comment = cell.comment;
-    
-    BOOL hidden;
-    if (comment.filter.length > 0) {
-        
-        comment.filter = @""; // clear filter
-        hidden = NO;
-    }        
-    else
-        hidden = !comment.isHidden;
-    
-    [_comments setHiddenFlag:hidden forComment:comment];
+    SamLibComment *comment = cell.comment;    
+    [_comments setHiddenFlag:!comment.isHidden forComment:comment];
     
     NSIndexPath * indexPath = [self.tableView indexPathForCell: cell];
     [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
@@ -396,10 +378,7 @@
                                   reuseIdentifier:CellIdentifier];
     }
     
-    SamLibComment *comment = [_comments.all objectAtIndex:indexPath.row];   
-    //if (!comment.filter)
-    //    comment.filter = [self findBanForComment: comment];
-    
+    SamLibComment *comment = [_comments.all objectAtIndex:indexPath.row];       
     cell.delegate = self;
     cell.comment = comment;    
     return cell;
@@ -408,13 +387,8 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath 
 {    
     SamLibComment *comment = [_comments.all objectAtIndex:indexPath.row];  
-
-    if (!comment.filter && !comment.isHidden)
-        comment.filter = [self findBanForComment: comment];
-    
     return [CommentCell heightForComment:comment 
                                withWidth:tableView.frame.size.width];
-    
 }
 
 @end

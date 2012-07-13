@@ -37,7 +37,6 @@ typedef void (^UpdateCommentsBlock)(SamLibComments *comments,
 @property (readonly, nonatomic) NSInteger msgidNumber;
 @property (readwrite, nonatomic) BOOL isNew;
 @property (readonly, nonatomic) BOOL isHidden;
-@property (readwrite, nonatomic, KX_PROP_STRONG) NSString *filter;
 
 + (id) fromDictionary: (NSDictionary *) dict;
 

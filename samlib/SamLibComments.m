@@ -47,7 +47,6 @@ static NSDate* mkDateFromComment(NSString *dt)
     NSDate * _timestamp;
     NSInteger _msgidNumber;
     BOOL _isNew;
-    NSString *_filter;
 }
 @end
 
@@ -55,7 +54,6 @@ static NSDate* mkDateFromComment(NSString *dt)
 
 @synthesize timestamp = _timestamp;
 @synthesize isNew = _isNew;
-@synthesize filter = _filter;
 
 @dynamic number, deleteMsg, name, link, color, msgid, replyto, message, isSamizdat, isHidden;
 
@@ -135,7 +133,6 @@ static NSDate* mkDateFromComment(NSString *dt)
         return YES;    
     return  self.number == other.number;    
 }
-
 
 - (BOOL) isHidden
 {
