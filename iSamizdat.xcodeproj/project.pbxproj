@@ -105,6 +105,7 @@
 		8776CA4715776EC50099C83D /* FavoritesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8776CA4515776EC50099C83D /* FavoritesViewController.xib */; };
 		878850C015AAB157002B6F8D /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 878850BF15AAB157002B6F8D /* libz.dylib */; };
 		878850C315AAB1F2002B6F8D /* SamLibModerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 878850C215AAB1F2002B6F8D /* SamLibModerator.m */; };
+		8788D8F715B0527500D6027A /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8788D8F615B0527500D6027A /* AboutViewController.m */; };
 		87D8FAF215AED08800CE14D9 /* unban.png in Resources */ = {isa = PBXBuildFile; fileRef = 87D8FAF115AED08800CE14D9 /* unban.png */; };
 		87E230AC158B0AC70074EBF1 /* TextGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87E230AA158B0AC70074EBF1 /* TextGroupViewController.m */; };
 		87E230AD158B0AC70074EBF1 /* TextGroupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 87E230AB158B0AC70074EBF1 /* TextGroupViewController.xib */; };
@@ -358,6 +359,8 @@
 		878850BF15AAB157002B6F8D /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		878850C115AAB1F2002B6F8D /* SamLibModerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SamLibModerator.h; sourceTree = "<group>"; };
 		878850C215AAB1F2002B6F8D /* SamLibModerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SamLibModerator.m; sourceTree = "<group>"; };
+		8788D8F515B0527500D6027A /* AboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AboutViewController.h; sourceTree = "<group>"; };
+		8788D8F615B0527500D6027A /* AboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AboutViewController.m; sourceTree = "<group>"; };
 		87D8FAF115AED08800CE14D9 /* unban.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = unban.png; path = resources/unban.png; sourceTree = "<group>"; };
 		87E230A9158B0AC70074EBF1 /* TextGroupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextGroupViewController.h; sourceTree = "<group>"; };
 		87E230AA158B0AC70074EBF1 /* TextGroupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextGroupViewController.m; sourceTree = "<group>"; };
@@ -582,6 +585,8 @@
 				87E37DF015AC2A810009B377 /* HistoryViewController.m */,
 				87F70BB415AD482400B202C7 /* TextContainerController.h */,
 				87F70BB515AD482400B202C7 /* TextContainerController.m */,
+				8788D8F515B0527500D6027A /* AboutViewController.h */,
+				8788D8F615B0527500D6027A /* AboutViewController.m */,
 				87546F25157C888000DE58DD /* CommentCell.h */,
 				87546F26157C888000DE58DD /* CommentCell.m */,
 				87546F29157C895C00DE58DD /* TextLine.h */,
@@ -1052,6 +1057,7 @@
 				87E37DE715AC28DD0009B377 /* SamLibHistory.m in Sources */,
 				87E37DF215AC2A810009B377 /* HistoryViewController.m in Sources */,
 				87F70BB615AD482400B202C7 /* TextContainerController.m in Sources */,
+				8788D8F715B0527500D6027A /* AboutViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

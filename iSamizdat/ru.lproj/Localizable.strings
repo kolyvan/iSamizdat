@@ -95,3 +95,8 @@
 " - deleted %@" = " - удаленно %@";
 "hidden comment" = "комментарий скрыт";
 "Max comments load" = "Комментарии (колво.)";
+"About" = "О программе";
+"Version" = "Версия программы";
+"Site" = "Сайт";
+"Twit feedback" = "Твитнуть отзыв";
+"Mail feedback" = "Отзыв почтой";

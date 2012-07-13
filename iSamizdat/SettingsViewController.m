@@ -14,6 +14,7 @@
 #import "KxMacros.h"
 #import "UserViewController.h"
 #import "CacheViewController.h"
+#import "AboutViewController.h"
 #import "SamLibModerator.h"
 #import "SamLibComments.h"
 #import "DDLog.h"
@@ -22,8 +23,9 @@ extern int ddLogLevel;
 
 enum {
 
+    SettingsViewAboutRow,    
     SettingsViewUserRow,
-    SettingsViewCacheRow,
+    SettingsViewCacheRow,    
     SettingsViewFilterRow,   
     SettingsViewMaxCommentsRow,       
     
@@ -38,11 +40,13 @@ enum {
 @interface SettingsViewController ()
 @property (nonatomic, strong) UserViewController *userViewController;
 @property (nonatomic, strong) CacheViewController *cacheViewController;
+@property (nonatomic, strong) AboutViewController *aboutViewController;
+
 @end
 
 @implementation SettingsViewController
 
-@synthesize userViewController, cacheViewController;
+@synthesize userViewController, cacheViewController, aboutViewController;
 
 - (id) init
 {
@@ -68,6 +72,7 @@ enum {
     self.navigationItem.rightBarButtonItem = nil;
     self.userViewController = nil;
     self.cacheViewController = nil;
+    self.aboutViewController = nil;
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -80,7 +85,8 @@ enum {
 {
     [super didReceiveMemoryWarning]; 
     self.userViewController = nil;
-    self.cacheViewController = nil;    
+    self.cacheViewController = nil;  
+    self.aboutViewController = nil;    
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -189,7 +195,12 @@ enum {
 
         cell = [self mkCell: @"Cell"];        
         cell.textLabel.text = locString(@"Cache Settings");
-
+        
+    } else if (SettingsViewAboutRow == indexPath.row) {
+        
+        cell = [self mkCell: @"Cell"];        
+        cell.textLabel.text = locString(@"About");
+        
     } else if (SettingsViewFilterRow == indexPath.row) {
         
         cell = [self mkSwitchCell: @"SwitchCell"];        
@@ -235,7 +246,16 @@ enum {
         }
         [self.navigationController pushViewController:self.cacheViewController 
                                              animated:YES]; 
+    } else if (SettingsViewAboutRow == indexPath.row) {
+        
+        if (!self.aboutViewController) {
+            self.aboutViewController = [[AboutViewController alloc] init];        
+        }
+        [self.navigationController pushViewController:self.aboutViewController 
+                                             animated:YES]; 
     }
+    
+    //
     
     //[self.navigationController setNavigationBarHidden:NO animated:YES];    
 }
