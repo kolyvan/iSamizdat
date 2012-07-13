@@ -37,9 +37,7 @@
         return [UIImage imageNamed: @"favorite.png"];        
         
     if (self.flagNew.nonEmpty) {
-        
-        //return [UIImage imageNamed:@"new.png"];
-        
+                        
         if ([self.flagNew isEqualToString:@"red"])         
             return [UIImage imageNamed:@"new-red.png"];        
         
