@@ -23,10 +23,6 @@ enum {
     AboutViewRowsCount,
 };
 
-#define SITE  @"samlib.ru/k/kolywan"
-#define EMAIL @"ru.kolyvan@gmail.com"
-#define TWEET @"@Kolyvan_Ru"
-
 
 @interface AboutViewController ()
 @property (readonly) UITableView *tableView;
@@ -84,7 +80,8 @@ enum {
     
     TWTweetComposeViewController *twitter = [[TWTweetComposeViewController alloc] init];
    
-    [twitter setInitialText:KxUtils.format(@"%@ ", TWEET)];
+    NSDictionary *dict = [[NSBundle mainBundle] infoDictionary]; 
+    [twitter setInitialText:KxUtils.format(@"%@@ ", [dict get:@"SamLibAboutTwitter" orElse:@"?"])];
           
     twitter.completionHandler = ^(TWTweetComposeViewControllerResult result)
     {
@@ -127,25 +124,26 @@ enum {
 {
     UITableViewCell *cell;
     
+    NSDictionary *dict = [[NSBundle mainBundle] infoDictionary];
+    
     if (AboutViewRowVersion == indexPath.row) {
         
         cell = [self mkCell:@"Cell" withStyle:UITableViewCellStyleValue1];
         cell.textLabel.text = locString(@"Version");   
-        
-        NSDictionary *dict = [[NSBundle mainBundle] infoDictionary];
         cell.detailTextLabel.text = [dict get:@"CFBundleShortVersionString" orElse:@"?"];           
         
     } else if (AboutViewRowLink == indexPath.row) {
 
         cell = [self mkCell:@"LinkCell" withStyle:UITableViewCellStyleValue1];
-        cell.textLabel.text = locString(@"Site");   
-        cell.detailTextLabel.text = SITE;        
+        cell.textLabel.text = locString(@"Site");
+        cell.detailTextLabel.text = [dict get:@"SamLibAboutSite" orElse:@"?"];        
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         
     } else if (AboutViewRowCopyrigth == indexPath.row) {        
         
-        cell = [self mkCell:@"TextCell" withStyle:UITableViewCellStyleDefault];
-        cell.textLabel.text = locString(@"(c) 2012 Konstantin Bukreev");
+        cell = [self mkCell:@"TextCell" withStyle:UITableViewCellStyleSubtitle];
+        cell.textLabel.text = [dict get:@"NSHumanReadableCopyright" orElse:@"?"]; 
+        cell.detailTextLabel.text = @"Copyright (c) 2012";
         
     } else if (AboutViewRowTwitter == indexPath.row) {        
 
@@ -174,9 +172,11 @@ enum {
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    NSDictionary *dict = [[NSBundle mainBundle] infoDictionary];
+    
     if (AboutViewRowLink == indexPath.row) {
         
-        [self openUrl: KxUtils.format(@"http://%@", SITE)];
+        [self openUrl: KxUtils.format(@"http://%@", [dict get:@"SamLibAboutSite" orElse:@"?"])];
         
     } else if (AboutViewRowTwitter == indexPath.row) {
         
@@ -184,9 +184,10 @@ enum {
         
     } else if (AboutViewRowEmail == indexPath.row) {        
 
-        [self openUrl: KxUtils.format(@"mailto:%@?subject=iSamizdat", EMAIL)];
+        [self openUrl: KxUtils.format(@"mailto:%@?subject=iSamizdat", [dict get:@"SamLibAboutEmail" orElse:@"?"])];
     }
-    
+
+    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];    
 }
 
 @end

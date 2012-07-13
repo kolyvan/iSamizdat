@@ -59,5 +59,13 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSHumanReadableCopyright</key>
+	<string>Konstantin Bukreev</string>
+	<key>SamLibAboutSite</key>
+	<string>samlib.ru/k/kolywan</string>
+	<key>SamLibAboutEmail</key>
+	<string>ru.kolyvan@gmail.com</string>
+	<key>SamLibAboutTwitter</key>
+	<string>Kolyvan_Ru</string>
 </dict>
 </plist>
