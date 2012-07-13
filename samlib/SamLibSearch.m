@@ -389,7 +389,7 @@ static NSString * mkPathFromName(NSString *name)
     
     if (byName) {        
         
-        catalog = SamLibParser.captitalToPath(pattern.first);        
+        catalog = SamLibParser.capitalToPath(pattern.first);        
         
         if (!catalog.nonEmpty) {
             

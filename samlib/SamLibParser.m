@@ -973,9 +973,9 @@ static NSString * cyrillicToLatin(unichar first)
     return nil;
 }
 
-static NSString * captitalToPath(unichar first)
+static NSString * capitalToPath(unichar first)
 {   
-    IndexEntry cyrillic [33] = {
+    static IndexEntry cyrillic [33] = {
         { 1040, "a/" }, // А
         { 1041, "b/" }, // Б  
         { 1042, "w/" }, // В
@@ -1040,6 +1040,6 @@ SamLibParser_t SamLibParser = {
     scanTextPage,
     listOfGroups,
     scanAuthors,
-    captitalToPath,
+    capitalToPath,
     cyrillicToLatin,
 };
