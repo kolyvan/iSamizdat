@@ -212,7 +212,8 @@ enum {
     
     [ma push: $int(RowMyVote)];  
     
-    if (_text.htmlFile.nonEmpty || 
+    if ([_text commentsObject:NO] != nil ||
+        _text.htmlFile.nonEmpty ||         
         _text.commentsFile.nonEmpty) {
         
         [ma push: $int(RowCleanup)];

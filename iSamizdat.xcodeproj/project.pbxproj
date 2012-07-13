@@ -1219,6 +1219,7 @@
 		8788D8BC15AFE4EC00D6027A /* AdHoc */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Konstantin Bukreev";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "iSamizdat/iSamizdat-Prefix.pch";
 				INFOPLIST_FILE = "iSamizdat/iSamizdat-Info.plist";
@@ -1228,6 +1229,7 @@
 					"-all_load",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "6DFDCE1C-1712-4C20-8193-75D61160CB90";
 				USER_HEADER_SEARCH_PATHS = "vendors/sharekit/**";
 				WRAPPER_EXTENSION = app;
 			};
