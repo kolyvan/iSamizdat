@@ -63,6 +63,8 @@ extern int ddLogLevel;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.searchBar.delegate = self;
+    
+    self.searchBar.scopeButtonTitles = KxUtils.array(locString(@"Author"), locString(@"Text"), nil);
 }
 
 - (void) viewWillAppear:(BOOL)animated

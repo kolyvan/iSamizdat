@@ -82,7 +82,8 @@
 {
     SamLibAgent.cancelAll();
     [self.pullToRefreshView finishLoading];
-    self.navigationItem.rightBarButtonItem = self.savedRightButton;    
+    self.navigationItem.rightBarButtonItem = self.savedRightButton; 
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
 }
 
 - (void) showSuccessNoticeAboutReloadResult: (NSString *) message
