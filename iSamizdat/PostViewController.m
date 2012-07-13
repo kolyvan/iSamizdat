@@ -49,6 +49,11 @@
     return [self initWithNibName:@"PostViewController" bundle:nil];
 }
 
+- (void) dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];

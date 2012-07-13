@@ -42,6 +42,11 @@
     return self;
 }
 
+- (void) dealloc
+{
+    [self resetObserverNavigationRightButton: NO];    
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
