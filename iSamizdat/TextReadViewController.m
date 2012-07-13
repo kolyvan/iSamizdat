@@ -373,6 +373,8 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
 
 - (void) loadWebViewFromPath: (NSString *) path
 {
+    [_webView loadRequest:[NSURLRequest requestWithURL: [NSURL URLWithString: @"about:blank"]]];
+    
     NSURL *url = [NSURL fileURLWithPath:path isDirectory: NO];
     NSURLRequest * request = [NSURLRequest requestWithURL: url];    
     [_webView loadRequest:request];
