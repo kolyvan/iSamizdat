@@ -143,9 +143,6 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
         //DDLogInfo(@"reload text %@", _text.path);   
     }
     
-    if (_text.htmlFile.nonEmpty)
-        [[SamLibHistory shared] addText:_text];
-    
     _prevScale = 1.0f;
 }
 
@@ -177,6 +174,9 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
     
     if (_fullScreen)
         [self fullscreenMode: NO];
+    
+    if (_text.htmlFile.nonEmpty)
+        [[SamLibHistory shared] addText:_text];
     
     //self.navigationController.navigationBar.translucent = _prevNavBarTranslucent;
 }
