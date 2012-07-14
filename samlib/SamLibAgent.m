@@ -159,6 +159,18 @@ static void setSettingsInt(NSString *key, NSInteger value, NSInteger defaultValu
                 [NSNumber numberWithInteger:defaultValue]);
 }
 
+static CGFloat settingsFloat(NSString *key, CGFloat defaultValue)
+{
+    return [getSettings(key, [NSNumber numberWithFloat:defaultValue]) floatValue];    
+}
+
+static void setSettingsFloat(NSString *key, CGFloat value, CGFloat defaultValue)
+{
+    setSettings(key, 
+                [NSNumber numberWithFloat:value], 
+                [NSNumber numberWithFloat:defaultValue]);    
+}
+
 static NSString * settingsString(NSString *key,  NSString * defaultValue)
 {
     return getSettings(key, defaultValue);
@@ -364,10 +376,11 @@ SamLibAgent_t SamLibAgent = {
     settings,
     saveSettings,
     settingsBool,
-    setSettingsBool,
-    
+    setSettingsBool,    
     settingsInt,
     setSettingsInt,
+    settingsFloat,
+    setSettingsFloat,    
     settingsString,
     setSettingsString,
     

@@ -390,36 +390,31 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
 
 - (void) prepareHTML
 {
-    /*
-    [self selElement:@"textName" value:_text.title];    
-    
-    if (_text.group.nonEmpty)
-        [self selElement:@"textGroup" value:_text.group];        
-    
-    if (_text.type.nonEmpty)
-        [self selElement:@"textType" value:_text.type];            
-    
-    if (_text.genre.nonEmpty)    
-        [self selElement:@"textGenre" value:_text.genre];
-    
-    [self selElement:@"textFiletime" value:[_text.filetime shortRelativeFormatted]];                        
-    
-    [self selElement:@"commentsCount" value:[_text commentsWithDelta:@" "]];  
-    
-    if (_text.canUpdate) {
-         NSString *s = KxUtils.format(locString(@"new version: %@"), [_text sizeWithDelta:@" "]);
-        [self selElement:@"textReload"
-                   value:s];
-    }
-    */ 
 }
 
 #pragma mark - UIWebView delegate
 
-- (void)webViewDidFinishLoad:(UIWebView *)webView
+- (void)webViewDidFinishLoadDeferred
 {
+    DDLogInfo(@"webViewDidFinishLoadDeferred %@", _text.path);
+    
     [self prepareHTML];
     [self restoreOffset];
+    
+}
+
+- (void)webViewDidFinishLoad:(UIWebView *)webView
+{
+    // UIWebView fires webViewDidFinishLoad twice
+    // so workaroud here
+    
+    [self->isa cancelPreviousPerformRequestsWithTarget:self 
+                                              selector:@selector(webViewDidFinishLoadDeferred) 
+                                                object:nil];
+    
+    [self performSelector:@selector(webViewDidFinishLoadDeferred) 
+               withObject:nil 
+               afterDelay:0.2];
 }
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error

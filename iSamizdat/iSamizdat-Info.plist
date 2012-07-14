@@ -28,7 +28,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>0.5.26</string>
+	<string>0.5.27</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
@@ -44,11 +44,19 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>26</string>
+	<string>27</string>
 	<key>LSApplicationCategoryType</key>
 	<string></string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSHumanReadableCopyright</key>
+	<string>Konstantin Bukreev</string>
+	<key>SamLibAboutEmail</key>
+	<string>ru.kolyvan@gmail.com</string>
+	<key>SamLibAboutSite</key>
+	<string>kolyvan.github.com/iSamizdat</string>
+	<key>SamLibAboutTwitter</key>
+	<string>Kolyvan_Ru</string>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>
@@ -59,13 +67,5 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>NSHumanReadableCopyright</key>
-	<string>Konstantin Bukreev</string>
-	<key>SamLibAboutSite</key>
-	<string>kolyvan.github.com/iSamizdat</string>
-	<key>SamLibAboutEmail</key>
-	<string>ru.kolyvan@gmail.com</string>
-	<key>SamLibAboutTwitter</key>
-	<string>Kolyvan_Ru</string>
 </dict>
 </plist>

@@ -31,7 +31,9 @@ typedef struct {
     BOOL (*settingsBool)(NSString *key, BOOL defaultValue);
     void (*setSettingsBool)(NSString *key, BOOL value, BOOL defaultValue);
     NSInteger (*settingsInt)(NSString *key, NSInteger defaultValue);
-    void (*setSettingsInt)(NSString *key, NSInteger value, NSInteger defaultValue);
+    void (*setSettingsInt)(NSString *key, NSInteger value, NSInteger defaultValue);    
+    CGFloat (*settingsFloat)(NSString *key, CGFloat defaultValue);
+    void (*setSettingsFloat)(NSString *key, CGFloat value, CGFloat defaultValue);
     NSString * (*settingsString)(NSString *key,  NSString * defaultValue);
     void (*setSettingsString)(NSString *key, NSString *value, NSString *defaultValue);
    
