@@ -94,7 +94,7 @@
 "Filter bad language" = "Фильтр мата";
 " - deleted %@" = " - удаленно %@";
 "hidden comment" = "комментарий скрыт";
-"Max comments load" = "Кол-во для загрузки";
+"Maximum (%d)" = "Максимум (%d)";
 "About" = "О программе";
 "Version" = "Версия программы";
 "Site" = "Сайт";
@@ -102,4 +102,3 @@
 "Mail feedback" = "Отзыв почтой";
 "Font Name" = "Шрифт";
 "Font Size" = "Размер шрифта";
-"Select Font" = "Шрифт";

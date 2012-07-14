@@ -12,25 +12,48 @@
 
 #import "SettingsViewController.h"
 #import "KxMacros.h"
+#import "NSArray+Kolyvan.h"
 #import "UserViewController.h"
 #import "CacheViewController.h"
 #import "AboutViewController.h"
+#import "SamLibAgent.h"
 #import "SamLibModerator.h"
 #import "SamLibComments.h"
+//#import "SelectFontViewController.h"
+#import "KxUtils.h"
 #import "DDLog.h"
 
 extern int ddLogLevel;
 
 enum {
-
-    SettingsViewAboutRow,    
-    SettingsViewUserRow,
-    SettingsViewCacheRow,    
-    SettingsViewFilterRow,   
-    SettingsViewMaxCommentsRow,       
     
-    SettingsViewNumberOfRows,
+    SettingsViewSection0AboutRow,    
+    SettingsViewSection0UserRow,
+    SettingsViewSection0CacheRow,    
+    
+    SettingsViewSection0NumberOfRows,
 };
+
+enum {
+    
+    SettingsViewSection1FilterRow,   
+    SettingsViewSection1MaxCommentsRow,       
+    
+    SettingsViewSection1NumberOfRows,    
+};
+
+enum {
+
+    SettingsViewSection2TextZoom, 
+    //SettingsViewSection2FontName,       
+    //    SettingsViewSection2TextColor,     
+    //    SettingsViewSection2Textbackground,         
+    
+    SettingsViewSection2NumberOfRows,    
+};
+
+#define SLIDER_COMMENTS 1
+#define SLIDER_FONTSIZE 2
 
 #define FIRST_PAGE_COMMENTS_NUMBER 10
 #define NEXT_PAGE_COMMENTS_NUMBER  40
@@ -41,7 +64,7 @@ enum {
 @property (nonatomic, strong) UserViewController *userViewController;
 @property (nonatomic, strong) CacheViewController *cacheViewController;
 @property (nonatomic, strong) AboutViewController *aboutViewController;
-
+//@property (nonatomic, strong) SelectFontViewController *selectFontViewController;
 @end
 
 @implementation SettingsViewController
@@ -73,6 +96,7 @@ enum {
     self.userViewController = nil;
     self.cacheViewController = nil;
     self.aboutViewController = nil;
+//    self.selectFontViewController = nil;
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -86,7 +110,8 @@ enum {
     [super didReceiveMemoryWarning]; 
     self.userViewController = nil;
     self.cacheViewController = nil;  
-    self.aboutViewController = nil;    
+    self.aboutViewController = nil;  
+//    self.selectFontViewController = nil;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -123,31 +148,64 @@ enum {
 }
 
 - (void) sliderCellValueChanged: (UISlider *)slider
-{
-    NSUInteger value = ceil(slider.value - 1) * NEXT_PAGE_COMMENTS_NUMBER + FIRST_PAGE_COMMENTS_NUMBER;    
-    [SamLibComments setMaxComments: value];
+{   
+    if (SLIDER_COMMENTS == slider.tag) {
+        
+        NSUInteger maxCount = ceil(slider.value - 1) * NEXT_PAGE_COMMENTS_NUMBER + FIRST_PAGE_COMMENTS_NUMBER;    
+        [SamLibComments setMaxComments: maxCount];        
+        
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:SettingsViewSection1MaxCommentsRow
+                                                    inSection:1];
+        UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];        
+        cell.textLabel.text = KxUtils.format(locString(@"Maximum (%d)"), maxCount);        
+        
+    } else if (SLIDER_FONTSIZE == slider.tag) {
+        
+        CGFloat zoom = (int)(slider.value * 10) * 0.1;                
+        SamLibAgent.setSettingsFloat(@"text.zoom", zoom, 1.0); 
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SamLibTextSettingsChanged" object:nil];        
+        
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:SettingsViewSection2TextZoom
+                                                    inSection:2];
+        UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];        
+        cell.textLabel.text = KxUtils.format(@"Zoom (%.1f)", zoom);                
+    }
 }
 
-#pragma mark - Table view data source
+#pragma mark - Table view
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 1;
+    return 3;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return SettingsViewNumberOfRows;
+    switch (section) {
+        case 0: return SettingsViewSection0NumberOfRows;
+        case 1: return SettingsViewSection1NumberOfRows;            
+        case 2: return SettingsViewSection2NumberOfRows;                        
+    }
+    return 0;
 }
 
-- (UITableViewCell *) mkCell: (NSString *)cellIdentifier
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    switch (section) {
+        case 0: return @"";
+        case 1: return locString(@"Comments");
+        case 2: return locString(@"Text");            
+    }
+    return @"";
+}
+
+- (id) mkCell: (NSString *) cellIdentifier
+    withStyle: (UITableViewCellStyle) style
 {
     UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];    
-    if (!cell) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault 
-                                      reuseIdentifier:cellIdentifier];
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    }    
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:style reuseIdentifier:cellIdentifier];                
+    }
     return cell;
 }
 
@@ -172,7 +230,7 @@ enum {
     if (!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault 
                                       reuseIdentifier:cellIdentifier];
-        UISlider * slider = [[UISlider alloc] initWithFrame:CGRectMake(0,0, 80, 30)]; 
+        UISlider * slider = [[UISlider alloc] initWithFrame:CGRectMake(0,0, 120, 30)]; 
         [slider addTarget:self 
                    action:@selector(sliderCellValueChanged:) 
          forControlEvents:UIControlEventValueChanged]; 
@@ -185,79 +243,117 @@ enum {
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell;
-  
-    if (SettingsViewUserRow == indexPath.row) {
+    
+    if (0 == indexPath.section) {
         
-        cell = [self mkCell: @"Cell"];
-        cell.textLabel.text = locString(@"User Info");
+        if (SettingsViewSection0UserRow == indexPath.row) {
+            
+            cell = [self mkCell: @"Cell" withStyle:UITableViewCellStyleDefault];
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            cell.textLabel.text = locString(@"User Info");
+            
+        } else if (SettingsViewSection0CacheRow == indexPath.row) {
+            
+            cell = [self mkCell: @"Cell" withStyle:UITableViewCellStyleDefault]; 
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;            
+            cell.textLabel.text = locString(@"Cache Settings");
+            
+        } else if (SettingsViewSection0AboutRow == indexPath.row) {
+            
+            cell = [self mkCell: @"Cell" withStyle:UITableViewCellStyleDefault]; 
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;            
+            cell.textLabel.text = locString(@"About");
+            
+        } 
         
-    } else if (SettingsViewCacheRow == indexPath.row) {
+    } else if (1 == indexPath.section) {
+        
+        if (SettingsViewSection1FilterRow == indexPath.row) {
+            
+            cell = [self mkSwitchCell: @"SwitchCell"];        
+            UISwitch *button = (UISwitch *)cell.accessoryView;        
+            cell.textLabel.text = locString(@"Filter bad language");
+            
+            SamLibBan *ban = [[SamLibModerator shared] findByName:@"censored"];        
+            button.on = ban.enabled;        
+            
+        } else if (SettingsViewSection1MaxCommentsRow == indexPath.row) {
+            
+            cell = [self mkSliderCell: @"SlideCell"];  
+            
+            NSInteger maxCount = [SamLibComments maxComments];
+            
+            cell.textLabel.text = KxUtils.format(locString(@"Maximum (%d)"), maxCount);        
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;            
+            
+            UISlider *slider = (UISlider *)cell.accessoryView;                    
+            slider.continuous = NO;
+            slider.maximumValue = MAX_COMMENTS_PAGES;
+            slider.minimumValue = MIN_COMMENTS_PAGES;        
+            slider.tag = SLIDER_COMMENTS;
 
-        cell = [self mkCell: @"Cell"];        
-        cell.textLabel.text = locString(@"Cache Settings");
+            slider.value = (((CGFloat)maxCount - FIRST_PAGE_COMMENTS_NUMBER) / NEXT_PAGE_COMMENTS_NUMBER) + 1; 
+        }
         
-    } else if (SettingsViewAboutRow == indexPath.row) {
+    } else if (2 == indexPath.section) {
         
-        cell = [self mkCell: @"Cell"];        
-        cell.textLabel.text = locString(@"About");
-        
-    } else if (SettingsViewFilterRow == indexPath.row) {
-        
-        cell = [self mkSwitchCell: @"SwitchCell"];        
-        UISwitch *button = (UISwitch *)cell.accessoryView;        
-        cell.textLabel.text = locString(@"Filter bad language");
-        
-        SamLibBan *ban = [[SamLibModerator shared] findByName:@"censored"];        
-        button.on = ban.enabled;        
-        
-    } else if (SettingsViewMaxCommentsRow == indexPath.row) {
-        
-        cell = [self mkSliderCell: @"SlideCell"];        
-        UISlider *slider = (UISlider *)cell.accessoryView;        
-        cell.textLabel.text = locString(@"Max comments load");
-        
-        slider.continuous = NO;
-        slider.maximumValue = MAX_COMMENTS_PAGES;
-        slider.minimumValue = MIN_COMMENTS_PAGES;        
-        
-        CGFloat x = [SamLibComments maxComments];        
-        slider.value = ((x - FIRST_PAGE_COMMENTS_NUMBER) / NEXT_PAGE_COMMENTS_NUMBER) + 1; 
+        if (SettingsViewSection2TextZoom == indexPath.row) {
+            
+            //cell = [self mkCell: @"Cell" withStyle:UITableViewCellStyleValue1];             
+            //cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;  
+            
+            CGFloat zoom = SamLibAgent.settingsFloat(@"text.zoom", 1.0);
+            
+            cell = [self mkSliderCell:@"SlideCell"]; 
+            cell.textLabel.text = KxUtils.format(@"Zoom (%.1f)", zoom);                
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            
+            UISlider *slider = (UISlider *)cell.accessoryView;  
+            
+            slider.continuous = NO;
+            slider.maximumValue = 1.5;
+            slider.minimumValue = 0.5;   
+            slider.tag = SLIDER_FONTSIZE;
+            slider.value = zoom;
+        }
     }
     
     return cell;
 }
 
-#pragma mark - Table view delegate
-
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {    
-    if (SettingsViewUserRow == indexPath.row) {
+    if (0 == indexPath.section) {
         
-        if (!self.userViewController) {
-            self.userViewController = [[UserViewController alloc] init];        
-        }
-        [self.navigationController pushViewController:self.userViewController 
-                                             animated:YES];          
-        
-    } else if (SettingsViewCacheRow == indexPath.row) {
-        
-        if (!self.cacheViewController) {
-            self.cacheViewController = [[CacheViewController alloc] init];        
-        }
-        [self.navigationController pushViewController:self.cacheViewController 
-                                             animated:YES]; 
-    } else if (SettingsViewAboutRow == indexPath.row) {
-        
-        if (!self.aboutViewController) {
-            self.aboutViewController = [[AboutViewController alloc] init];        
-        }
-        [self.navigationController pushViewController:self.aboutViewController 
-                                             animated:YES]; 
+        if (SettingsViewSection0AboutRow == indexPath.row) {
+            
+            if (!self.aboutViewController) {
+                self.aboutViewController = [[AboutViewController alloc] init];        
+            }
+            [self.navigationController pushViewController:self.aboutViewController 
+                                                 animated:YES]; 
+            
+        } else if (SettingsViewSection0UserRow == indexPath.row) {
+            
+            if (!self.userViewController) {
+                self.userViewController = [[UserViewController alloc] init];        
+            }
+            [self.navigationController pushViewController:self.userViewController 
+                                                 animated:YES]; 
+            
+        } else if (SettingsViewSection0CacheRow == indexPath.row) {
+            
+            if (!self.cacheViewController) {
+                self.cacheViewController = [[CacheViewController alloc] init];        
+            }
+            [self.navigationController pushViewController:self.cacheViewController 
+                                                 animated:YES]; 
+        } 
     }
     
-    //
-    
-    //[self.navigationController setNavigationBarHidden:NO animated:YES];    
+    if (2 == indexPath.section) {
+        
+    }
 }
 
 @end

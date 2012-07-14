@@ -107,6 +107,11 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
     return self;
 }
 
+- (void) dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -119,9 +124,9 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
     //gestureRecognizer.delegate = self;    
     [self.webView addGestureRecognizer:gestureRecognizer];
     
-    pinchGestureRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self 
-                                                                       action:@selector(handlePinch:)];  
-    [self.webView addGestureRecognizer:pinchGestureRecognizer];
+    //pinchGestureRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self 
+    //                                                                   action:@selector(handlePinch:)];  
+    //[self.webView addGestureRecognizer:pinchGestureRecognizer];
     
     self.pullToRefreshView = [[SSPullToRefreshView alloc] initWithScrollView:self.webView.scrollView
                                                                     delegate:self];
@@ -129,6 +134,11 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
     self.stopButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemStop 
                                                                     target:self 
                                                                     action:@selector(goStop)];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(samLibTextSettingsChanged:)
+                                                 name:@"SamLibTextSettingsChanged" 
+                                               object:nil];
 
 }
 
@@ -191,11 +201,18 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
     
     self.pullToRefreshView = nil;
     self.stopButton = nil;
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
+}
+
+- (void) samLibTextSettingsChanged:(NSNotification *)notification
+{
+    _needReload = YES;
 }
 
 #pragma mark - pull to refresh
@@ -390,6 +407,12 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
 
 - (void) prepareHTML
 {
+    CGFloat zoom = SamLibAgent.settingsFloat(@"text.zoom", 1);
+    if (fabs(zoom - 1) > 0.05) {
+        
+        NSString *js = KxUtils.format(@"document.body.style.zoom = %.2f;", zoom);        
+        [self.webView stringByEvaluatingJavaScriptFromString: js];
+    }    
 }
 
 #pragma mark - UIWebView delegate
