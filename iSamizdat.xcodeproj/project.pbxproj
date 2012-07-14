@@ -1219,7 +1219,7 @@
 					"-all_load",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "6DFDCE1C-1712-4C20-8193-75D61160CB90";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "976CABFE-21DF-4EE4-A807-912A00690D69";
 				USER_HEADER_SEARCH_PATHS = "vendors/sharekit/**";
 				WRAPPER_EXTENSION = app;
 			};
