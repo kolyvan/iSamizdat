@@ -217,14 +217,20 @@
         
     } else {
     
-        [_comments update:YES 
+        [_comments update:NO 
                     block:^(SamLibComments *comments, SamLibStatus status, NSString *error) {
             
                         NSString *message;
                         if (status == SamLibStatusSuccess)  {                          
-                            message = KxUtils.format(locString(@"New comments:%ld"), comments.numberOfNew);
-                            if (comments.numberOfNew > 0)
+                            if (comments.numberOfNew > 0) {
+                                
+                                message = KxUtils.format(locString(@"New comments:%ld"), comments.numberOfNew);
                                 [self filterComments];
+                                
+                            } else {
+                                
+                                status = SamLibStatusNotModifed;
+                            }
                         }
                         else if (status == SamLibStatusFailure)                            
                             message = error;
