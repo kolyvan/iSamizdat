@@ -114,19 +114,19 @@ enum {
     if (CacheViewTextRow == indexPath.row) {
         
         cell.textLabel.text = locString(@"Texts");
-        cell.detailTextLabel.text = KxUtils.format(@"size: %.1fk", SamLibStorage.sizeOfTexts() / 1024.0); 
+        cell.detailTextLabel.text = KxUtils.format(locString(@"size: %.1fk"), SamLibStorage.sizeOfTexts() / 1024.0); 
         button.on = SamLibStorage.allowTexts();
         
     } else if (CacheViewCommentsRow == indexPath.row) {
         
         cell.textLabel.text = locString(@"Comments");
-        cell.detailTextLabel.text = KxUtils.format(@"size: %.1fk", SamLibStorage.sizeOfComments() / 1024.0);         
+        cell.detailTextLabel.text = KxUtils.format(locString(@"size: %.1fk"), SamLibStorage.sizeOfComments() / 1024.0);         
         button.on = SamLibStorage.allowComments();
         
     } else if (CacheViewNamesRow == indexPath.row) {
         
         cell.textLabel.text = locString(@"Names");
-        cell.detailTextLabel.text = KxUtils.format(@"size: %.1fk", SamLibStorage.sizeOfNames() / 1024.0);
+        cell.detailTextLabel.text = KxUtils.format(locString(@"size: %.1fk"), SamLibStorage.sizeOfNames() / 1024.0);
         button.on = SamLibStorage.allowNames();    
     } 
     

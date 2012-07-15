@@ -305,7 +305,7 @@ enum {
             CGFloat zoom = SamLibAgent.settingsFloat(@"text.zoom", 1.0);
             
             cell = [self mkSliderCell:@"SlideCell"]; 
-            cell.textLabel.text = KxUtils.format(@"Zoom (%.1f)", zoom);                
+            cell.textLabel.text = KxUtils.format(locString(@"Zoom (%.1f)"), zoom);                
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             
             UISlider *slider = (UISlider *)cell.accessoryView;  
