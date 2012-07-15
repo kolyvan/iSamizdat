@@ -20,7 +20,6 @@
 		8712FF9315749A3800C01283 /* SamLibAuthor+IOS.m in Sources */ = {isa = PBXBuildFile; fileRef = 8712FF9215749A3800C01283 /* SamLibAuthor+IOS.m */; };
 		8712FF9515749D7D00C01283 /* failure.png in Resources */ = {isa = PBXBuildFile; fileRef = 8712FF9415749D7D00C01283 /* failure.png */; };
 		8712FF9715749DE400C01283 /* success.png in Resources */ = {isa = PBXBuildFile; fileRef = 8712FF9615749DE400C01283 /* success.png */; };
-		8712FFAC1574C02700C01283 /* NewAuthorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8712FFAD1574C02700C01283 /* NewAuthorViewController.xib */; };
 		8712FFC81574D8D300C01283 /* NoticeView.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8712FFBC1574D8D300C01283 /* NoticeView.bundle */; };
 		8712FFC91574D8D300C01283 /* UILabel+WBExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 8712FFBE1574D8D300C01283 /* UILabel+WBExtensions.m */; };
 		8712FFCA1574D8D300C01283 /* WBBaseNoticeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8712FFC01574D8D300C01283 /* WBBaseNoticeView.m */; };
@@ -212,7 +211,6 @@
 		8712FF9215749A3800C01283 /* SamLibAuthor+IOS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SamLibAuthor+IOS.m"; sourceTree = "<group>"; };
 		8712FF9415749D7D00C01283 /* failure.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = failure.png; path = resources/failure.png; sourceTree = "<group>"; };
 		8712FF9615749DE400C01283 /* success.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = success.png; path = resources/success.png; sourceTree = "<group>"; };
-		8712FFAD1574C02700C01283 /* NewAuthorViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NewAuthorViewController.xib; sourceTree = "<group>"; };
 		8712FFBC1574D8D300C01283 /* NoticeView.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = NoticeView.bundle; path = vendors/notice/NoticeView/WBNoticeView/NoticeView.bundle; sourceTree = "<group>"; };
 		8712FFBD1574D8D300C01283 /* UILabel+WBExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UILabel+WBExtensions.h"; path = "vendors/notice/NoticeView/WBNoticeView/UILabel+WBExtensions.h"; sourceTree = "<group>"; };
 		8712FFBE1574D8D300C01283 /* UILabel+WBExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UILabel+WBExtensions.m"; path = "vendors/notice/NoticeView/WBNoticeView/UILabel+WBExtensions.m"; sourceTree = "<group>"; };
@@ -628,7 +626,6 @@
 				8776CA38157756820099C83D /* TextReadViewController.xib */,
 				8712FFD51574E65500C01283 /* TextViewController.xib */,
 				87E230BF158B5A600074EBF1 /* AuthorInfoViewController.xib */,
-				8712FFAD1574C02700C01283 /* NewAuthorViewController.xib */,
 				872D944B15737B0400BCB4EC /* MainViewController.xib */,
 				8712FFD01574DA7900C01283 /* AuthorViewController.xib */,
 				87EE1E5215885C130015BA99 /* VoteViewController.xib */,
@@ -931,7 +928,6 @@
 				872D9571157399D600BCB4EC /* emblem-system@2x.png in Resources */,
 				8712FF9515749D7D00C01283 /* failure.png in Resources */,
 				8712FF9715749DE400C01283 /* success.png in Resources */,
-				8712FFAC1574C02700C01283 /* NewAuthorViewController.xib in Resources */,
 				8712FFC81574D8D300C01283 /* NoticeView.bundle in Resources */,
 				8712FFD21574DA7900C01283 /* AuthorViewController.xib in Resources */,
 				8712FFD71574E65500C01283 /* TextViewController.xib in Resources */,
