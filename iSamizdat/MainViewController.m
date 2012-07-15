@@ -62,8 +62,7 @@ typedef enum {
 - (id) init
 {
     self = [super initWithNibName:@"MainViewController" bundle:nil];
-    if (self) {
-        self.title = locString(@"Samizdat");
+    if (self) {        
         self.tabBarItem = [[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemFeatured tag: 0];                
     }
     return self;
@@ -114,7 +113,7 @@ typedef enum {
 - (void) viewWillAppear:(BOOL)animated
 {
     [self prepareData];        
-    //[self.navigationController setNavigationBarHidden:YES animated:YES];    
+    //[self.navigationController setNavigationBarHidden:YES animated:YES]; 
 }
 
 - (void) viewDidAppear:(BOOL)animated
@@ -163,6 +162,11 @@ typedef enum {
         self.content = [self mkContent];
         [self refreshBadgeValue];        
         [self.tableView reloadData]; 
+        
+        if (self.authors.nonEmpty)
+            self.title = KxUtils.format(@"%@ (%d)", locString(@"Authors list"), self.authors.count);        
+        else
+            self.title = locString(@"Authors list");        
     }
 }
 
