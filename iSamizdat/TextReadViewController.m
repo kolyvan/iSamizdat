@@ -20,6 +20,7 @@
 #import "NSString+Kolyvan.h"
 #import "NSDate+Kolyvan.h"
 #import "NSDictionary+Kolyvan.h"
+#import "UITabBarController+Kolyvan.h"
 #import "AppDelegate.h"
 #import "KxMacros.h"
 #import "DDLog.h"
@@ -141,7 +142,6 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
                                              selector:@selector(samLibTextSettingsChanged:)
                                                  name:@"SamLibTextSettingsChanged" 
                                                object:nil];
-
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -210,6 +210,7 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
+    
 }
 
 - (void) samLibTextSettingsChanged:(NSNotification *)notification
@@ -311,35 +312,11 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
 
 - (void) fullscreenMode: (BOOL) on
 {   
-    //self.wantsFullScreenLayout = YES;    
-    
-    _fullScreen = on;
-    
-    [UIView transitionWithView:self.view
-                      duration:0.2
-                       options:UIViewAnimationOptionTransitionNone
-                    animations:^{
-                        
-                        UIApplication *app = [UIApplication sharedApplication];
-                        
-                        CGRect bounds = [UIScreen mainScreen].bounds;    
-                        
-                        if (on) {        
-                            
-                            CGFloat tabbarHeight = self.tabBarController.tabBar.bounds.size.height;                            
-                                                                 
-                            bounds.origin.y = -20;
-                            bounds.size.height += 20;
-                            bounds.size.height += tabbarHeight;
-                        }
-                        
-                        [app setStatusBarHidden:on withAnimation:UIStatusBarAnimationSlide];    
-                        app.keyWindow.frame = bounds;                        
-                        [self.navigationController setNavigationBarHidden:on animated:YES];
-                        [self.tabBarController.tabBar setHidden:on];
-                        
-                    }
-                    completion:nil];
+    _fullScreen = on;    
+    UIApplication *app = [UIApplication sharedApplication];    
+    [app setStatusBarHidden:on withAnimation:UIStatusBarAnimationSlide];        
+    [self.navigationController setNavigationBarHidden:on animated:YES];
+    [self.tabBarController setTabBarHidden:on animated:YES];   
 }
 
 - (void) restoreOffset
