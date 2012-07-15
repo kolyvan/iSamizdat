@@ -25,6 +25,12 @@
 
 extern int ddLogLevel;
 
+enum {
+    SearchNameSelected,
+    SearchPageSelected,    
+    SearchTextSelected,        
+};
+
 @interface SearchViewController () {
     NSArray *_result;
     SamLibSearch *_search;
@@ -64,7 +70,10 @@ extern int ddLogLevel;
     self.tableView.dataSource = self;
     self.searchBar.delegate = self;
     
-    self.searchBar.scopeButtonTitles = KxUtils.array(locString(@"Author"), locString(@"Text"), nil);
+    self.searchBar.scopeButtonTitles = KxUtils.array(locString(@"Name"), 
+                                                     locString(@"Page"), 
+                                                     locString(@"Text"), 
+                                                     nil);
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -207,46 +216,50 @@ extern int ddLogLevel;
 
 - (void) searchAuthor: (NSString *)pattern 
            deepSearch: (BOOL) deepSearch 
-{   
-    BOOL byName = YES;
+{       
     FuzzySearchFlag searchFlag;
+    searchFlag = deepSearch ? FuzzySearchFlagAll : FuzzySearchFlagLocal;
+    _search = [SamLibSearch searchAuthor:pattern 
+                                  byName:YES
+                                    flag:searchFlag
+                                   block:^(NSArray *result) {
+                                       
+                                       [self addSearchResult:result 
+                                                  deepSearch:deepSearch];                
+                                   }];
+}
+
+- (void) searchPage: (NSString *)pattern 
+           deepSearch: (BOOL) deepSearch 
+{      
     
-    if (pattern.first > 96 && pattern.first < 123) {
+    NSString *path = [self mkSearchPath:pattern];
+    if (!path.nonEmpty) {
         
-        NSString *path = [self mkSearchPath:pattern];
-        if (!path.nonEmpty) {
-            
-            [[AppDelegate shared] errorNoticeInView:self.view 
-                                              title:locString(@"Invalid path") 
-                                            message:pattern]; 
-            
-            if (deepSearch)                
-                [activityIndicator stopAnimating];
-            
-            return;
-
-        } else {
-            
-            searchFlag = deepSearch ? FuzzySearchFlagCache|FuzzySearchFlagLocal|FuzzySearchFlagDirect : FuzzySearchFlagLocal;
-            byName = NO;
-            pattern = path;
-        }
-
+        [[AppDelegate shared] errorNoticeInView:self.view 
+                                          title:locString(@"Invalid path") 
+                                        message:pattern]; 
+        
+        if (deepSearch)                
+            [activityIndicator stopAnimating];
+        
+        return;
+        
     } else {
         
-        searchFlag = deepSearch ? FuzzySearchFlagAll : FuzzySearchFlagLocal;
+        pattern = path;
     }
-  
+ 
+    FuzzySearchFlag searchFlag;
+    searchFlag = deepSearch ? FuzzySearchFlagCache|FuzzySearchFlagLocal|FuzzySearchFlagDirect : FuzzySearchFlagLocal;    
     _search = [SamLibSearch searchAuthor:pattern 
-                                  byName:byName
+                                  byName:NO
                                     flag:searchFlag
-                               block:^(NSArray *result) {
-                                   
-                                   [self addSearchResult:result 
-                                              deepSearch: deepSearch];                
-                               }];
-
-
+                                   block:^(NSArray *result) {
+                                       
+                                       [self addSearchResult:result 
+                                                  deepSearch:deepSearch];                
+                                   }];
 }
 
 - (void) searchText: (NSString *)pattern 
@@ -271,7 +284,6 @@ extern int ddLogLevel;
                                                     deepSearch: deepSearch];                                       
                                          
                                      }];
-        
     }
 }
 
@@ -291,8 +303,10 @@ extern int ddLogLevel;
     
     if (pattern.nonEmpty) {        
         
-        if (0 == self.searchBar.selectedScopeButtonIndex)            
+        if (SearchNameSelected == self.searchBar.selectedScopeButtonIndex)            
             [self searchAuthor:pattern deepSearch:deepSearch];            
+        else if (SearchPageSelected == self.searchBar.selectedScopeButtonIndex)            
+            [self searchPage:pattern deepSearch:deepSearch];                    
         else            
             [self searchText:pattern deepSearch:deepSearch];        
     }    
@@ -381,7 +395,7 @@ extern int ddLogLevel;
         
         SamLibModel *model = [SamLibModel shared];
         
-        if (0 == self.searchBar.selectedScopeButtonIndex) {
+        if (SearchTextSelected != self.searchBar.selectedScopeButtonIndex) {
         
             NSString *from = [dict get:@"from"];
             NSString *path = [dict get:@"path"]; 

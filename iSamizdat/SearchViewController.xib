@@ -76,8 +76,9 @@
 							<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 						</object>
 						<array key="IBScopeButtonTitles">
-							<string>Author</string>
-							<string>Text</string>
+							<string>Name</string>
+							<string>Page</string>
+							<string>Title</string>
 						</array>
 					</object>
 					<object class="IBUIActivityIndicatorView" id="929996459">
