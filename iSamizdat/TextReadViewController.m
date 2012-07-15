@@ -68,17 +68,16 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
 
 @interface TextReadViewController () {
     BOOL _needReload;
-    BOOL _needRestoreOffset;
     id _version;
     BOOL _fullScreen;
     BOOL _prevNavBarTranslucent;
-    UISwipeGestureRecognizer *gestureRecognizer; 
-    UIPinchGestureRecognizer *pinchGestureRecognizer;
+    UISwipeGestureRecognizer *gestureRecognizer;     
     CGFloat _prevScale;
 }
 @property (nonatomic, strong) IBOutlet UIWebView * webView;
 @property (nonatomic, strong) SSPullToRefreshView *pullToRefreshView;
 @property (nonatomic, strong) UIBarButtonItem *stopButton;
+//@property (nonatomic, strong) UIBarButtonItem *bookmarkButton;
 @end
 
 @implementation TextReadViewController
@@ -86,6 +85,7 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
 @synthesize text = _text;
 @synthesize webView = _webView;
 @synthesize pullToRefreshView, stopButton;
+//@synthesize bookmarkButton;
 
 - (void) setText:(SamLibText *)text 
 {
@@ -124,16 +124,18 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
     //gestureRecognizer.delegate = self;    
     [self.webView addGestureRecognizer:gestureRecognizer];
     
-    //pinchGestureRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self 
-    //                                                                   action:@selector(handlePinch:)];  
-    //[self.webView addGestureRecognizer:pinchGestureRecognizer];
-    
     self.pullToRefreshView = [[SSPullToRefreshView alloc] initWithScrollView:self.webView.scrollView
                                                                     delegate:self];
         
     self.stopButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemStop 
                                                                     target:self 
                                                                     action:@selector(goStop)];
+    
+    //self.bookmarkButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemPlay 
+    //                                                                    target:self 
+    //                                                                    action:@selector(goBookmark)];
+    //
+    //self.navigationItem.rightBarButtonItem = self.bookmarkButton;
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(samLibTextSettingsChanged:)
@@ -148,7 +150,6 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
     
     if (_needReload) {        
         _needReload = NO;
-        _needRestoreOffset = YES;
         [self reloadWebView];        
         //DDLogInfo(@"reload text %@", _text.path);   
     }
@@ -201,6 +202,7 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
     
     self.pullToRefreshView = nil;
     self.stopButton = nil;
+    //self.bookmarkButton = nil;
     
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
@@ -261,8 +263,14 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
 {
     SamLibAgent.cancelAll();
     [self.pullToRefreshView finishLoading];
-    self.navigationItem.rightBarButtonItem = nil;    
+    self.navigationItem.rightBarButtonItem = nil;
+    //self.navigationItem.rightBarButtonItem = self.bookmarkButton;    
 }
+
+//- (IBAction) goBookmark
+//{    
+//    [self restoreOffset];
+//}
 
 - (void)pullToRefreshViewDidStartLoading:(SSPullToRefreshView *)view 
 {   
@@ -279,6 +287,7 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
         [self.pullToRefreshView finishLoading];
         [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;        
         self.navigationItem.rightBarButtonItem = nil;
+        //self.navigationItem.rightBarButtonItem = self.bookmarkButton;
         
         NSString *message = (status == SamLibStatusFailure) ? error : nil;
         [self handleStatus: status withMessage:message];        
@@ -299,37 +308,6 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
         [self fullscreenMode: !_fullScreen];        
     } 
 }
-
-- (void)handlePinch:(UIPinchGestureRecognizer *)sender 
-{
-    if (sender.state == UIGestureRecognizerStateChanged) {
-               
-        if (fabs(_prevScale - sender.scale) > 0.05) {
-
-            _prevScale = sender.scale;
-            NSString *js = KxUtils.format(@"document.body.style.zoom = %.2f;", sender.scale);
-            [self.webView stringByEvaluatingJavaScriptFromString: js];
-        }
-    } 
-}
-
-/*
-- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
-{
-    CGPoint pt = [touch locationInView:self.webView];
-    CGRect bounds = self.webView.bounds;
-    CGFloat w = bounds.size.width;
-    CGFloat l = bounds.origin.x + w * .33;
-    CGFloat r = bounds.origin.x + w * .66;    
-    
-    if ((pt.x > l) && (pt.x < r)) {
-        DDLogInfo(@"gestureRecognizer");
-        return YES;        
-    }
-    
-    return NO;
-}
- */
 
 - (void) fullscreenMode: (BOOL) on
 {   
@@ -365,18 +343,15 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
 }
 
 - (void) restoreOffset
-{
-    if (_needRestoreOffset) {
-        _needRestoreOffset = NO;        
-        CGFloat offset = _text.scrollOffset;
-        if (offset > 0) {                   
-            //DDLogInfo(@"restore offset %f", offset);             
-            CGFloat size = _webView.scrollView.contentSize.height;
-            //CGRect frame = _webView.scrollView.frame;            
-            //frame.origin.y = offset * size;                                
-            //[_webView.scrollView scrollRectToVisible:frame animated:NO];            
-            [_webView.scrollView setContentOffset:CGPointMake(0, offset * size) animated:NO]; 
-        }
+{   
+    CGFloat offset = _text.scrollOffset;
+    if (offset > 0) {                   
+        //DDLogInfo(@"restore offset %f", offset);             
+        CGFloat size = _webView.scrollView.contentSize.height;
+        //CGRect frame = _webView.scrollView.frame;            
+        //frame.origin.y = offset * size;                                
+        //[_webView.scrollView scrollRectToVisible:frame animated:NO];            
+        [_webView.scrollView setContentOffset:CGPointMake(0, offset * size) animated:NO]; 
     }
 }
 
@@ -419,9 +394,8 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
 
 - (void)webViewDidFinishLoadDeferred
 {
-    DDLogInfo(@"webViewDidFinishLoadDeferred %@", _text.path);
-    
-    [self prepareHTML];
+    //DDLogInfo(@"webViewDidFinishLoadDeferred %@", _text.path);    
+    [self prepareHTML];    
     [self restoreOffset];
     
 }
