@@ -14,6 +14,7 @@
 #import "KxMacros.h"
 #import "KxUtils.h"
 #import "SamLibText+IOS.h"
+#import "UIFont+Kolyvan.h"
 
 @interface VoteViewController () {
     //BOOL _needReload;
@@ -115,10 +116,10 @@
     }
     cell.textLabel.text = KxUtils.format(@"%ld", indexPath.row); 
     cell.detailTextLabel.text = [[SamLibText class] stringForVote:indexPath.row];
+    cell.textLabel.font = [UIFont boldSystemFont16];
     cell.accessoryType = indexPath.row == _myVote ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;        
     return cell;
 }
-
 
 #pragma mark - Table view delegate
 
