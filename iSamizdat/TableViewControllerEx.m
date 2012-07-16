@@ -60,7 +60,6 @@
 {
     [super viewDidAppear:animated];
     [[AppDelegate shared] closeNotice]; 
-    
     [self refreshLastUpdated];
 }
 

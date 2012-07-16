@@ -127,6 +127,7 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
     
     self.pullToRefreshView = [[SSPullToRefreshView alloc] initWithScrollView:self.webView.scrollView
                                                                     delegate:self];
+    self.pullToRefreshView.contentView = [[LocalizedPullToRefreshContentView alloc] initWithFrame:CGRectZero];    
         
     self.stopButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemStop 
                                                                     target:self 
@@ -150,7 +151,8 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
     
     if (_needReload) {        
         _needReload = NO;
-        [self reloadWebView];        
+        [self reloadWebView];       
+        [self refreshLastUpdated];
         //DDLogInfo(@"reload text %@", _text.path);   
     }
     
@@ -237,12 +239,14 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
           withMessage: (NSString *)message
 {
     if (status == SamLibStatusFailure) {
-        
+                
         [self performSelector:@selector(showFailureNoticeAboutReloadResult:) 
                    withObject:message
                    afterDelay:0.3];
         
     } else if (status == SamLibStatusSuccess) {            
+
+        [self refreshLastUpdated];
         
         [self performSelector:@selector(showSuccessNoticeAboutReloadResult:) 
                    withObject:message
@@ -268,18 +272,16 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
     //self.navigationItem.rightBarButtonItem = self.bookmarkButton;    
 }
 
-//- (IBAction) goBookmark
-//{    
-//    [self restoreOffset];
-//}
+- (void) refreshLastUpdated
+{
+    [self.pullToRefreshView.contentView setLastUpdatedAt:_text.timestamp
+                                   withPullToRefreshView:self.pullToRefreshView]; 
+}
 
 - (void)pullToRefreshViewDidStartLoading:(SSPullToRefreshView *)view 
 {   
     self.navigationItem.rightBarButtonItem = self.stopButton;
-    
-    [self.pullToRefreshView.contentView setLastUpdatedAt:_text.timestamp
-                                   withPullToRefreshView:self.pullToRefreshView]; 
-    
+        
     [self.pullToRefreshView startLoading];  
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
            

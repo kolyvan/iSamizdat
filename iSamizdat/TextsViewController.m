@@ -123,6 +123,8 @@ static UIImage * mkVoteImage(NSInteger number)
 {
     [super viewDidUnload];
     self.textContainerController = nil;
+    _tableView.delegate = nil;
+    _tableView.dataSource = nil;    
     _favorites = nil;
     _voted = nil;
 }

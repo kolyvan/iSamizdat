@@ -12,8 +12,6 @@
 
 #import "AppDelegate.h"
 #import "MainViewController.h"
-//#import "FavoritesViewController.h"
-//#import "VotedViewController.h"
 #import "TextsViewController.h"
 #import "SearchViewController.h"
 #import "SettingsViewController.h"
@@ -78,12 +76,10 @@ int ddLogLevel = LOG_LEVEL_WARN;
    // [[UINavigationBar appearance] setBarStyle: UIBarStyleBlack];
     
     MainViewController *vc0 = [[MainViewController alloc] init];
-    //FavoritesViewController *vc1 = [[FavoritesViewController alloc] init];
     TextsViewController *vc1 = [[TextsViewController alloc] init];
     HistoryViewController *vc2 = [[HistoryViewController alloc] init];
     SearchViewController *vc3 = [[SearchViewController alloc] init]; 
     SettingsViewController *vc4 = [[SettingsViewController alloc] init];    
-    //VotedViewController *vc5 = [[VotedViewController alloc] init];    
 
     NSArray * controllers = KxUtils.array(
                                           [[UINavigationController alloc] initWithRootViewController:vc0],                                          
@@ -91,7 +87,6 @@ int ddLogLevel = LOG_LEVEL_WARN;
                                           [[UINavigationController alloc] initWithRootViewController:vc2],
                                           [[UINavigationController alloc] initWithRootViewController:vc3],
                                           [[UINavigationController alloc] initWithRootViewController:vc4],                                          
-                                          //[[UINavigationController alloc] initWithRootViewController:vc5],                                                    
                                           nil);
     
     UITabBarController *tabBarContrller = [[UITabBarController alloc] init];
