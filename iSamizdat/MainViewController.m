@@ -193,13 +193,14 @@ typedef enum {
     return ma;
 }
 
-- (void) refreshBadgeValue
+- (NSInteger) refreshBadgeValue
 {
     NSInteger count = 0;
     for (id obj in self.content)
         if ([obj isKindOfClass:[SamLibText class]]) 
              ++count;    
     self.tabBarItem.badgeValue = count > 0 ? KxUtils.format(@"%d", count) : nil;
+    return count;
 }
 
 - (void) samLibAuthorIgnoredChanged:(NSNotification *)notification
@@ -268,13 +269,15 @@ typedef enum {
             
             if (--count == 0) {
                 
-                if (reloaded > 0) {
-                    status = SamLibStatusSuccess;   
-                    self.content = [self mkContent]; 
-                    [self refreshBadgeValue];        
-                }
-                
                 NSString *message = nil;
+                
+                if (reloaded > 0) {
+                    
+                    self.content = [self mkContent]; 
+                    NSInteger count = [self refreshBadgeValue];       
+                    status = count > 0 ? SamLibStatusSuccess : SamLibStatusNotModifed;
+                }
+
                 if (errors.nonEmpty) {
                     
                     status = SamLibStatusFailure;
