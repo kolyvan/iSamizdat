@@ -172,6 +172,15 @@ typedef enum {
 
 - (NSMutableArray *) mkContent
 {   
+    // updated authors float up
+    self.authors = [ self.authors sortWith:^(SamLibAuthor *l, SamLibAuthor *r) {   
+       BOOL bl = l.hasUpdatedText;
+       BOOL br = r.hasUpdatedText;
+       if (bl == br) return NSOrderedSame;
+       if (bl) return NSOrderedAscending;
+       return NSOrderedDescending;
+   }];
+    
     NSMutableArray * ma = [NSMutableArray array];            
     for (SamLibAuthor *author in self.authors) {            
         [ma push:author];            
@@ -371,7 +380,7 @@ typedef enum {
             cell.textLabel.textColor = [UIColor darkTextColor];                        
             if (author.lastError.nonEmpty) {
                 cell.imageView.image = [UIImage imageNamed:@"failure.png"];
-            } else if (author.hasChangedSize) {
+            } else if (author.hasUpdatedText) {
                 cell.imageView.image = [UIImage imageNamed:@"success.png"];                
             } else {
                 cell.imageView.image = nil;

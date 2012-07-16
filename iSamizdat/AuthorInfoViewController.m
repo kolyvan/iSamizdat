@@ -219,7 +219,7 @@ enum {
                 cell.textLabel.text = _author.lastError;
                 cell.textLabel.textColor = [UIColor redColor];
                 
-            } else if (_author.hasChangedSize) {
+            } else if (_author.hasUpdatedText) {
                 
                 cell.imageView.image = [UIImage imageNamed:@"success.png"];                
                 cell.textLabel.text = locString(@"Updated");

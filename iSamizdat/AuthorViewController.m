@@ -237,7 +237,7 @@ extern int ddLogLevel;
          }
          
          if (status == SamLibStatusSuccess && 
-             author.hasChangedSize) {
+             author.hasUpdatedText) {
              
              [[NSNotificationCenter defaultCenter] postNotificationName:@"SamLibAuthorHasChangedSize" object:nil];
              

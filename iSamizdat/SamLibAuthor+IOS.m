@@ -52,10 +52,10 @@ static char gKey;
         [dict removeObjectForKey:@"lastError"];
 }
 
-- (BOOL) hasChangedSize
+- (BOOL) hasUpdatedText
 {
     for (SamLibText *text in self.texts)
-        if (text.changedSize)
+        if (text.changedSize || (text.isNew && text.flagNew != nil))
             return YES;
     return NO;
 }
