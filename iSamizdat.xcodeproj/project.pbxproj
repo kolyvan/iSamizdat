@@ -93,6 +93,8 @@
 		87562830159987D000636465 /* Twitter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8756282E159987CB00636465 /* Twitter.framework */; };
 		87562833159987F400636465 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87562831159987ED00636465 /* CoreFoundation.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		87562836159989D800636465 /* SHKConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 87562835159989D800636465 /* SHKConfig.m */; };
+		8757AD8115B3EB2000B12308 /* arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 8757AD7F15B3EB2000B12308 /* arrow.png */; };
+		8757AD8215B3EB2000B12308 /* arrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8757AD8015B3EB2000B12308 /* arrow@2x.png */; };
 		8776096315A56FF80063A6F2 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8776096515A56FF80063A6F2 /* Localizable.strings */; };
 		8776CA2C157738670099C83D /* TableViewControllerEx.m in Sources */ = {isa = PBXBuildFile; fileRef = 8776CA2B157738670099C83D /* TableViewControllerEx.m */; };
 		8776CA34157751D50099C83D /* text.css in Resources */ = {isa = PBXBuildFile; fileRef = 8776CA32157751D50099C83D /* text.css */; };
@@ -341,6 +343,8 @@
 		87562831159987ED00636465 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		87562834159989D800636465 /* SHKConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHKConfig.h; sourceTree = "<group>"; };
 		87562835159989D800636465 /* SHKConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SHKConfig.m; sourceTree = "<group>"; };
+		8757AD7F15B3EB2000B12308 /* arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = arrow.png; path = resources/arrow.png; sourceTree = "<group>"; };
+		8757AD8015B3EB2000B12308 /* arrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "arrow@2x.png"; path = "resources/arrow@2x.png"; sourceTree = "<group>"; };
 		8776094515A565880063A6F2 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		8776096415A56FF80063A6F2 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8776096615A56FFC0063A6F2 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -770,6 +774,8 @@
 		872D956D1573968C00BCB4EC /* resources */ = {
 			isa = PBXGroup;
 			children = (
+				8757AD7F15B3EB2000B12308 /* arrow.png */,
+				8757AD8015B3EB2000B12308 /* arrow@2x.png */,
 				8734925715B3E0DF00A6086D /* download@2x.png */,
 				87D8FAF115AED08800CE14D9 /* unban.png */,
 				87F70BD615AD7BA000B202C7 /* safari.png */,
@@ -976,6 +982,8 @@
 				87F70BDB15AD88AB00B202C7 /* icon@2x.png in Resources */,
 				87D8FAF215AED08800CE14D9 /* unban.png in Resources */,
 				8734925815B3E0DF00A6086D /* download@2x.png in Resources */,
+				8757AD8115B3EB2000B12308 /* arrow.png in Resources */,
+				8757AD8215B3EB2000B12308 /* arrow@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -168,7 +168,7 @@
 
 - (NSDate *) lastUpdateDate
 {
-    return _comments.timestamp;
+    return _comments.all.count > 0 ?  _comments.timestamp : nil;
 }
 
 - (void) refresh: (void(^)(SamLibStatus status, NSString *message)) block

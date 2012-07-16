@@ -16,7 +16,8 @@
 #import "KxMacros.h"
 #import "NSString+Kolyvan.h"
 #import "SSPullToRefreshView+Kolyvan.h"
-//#import "WBNoticeView.h"
+
+////
 
 @interface TableViewControllerEx()
 
@@ -41,6 +42,8 @@
     
     self.pullToRefreshView = [[SSPullToRefreshView alloc] initWithScrollView:self.tableView 
                                                                     delegate:self];
+    
+    self.pullToRefreshView.contentView = [[LocalizedPullToRefreshContentView alloc] initWithFrame:CGRectZero];
 }
 
 - (void)viewDidUnload
@@ -56,7 +59,9 @@
 - (void) viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [[AppDelegate shared] closeNotice];     
+    [[AppDelegate shared] closeNotice]; 
+    
+    [self refreshLastUpdated];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -76,6 +81,12 @@
 - (NSDate *) lastUpdateDate
 {
     return nil;
+}
+
+- (void) refreshLastUpdated
+{
+    [self.pullToRefreshView.contentView setLastUpdatedAt:[self lastUpdateDate]
+                                   withPullToRefreshView:self.pullToRefreshView]; 
 }
 
 - (IBAction) goStop
@@ -110,6 +121,8 @@
         
     } else if (status == SamLibStatusSuccess) {            
         
+        [self refreshLastUpdated];
+        
         [self performSelector:@selector(showSuccessNoticeAboutReloadResult:) 
                    withObject:message
                    afterDelay:0.3];
@@ -132,11 +145,6 @@
 {   
     self.savedRightButton = self.navigationItem.rightBarButtonItem;
     self.navigationItem.rightBarButtonItem = self.stopButton;
-    
-    NSDate * lastUpdateDate = [self lastUpdateDate];
-    if (lastUpdateDate)
-        [self.pullToRefreshView.contentView setLastUpdatedAt:lastUpdateDate
-                                       withPullToRefreshView:self.pullToRefreshView]; 
     
     [self.pullToRefreshView startLoading];  
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;

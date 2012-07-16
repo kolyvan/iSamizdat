@@ -159,6 +159,11 @@ extern int ddLogLevel;
 
 #pragma mark - private
 
+- (NSDate *) lastUpdateDate
+{
+    return _author.timestamp;
+}
+
 - (void) prepareData
 {
     NSMutableDictionary * sections = [NSMutableDictionary dictionary];

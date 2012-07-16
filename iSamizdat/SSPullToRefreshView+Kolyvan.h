@@ -7,9 +7,13 @@
 //
 
 #import "SSPullToRefreshView.h"
+#import "SSPullToRefreshDefaultContentView.h"
 
 @interface SSPullToRefreshView (Kolyvan)
 
 - (void) startLoadingAndForceExpand;
 
 @end
+
+@interface LocalizedPullToRefreshContentView : SSPullToRefreshDefaultContentView
+@end 
