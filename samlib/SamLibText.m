@@ -28,11 +28,59 @@
 #import <DiffMatchPatch/DiffMatchPatch.h>
 #endif
 
+#ifndef __IPHONE_OS_VERSION_MAX_ALLOWED 
+#define MAKEDIFF_IMPLEMETED
+#endif
+
 ////
 
 extern int ddLogLevel;
 
-static NSString * prepareText(NSString * text) {
+static NSString * replaceRelativeImg(NSString *text, NSString* format)
+{
+    NSMutableString *ms = nil;    
+    NSScanner *scanner = [NSScanner scannerWithString:text];
+    
+    while (!scanner.isAtEnd) {
+        
+        NSString *s;
+        
+        if ([scanner scanString:@"<img src=\"/img/" intoString:nil])
+        {
+            NSString *attr;
+            
+            if ([scanner scanUpToString:@"\"" intoString:&s] &&
+                [scanner scanUpToString:@">" intoString:&attr]) {
+                
+                scanner.scanLocation += 1; // skip '>'
+                
+                if (!ms)
+                    ms = [NSMutableString string];
+                
+                [ms appendString:KxUtils.format(format, s, attr)];
+            }
+        }
+        else {
+            
+            if ([scanner scanUpToString:@"<img src=\"/img/" intoString:&s]) {
+                
+                if (!ms) {
+                    
+                    if (scanner.isAtEnd)
+                        break; // no img tag in text
+                    
+                    ms = [NSMutableString string];
+                }
+                
+                [ms appendString:s];
+            }
+        }
+    }
+    
+    return ms ? ms : text;    
+}
+
+static NSString * prepareText(NSString * text, NSString* format) {
     
     NSArray *lines = [text lines];
     
@@ -41,8 +89,11 @@ static NSString * prepareText(NSString * text) {
         return s.nonEmpty;
     }];
     
-    return [[lines map:^(id elem){
-        NSString *s = elem;            
+    return [[lines map:^(NSString *s){
+        
+        if (format)
+            s = replaceRelativeImg(s, format);
+        
         if ([s hasPrefix:@"<dd>&nbsp;&nbsp;"])
             return [[s substringFromIndex:16] stringByAppendingString:@"<br />"];
         return s;
@@ -520,24 +571,6 @@ static NSString * prettyHtml (NSMutableArray *diffs)
     return [s stringByAppendingPathExtension:@"html"];
 }
 
-- (NSString *) diffPath
-{
-    NSString *s = [SamLibStorage.textsPath() stringByAppendingPathComponent:self.key];
-    return [s stringByAppendingPathExtension:@"diff.html"];
-}
-
-- (NSString *) rawPath
-{
-    NSString *s = [SamLibStorage.textsPath() stringByAppendingPathComponent:self.key];
-    return [s stringByAppendingPathExtension:@"raw"];    
-}
-
-- (NSString *) oldPath
-{
-    NSString *s = [SamLibStorage.textsPath() stringByAppendingPathComponent:self.key];
-    return [s stringByAppendingPathExtension:@"old"];    
-}
-
 - (NSString *) commentsPath
 {
     NSString *s = [SamLibStorage.commentsPath() stringByAppendingPathComponent: self.key];
@@ -577,6 +610,14 @@ static NSString * prettyHtml (NSMutableArray *diffs)
     return _cachedFileSize;
 }
 
+#ifdef MAKEDIFF_IMPLEMETED
+
+- (NSString *) diffPath
+{
+    NSString *s = [SamLibStorage.textsPath() stringByAppendingPathComponent:self.key];
+    return [s stringByAppendingPathExtension:@"diff.html"];
+}
+
 - (NSString *) diffFile
 {
     NSFileManager * fm = [[NSFileManager alloc] init];    
@@ -589,14 +630,26 @@ static NSString * prettyHtml (NSMutableArray *diffs)
 {
     NSFileManager * fm = [[NSFileManager alloc] init];    
     BOOL r = [fm isReadableFileAtPath:self.oldPath] &&
-             [fm isReadableFileAtPath:self.rawPath];    
+    [fm isReadableFileAtPath:self.rawPath];    
     KX_RELEASE(fm);     
     return r;
 }
 
+- (NSString *) rawPath
+{
+    NSString *s = [SamLibStorage.textsPath() stringByAppendingPathComponent:self.key];
+    return [s stringByAppendingPathExtension:@"raw"];    
+}
+
+- (NSString *) oldPath
+{
+    NSString *s = [SamLibStorage.textsPath() stringByAppendingPathComponent:self.key];
+    return [s stringByAppendingPathExtension:@"old"];    
+}
+
 - (void) makeDiff: (TextFormatter) formatter
 { 
-#ifndef __IPHONE_OS_VERSION_MAX_ALLOWED    
+ 
     NSString *old = [NSString stringWithContentsOfFile:self.oldPath
                                               encoding:NSUTF8StringEncoding                                                    
                                                  error:nil]; 
@@ -656,7 +709,7 @@ static NSString * prettyHtml (NSMutableArray *diffs)
         
     DDLogInfo(@"Diff elapsed time: %.4lf count: %ld dels: %ld ins: %ld", 
                (double)duration, result.count, delDiffs, insDiffs);
-#endif    
+ 
 }
 
 - (void) saveHTML: (NSString *) data
@@ -703,7 +756,8 @@ static NSString * prettyHtml (NSMutableArray *diffs)
     
     // save .raw
     data = SamLibParser.scanTextData(data);
-    data = prepareText(data);    
+    data = prepareText(data, @"<img src=\"http://samlib.ru/img/%@\" %@ >");    
+    //data = prepareText(data, @"<a href=\"http://samlib.ru/img/%@\">image</a>");            
     if (![data writeToFile:self.rawPath
                 atomically:NO 
                   encoding:NSUTF8StringEncoding
@@ -732,6 +786,69 @@ static NSString * prettyHtml (NSMutableArray *diffs)
     
     KX_RELEASE(fm);
 }
+
+#else
+    
+- (NSString *) diffFile
+{
+    return nil;    
+}
+
+- (BOOL) canMakeDiff
+{
+    return NO;
+}
+
+- (void) makeDiff: (TextFormatter) formatter
+{
+    NSAssert(false, @"not implemeted");
+}
+
+- (void) saveHTML: (NSString *) data
+        formatter: (TextFormatter) formatter
+{           
+    _cachedFileSize = 0;
+    
+    NSError *error;
+    
+    NSFileManager *fm = [[NSFileManager alloc] init];
+
+    BOOL htmlExists = [fm fileExistsAtPath:self.htmlPath];     
+    
+    // delete .html
+    if (htmlExists &&
+        ![fm removeItemAtPath:self.htmlPath error:&error]) {
+        DDLogCError(locString(@"file error: %@"), 
+                    KxUtils.completeErrorMessage(error));                   
+    }  
+    
+    data = SamLibParser.scanTextData(data);
+        
+    NSString *pathToImage = KxUtils.pathForResource(@"image_link.png");
+    NSString *format = KxUtils.format(@"<a href='http://samlib.ru/img/%%@'><img src='%@' ></a>", pathToImage);
+    data = prepareText(data, format);            
+       
+    // save .html
+    NSString *html = formatter ? formatter(self, data) : data;
+    if ([html writeToFile:self.htmlPath
+               atomically:NO 
+                 encoding:NSUTF8StringEncoding
+                    error:&error]) {
+        
+        
+        ++_version;
+        self.filetime = [NSDate date];
+        
+    } else {
+        
+        DDLogError(locString(@"file error: %@"), 
+                   KxUtils.completeErrorMessage(error));                
+    } 
+    
+    KX_RELEASE(fm);
+}
+
+#endif   
 
 - (void) update: (UpdateTextBlock) block 
        progress: (AsyncProgressBlock) progress
@@ -855,9 +972,11 @@ static NSString * prettyHtml (NSMutableArray *diffs)
     NSFileManager * fm = [[NSFileManager alloc] init];    
     if (texts) {
         [fm removeItemAtPath:self.htmlPath error:nil];
+#ifdef MAKEDIFF_IMPLEMETED
         [fm removeItemAtPath:self.diffPath error:nil];    
         [fm removeItemAtPath:self.oldPath error:nil]; 
         [fm removeItemAtPath:self.rawPath error:nil];     
+#endif        
     }
     if (comments)
         [fm removeItemAtPath:self.commentsPath error:nil];            

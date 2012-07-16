@@ -96,6 +96,10 @@
 		8757AD8115B3EB2000B12308 /* arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 8757AD7F15B3EB2000B12308 /* arrow.png */; };
 		8757AD8215B3EB2000B12308 /* arrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8757AD8015B3EB2000B12308 /* arrow@2x.png */; };
 		8757AD8515B3F8F900B12308 /* TextsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8757AD8415B3F8F900B12308 /* TextsViewController.m */; };
+		8757ADA015B428B100B12308 /* image_link.png in Resources */ = {isa = PBXBuildFile; fileRef = 8757AD9F15B428B100B12308 /* image_link.png */; };
+		8757ADA315B42AF500B12308 /* UrlImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8757ADA215B42AF500B12308 /* UrlImageViewController.m */; };
+		8757ADAA15B42D2000B12308 /* UIImageView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 8757ADA915B42D2000B12308 /* UIImageView+AFNetworking.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		8757ADAD15B42D7A00B12308 /* AFImageRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 8757ADAC15B42D7A00B12308 /* AFImageRequestOperation.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		8776096315A56FF80063A6F2 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8776096515A56FF80063A6F2 /* Localizable.strings */; };
 		8776CA2C157738670099C83D /* TableViewControllerEx.m in Sources */ = {isa = PBXBuildFile; fileRef = 8776CA2B157738670099C83D /* TableViewControllerEx.m */; };
 		8776CA34157751D50099C83D /* text.css in Resources */ = {isa = PBXBuildFile; fileRef = 8776CA32157751D50099C83D /* text.css */; };
@@ -344,6 +348,13 @@
 		8757AD8015B3EB2000B12308 /* arrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "arrow@2x.png"; path = "resources/arrow@2x.png"; sourceTree = "<group>"; };
 		8757AD8315B3F8F900B12308 /* TextsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextsViewController.h; sourceTree = "<group>"; };
 		8757AD8415B3F8F900B12308 /* TextsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextsViewController.m; sourceTree = "<group>"; };
+		8757AD9F15B428B100B12308 /* image_link.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = image_link.png; path = resources/image_link.png; sourceTree = "<group>"; };
+		8757ADA115B42AF500B12308 /* UrlImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UrlImageViewController.h; sourceTree = "<group>"; };
+		8757ADA215B42AF500B12308 /* UrlImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UrlImageViewController.m; sourceTree = "<group>"; };
+		8757ADA815B42D2000B12308 /* UIImageView+AFNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImageView+AFNetworking.h"; path = "vendors/af/AFNetworking/UIImageView+AFNetworking.h"; sourceTree = "<group>"; };
+		8757ADA915B42D2000B12308 /* UIImageView+AFNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImageView+AFNetworking.m"; path = "vendors/af/AFNetworking/UIImageView+AFNetworking.m"; sourceTree = "<group>"; };
+		8757ADAB15B42D7A00B12308 /* AFImageRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AFImageRequestOperation.h; path = vendors/af/AFNetworking/AFImageRequestOperation.h; sourceTree = "<group>"; };
+		8757ADAC15B42D7A00B12308 /* AFImageRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AFImageRequestOperation.m; path = vendors/af/AFNetworking/AFImageRequestOperation.m; sourceTree = "<group>"; };
 		8776094515A565880063A6F2 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		8776096415A56FF80063A6F2 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8776096615A56FFC0063A6F2 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -587,6 +598,8 @@
 				8788D8F615B0527500D6027A /* AboutViewController.m */,
 				8757AD8315B3F8F900B12308 /* TextsViewController.h */,
 				8757AD8415B3F8F900B12308 /* TextsViewController.m */,
+				8757ADA115B42AF500B12308 /* UrlImageViewController.h */,
+				8757ADA215B42AF500B12308 /* UrlImageViewController.m */,
 				87546F25157C888000DE58DD /* CommentCell.h */,
 				87546F26157C888000DE58DD /* CommentCell.m */,
 				87546F29157C895C00DE58DD /* TextLine.h */,
@@ -727,6 +740,10 @@
 		872D95461573866700BCB4EC /* af */ = {
 			isa = PBXGroup;
 			children = (
+				8757ADAB15B42D7A00B12308 /* AFImageRequestOperation.h */,
+				8757ADAC15B42D7A00B12308 /* AFImageRequestOperation.m */,
+				8757ADA815B42D2000B12308 /* UIImageView+AFNetworking.h */,
+				8757ADA915B42D2000B12308 /* UIImageView+AFNetworking.m */,
 				872D95471573868500BCB4EC /* AFHTTPClient.h */,
 				872D95481573868500BCB4EC /* AFHTTPClient.m */,
 				872D95491573868500BCB4EC /* AFHTTPRequestOperation.h */,
@@ -763,6 +780,7 @@
 		872D956D1573968C00BCB4EC /* resources */ = {
 			isa = PBXGroup;
 			children = (
+				8757AD9F15B428B100B12308 /* image_link.png */,
 				8757AD7F15B3EB2000B12308 /* arrow.png */,
 				8757AD8015B3EB2000B12308 /* arrow@2x.png */,
 				8734925715B3E0DF00A6086D /* download@2x.png */,
@@ -971,6 +989,7 @@
 				8734925815B3E0DF00A6086D /* download@2x.png in Resources */,
 				8757AD8115B3EB2000B12308 /* arrow.png in Resources */,
 				8757AD8215B3EB2000B12308 /* arrow@2x.png in Resources */,
+				8757ADA015B428B100B12308 /* image_link.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1058,6 +1077,9 @@
 				8788D8F715B0527500D6027A /* AboutViewController.m in Sources */,
 				8722160015B2B32900A50602 /* UITabBarController+Kolyvan.m in Sources */,
 				8757AD8515B3F8F900B12308 /* TextsViewController.m in Sources */,
+				8757ADA315B42AF500B12308 /* UrlImageViewController.m in Sources */,
+				8757ADAA15B42D2000B12308 /* UIImageView+AFNetworking.m in Sources */,
+				8757ADAD15B42D7A00B12308 /* AFImageRequestOperation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

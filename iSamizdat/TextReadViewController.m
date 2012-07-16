@@ -23,6 +23,7 @@
 #import "UITabBarController+Kolyvan.h"
 #import "AppDelegate.h"
 #import "KxMacros.h"
+#import "UrlImageViewController.h"
 #import "DDLog.h"
 
 extern int ddLogLevel;
@@ -78,6 +79,7 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
 @property (nonatomic, strong) IBOutlet UIWebView * webView;
 @property (nonatomic, strong) SSPullToRefreshView *pullToRefreshView;
 @property (nonatomic, strong) UIBarButtonItem *stopButton;
+@property (nonatomic, strong) UrlImageViewController *urlImageViewController;
 //@property (nonatomic, strong) UIBarButtonItem *bookmarkButton;
 @end
 
@@ -86,6 +88,7 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
 @synthesize text = _text;
 @synthesize webView = _webView;
 @synthesize pullToRefreshView, stopButton;
+@synthesize urlImageViewController;
 //@synthesize bookmarkButton;
 
 - (void) setText:(SamLibText *)text 
@@ -185,8 +188,8 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
     _text.scrollOffset = offset;
     //DDLogInfo(@"store offset %f", offset); 
     
-    if (_fullScreen)
-        [self fullscreenMode: NO];
+    //if (_fullScreen)
+    //    [self fullscreenMode: NO];
     
     if (_text.htmlFile.nonEmpty)
         [[SamLibHistory shared] addText:_text];
@@ -204,9 +207,16 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
     
     self.pullToRefreshView = nil;
     self.stopButton = nil;
+    self.urlImageViewController = nil;
     //self.bookmarkButton = nil;
     
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void) didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning]; 
+    self.urlImageViewController = nil;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -369,6 +379,16 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
     }    
 }
 
+- (void) showRemoteImage: (NSURL *) url
+{
+    if (!self.urlImageViewController)
+        self.urlImageViewController = [[UrlImageViewController alloc] init];    
+    self.urlImageViewController.url = url;
+    self.urlImageViewController.fullscreen = _fullScreen;
+    [self.navigationController pushViewController:self.urlImageViewController 
+                                         animated:YES];
+}
+
 #pragma mark - UIWebView delegate
 
 - (void)webViewDidFinishLoadDeferred
@@ -401,6 +421,8 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
 shouldStartLoadWithRequest:(NSURLRequest *)request 
  navigationType:(UIWebViewNavigationType)navigationType
 {
+    //DDLogInfo(@"webView %d %@ %@", navigationType, request.URL.absoluteURL, request.URL.pathExtension);
+    
     if (navigationType == UIWebViewNavigationTypeLinkClicked) {
         NSString *last = [request.URL lastPathComponent];
         
@@ -414,6 +436,16 @@ shouldStartLoadWithRequest:(NSURLRequest *)request
         if ([last isEqualToString:@"reload"]) {
             
             //[self reloadText];
+            return NO;
+        }
+        
+        NSString *ext = request.URL.pathExtension;
+        if ([ext isEqualToString:@"png"] ||
+            [ext isEqualToString:@"jpg"] ||
+            [ext isEqualToString:@"jpeg"] ||
+            [ext isEqualToString:@"gif"]) {
+                       
+            [self showRemoteImage: request.URL];
             return NO;
         }
     }
