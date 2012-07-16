@@ -142,18 +142,14 @@ enum {
         _needReload = NO;  
         [self prepareData];       
         [self.tableView reloadData];
+        
+        [self clearChangedFlag];
     }    
 }
 
 - (void) viewWillDisappear:(BOOL)animated
 {
-    [super viewWillDisappear:animated];
-    
-    if (_text.changedSize || (_text.isNew && _text.flagNew != nil)) {
-        
-        [_text flagAsChangedNone];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"samLibTextChanged" object:nil];        
-    }
+    [super viewWillDisappear:animated];    
 }
 
 - (void)viewDidUnload
@@ -295,6 +291,14 @@ enum {
     [actionSheet showFromTabBar:self.tabBarController.tabBar];
 }
 
+- (void) clearChangedFlag
+{
+    if (_text.changedSize || (_text.isNew && _text.flagNew != nil)) {
+        
+        [_text flagAsChangedNone];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SamLibTextChanged" object:nil];        
+    }   
+}
 
 #pragma mark - Table view data source
 
@@ -468,7 +472,7 @@ enum {
         _text.favorited = !_text.favorited;
         ((UIImageView *)cell.accessoryView).image = _text.favoritedImage;               
         
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"samLibTextChanged" object:nil];
+        //[[NSNotificationCenter defaultCenter] postNotificationName:@"SamLibTextChanged" object:nil];
     
     } else if (RowMyVote == row) {
         
@@ -542,8 +546,8 @@ enum {
     
     cell.detailTextLabel.text = @"..";
     
-    if (0 == _text.myVote || 0 == vote)
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"samLibTextChanged" object:nil];
+    //if (0 == _text.myVote || 0 == vote)
+    //    [[NSNotificationCenter defaultCenter] postNotificationName:@"SamLibTextChanged" object:nil];
     
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     
@@ -575,7 +579,6 @@ enum {
             [_text removeTextFiles:YES andComments:YES];   
             [self prepareData];
             [self.tableView reloadData];
-            
         }
     }
 }

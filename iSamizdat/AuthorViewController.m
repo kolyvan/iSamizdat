@@ -244,7 +244,7 @@ extern int ddLogLevel;
          if (status == SamLibStatusSuccess && 
              author.hasUpdatedText) {
              
-             [[NSNotificationCenter defaultCenter] postNotificationName:@"SamLibAuthorHasChangedSize" object:nil];
+             [[NSNotificationCenter defaultCenter] postNotificationName:@"SamLibAuthorChanged" object:nil];
              
              message = locString(@"Update is available");
          }

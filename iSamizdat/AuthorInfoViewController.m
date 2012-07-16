@@ -126,7 +126,7 @@ enum {
     UISwitch *button = sender;    
     _author.ignored = button.on;
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"SamLibAuthorIgnoredChanged" object:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SamLibAuthorChanged" object:nil];
 }
 
 #pragma mark - Table view data source

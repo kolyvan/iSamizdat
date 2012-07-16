@@ -75,24 +75,14 @@ typedef enum {
     //self.navigationController.navigationBarHidden = YES;
           
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(samLibAuthorIgnoredChanged:)
-                                                 name:@"SamLibAuthorIgnoredChanged" 
+                                             selector:@selector(changedNotification:)
+                                                 name:@"SamLibAuthorChanged" 
                                                object:nil];
-    
+        
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(samLibAuthorHasChangedSize:)
-                                                 name:@"SamLibAuthorHasChangedSize" 
-                                               object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(samLibTextChanged:)
-                                                 name:@"samLibTextChanged" 
-                                               object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(samLibTextChanged:)
-                                                 name:@"samLibTextChanged" 
-                                               object:nil];    
+                                             selector:@selector(changedNotification:)
+                                                 name:@"SamLibTextChanged" 
+                                               object:nil];      
     
 }
 
@@ -203,19 +193,10 @@ typedef enum {
     return count;
 }
 
-- (void) samLibAuthorIgnoredChanged:(NSNotification *)notification
+- (void) changedNotification:(NSNotification *)notification
 {
+    self.content = nil;
     self.ignored = nil;
-}
-
-- (void) samLibAuthorHasChangedSize:(NSNotification *)notification
-{
-    self.content = nil;
-}
-
-- (void) samLibTextChanged:(NSNotification *)notification
-{
-    self.content = nil;
 }
 
 - (void) toggleEdit
