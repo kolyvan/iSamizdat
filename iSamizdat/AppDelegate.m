@@ -12,7 +12,9 @@
 
 #import "AppDelegate.h"
 #import "MainViewController.h"
-#import "TextsViewController.h"
+#import "FavoritesViewController.h"
+#import "VotedViewController.h"
+#import "DownloadsViewController.h"
 #import "SearchViewController.h"
 #import "SettingsViewController.h"
 #import "HistoryViewController.h"
@@ -28,6 +30,7 @@
 #import "DDTTYLogger.h"
 #import "KxUtils.h"
 #import "KxMacros.h"
+#import "NSArray+Kolyvan.h"
 #import "NSDictionary+Kolyvan.h"
 #import "NSString+Kolyvan.h"
 #import "WBSuccessNoticeView.h"
@@ -73,25 +76,25 @@ int ddLogLevel = LOG_LEVEL_WARN;
 
     [self checkFirstRun];
     
-   // [[UINavigationBar appearance] setBarStyle: UIBarStyleBlack];
+    //[[UINavigationBar appearance] setBarStyle: UIBarStyleBlack];
     
-    MainViewController *vc0 = [[MainViewController alloc] init];
-    TextsViewController *vc1 = [[TextsViewController alloc] init];
-    HistoryViewController *vc2 = [[HistoryViewController alloc] init];
-    SearchViewController *vc3 = [[SearchViewController alloc] init]; 
-    SettingsViewController *vc4 = [[SettingsViewController alloc] init];    
-
-    NSArray * controllers = KxUtils.array(
-                                          [[UINavigationController alloc] initWithRootViewController:vc0],                                          
-                                          [[UINavigationController alloc] initWithRootViewController:vc1],
-                                          [[UINavigationController alloc] initWithRootViewController:vc2],
-                                          [[UINavigationController alloc] initWithRootViewController:vc3],
-                                          [[UINavigationController alloc] initWithRootViewController:vc4],                                          
+    NSArray * controllers = KxUtils.array([[MainViewController alloc] init],                                          
+                                          [[FavoritesViewController alloc] init],
+                                          [[HistoryViewController alloc] init],
+                                          [[SearchViewController alloc] init],
+                                          [[VotedViewController alloc] init],                                          
+                                          [[DownloadsViewController alloc] init],                                                                                    
+                                          [[SettingsViewController alloc] init],                                                                                                                                                                        
                                           nil);
+    
+    controllers = [self restoreTabBars:controllers];    
+    controllers = [controllers = controllers map:^(UIViewController *vc) {
+        return [[UINavigationController alloc] initWithRootViewController:vc];       
+    }];
     
     UITabBarController *tabBarContrller = [[UITabBarController alloc] init];
     tabBarContrller.viewControllers = controllers;
-    //tabBarContrller.customizableViewControllers = controllers; 
+    tabBarContrller.customizableViewControllers = controllers; 
 
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];    
     self.window.rootViewController = tabBarContrller;    
@@ -129,6 +132,8 @@ int ddLogLevel = LOG_LEVEL_WARN;
         DDLogInfo(@"cleanup names");                
         SamLibStorage.cleanupNames();
     }
+    
+    [self saveTabBars];
     
     SamLibAgent.saveSettings();
 }
@@ -337,6 +342,43 @@ int ddLogLevel = LOG_LEVEL_WARN;
 
         }
     }
+}
+
+- (NSArray *) restoreTabBars: (NSArray *) vcs
+{
+    NSArray * order = [SamLibAgent.settings() get:@"ui.tabbar"];
+    
+    if (!order.nonEmpty) 
+        return vcs;
+       
+    for (UIViewController *vc in vcs) {
+        
+        NSString *klass = NSStringFromClass([vc class]);
+        vc.tabBarItem.tag = [order indexOfObject:klass];        
+    }
+    
+    return [vcs sortWith:^(UIViewController *l, UIViewController *r) {      
+        NSInteger li = l.tabBarItem.tag;
+        NSInteger ri = r.tabBarItem.tag;                
+        if (li < ri) return NSOrderedAscending;
+        if (li > ri) return NSOrderedDescending;        
+        return NSOrderedSame;        
+    }];   
+}
+
+- (void) saveTabBars
+{
+    UITabBarController *tabBarContrller = (UITabBarController *)self.window.rootViewController;
+    
+    NSMutableArray *ma = [NSMutableArray array];
+    
+    for (UINavigationController *nav in tabBarContrller.viewControllers) {
+    
+        UIViewController *rootVC = nav.viewControllers.first;
+        [ma push: NSStringFromClass([rootVC class])];
+    }
+    
+    [SamLibAgent.settings() update:@"ui.tabbar" value:ma];
 }
 
 #pragma mark - SSO Facebook support

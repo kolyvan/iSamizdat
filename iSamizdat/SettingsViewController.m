@@ -78,7 +78,7 @@ enum {
         self.title = locString(@"Settings");
         self.tabBarItem = [[UITabBarItem alloc] initWithTitle:locString(@"Settings")
                                                         image:[UIImage imageNamed:@"emblem-system"] 
-                                                          tag:5];
+                                                          tag:0];
     }
     return self;
 }

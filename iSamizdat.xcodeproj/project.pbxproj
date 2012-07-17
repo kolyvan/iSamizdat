@@ -133,6 +133,11 @@
 		878850C015AAB157002B6F8D /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 878850BF15AAB157002B6F8D /* libz.dylib */; };
 		878850C315AAB1F2002B6F8D /* SamLibModerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 878850C215AAB1F2002B6F8D /* SamLibModerator.m */; };
 		8788D8F715B0527500D6027A /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8788D8F615B0527500D6027A /* AboutViewController.m */; };
+		87CC780915B5636F004F5E7F /* FavoritesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87CC780815B5636F004F5E7F /* FavoritesViewController.m */; };
+		87CC780C15B56516004F5E7F /* VotedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87CC780B15B56516004F5E7F /* VotedViewController.m */; };
+		87CC780F15B5679F004F5E7F /* voted.png in Resources */ = {isa = PBXBuildFile; fileRef = 87CC780D15B5679F004F5E7F /* voted.png */; };
+		87CC781015B5679F004F5E7F /* voted@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 87CC780E15B5679F004F5E7F /* voted@2x.png */; };
+		87CC781315B56802004F5E7F /* DownloadsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87CC781215B56802004F5E7F /* DownloadsViewController.m */; };
 		87D8FAF215AED08800CE14D9 /* unban.png in Resources */ = {isa = PBXBuildFile; fileRef = 87D8FAF115AED08800CE14D9 /* unban.png */; };
 		87E230AC158B0AC70074EBF1 /* TextGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87E230AA158B0AC70074EBF1 /* TextGroupViewController.m */; };
 		87E230AD158B0AC70074EBF1 /* TextGroupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 87E230AB158B0AC70074EBF1 /* TextGroupViewController.xib */; };
@@ -417,6 +422,14 @@
 		878850C215AAB1F2002B6F8D /* SamLibModerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SamLibModerator.m; sourceTree = "<group>"; };
 		8788D8F515B0527500D6027A /* AboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AboutViewController.h; sourceTree = "<group>"; };
 		8788D8F615B0527500D6027A /* AboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AboutViewController.m; sourceTree = "<group>"; };
+		87CC780715B5636E004F5E7F /* FavoritesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FavoritesViewController.h; sourceTree = "<group>"; };
+		87CC780815B5636F004F5E7F /* FavoritesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FavoritesViewController.m; sourceTree = "<group>"; };
+		87CC780A15B56516004F5E7F /* VotedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VotedViewController.h; sourceTree = "<group>"; };
+		87CC780B15B56516004F5E7F /* VotedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VotedViewController.m; sourceTree = "<group>"; };
+		87CC780D15B5679F004F5E7F /* voted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = voted.png; path = resources/voted.png; sourceTree = "<group>"; };
+		87CC780E15B5679F004F5E7F /* voted@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "voted@2x.png"; path = "resources/voted@2x.png"; sourceTree = "<group>"; };
+		87CC781115B56802004F5E7F /* DownloadsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DownloadsViewController.h; sourceTree = "<group>"; };
+		87CC781215B56802004F5E7F /* DownloadsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DownloadsViewController.m; sourceTree = "<group>"; };
 		87D8FAF115AED08800CE14D9 /* unban.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = unban.png; path = resources/unban.png; sourceTree = "<group>"; };
 		87E230A9158B0AC70074EBF1 /* TextGroupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextGroupViewController.h; sourceTree = "<group>"; };
 		87E230AA158B0AC70074EBF1 /* TextGroupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextGroupViewController.m; sourceTree = "<group>"; };
@@ -640,6 +653,12 @@
 				8788D8F615B0527500D6027A /* AboutViewController.m */,
 				8757AD8315B3F8F900B12308 /* TextsViewController.h */,
 				8757AD8415B3F8F900B12308 /* TextsViewController.m */,
+				87CC780715B5636E004F5E7F /* FavoritesViewController.h */,
+				87CC780815B5636F004F5E7F /* FavoritesViewController.m */,
+				87CC780A15B56516004F5E7F /* VotedViewController.h */,
+				87CC780B15B56516004F5E7F /* VotedViewController.m */,
+				87CC781115B56802004F5E7F /* DownloadsViewController.h */,
+				87CC781215B56802004F5E7F /* DownloadsViewController.m */,
 				8757ADA115B42AF500B12308 /* UrlImageViewController.h */,
 				8757ADA215B42AF500B12308 /* UrlImageViewController.m */,
 				87546F25157C888000DE58DD /* CommentCell.h */,
@@ -822,6 +841,8 @@
 		872D956D1573968C00BCB4EC /* resources */ = {
 			isa = PBXGroup;
 			children = (
+				87CC780D15B5679F004F5E7F /* voted.png */,
+				87CC780E15B5679F004F5E7F /* voted@2x.png */,
 				8724331515B522C500F8C6D3 /* author_add@2x.png */,
 				8724331615B522C500F8C6D3 /* author_go@2x.png */,
 				8724331715B522C500F8C6D3 /* ban@2x.png */,
@@ -1074,6 +1095,8 @@
 				8724333C15B522C500F8C6D3 /* success@2x.png in Resources */,
 				8724333D15B522C500F8C6D3 /* trash@2x.png in Resources */,
 				8724333E15B522C500F8C6D3 /* unban@2x.png in Resources */,
+				87CC780F15B5679F004F5E7F /* voted.png in Resources */,
+				87CC781015B5679F004F5E7F /* voted@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1164,6 +1187,9 @@
 				8757ADA315B42AF500B12308 /* UrlImageViewController.m in Sources */,
 				8757ADAA15B42D2000B12308 /* UIImageView+AFNetworking.m in Sources */,
 				8757ADAD15B42D7A00B12308 /* AFImageRequestOperation.m in Sources */,
+				87CC780915B5636F004F5E7F /* FavoritesViewController.m in Sources */,
+				87CC780C15B56516004F5E7F /* VotedViewController.m in Sources */,
+				87CC781315B56802004F5E7F /* DownloadsViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

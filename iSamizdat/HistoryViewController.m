@@ -34,7 +34,7 @@
     self =  [self initWithNibName:@"HistoryViewController" bundle:nil];
     if (self) {
         self.title = locString(@"Recent");
-        self.tabBarItem = [[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemRecents tag: 4];        
+        self.tabBarItem = [[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemRecents tag: 0];        
     }
     return self;
 }

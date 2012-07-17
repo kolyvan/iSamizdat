@@ -57,7 +57,7 @@ enum {
     self = [super initWithNibName:@"SearchViewController" bundle:nil];
     if (self) {
         self.title = locString(@"Search");
-        self.tabBarItem = [[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemSearch tag: 3];
+        self.tabBarItem = [[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemSearch tag: 0];
     }
     return self;
 }
