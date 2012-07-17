@@ -426,16 +426,17 @@ static NSDictionary * parseComment(NSString *html)
         s = [s stringByReplacingOccurrencesOfString:@"\n" withString:@""];         
         s = [s stringByReplacingOccurrencesOfString:@"<br>" withString:@"\n"];
         
-        NSMutableString * replyto = [NSMutableString string];
         NSMutableString * message = [NSMutableString string];
         
-        for (NSString * line in [s lines]) { 
+        for (NSString *line in s.lines) { 
             if ([line hasPrefix:@"&gt;<b>"]) {
                 
                 NSString * t = parseCommentReplyLine([line substringFromIndex:@"&gt;<b>".length]);   
                 if (t.nonEmpty) {
-                    [replyto appendString:[t stringByReplacingOccurrencesOfString: @"</b>&gt;<b>" withString:@""]];
-                    [replyto appendString:@"\n"];                
+
+                    [message appendString:@"> "];                                    
+                    [message appendString:[t stringByReplacingOccurrencesOfString: @"</b>&gt;<b>" withString:@""]];                    
+                    [message appendString:@"\n"];                
                 }
             }            
             else {
@@ -445,11 +446,8 @@ static NSDictionary * parseComment(NSString *html)
         }
         
         if (message.nonEmpty)
-            [dict update:@"message" value:message];         
-        if (replyto.nonEmpty)
-            [dict update:@"replyto" value:replyto];         
+            [dict update:@"message" value:message];  
     }
-    
     
     return dict;
 }

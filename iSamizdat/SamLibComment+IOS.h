@@ -18,7 +18,6 @@
 @interface SamLibComment (IOS)
 
 - (NSArray *) messageLines;
-- (NSArray *) replytoLines;
 - (TextLine *) nameLine;
 - (UIColor *) nameColor;
 

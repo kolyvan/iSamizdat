@@ -55,7 +55,7 @@ static NSDate* mkDateFromComment(NSString *dt)
 @synthesize timestamp = _timestamp;
 @synthesize isNew = _isNew;
 
-@dynamic number, deleteMsg, name, link, color, msgid, replyto, message, isSamizdat, isHidden;
+@dynamic number, deleteMsg, name, link, color, msgid, message, isSamizdat, isHidden;
 
 - (NSInteger) number        { return [[_dict get:@"num"] integerValue]; }
 - (NSString *) deleteMsg    { return [_dict get: @"deleteMsg"]; }
@@ -64,7 +64,6 @@ static NSDate* mkDateFromComment(NSString *dt)
 - (NSString *) color        { return [_dict get: @"color"]; }
 - (NSString *) email        { return [_dict get: @"email"]; }
 - (NSString *) msgid        { return [_dict get: @"msgid"]; }
-- (NSString *) replyto      { return [_dict get: @"replyto"]; }
 - (NSString *) message      { return [_dict get: @"message"]; }
 - (BOOL) isSamizdat         { return [_dict contains:@"samizdat"]; }
 - (BOOL) canEdit            { return [[_dict get:@"canEdit"] boolValue]; }
@@ -337,7 +336,9 @@ static NSDate* mkDateFromComment(NSString *dt)
         
     } else {        
 
-        _numberOfNew = result.count;          
+        _numberOfNew = result.count; 
+        for (SamLibComment * p in result)
+            p.isNew = YES;
         self.all = result;        
         //_isDirty = YES;        
     }    

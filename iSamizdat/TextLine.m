@@ -15,9 +15,7 @@
 #import "NSString+Kolyvan.h"
 #import "KxUtils.h"
 
-
 @interface TextLine() {
-    CGSize _size;
     CGFloat _width;    
     KX_WEAK UIFont * _font;
 }
@@ -28,6 +26,7 @@
 @synthesize text, link;
 @synthesize origin = _origin;
 @synthesize size = _size;
+@synthesize isQuote = _isQuote;
 
 - (CGRect) bounds 
 {

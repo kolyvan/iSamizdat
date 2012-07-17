@@ -84,9 +84,20 @@ static char gKey;
     NSMutableArray * result = [NSMutableArray arrayWithCapacity:lines.count];
     for (NSString * line in lines) {
         
-        [self scanLine: line 
-             intoArray:result 
-            storeLinks:storeLinks];        
+        
+        if ([line hasPrefix:@"> "]) {
+            
+            TextLine * textLine = [[TextLine alloc] init];                
+            textLine.text = [line removeHTML];
+            textLine.isQuote = YES;
+            [result push: textLine];
+            
+        } else {
+        
+            [self scanLine: line 
+                 intoArray:result 
+                storeLinks:storeLinks];        
+        }
     }
     
     return result;
@@ -116,13 +127,6 @@ static char gKey;
     }];    
 }
 
-- (NSArray *) replytoLines
-{
-    NSMutableDictionary * dict = [self extDict];
-    return [dict get:@"replyto" orSet:^id{        
-        return [self->isa stringToLines: self.replyto storeLinks: NO];
-    }];     
-}
 
 - (TextLine *) nameLine
 {   

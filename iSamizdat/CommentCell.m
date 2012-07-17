@@ -349,8 +349,8 @@ static void drawLine(CGPoint from, CGPoint to, UIColor *color, CGFloat width)
 + (CGFloat) heightForComment:(SamLibComment *) comment 
                    withWidth:(CGFloat) width
 {
-    CGFloat height = 15;
-    CGFloat widthr = width - 10;
+    CGFloat height = 10;
+    CGFloat widthr = width - 8;
     
     height += [UIFont boldSystemFont16].lineHeight;
     
@@ -362,25 +362,27 @@ static void drawLine(CGPoint from, CGPoint to, UIColor *color, CGFloat width)
         
         return self.minimumHeight;
         
-    } else {
-                    
-        if (comment.replyto.nonEmpty) {
+    } else if (comment.message.nonEmpty) {
+        
+        height += 5;                
+        
+        NSArray *lines = comment.messageLines;        
+        BOOL isQuote = lines.nonEmpty ? [lines.first isQuote] : NO;
+        
+        for (TextLine * line in lines) {
+                        
+            if (isQuote != line.isQuote) 
+                height += 2;
+            isQuote = line.isQuote;
             
-            height += 10;        
-            for (TextLine * line in [comment replytoLines]) {
-                height += [line computeSize:widthr - 10 withFont:[UIFont systemFont12]].height;
-            }
-        }
-    
-        if (comment.message.nonEmpty) {
-            
-            height += 10;                
-            for (TextLine * line in [comment messageLines]) {
+            if (line.isQuote)
+                height += [line computeSize:widthr - 10 withFont:[UIFont systemFont12]].height;            
+            else
                 height += [line computeSize:widthr withFont:[UIFont systemFont14]].height;
-            }
+            
         }
     }
-    
+        
     height += 2;
     NSString * date = [comment.timestamp shortRelativeFormatted]; 
     height += [date sizeWithFont:[UIFont systemFont12] 
@@ -396,16 +398,16 @@ static void drawLine(CGPoint from, CGPoint to, UIColor *color, CGFloat width)
     
     CGSize size;
     CGFloat h = 0;
-    CGFloat x = 5, y = 5, w = rect.size.width - 10;    
+    CGFloat x = 4, y = 1, w = rect.size.width - 8;    
 	
 	[[UIColor whiteColor] set];
 	CGContextFillRect(context, rect);
     
     h = [UIFont boldSystemFont16].lineHeight;
-    
-    float headerHeight = h + 5;
-    
-    [[UIColor colorWithWhite:0.8 alpha:1] set];
+
+    float headerHeight = h + 4;
+
+    [[UIColor colorWithWhite:0.85 alpha:1] set];
 	CGContextFillRect(context, CGRectMake(0, y, rect.size.width, headerHeight));
     
     // render number
@@ -421,99 +423,100 @@ static void drawLine(CGPoint from, CGPoint to, UIColor *color, CGFloat width)
               constrainedToSize:CGSizeMake(w, 999999) 
                   lineBreakMode:UILineBreakModeTailTruncation];    
     
-    [number drawInRect:CGRectMake(w - size.width, 
-                                  y + 3, 
+    [number drawInRect:CGRectMake(w - size.width,                                  
+                                  y + 4, 
                                   size.width, 
                                   headerHeight) 
               withFont:[UIFont systemFont12] 
          lineBreakMode:UILineBreakModeTailTruncation];    
     
-    // render name
+    // render name or delete message
     
-    if (_comment.name.nonEmpty) 
-    {   
-        TextLine *nameLine = _comment.nameLine;
-        [nameLine drawInRect:CGRectMake(x, y + 2, w - size.width, headerHeight) 
-                    withFont:[UIFont boldSystemFont16] 
-                    andColor:_comment.nameColor];
-        
-    } else if (_comment.deleteMsg.nonEmpty) {
-        
+    if (_comment.deleteMsg.nonEmpty) {
+       
         [[UIColor darkGrayColor] set]; 
         NSString *s = KxUtils.format(locString(@" - deleted %@"), _comment.deleteMsg);
         [s drawInRect:CGRectMake(x, y + 2, w - size.width, headerHeight) 
              withFont:[UIFont systemFont12]  
         lineBreakMode:UILineBreakModeTailTruncation];
+        
+        return;
+        
+    } 
+        
+    if (_comment.name.nonEmpty) {
+          
+        TextLine *nameLine = _comment.nameLine;
+        [nameLine drawInRect:CGRectMake(x, y + 2, w - size.width, headerHeight) 
+                    withFont:[UIFont boldSystemFont16] 
+                    andColor:_comment.nameColor];
     }
     
+    // render message
+    
     y += headerHeight;
-
+    
     if (_comment.isHidden) {
-                        
+        
         [[UIColor grayColor] set];
         
-        y += 10;
-
+        y += 5;
+        
         NSString *s = locString(@"hidden comment");
         float dx = [s sizeWithFont:[UIFont systemFont14] 
-                    constrainedToSize:CGSizeMake(w, 20) 
-                        lineBreakMode:UILineBreakModeClip].width;
-
+                 constrainedToSize:CGSizeMake(w, 20) 
+                     lineBreakMode:UILineBreakModeClip].width;
+        
         dx = (w - dx) * .5;
         
         [s drawInRect:CGRectMake(x + dx, y, w  - dx, rect.size.height - y)
-                  withFont:[UIFont systemFont14]  
-             lineBreakMode:UILineBreakModeClip];
+             withFont:[UIFont systemFont14]  
+        lineBreakMode:UILineBreakModeClip];
+
         
-    } else {
+    } else if (_comment.message.nonEmpty) {
+
+        y += 5;      
+        NSArray *lines = _comment.messageLines;        
+        BOOL isQuote = lines.nonEmpty ? [lines.first isQuote] : NO;
         
-        // render reply
-        
-        if (_comment.replyto.nonEmpty) {
+        for (TextLine * line in lines) {
             
-            y += 10;        
+            if (isQuote != line.isQuote) 
+                y += 2;
+            isQuote = line.isQuote;
             
-            [[UIColor grayColor] set];         
-            
-            for (TextLine * line in [_comment replytoLines]) {
-                
-                y += [line drawInRect:CGRectMake(x + 10, y, w - 10, rect.size.height - y)  
+            if (line.isQuote) {
+                                
+                y += [line drawInRect:CGRectMake(x + 5, y, w - 5, rect.size.height - y)  
                              withFont:[UIFont systemFont12] 
-                             andColor:nil].height;
+                             andColor:[UIColor grayColor]].height;            
             }
-        }    
-        
-        // render message
-        
-        if (_comment.message.nonEmpty) {
             
-            y +=10;
-            
-            for (TextLine * line in [_comment messageLines]) {
+            else {
                 
                 y += [line drawInRect:CGRectMake(x, y, w, rect.size.height - y)  
                              withFont:[UIFont systemFont14] 
                              andColor:line.link.nonEmpty ? [UIColor blueColor] : [UIColor blackColor]].height;
             }
-            
+
         }
-    }   
-        
+    }
+    
     // render timestamp
     
-    if (!_comment.deleteMsg.nonEmpty) {
-        
-        y += 2;
-        NSString * date = [_comment.timestamp shortRelativeFormatted]; 
-        
-        float dx = [date sizeWithFont:[UIFont systemFont12] 
-                    constrainedToSize:CGSizeMake(w, 999999) 
-                        lineBreakMode:UILineBreakModeTailTruncation].width;
-        
-        y += [date drawInRect:CGRectMake(w - dx , y, dx, rect.size.height - y) 
-                     withFont:[UIFont systemFont12] 
-                lineBreakMode:UILineBreakModeTailTruncation].height;
-    }   
+    y += 2;
+    [[UIColor grayColor] set];
+    NSString * date = [_comment.timestamp shortRelativeFormatted]; 
+    
+    float dx = [date sizeWithFont:[UIFont systemFont12] 
+                constrainedToSize:CGSizeMake(w, 999999) 
+                    lineBreakMode:UILineBreakModeTailTruncation].width;
+    
+    y += [date drawInRect:CGRectMake(w - dx , y, dx, rect.size.height - y) 
+                 withFont:[UIFont systemFont12] 
+            lineBreakMode:UILineBreakModeTailTruncation].height;     
+ 
 }
 
 - (void) touchUpInside:(CGPoint)loc

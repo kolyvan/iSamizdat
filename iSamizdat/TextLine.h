@@ -19,6 +19,7 @@
 @property (readonly, nonatomic) CGPoint origin;
 @property (readonly, nonatomic) CGSize size;
 @property (readonly, nonatomic) CGRect bounds;
+@property (readwrite, nonatomic) BOOL isQuote;
 
 - (CGSize) computeSize: (CGFloat) width 
               withFont: (UIFont *) font;

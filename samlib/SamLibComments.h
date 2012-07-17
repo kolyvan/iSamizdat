@@ -28,7 +28,6 @@ typedef void (^UpdateCommentsBlock)(SamLibComments *comments,
 @property (readonly, nonatomic) NSString * color;
 @property (readonly, nonatomic) NSString * email;
 @property (readonly, nonatomic) NSString * msgid;
-@property (readonly, nonatomic) NSString * replyto;
 @property (readonly, nonatomic) NSString * message;
 @property (readonly, nonatomic) NSDate * timestamp;
 @property (readonly, nonatomic) BOOL isSamizdat;
