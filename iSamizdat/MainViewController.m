@@ -377,12 +377,14 @@ typedef enum {
            
     if (section == AuthorSectionNumber) {        
         
-        static UIColor *fillColor = nil;
-        if (!fillColor)        
-            fillColor = [UIColor colorWithRed:1.0 
-                                        green:1.0 
-                                         blue:0.8 
-                                        alpha:1.0];  
+        static UIColor *updatedFillColor = nil;
+        static UIColor *commonFillColor = nil;
+        
+        if (!updatedFillColor)        
+            updatedFillColor = [UIColor colorWithRed:1.0 green:1.0 blue:0.8 alpha:1.0];  
+        
+        if (!commonFillColor)        
+            commonFillColor = [UIColor colorWithRed:0.95 green:0.95 blue:1.0 alpha:1.0];  
         
         
         id obj = [self.content objectAtIndex:indexPath.row]; 
@@ -398,7 +400,7 @@ typedef enum {
             cell.textLabel.text = text.title;
             cell.textLabel.textColor = [UIColor secondaryTextColor];  
             
-            cell.fillColor = fillColor;
+            cell.fillColor = updatedFillColor;
             return cell;            
         }
         
@@ -412,15 +414,20 @@ typedef enum {
             UIColor *p  = cell.fillColor;
             
             if (author.lastError.nonEmpty) {
+                
                 cell.imageView.image = [UIImage imageNamed:@"failure.png"];
-                cell.fillColor = nil;                
+                cell.fillColor = nil;        
+                
             } else if (author.hasUpdatedText) {             
+                
                 cell.imageView.image = nil;    
                 cell.fillColor = nil;                                    
-                cell.fillColor = fillColor;                
+                cell.fillColor = updatedFillColor;    
+                
             } else {
+                
                 cell.imageView.image = nil;            
-                cell.fillColor = nil;                    
+                cell.fillColor = indexPath.row % 2  ? commonFillColor : nil;                    
             }
             
             if (p != cell.fillColor)
