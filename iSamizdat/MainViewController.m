@@ -38,6 +38,29 @@ typedef enum {
     
 } SectionNumber;
 
+////
+
+@interface MainTableViewCell : UITableViewCell
+@property (readwrite, nonatomic, strong) UIColor *fillColor;
+@end
+
+@implementation MainTableViewCell
+@synthesize fillColor;
+- (void)drawRect:(CGRect)rect 
+{
+    [super drawRect:rect];
+    
+    if (!self.selected && self.fillColor) {
+        
+        CGContextRef context = UIGraphicsGetCurrentContext();
+        [self.fillColor set];
+        CGContextFillRect(context, rect);        
+    }
+}
+@end
+
+////
+
 @interface MainViewController () {
     NSInteger _modelVersion;
     BOOL _tableLoaded;
@@ -313,25 +336,38 @@ typedef enum {
     return 0;
 }
 
-- (UITableViewCell *) mkMainCell
+
+- (MainTableViewCell *) mkMainCell
 {
-    UITableViewCell * cell = [self mkCell:@"MainCell" withStyle:UITableViewCellStyleDefault];
-    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;    
+    static NSString *CellIdentifier = @"MainCell";
+    
+    MainTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];    
+    if (cell == nil) {
+        cell = [[MainTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault 
+                                        reuseIdentifier:CellIdentifier];                
+        cell.textLabel.backgroundColor = [UIColor clearColor];
+        cell.textLabel.opaque = NO;    
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;       
+    }    
     return cell;
 }
 
-- (UITableViewCell *) mkTextCell
+- (MainTableViewCell *) mkTextCell
 {
     static NSString *CellIdentifier = @"TextCell";
     
-    UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    MainTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];    
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier];
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        cell = [[MainTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 
+                                        reuseIdentifier:CellIdentifier];                
+        cell.textLabel.backgroundColor = [UIColor clearColor];
+        cell.textLabel.opaque = NO;    
+        cell.detailTextLabel.backgroundColor = [UIColor clearColor];
+        cell.detailTextLabel.opaque = NO;
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;       
         cell.detailTextLabel.font = [UIFont systemFont14];
-        cell.textLabel.font = [UIFont systemFont14];        
-    }
-    
+        cell.textLabel.font = [UIFont systemFont14];  
+    }    
     return cell;
 }
 
@@ -341,11 +377,19 @@ typedef enum {
            
     if (section == AuthorSectionNumber) {        
         
+        static UIColor *fillColor = nil;
+        if (!fillColor)        
+            fillColor = [UIColor colorWithRed:1.0 
+                                        green:1.0 
+                                         blue:0.8 
+                                        alpha:1.0];  
+        
+        
         id obj = [self.content objectAtIndex:indexPath.row]; 
         
         if ([obj isKindOfClass:[SamLibText class]]) {
             
-            UITableViewCell *cell = [self mkTextCell];
+            MainTableViewCell *cell = [self mkTextCell];
             SamLibText *text = obj;
             if (text.changedSize)
                 cell.detailTextLabel.text = KxUtils.format(@"%+ldk", text.deltaSize);
@@ -353,33 +397,46 @@ typedef enum {
                 cell.detailTextLabel.text = locString(@"new");
             cell.textLabel.text = text.title;
             cell.textLabel.textColor = [UIColor secondaryTextColor];  
+            
+            cell.fillColor = fillColor;
             return cell;            
         }
         
         if ([obj isKindOfClass:[SamLibAuthor class]]) {
             
-            UITableViewCell *cell = [self mkMainCell];
+            MainTableViewCell *cell = [self mkMainCell];        
             SamLibAuthor *author = obj;
             cell.textLabel.text = author.name.nonEmpty ? author.name : author.path;
             cell.textLabel.textColor = [UIColor darkTextColor];                        
+                    
+            UIColor *p  = cell.fillColor;
+            
             if (author.lastError.nonEmpty) {
                 cell.imageView.image = [UIImage imageNamed:@"failure.png"];
-            } else if (author.hasUpdatedText) {
-                cell.imageView.image = [UIImage imageNamed:@"success.png"];                
+                cell.fillColor = nil;                
+            } else if (author.hasUpdatedText) {             
+                cell.imageView.image = nil;    
+                cell.fillColor = nil;                                    
+                cell.fillColor = fillColor;                
             } else {
-                cell.imageView.image = nil;
+                cell.imageView.image = nil;            
+                cell.fillColor = nil;                    
             }
+            
+            if (p != cell.fillColor)
+                [cell setNeedsDisplay];
+            
             return cell;
         }
     } 
     
     if (section == IgnoredSectionNumber) {        
         
-        UITableViewCell *cell = [self mkMainCell];
+        UITableViewCell *cell = [self mkCell: @"IgnoredCell" withStyle: UITableViewCellStyleDefault];
         SamLibAuthor *author = [self.ignored objectAtIndex:indexPath.row];    
         cell.textLabel.text = author.name.nonEmpty ? author.name : author.path;
         cell.textLabel.textColor = [UIColor grayColor];
-        cell.imageView.image = nil;        
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         return cell;
     }
     
