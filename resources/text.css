@@ -25,8 +25,8 @@
 	color:black;
 	margin: 1em 1em 1em 1em;
 	padding: 1em 0em 1em 0em;    
-    border-top: 1px dotted #555;
-    border-bottom: 1px dotted #555;    
+    border-top: 1px solid #555;
+    border-bottom: 1px solid #555;    
 }
 
 .info .subinfo div span {
