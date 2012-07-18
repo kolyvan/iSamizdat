@@ -49,6 +49,13 @@ UIImage * mkVoteImage(NSInteger number, BOOL selected)
 - (void) viewDidLoad
 {
     [super viewDidLoad];
+    
+    UIBarButtonItem *backBtn =  [[UIBarButtonItem alloc] initWithTitle:locString(@"Voted")
+                                                                 style:UIBarButtonItemStylePlain
+                                                                target:nil
+                                                                action:nil];
+    self.navigationItem.backBarButtonItem = backBtn;
+
         
     
     UIBarButtonItem *sortBtn =  [[UIBarButtonItem alloc] initWithTitle:locString(@"by vote")
@@ -63,6 +70,7 @@ UIImage * mkVoteImage(NSInteger number, BOOL selected)
 {
     [super viewDidUnload];
     self.navigationItem.rightBarButtonItem = nil;
+    self.navigationItem.backBarButtonItem = nil;    
     _sortByVote = NO;
 }
 
