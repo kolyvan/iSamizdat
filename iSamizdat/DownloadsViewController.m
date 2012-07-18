@@ -17,8 +17,6 @@
 #import "SamLibModel.h"
 #import "SamLibAuthor.h"
 #import "SamLibText.h"
-//#import "SamLibText+IOS.h"
-//#import "UIFont+Kolyvan.h"
 #import "SamLibStorage.h"
 
 ////
@@ -84,13 +82,13 @@
         totalSize += [[attr get: @"NSFileSize"] unsignedLongLongValue];
     
     NSString *rank = @"Kb";
-    CGFloat totalSizeF = totalSize / 1024.0;
-    if (totalSizeF  > 1024.0) {
+    totalSize = totalSize / 1024.0;
+    if (totalSize  > 1024.0) {
         rank = @"Mb";
-        totalSizeF = totalSizeF / 1024.0;
+        totalSize = totalSize / 1024.0;
     }
     
-    self.title = KxUtils.format(@"%@ (%.1f %@)", locString(@"Downloads"), totalSizeF, rank);
+    self.title = KxUtils.format(@"%@ (%qu%@)", locString(@"Downloads"), totalSize, rank);
 }
 
 - (NSArray *) prepareData
@@ -167,9 +165,19 @@
     NSNumber *size = [attr get: @"NSFileSize"];
     NSDate *ts = [attr get: @"NSFileModificationDate"];    
     
-    NSString *s = KxUtils.format(@"%@\n%7.1f Kb   %@", 
+    NSString *sizeAsStr = size ? KxUtils.format(@"%iKb", (int)size.unsignedLongLongValue / 1024) : @"?";
+            
+    // let spaces between size and date
+    // at least one space will be 
+    const int FIELD_GAP =  9;
+    char spaces[FIELD_GAP];
+    memset(spaces, ' ', FIELD_GAP);
+    spaces[MAX(1, (FIELD_GAP - (int)sizeAsStr.length - 1))] = 0;
+        
+    NSString *s = KxUtils.format(@"%@\n%@%s%@", 
                                  text.author.name,
-                                 size ? size.unsignedLongLongValue / 1024.0 : -1,
+                                 sizeAsStr,
+                                 spaces,                                 
                                  ts ? [ts dateFormatted] : @"?", 
                                  nil);
     
