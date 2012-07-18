@@ -111,3 +111,6 @@
 "Last Updated: %@" = "Обновлено: %@";
 "No updated" =  "Не обновлялось";
 "Downloads" = "Загрузки";
+"by date" = "по дате";
+"by author" = "по автору";
+"by vote" = "по оценке";

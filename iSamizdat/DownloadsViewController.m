@@ -9,6 +9,7 @@
 #import "DownloadsViewController.h"
 #import "KxMacros.h"
 #import "KxUtils.h"
+#import "KxTuple2.h"
 #import "NSString+Kolyvan.h"
 #import "NSArray+Kolyvan.h"
 #import "NSDictionary+Kolyvan.h"
@@ -24,6 +25,7 @@
 
 @interface DownloadsViewController () {
     NSMutableArray *_attrs;
+    BOOL _sortByDate;
 }
 @end
 
@@ -43,18 +45,35 @@
 {
     [super viewDidLoad];
    
-    UIBarButtonItem *backBtn =  [[UIBarButtonItem alloc] initWithTitle: locString(@"Downloads")
+    UIBarButtonItem *backBtn =  [[UIBarButtonItem alloc] initWithTitle:locString(@"Downloads")
                                                                  style:UIBarButtonItemStylePlain
-                                                                               target:nil
-                                                                               action:nil];
+                                                                target:nil
+                                                                action:nil];
     self.navigationItem.backBarButtonItem = backBtn;
+    
+    
+    UIBarButtonItem *sortBtn =  [[UIBarButtonItem alloc] initWithTitle:locString(@"by date")
+                                                                 style:UIBarButtonItemStylePlain
+                                                                target:self
+                                                                action:@selector(toggleSort:)];
+    
+    self.navigationItem.rightBarButtonItem = sortBtn;
 }
 
 - (void)viewDidUnload
 {
     [super viewDidUnload];
     self.navigationItem.backBarButtonItem = nil;    
+    self.navigationItem.rightBarButtonItem = nil;
     _attrs = nil;
+    _sortByDate = NO;
+}
+
+- (void) toggleSort: (UIBarButtonItem *) button
+{
+    _sortByDate = !_sortByDate;
+    button.title = _sortByDate ? locString(@"by author") : locString(@"by date");
+    [self refreshView];
 }
 
 - (void) refreshTitle
@@ -76,31 +95,44 @@
 
 - (NSArray *) prepareData
 {
-    NSArray *authors = [SamLibModel shared].authors;
-    
-    NSFileManager *fm =  KxUtils.fileManager();
-    
+    NSArray *authors = [SamLibModel shared].authors;    
+    NSFileManager *fm =  KxUtils.fileManager();    
     NSMutableArray *ma = [NSMutableArray array];
-    NSMutableArray *attrs = [NSMutableArray array];        
-    
+        
     for (SamLibAuthor *author in authors) {
         if (!author.ignored) {
             for (SamLibText *text in author.texts) {            
                 if (text.htmlFile.nonEmpty) {
-                    [ma push:text];                    
+                    
                     NSDictionary *attr = [fm attributesOfItemAtPath: text.htmlFile error: nil];
                     if (!attr) 
-                        attr = [NSDictionary dictionary];
-                    [attrs push:attr];
+                        attr = [NSDictionary dictionary];                    
+                    [ma push:[KxTuple2 first:text second: attr]];
                 }
             }
         }
     }
+    
+    KxTuple2 *tuple;
+    
+    if (_sortByDate) {
+    
+        tuple = [ma sortWith:^(KxTuple2 *l, KxTuple2 *r) {
+            
+            NSDate *dl = [l.second get:@"NSFileModificationDate"];
+            NSDate *dr = [r.second get:@"NSFileModificationDate"]; 
+            return [dr compare:dl];
+        }].unzip;
         
-    _attrs = attrs;    
+    } else {
+        
+        tuple = ma.unzip;
+    }
+        
+    _attrs = [tuple.second mutableCopy];    
     [self refreshTitle];
     
-    return ma;
+    return tuple.first;
 }
 
 - (NSInteger) textContainerSelected

@@ -73,7 +73,9 @@ static UIImage * mkVoteImage(NSInteger number)
 }
 
 
-@interface VotedViewController ()
+@interface VotedViewController () {
+    BOOL _sortByVote;
+}
 @end
 
 @implementation VotedViewController
@@ -91,6 +93,33 @@ static UIImage * mkVoteImage(NSInteger number)
     return self;
 }
 
+- (void) viewDidLoad
+{
+    [super viewDidLoad];
+        
+    
+    UIBarButtonItem *sortBtn =  [[UIBarButtonItem alloc] initWithTitle:locString(@"by vote")
+                                                                 style:UIBarButtonItemStylePlain
+                                                                target:self
+                                                                action:@selector(toggleSort:)];
+    
+    self.navigationItem.rightBarButtonItem = sortBtn;
+}
+
+- (void)viewDidUnload
+{
+    [super viewDidUnload];
+    self.navigationItem.rightBarButtonItem = nil;
+    _sortByVote = NO;
+}
+
+- (void) toggleSort: (UIBarButtonItem *) button
+{
+    _sortByVote = !_sortByVote;
+    button.title = _sortByVote ? locString(@"by author") : locString(@"by vote");
+    [self refreshView];
+}
+
 - (NSArray *) prepareData
 {
     NSArray *authors = [SamLibModel shared].authors;
@@ -104,6 +133,16 @@ static UIImage * mkVoteImage(NSInteger number)
                     [ma push:text];  
             }
         }
+    }
+    
+    if (_sortByVote) {
+    
+        return [ma sortWith:^(SamLibText *l, SamLibText *r) {
+            // reversi order
+            if (l.myVote > r.myVote) return NSOrderedAscending;
+            if (l.myVote < r.myVote) return NSOrderedDescending;
+            return NSOrderedSame;            
+        }];
     }
     
     return ma;
