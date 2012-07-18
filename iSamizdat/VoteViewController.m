@@ -15,6 +15,7 @@
 #import "KxUtils.h"
 #import "SamLibText+IOS.h"
 #import "UIFont+Kolyvan.h"
+#import "VotedViewController.h"
 
 @interface VoteViewController () {
     //BOOL _needReload;
@@ -87,11 +88,15 @@
     
     indexPath = [NSIndexPath indexPathForRow:newVote inSection:0];
     cell = [self.tableView cellForRowAtIndexPath:indexPath];
-    cell.accessoryType = UITableViewCellAccessoryCheckmark;
+    
+    ((UIImageView *)cell.accessoryView).image = mkVoteImage(newVote, YES);
+    [cell.accessoryView sizeToFit];
     
     indexPath = [NSIndexPath indexPathForRow:self.myVote inSection:0];
     cell = [self.tableView cellForRowAtIndexPath:indexPath];
-    cell.accessoryType = UITableViewCellAccessoryNone;
+    
+    ((UIImageView *)cell.accessoryView).image = mkVoteImage(self.myVote, NO);
+    [cell.accessoryView sizeToFit];
 }
 
 #pragma mark - Table view data source
@@ -111,13 +116,15 @@
     static NSString *CellIdentifier = @"VoteCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 
-                                      reuseIdentifier:CellIdentifier];                
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
+                                      reuseIdentifier:CellIdentifier];                        
+        cell.accessoryView = [[UIImageView alloc] initWithFrame:CGRectZero];
     }
-    cell.textLabel.text = KxUtils.format(@"%ld", indexPath.row); 
-    cell.detailTextLabel.text = [[SamLibText class] stringForVote:indexPath.row];
-    cell.textLabel.font = [UIFont boldSystemFont16];
-    cell.accessoryType = indexPath.row == _myVote ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;        
+    
+    cell.textLabel.text = [[SamLibText class] stringForVote:indexPath.row];    
+    ((UIImageView *)cell.accessoryView).image = mkVoteImage(indexPath.row, indexPath.row == _myVote);
+    [cell.accessoryView sizeToFit];
+    
     return cell;
 }
 

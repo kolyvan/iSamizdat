@@ -8,6 +8,8 @@
 
 #import "TextsViewController.h"
 
+extern UIImage * mkVoteImage(NSInteger number, BOOL selected);
+
 @interface VotedViewController : TextsViewController
 
 @end
