@@ -165,19 +165,14 @@
     NSNumber *size = [attr get: @"NSFileSize"];
     NSDate *ts = [attr get: @"NSFileModificationDate"];    
     
-    NSString *sizeAsStr = size ? KxUtils.format(@"%iKb", (int)size.unsignedLongLongValue / 1024) : @"?";
-            
-    // let spaces between size and date
-    // at least one space will be 
-    const int FIELD_GAP =  9;
-    char spaces[FIELD_GAP];
-    memset(spaces, ' ', FIELD_GAP);
-    spaces[MAX(1, (FIELD_GAP - (int)sizeAsStr.length - 1))] = 0;
+    NSMutableString *sizeAsStr = [NSMutableString string];    
+    [sizeAsStr appendFormat: @"%quKb", size.unsignedLongLongValue / 1024, nil];       
+    while (sizeAsStr.length < 9)        
+        [sizeAsStr appendString:@" "];    
         
-    NSString *s = KxUtils.format(@"%@\n%@%s%@", 
-                                 text.author.name,
+    NSString *s = KxUtils.format(@"%@\n%@ %@", 
+                                 text.author.name,                                 
                                  sizeAsStr,
-                                 spaces,                                 
                                  ts ? [ts dateFormatted] : @"?", 
                                  nil);
     
