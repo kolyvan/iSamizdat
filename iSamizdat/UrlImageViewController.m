@@ -63,7 +63,8 @@
 
 - (void) viewWillAppear:(BOOL)animated
 {
-    [super viewWillAppear:animated];    
+    [super viewWillAppear:animated];  
+    _imageView.transform = CGAffineTransformIdentity;
     [_imageView setImageWithURL:_url];
 }
 
