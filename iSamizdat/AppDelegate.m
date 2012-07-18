@@ -368,6 +368,9 @@ int ddLogLevel = LOG_LEVEL_WARN;
 
 - (void) saveTabBars
 {
+    // FIXME: it crashes (nav.controllers could be empty)
+    return;
+    
     UITabBarController *tabBarContrller = (UITabBarController *)self.window.rootViewController;
     
     NSMutableArray *ma = [NSMutableArray array];
