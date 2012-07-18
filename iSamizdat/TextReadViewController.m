@@ -75,8 +75,10 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
     BOOL _prevNavBarTranslucent;
     UISwipeGestureRecognizer *gestureRecognizer;     
     CGFloat _prevScale;
+    BOOL _resetingWebView;
 }
 @property (nonatomic, strong) IBOutlet UIWebView * webView;
+@property (nonatomic, strong) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (nonatomic, strong) SSPullToRefreshView *pullToRefreshView;
 @property (nonatomic, strong) UIBarButtonItem *stopButton;
 @property (nonatomic, strong) UrlImageViewController *urlImageViewController;
@@ -89,7 +91,7 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
 @synthesize webView = _webView;
 @synthesize pullToRefreshView, stopButton;
 @synthesize urlImageViewController;
-//@synthesize bookmarkButton;
+@synthesize activityIndicator;
 
 - (void) setText:(SamLibText *)text 
 {
@@ -195,6 +197,8 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
         [[SamLibHistory shared] addText:_text];
     
     //self.navigationController.navigationBar.translucent = _prevNavBarTranslucent;
+    
+    [self.activityIndicator stopAnimating];        
 }
 
 - (void)viewDidUnload
@@ -348,17 +352,22 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
 {    
     NSString *path = _text.htmlFile;
     if (!path)
-        path = KxUtils.pathForResource(@"text.html");            
+        path = KxUtils.pathForResource(@"empty.html");
     [self loadWebViewFromPath: path];
 }
 
 - (void) loadWebViewFromPath: (NSString *) path
 {
-    [_webView loadRequest:[NSURLRequest requestWithURL: [NSURL URLWithString: @"about:blank"]]];
+    _resetingWebView = YES;
+   [_webView loadRequest:[NSURLRequest requestWithURL: [NSURL URLWithString: @"about:blank"]]];
     
-    NSURL *url = [NSURL fileURLWithPath:path isDirectory: NO];
-    NSURLRequest * request = [NSURLRequest requestWithURL: url];    
-    [_webView loadRequest:request];
+    if (path.nonEmpty) {
+
+        [self.activityIndicator startAnimating];        
+        NSURL *url = [NSURL fileURLWithPath:path isDirectory: NO];
+        NSURLRequest * request = [NSURLRequest requestWithURL: url];    
+        [_webView loadRequest:request];
+    }
 }
 
 - (void) selElement: (NSString *) idName 
@@ -394,14 +403,23 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
 - (void)webViewDidFinishLoadDeferred
 {
     //DDLogInfo(@"webViewDidFinishLoadDeferred %@", _text.path);    
+    
     [self prepareHTML];    
     [self restoreOffset];
     
+    [self.activityIndicator stopAnimating];        
 }
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
-    // UIWebView fires webViewDidFinishLoad twice
+    if (_resetingWebView) {
+        _resetingWebView = NO;
+        return;
+    }
+    
+    //DDLogInfo(@"webViewDidFinishLoad %@", _text.path);    
+    
+    // UIWebView can fire webViewDidFinishLoad twice
     // so workaroud here
     
     [self->isa cancelPreviousPerformRequestsWithTarget:self 

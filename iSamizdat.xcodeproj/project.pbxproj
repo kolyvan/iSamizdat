@@ -122,6 +122,7 @@
 		8757ADAA15B42D2000B12308 /* UIImageView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 8757ADA915B42D2000B12308 /* UIImageView+AFNetworking.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		8757ADAD15B42D7A00B12308 /* AFImageRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 8757ADAC15B42D7A00B12308 /* AFImageRequestOperation.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		8776096315A56FF80063A6F2 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8776096515A56FF80063A6F2 /* Localizable.strings */; };
+		877646E915B6815A00AE3DBB /* empty.html in Resources */ = {isa = PBXBuildFile; fileRef = 877646E815B6815A00AE3DBB /* empty.html */; };
 		8776CA2C157738670099C83D /* TableViewControllerEx.m in Sources */ = {isa = PBXBuildFile; fileRef = 8776CA2B157738670099C83D /* TableViewControllerEx.m */; };
 		8776CA34157751D50099C83D /* text.css in Resources */ = {isa = PBXBuildFile; fileRef = 8776CA32157751D50099C83D /* text.css */; };
 		8776CA35157751D50099C83D /* text.html in Resources */ = {isa = PBXBuildFile; fileRef = 8776CA33157751D50099C83D /* text.html */; };
@@ -405,6 +406,7 @@
 		8776094515A565880063A6F2 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		8776096415A56FF80063A6F2 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8776096615A56FFC0063A6F2 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
+		877646E815B6815A00AE3DBB /* empty.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = empty.html; path = resources/empty.html; sourceTree = "<group>"; };
 		8776CA2A157738670099C83D /* TableViewControllerEx.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableViewControllerEx.h; sourceTree = "<group>"; };
 		8776CA2B157738670099C83D /* TableViewControllerEx.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TableViewControllerEx.m; sourceTree = "<group>"; };
 		8776CA32157751D50099C83D /* text.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; name = text.css; path = resources/text.css; sourceTree = "<group>"; };
@@ -887,6 +889,7 @@
 				87E230AF158B1D490074EBF1 /* download.png */,
 				8776CA32157751D50099C83D /* text.css */,
 				8776CA33157751D50099C83D /* text.html */,
+				877646E815B6815A00AE3DBB /* empty.html */,
 				870BA45F15750A2600B71E07 /* comment.png */,
 				870BA45B1575009600B71E07 /* favorite-off.png */,
 				870BA45C1575009600B71E07 /* favorite.png */,
@@ -1097,6 +1100,7 @@
 				8724333E15B522C500F8C6D3 /* unban@2x.png in Resources */,
 				87CC780F15B5679F004F5E7F /* voted.png in Resources */,
 				87CC781015B5679F004F5E7F /* voted@2x.png in Resources */,
+				877646E915B6815A00AE3DBB /* empty.html in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
