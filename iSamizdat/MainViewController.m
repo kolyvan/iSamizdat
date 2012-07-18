@@ -96,8 +96,12 @@ typedef enum {
 {
     [super viewDidLoad];
    
-    //self.navigationController.navigationBarHidden = YES;
-          
+    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:locString(@"Authors list")
+                                                                             style:UIBarButtonItemStylePlain
+                                                                            target:nil
+                                                                            action:nil];
+    
+    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(changedNotification:)
                                                  name:@"SamLibAuthorChanged" 
@@ -120,6 +124,8 @@ typedef enum {
     
     self.authorViewController = nil;
     self.textContainerController = nil;
+    
+    self.navigationItem.backBarButtonItem = nil;
     
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }

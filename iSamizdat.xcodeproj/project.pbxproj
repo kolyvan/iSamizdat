@@ -123,6 +123,8 @@
 		8757ADAD15B42D7A00B12308 /* AFImageRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 8757ADAC15B42D7A00B12308 /* AFImageRequestOperation.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		8776096315A56FF80063A6F2 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8776096515A56FF80063A6F2 /* Localizable.strings */; };
 		877646E915B6815A00AE3DBB /* empty.html in Resources */ = {isa = PBXBuildFile; fileRef = 877646E815B6815A00AE3DBB /* empty.html */; };
+		877646EB15B69B6900AE3DBB /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 877646EA15B69B6900AE3DBB /* Default@2x.png */; };
+		877646ED15B69D3F00AE3DBB /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 877646EC15B69D3F00AE3DBB /* Default.png */; };
 		8776CA2C157738670099C83D /* TableViewControllerEx.m in Sources */ = {isa = PBXBuildFile; fileRef = 8776CA2B157738670099C83D /* TableViewControllerEx.m */; };
 		8776CA34157751D50099C83D /* text.css in Resources */ = {isa = PBXBuildFile; fileRef = 8776CA32157751D50099C83D /* text.css */; };
 		8776CA35157751D50099C83D /* text.html in Resources */ = {isa = PBXBuildFile; fileRef = 8776CA33157751D50099C83D /* text.html */; };
@@ -407,6 +409,8 @@
 		8776096415A56FF80063A6F2 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8776096615A56FFC0063A6F2 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		877646E815B6815A00AE3DBB /* empty.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = empty.html; path = resources/empty.html; sourceTree = "<group>"; };
+		877646EA15B69B6900AE3DBB /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
+		877646EC15B69D3F00AE3DBB /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		8776CA2A157738670099C83D /* TableViewControllerEx.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableViewControllerEx.h; sourceTree = "<group>"; };
 		8776CA2B157738670099C83D /* TableViewControllerEx.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TableViewControllerEx.m; sourceTree = "<group>"; };
 		8776CA32157751D50099C83D /* text.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; name = text.css; path = resources/text.css; sourceTree = "<group>"; };
@@ -576,6 +580,8 @@
 				878850BF15AAB157002B6F8D /* libz.dylib */,
 				87F70BDA15AD88AB00B202C7 /* icon@2x.png */,
 				87F70BD815AD88A800B202C7 /* icon.png */,
+				877646EC15B69D3F00AE3DBB /* Default.png */,
+				877646EA15B69B6900AE3DBB /* Default@2x.png */,
 				872D956D1573968C00BCB4EC /* resources */,
 				872D94AE1573857500BCB4EC /* vendors */,
 				872D94851573836500BCB4EC /* samlib */,
@@ -1101,6 +1107,8 @@
 				87CC780F15B5679F004F5E7F /* voted.png in Resources */,
 				87CC781015B5679F004F5E7F /* voted@2x.png in Resources */,
 				877646E915B6815A00AE3DBB /* empty.html in Resources */,
+				877646EB15B69B6900AE3DBB /* Default@2x.png in Resources */,
+				877646ED15B69D3F00AE3DBB /* Default.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
