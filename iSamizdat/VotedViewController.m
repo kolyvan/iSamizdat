@@ -7,6 +7,7 @@
 //
 
 #import "VotedViewController.h"
+#import "KxArc.h"
 #import "KxMacros.h"
 #import "KxUtils.h"
 #import "NSArray+Kolyvan.h"
@@ -120,6 +121,11 @@ static UIImage * mkVoteImage(NSInteger number)
     [self refreshView];
 }
 
+- (void) refreshTitle: (NSInteger) count
+{
+    self.title = count ? KxUtils.format(@"%@ (%d)", locString(@"Voted"), count) : locString(@"Voted");
+}
+
 - (NSArray *) prepareData
 {
     NSArray *authors = [SamLibModel shared].authors;
@@ -145,7 +151,30 @@ static UIImage * mkVoteImage(NSInteger number)
         }];
     }
     
+    [self refreshTitle: ma.count];
+    
     return ma;
+}
+
+- (BOOL) canRemoveText: (SamLibText *) text
+{
+    return YES;
+}
+
+- (void) handleRemoveText: (SamLibText *) text
+{
+    KX_WEAK VotedViewController *this = self;
+    
+    [text vote:SamLibTextVote0 block:^(SamLibText *text, SamLibStatus status, NSString *error){
+
+        VotedViewController *p = this;
+        if (p) {
+            if (status == SamLibStatusSuccess)
+                [p refreshTitle:p.texts.count];
+            else
+                [self refreshView];            
+        }        
+    }];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
