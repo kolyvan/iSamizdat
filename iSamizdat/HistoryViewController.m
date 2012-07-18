@@ -42,20 +42,27 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];    
-    //self.navigationController.navigationBarHidden = YES;
+
+    UIBarButtonItem *clearBtn =  [[UIBarButtonItem alloc] initWithTitle:locString(@"Clear")
+                                                                  style:UIBarButtonItemStylePlain
+                                                                 target:self
+                                                                 action:@selector(goClear)];
+
+    self.navigationItem.rightBarButtonItem = clearBtn;
+
 }
 
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     [self.tableView reloadData];
-    //[self.navigationController setNavigationBarHidden:YES animated:YES];    
 }
 
 - (void)viewDidUnload
 {
     [super viewDidUnload];
     self.textContainerController = nil; 
+    self.navigationItem.rightBarButtonItem = nil;    
 }
 
 - (void) didReceiveMemoryWarning
@@ -67,6 +74,12 @@
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
+}
+
+- (void) goClear
+{
+    [[SamLibHistory shared] clearAll];
+    [self.tableView reloadData];
 }
 
 #pragma mark - Table view data source

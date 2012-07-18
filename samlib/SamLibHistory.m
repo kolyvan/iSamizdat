@@ -179,5 +179,10 @@ extern int ddLogLevel;
     }
 }
 
+- (void) clearAll
+{
+    [_history removeAllObjects];
+    ++_version;
+}
 
 @end

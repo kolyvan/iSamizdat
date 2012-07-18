@@ -37,4 +37,6 @@ typedef enum {
 
 - (void) save;
 
+- (void) clearAll;
+
 @end
