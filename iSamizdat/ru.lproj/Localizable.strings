@@ -7,32 +7,16 @@
 */
 
 "Samizdat" = "Самиздат";
-"Authors" = "Авторы";
 "Ignored" = "Игнорируется";
 "Favorites" = "Закладки";
 "Reload success" = "Успешно обновлено";
 "Reload failure" = "Ошибка при обновлении";
 "Invalid path" = "Неверный путь";
-"Already exists" = "Уже существует";
-"Fetch failure" = "Ошибка при загрузке";
-"Fetch success" = "Успешно загружен";
-"Found: %ld" = "Найдено: %ld";
 "Not found" = "Не найдено";
-"Search result" = "Результат поиска";
-"Size: %@" = "Размер: %@";
-"Enter author's page on samlib.ru" = "Укажите страницу автора";
-"Or author's name for search" = "или фамилию для поиска";
-"Add" = "Добавить";
-"Back" = "Назад";
-"Author" = "Автор";
 "Text" = "Текст";
 "Size" = "Размер";
 "Comments" = "Комментарии";
-"Saved copy" = "Сохраненная копия";
-"The copy from" = "Копия от";
 "The text from" = "Текст от";
-"Read" = "Читать";
-"new version: %@" = "можно загрузить: %@";
 "Are you sure?" = "Вы уверены?";
 "Cancel" = "Отменить";
 "Delete" = "Удалить";
@@ -72,7 +56,6 @@
 "posts"="комм.";
 "Updated" = "Обновлено";
 "No updates" = "Нет обновлений";
-"Texts" = "Тексты";
 "Names" = "Имена";
 "Settings" = "Настройки";
 "Select name for posting" = "Добавить комментарий от";
@@ -81,13 +64,11 @@
 "Cleanup cached" = "Удалить сохраненное";
 "Remove text and comments?" = "Удалить текст и комментарии?";
 "Remove" = "Удалить";
-"Text Info" = "Текст Инфо";
 "Author Info" = "Автор Инфо";
 "Not modified" = "Нет изменений";
 "Send comment" = "Комментарий отправлен";
 "Deleted comment" = "Комментарий удален";
 "New comments:%ld" = "Новых комментариев: %ld";
-"Share It" = "Поделиться";
 "Add comment" = "Добавить";
 "Recent" = "Последние";
 "Filter bad language" = "Фильтр лексики";
@@ -114,3 +95,22 @@
 "by date" = "по дате";
 "by author" = "по автору";
 "by vote" = "по оценке";
+
+/* obsolete, keep it for just in case */
+
+"Search result" = "Результат поиска";
+"Found: %ld" = "Найдено: %ld";
+"Fetch failure" = "Ошибка при загрузке";
+"Fetch success" = "Успешно загружен";
+"Already exists" = "Уже существует";
+"Size: %@" = "Размер: %@";
+"Add" = "Добавить";
+"Back" = "Назад";
+"Author" = "Автор";
+"Saved copy" = "Сохраненная копия";
+"The copy from" = "Копия от";
+"Read" = "Читать";
+"new version: %@" = "можно загрузить: %@";
+"Texts" = "Тексты";
+"Text Info" = "Текст Инфо";
+"Share It" = "Поделиться";
