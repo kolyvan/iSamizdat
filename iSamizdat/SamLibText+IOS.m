@@ -17,9 +17,28 @@
 
 @implementation SamLibText (IOS)
 
+- (BOOL) hasUpdates
+{
+    return self.changedSize || (self.isNew && self.flagNew != nil);
+}
+
 - (UIImage *) favoritedImage
 {
     return [UIImage imageNamed: self.favorited ? @"favorite.png" : @"favorite-off.png"];        
+}
+
+- (UIImage *) imageFlagNew
+{
+    if ([self.flagNew isEqualToString:@"red"])         
+        return [UIImage imageNamed:@"new-red.png"];        
+    
+    if ([self.flagNew isEqualToString:@"brown"])
+        return [UIImage imageNamed:@"new-brown.png"];        
+    
+    if ([self.flagNew isEqualToString:@"gray"])
+        return [UIImage imageNamed:@"new-gray.png"];  
+    
+    return nil;
 }
 
 - (UIImage *) image
@@ -36,18 +55,9 @@
     if (self.favorited)
         return [UIImage imageNamed: @"favorite.png"];        
         
-    if (self.flagNew.nonEmpty) {
-                        
-        if ([self.flagNew isEqualToString:@"red"])         
-            return [UIImage imageNamed:@"new-red.png"];        
-        
-        if ([self.flagNew isEqualToString:@"brown"])
-            return [UIImage imageNamed:@"new-brown.png"];        
-        
-        if ([self.flagNew isEqualToString:@"gray"])
-            return [UIImage imageNamed:@"new-gray.png"];  
-    }
-        
+    if (self.flagNew.nonEmpty)                        
+        return [self imageFlagNew];
+            
     return [UIImage imageNamed: @"favorite-off.png"];
 }
 

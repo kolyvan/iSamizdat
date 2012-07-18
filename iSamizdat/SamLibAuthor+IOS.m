@@ -16,6 +16,7 @@
 #import "NSString+Kolyvan.h"
 #import "NSArray+Kolyvan.h"
 #import "SamLibText.h"
+#import "SamLibText+IOS.h"
 
 @implementation SamLibAuthor (IOS)
 
@@ -55,7 +56,7 @@ static char gKey;
 - (BOOL) hasUpdatedText
 {
     for (SamLibText *text in self.texts)
-        if (text.changedSize || (text.isNew && text.flagNew != nil))
+        if (text.hasUpdates)
             return YES;
     return NO;
 }

@@ -16,6 +16,7 @@
 #import "SamLibModel.h"
 #import "SamLibAuthor.h"
 #import "SamLibText.h"
+#import "SamLibText+IOS.h"
 #import "SamLibAgent.h"
 #import "SamLibAuthor+IOS.h"
 #import "NSArray+Kolyvan.h"
@@ -102,10 +103,10 @@ typedef enum {
                                                  name:@"SamLibAuthorChanged" 
                                                object:nil];
         
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(changedNotification:)
-                                                 name:@"SamLibTextChanged" 
-                                               object:nil];      
+    //[[NSNotificationCenter defaultCenter] addObserver:self
+    //                                         selector:@selector(changedNotification:)
+    //                                             name:@"SamLibTextChanged" 
+    //                                           object:nil];      
     
 }
 
@@ -198,7 +199,7 @@ typedef enum {
     for (SamLibAuthor *author in self.authors) {            
         [ma push:author];            
         for (SamLibText *text in author.texts) {
-            if (text.changedSize || (text.isNew && text.flagNew != nil)) {
+            if (text.hasUpdates) {
                 [ma push:text];                
             }
         }
@@ -218,8 +219,7 @@ typedef enum {
 
 - (void) changedNotification:(NSNotification *)notification
 {
-    self.content = nil;
-    self.ignored = nil;
+    self.authors = nil;
 }
 
 - (void) toggleEdit
@@ -275,8 +275,8 @@ typedef enum {
                 
                 NSString *message = nil;
                 
-                if (reloaded > 0) {
-                    
+                if (reloaded > 0) 
+                {   
                     self.content = [self mkContent]; 
                     NSInteger count = [self refreshBadgeValue];       
                     status = count > 0 ? SamLibStatusSuccess : SamLibStatusNotModifed;

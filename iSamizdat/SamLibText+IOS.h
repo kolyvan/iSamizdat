@@ -15,7 +15,10 @@
 
 @interface SamLibText (IOS)
 
+@property (nonatomic, readonly) BOOL hasUpdates;
+
 @property (nonatomic, readonly) UIImage * favoritedImage;
+@property (nonatomic, readonly) UIImage * imageFlagNew;
 @property (nonatomic, readonly) UIImage * image;
 
 @property (nonatomic, readonly) NSString * myVoteAsString;

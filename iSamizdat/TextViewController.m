@@ -143,12 +143,14 @@ enum {
         [self prepareData];       
         [self.tableView reloadData];
         
-        [self clearChangedFlag];
+        //[self clearChangedFlag];
     }    
 }
 
 - (void) viewWillDisappear:(BOOL)animated
 {
+    [self clearChangedFlag];
+    
     [super viewWillDisappear:animated];    
 }
 
@@ -293,11 +295,9 @@ enum {
 
 - (void) clearChangedFlag
 {
-    if (_text.changedSize || (_text.isNew && _text.flagNew != nil)) {
-        
-        [_text flagAsChangedNone];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"SamLibTextChanged" object:nil];        
-    }   
+    if (_text.hasUpdates)
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SamLibAuthorChanged" object:nil];
+    [_text flagAsChangedNone];
 }
 
 #pragma mark - Table view data source
@@ -370,6 +370,7 @@ enum {
         UITableViewCell *cell = [self mkCell: @"SizeCell" withStyle:UITableViewCellStyleValue1];            
         cell.textLabel.text = locString(@"Size");
         cell.detailTextLabel.text = [_text sizeWithDelta: @" "];
+        cell.imageView.image = _text.changedSize ? [UIImage imageNamed:@"success"] : _text.imageFlagNew;
         return cell;    
     
     } else if (RowGenre == row) {
@@ -399,7 +400,8 @@ enum {
         
         UITableViewCell *cell = [self mkCell: @"CommentsCell" withStyle:UITableViewCellStyleValue1];                    
         cell.textLabel.text = locString(@"Comments");
-        cell.detailTextLabel.text = [_text commentsWithDelta: @" "];  
+        cell.detailTextLabel.text = [_text commentsWithDelta: @" "]; 
+        cell.imageView.image = _text.changedComments ? [UIImage imageNamed:@"comment"] : nil;
         return cell;
         
     } else if (RowRead == row) {

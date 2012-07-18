@@ -307,6 +307,12 @@ extern int ddLogLevel;
     return YES;    
 }
 
+- (void) clearTextChanged
+{
+    for (SamLibText *t in self.texts) 
+        [t flagAsChangedNone];
+}
+
 - (void) update: (UpdateAuthorBlock) block
 {    
 #if __has_feature(objc_arc_weak)    
@@ -334,7 +340,10 @@ extern int ddLogLevel;
                                       
                                       status = SamLibStatusNotModifed;
                                   }
-                              }   
+                              } 
+                              
+                              //if (status == SamLibStatusNotModifed)                                  
+                              //    [self clearTextChanged];
                               
                               block(this, status, data);
                               
@@ -342,7 +351,6 @@ extern int ddLogLevel;
                           nil);
     
 }
-
 
 - (void) save: (NSString *) folder
 {
