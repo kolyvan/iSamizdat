@@ -299,9 +299,9 @@ typedef enum {
 {
     NSDate *date = nil;
     if (self.authors.nonEmpty) {
-        date = [self.authors fold:nil with:^id(id acc, id elem) {
+        date = [self.authors fold:nil with:^(id acc, id elem) {
             NSDate *l = acc, *r = ((SamLibAuthor *)elem).timestamp;
-            return [r laterDate: l];
+            return [r earlierDate: l];
         }];
     }
     return date;
