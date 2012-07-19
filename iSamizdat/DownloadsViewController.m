@@ -85,7 +85,7 @@
     totalSize = totalSize / 1024.0;
     if (totalSize  > 1024.0) {
         rank = @"Mb";
-        totalSize = totalSize / 1024.0;
+        totalSize = floor(totalSize / 1024.0 + .5);
     }
     
     self.navigationItem.title = KxUtils.format(@"%@ (%qu%@)", locString(@"Downloads"), totalSize, rank);
