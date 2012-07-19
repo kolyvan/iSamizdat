@@ -88,7 +88,7 @@
         totalSize = totalSize / 1024.0;
     }
     
-    self.title = KxUtils.format(@"%@ (%qu%@)", locString(@"Downloads"), totalSize, rank);
+    self.navigationItem.title = KxUtils.format(@"%@ (%qu%@)", locString(@"Downloads"), totalSize, rank);
 }
 
 - (NSArray *) prepareData

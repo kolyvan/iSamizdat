@@ -83,7 +83,7 @@ UIImage * mkVoteImage(NSInteger number, BOOL selected)
 
 - (void) refreshTitle: (NSInteger) count
 {
-    self.title = count ? KxUtils.format(@"%@ (%d)", locString(@"Voted"), count) : locString(@"Voted");
+    self.navigationItem.title = count ? KxUtils.format(@"%@ (%d)", locString(@"Voted"), count) : locString(@"Voted");
 }
 
 - (NSArray *) prepareData
