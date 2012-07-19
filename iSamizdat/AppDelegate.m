@@ -367,16 +367,18 @@ int ddLogLevel = LOG_LEVEL_WARN;
 }
 
 - (void) saveTabBars
-{
-    // FIXME: it crashes (nav.controllers could be empty)
-    return;
-    
+{    
     UITabBarController *tabBarContrller = (UITabBarController *)self.window.rootViewController;
     
     NSMutableArray *ma = [NSMutableArray array];
     
     for (UINavigationController *nav in tabBarContrller.viewControllers) {
     
+        // sometimes this is an empty array
+        // not best solution but working, it's just to skip
+        if (!nav.viewControllers.nonEmpty)
+            return; 
+        
         UIViewController *rootVC = nav.viewControllers.first;
         [ma push: NSStringFromClass([rootVC class])];
     }
