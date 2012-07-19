@@ -68,6 +68,8 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
 
 /////
 
+#define SLIDER_FATE_TIME 3
+
 @interface TextReadViewController () {
     BOOL _needReload;
     id _version;
@@ -76,13 +78,16 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
     UISwipeGestureRecognizer *gestureRecognizer;     
     CGFloat _prevScale;
     BOOL _resetingWebView;
+    UISlider *_slider;
+    NSTimer *_sliderTimer;
+    NSDate *_sliderTimestamp;
 }
 @property (nonatomic, strong) IBOutlet UIWebView * webView;
 @property (nonatomic, strong) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (nonatomic, strong) SSPullToRefreshView *pullToRefreshView;
 @property (nonatomic, strong) UIBarButtonItem *stopButton;
 @property (nonatomic, strong) UrlImageViewController *urlImageViewController;
-//@property (nonatomic, strong) UIBarButtonItem *bookmarkButton;
+@property (nonatomic, strong) UIBarButtonItem *goSlideButton;
 @end
 
 @implementation TextReadViewController
@@ -92,6 +97,7 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
 @synthesize pullToRefreshView, stopButton;
 @synthesize urlImageViewController;
 @synthesize activityIndicator;
+@synthesize goSlideButton;
 
 - (void) setText:(SamLibText *)text 
 {
@@ -138,11 +144,12 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
                                                                     target:self 
                                                                     action:@selector(goStop)];
     
-    //self.bookmarkButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemPlay 
-    //                                                                    target:self 
-    //                                                                    action:@selector(goBookmark)];
-    //
-    //self.navigationItem.rightBarButtonItem = self.bookmarkButton;
+    self.goSlideButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"slide"] 
+                                                          style:UIBarButtonItemStylePlain
+                                                         target:self 
+                                                         action:@selector(goSlide)];
+    
+    self.navigationItem.rightBarButtonItem = self.goSlideButton;
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(samLibTextSettingsChanged:)
@@ -181,13 +188,7 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
 {
     [super viewWillDisappear:animated];
        
-    CGFloat offset = 0;
-    CGFloat value = _webView.scrollView.contentOffset.y;
-    if (value > 10) {
-        CGFloat size = _webView.scrollView.contentSize.height;
-        offset = value / size;
-    }
-    _text.scrollOffset = offset;
+    _text.scrollOffset = [self computeOffset];
     //DDLogInfo(@"store offset %f", offset); 
     
     //if (_fullScreen)
@@ -198,7 +199,12 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
     
     //self.navigationController.navigationBar.translucent = _prevNavBarTranslucent;
     
-    [self.activityIndicator stopAnimating];        
+    [self.activityIndicator stopAnimating];  
+    
+    if (_sliderTimer) {
+        [_sliderTimer invalidate];
+        _sliderTimer = nil;
+    }
 }
 
 - (void)viewDidUnload
@@ -212,7 +218,8 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
     self.pullToRefreshView = nil;
     self.stopButton = nil;
     self.urlImageViewController = nil;
-    //self.bookmarkButton = nil;
+    self.goSlideButton = nil;
+    self.navigationItem.rightBarButtonItem = nil;
     
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
@@ -304,7 +311,7 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
         [self.pullToRefreshView finishLoading];
         [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;        
         self.navigationItem.rightBarButtonItem = nil;
-        //self.navigationItem.rightBarButtonItem = self.bookmarkButton;
+        self.navigationItem.rightBarButtonItem = self.goSlideButton;
         
         NSString *message = (status == SamLibStatusFailure) ? error : nil;
         [self handleStatus: status withMessage:message];        
@@ -333,6 +340,87 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
     [app setStatusBarHidden:on withAnimation:UIStatusBarAnimationSlide];        
     [self.navigationController setNavigationBarHidden:on animated:YES];
     [self.tabBarController setTabBarHidden:on animated:YES];   
+}
+
+- (CGFloat) computeOffset
+{
+    CGFloat offset = 0;
+    CGFloat value = _webView.scrollView.contentOffset.y;
+    if (value > 10) {
+        CGFloat size = _webView.scrollView.contentSize.height;
+        offset = value / size;
+    }
+    return offset;
+}
+
+- (void) goSlide
+{
+    if (!_slider) {
+        
+        CGSize size = self.view.bounds.size;
+        CGRect frame;
+        frame.origin.x = -size.width / 2;
+        frame.origin.y = size.height / 2 - 20;        
+        frame.size.width = size.height - 20;
+        frame.size.height = 30; 
+        
+        _slider = [[UISlider alloc] initWithFrame:frame];        
+        [self.view addSubview:_slider];
+        
+        _slider.transform = CGAffineTransformMakeRotation(M_PI_2);
+        _slider.continuous = YES;
+        _slider.hidden = YES;        
+        
+        [_slider addTarget:self 
+                    action:@selector(sliderValueChanged:) 
+          forControlEvents:UIControlEventValueChanged]; 
+    }
+    
+    _slider.hidden = !_slider.hidden;
+        
+    if (_sliderTimer) {
+        [_sliderTimer invalidate];
+        _sliderTimer = nil;
+    }
+    
+    if (!_slider.hidden) {
+      
+        _slider.value = [self computeOffset];
+        
+        _sliderTimestamp = [NSDate date];
+        
+        _sliderTimer = [NSTimer timerWithTimeInterval:1 
+                                               target:self 
+                                             selector:@selector(checkSliderVisibility) 
+                                             userInfo:nil 
+                                              repeats:YES];
+        
+        [[NSRunLoop currentRunLoop] addTimer:_sliderTimer 
+                                     forMode:NSRunLoopCommonModes];
+    } 
+}
+
+- (void) checkSliderVisibility
+{
+    NSTimeInterval t = [[NSDate date] timeIntervalSinceDate:_sliderTimestamp];
+    
+    if (t > SLIDER_FATE_TIME) {
+    
+        [_sliderTimer invalidate];
+        _sliderTimer = nil;
+        
+        [UIView beginAnimations:nil context:NULL];
+        _slider.hidden = YES;
+        [UIView commitAnimations];
+    }
+}
+
+- (void) sliderValueChanged: (UISlider *) sender
+{    
+    _sliderTimestamp = [NSDate date];
+    CGFloat offset = (sender.value - sender.minimumValue) / sender.maximumValue;    
+    CGFloat size = _webView.scrollView.contentSize.height;
+    [_webView.scrollView setContentOffset:CGPointMake(0, offset * size) animated:NO]; 
 }
 
 - (void) restoreOffset

@@ -32,6 +32,8 @@
 		8712FFD71574E65500C01283 /* TextViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8712FFD51574E65500C01283 /* TextViewController.xib */; };
 		8712FFDE1574E8D000C01283 /* back.png in Resources */ = {isa = PBXBuildFile; fileRef = 8712FFDC1574E8D000C01283 /* back.png */; };
 		8712FFDF1574E8D000C01283 /* back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8712FFDD1574E8D000C01283 /* back@2x.png */; };
+		8718689D15B7E35300096AEF /* slide.png in Resources */ = {isa = PBXBuildFile; fileRef = 8718689B15B7E35300096AEF /* slide.png */; };
+		8718689E15B7E35300096AEF /* slide@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8718689C15B7E35300096AEF /* slide@2x.png */; };
 		8722160015B2B32900A50602 /* UITabBarController+Kolyvan.m in Sources */ = {isa = PBXBuildFile; fileRef = 872215FF15B2B32900A50602 /* UITabBarController+Kolyvan.m */; };
 		8724332A15B522C500F8C6D3 /* author_add@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8724331515B522C500F8C6D3 /* author_add@2x.png */; };
 		8724332B15B522C500F8C6D3 /* author_go@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8724331615B522C500F8C6D3 /* author_go@2x.png */; };
@@ -308,6 +310,8 @@
 		8712FFD51574E65500C01283 /* TextViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TextViewController.xib; sourceTree = "<group>"; };
 		8712FFDC1574E8D000C01283 /* back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = back.png; path = resources/back.png; sourceTree = "<group>"; };
 		8712FFDD1574E8D000C01283 /* back@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "back@2x.png"; path = "resources/back@2x.png"; sourceTree = "<group>"; };
+		8718689B15B7E35300096AEF /* slide.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = slide.png; path = resources/slide.png; sourceTree = "<group>"; };
+		8718689C15B7E35300096AEF /* slide@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "slide@2x.png"; path = "resources/slide@2x.png"; sourceTree = "<group>"; };
 		872215FE15B2B32900A50602 /* UITabBarController+Kolyvan.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITabBarController+Kolyvan.h"; sourceTree = "<group>"; };
 		872215FF15B2B32900A50602 /* UITabBarController+Kolyvan.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITabBarController+Kolyvan.m"; sourceTree = "<group>"; };
 		8724331515B522C500F8C6D3 /* author_add@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "author_add@2x.png"; path = "resources/author_add@2x.png"; sourceTree = "<group>"; };
@@ -937,6 +941,8 @@
 		872D956D1573968C00BCB4EC /* resources */ = {
 			isa = PBXGroup;
 			children = (
+				8718689B15B7E35300096AEF /* slide.png */,
+				8718689C15B7E35300096AEF /* slide@2x.png */,
 				877646EE15B6C79400AE3DBB /* votes */,
 				87CC780D15B5679F004F5E7F /* voted.png */,
 				87CC780E15B5679F004F5E7F /* voted@2x.png */,
@@ -1294,6 +1300,8 @@
 				8776474415B6DA3800AE3DBB /* mark_08_32@2x.png in Resources */,
 				8776474515B6DA3800AE3DBB /* mark_09_32@2x.png in Resources */,
 				8776474615B6DA3800AE3DBB /* mark_10_32@2x.png in Resources */,
+				8718689D15B7E35300096AEF /* slide.png in Resources */,
+				8718689E15B7E35300096AEF /* slide@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
