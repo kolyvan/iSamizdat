@@ -21,7 +21,7 @@
 }
 
 - (NSString*)appURL {
-	return @"https://github.com/kolyvan/iSamizdat";
+	return @"http://kolyvan.github.com/iSamizdat/";
 }
 
 /*
@@ -45,7 +45,7 @@
 // Vkontakte
 // SHKVkontakteAppID is the Application ID provided by Vkontakte
 - (NSString*)vkontakteAppId {
-	return @"2706858";
+  	return @"3041708";    
 }
 
 // Facebook - https://developers.facebook.com/apps
@@ -59,7 +59,7 @@
 // 
 //    Your CFBundleURLSchemes entry: fb555lite
 - (NSString*)facebookAppId {
-	return @"232705466797125";
+    return @"425193604200052";    
 }
 
 - (NSString*)facebookLocalAppId {
@@ -221,6 +221,11 @@
 - (NSString *)facebookURLShareDescription 
 {
     return locString(@"Samizdat");
+}
+
+- (NSString*)sharersPlistName 
+{
+	return @"actual-sharers.plist";
 }
 
 @end

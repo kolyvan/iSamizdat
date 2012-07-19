@@ -45,6 +45,7 @@
 		871868C815B7E61100096AEF /* TextGroupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 871868CA15B7E61100096AEF /* TextGroupViewController.xib */; };
 		871868CC15B7E61700096AEF /* CacheViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 871868CE15B7E61700096AEF /* CacheViewController.xib */; };
 		871868D015B7E61E00096AEF /* SearchViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 871868D215B7E61E00096AEF /* SearchViewController.xib */; };
+		871868ED15B80AF700096AEF /* actual-sharers.plist in Resources */ = {isa = PBXBuildFile; fileRef = 871868EC15B80AF700096AEF /* actual-sharers.plist */; };
 		8722160015B2B32900A50602 /* UITabBarController+Kolyvan.m in Sources */ = {isa = PBXBuildFile; fileRef = 872215FF15B2B32900A50602 /* UITabBarController+Kolyvan.m */; };
 		8724332A15B522C500F8C6D3 /* author_add@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8724331515B522C500F8C6D3 /* author_add@2x.png */; };
 		8724332B15B522C500F8C6D3 /* author_go@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8724331615B522C500F8C6D3 /* author_go@2x.png */; };
@@ -337,6 +338,7 @@
 		871868CF15B7E61B00096AEF /* ru */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ru; path = ru.lproj/CacheViewController.xib; sourceTree = "<group>"; };
 		871868D115B7E61E00096AEF /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/SearchViewController.xib; sourceTree = "<group>"; };
 		871868D315B7E62100096AEF /* ru */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ru; path = ru.lproj/SearchViewController.xib; sourceTree = "<group>"; };
+		871868EC15B80AF700096AEF /* actual-sharers.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "actual-sharers.plist"; path = "resources/actual-sharers.plist"; sourceTree = "<group>"; };
 		872215FE15B2B32900A50602 /* UITabBarController+Kolyvan.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITabBarController+Kolyvan.h"; sourceTree = "<group>"; };
 		872215FF15B2B32900A50602 /* UITabBarController+Kolyvan.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITabBarController+Kolyvan.m"; sourceTree = "<group>"; };
 		8724331515B522C500F8C6D3 /* author_add@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "author_add@2x.png"; path = "resources/author_add@2x.png"; sourceTree = "<group>"; };
@@ -955,6 +957,7 @@
 		872D956D1573968C00BCB4EC /* resources */ = {
 			isa = PBXGroup;
 			children = (
+				871868EC15B80AF700096AEF /* actual-sharers.plist */,
 				877646EE15B6C79400AE3DBB /* votes */,
 				87CC780D15B5679F004F5E7F /* voted.png */,
 				87CC780E15B5679F004F5E7F /* voted@2x.png */,
@@ -1316,6 +1319,7 @@
 				8776474615B6DA3800AE3DBB /* mark_10_32@2x.png in Resources */,
 				8718689D15B7E35300096AEF /* slide.png in Resources */,
 				8718689E15B7E35300096AEF /* slide@2x.png in Resources */,
+				871868ED15B80AF700096AEF /* actual-sharers.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
