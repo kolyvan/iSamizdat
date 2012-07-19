@@ -7,15 +7,22 @@
 //
 
 #import "UrlImageViewController.h"
+#import "KxArc.h"
 #import "KxMacros.h"
 #import "UIImageView+AFNetworking.h"
 #import "UITabBarController+Kolyvan.h"
+
+#define VELOCITY_FACTOR 0.02
 
 @interface UrlImageViewController () {
     UIImageView *_imageView;
     UITapGestureRecognizer *_tapGestureRecognizer;  
     UISwipeGestureRecognizer *_swipeGestureRecognizer;
     UIPinchGestureRecognizer *_pinchGestureRecognizer;
+    UIPanGestureRecognizer *_panGestureRecognizer;
+    UIActivityIndicatorView *_activityIndicatorView;    
+    CGFloat scaleFactor;
+    CGPoint translateFactor;
 }
 @end
 
@@ -27,21 +34,24 @@
 {
     self = [super initWithNibName:nil bundle:nil];
     if (self) {
-        //self.title = locString(@"Image View");
     }
     return self;
-}
-
-- (void) loadView
-{
-    _imageView = [[UIImageView alloc] initWithFrame:CGRectZero];    
-    _imageView.contentMode = UIViewContentModeScaleAspectFit;
-    self.view = _imageView;
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    _imageView = [[UIImageView alloc] initWithFrame:self.view.bounds];    
+    _imageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    _imageView.contentMode = UIViewContentModeScaleAspectFit;        
+    [self.view addSubview:_imageView];   
+    
+    _activityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];    
+    _activityIndicatorView.hidesWhenStopped = YES;
+    [self.view addSubview:_activityIndicatorView];
+    _activityIndicatorView.center = CGPointMake(self.view.center.x, 100); 
+    
     
     _tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self 
                                                                     action:@selector(handleTap:)];   
@@ -53,28 +63,43 @@
     _pinchGestureRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self
                                                                         action:@selector(handlePinch:)]; 
     
+    _panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
+    
     _imageView.userInteractionEnabled = YES;
     
     [_imageView addGestureRecognizer:_tapGestureRecognizer];
     [_imageView addGestureRecognizer:_swipeGestureRecognizer];
-    [_imageView addGestureRecognizer:_pinchGestureRecognizer];    
-
+    [_imageView addGestureRecognizer:_pinchGestureRecognizer]; 
+    [_imageView addGestureRecognizer:_panGestureRecognizer]; 
 }
 
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];  
-    _imageView.transform = CGAffineTransformIdentity;
-    [_imageView setImageWithURL:_url];
+    
+    [self resetDownload: nil];    
+    [self setImageWithURL: _url];
 }
 
 - (void)viewDidUnload
 {
     [super viewDidUnload];
+
+    [_imageView removeGestureRecognizer:_tapGestureRecognizer];
+    [_imageView removeGestureRecognizer:_swipeGestureRecognizer];
+    [_imageView removeGestureRecognizer:_pinchGestureRecognizer];
+    [_imageView removeGestureRecognizer:_panGestureRecognizer];    
     
     _tapGestureRecognizer = nil;
     _swipeGestureRecognizer = nil;
     _pinchGestureRecognizer = nil;
+    _panGestureRecognizer = nil;
+    
+    [_imageView removeFromSuperview];
+    [_activityIndicatorView removeFromSuperview];
+    
+    _imageView = nil;
+    _activityIndicatorView = nil;
 }
 
 - (void) didReceiveMemoryWarning
@@ -90,8 +115,9 @@
 - (void) handleTap: (UITapGestureRecognizer *) sender
 {   
     if (sender.state == UIGestureRecognizerStateEnded) {
-        [self fullscreenMode:!_fullscreen] ;
-    }
+        
+        [self fullscreenMode:!_fullscreen];        
+    } 
 }
 
 - (void)handleSwipe:(UISwipeGestureRecognizer *)sender 
@@ -106,10 +132,19 @@
 {
     if (sender.state == UIGestureRecognizerStateChanged) {
         
-        CGFloat scale = sender.scale;        
-        //[UIView beginAnimations:nil context:NULL];        
-        _imageView.transform = CGAffineTransformMakeScale(scale, scale);
-        //[UIView commitAnimations];
+        scaleFactor += sender.velocity * VELOCITY_FACTOR;
+        [self applyTransform];
+    } 
+}
+
+- (void) handlePan: (UIPanGestureRecognizer *) sender
+{   
+    if (sender.state == UIGestureRecognizerStateChanged) {
+        
+        CGPoint pt = [sender velocityInView:self.view];                
+        translateFactor.x += pt.x * VELOCITY_FACTOR;
+        translateFactor.y += pt.y * VELOCITY_FACTOR;
+        [self applyTransform];
     } 
 }
 
@@ -119,8 +154,57 @@
     UIApplication *app = [UIApplication sharedApplication];    
     [app setStatusBarHidden:on withAnimation:UIStatusBarAnimationSlide];        
     [self.navigationController setNavigationBarHidden:on animated:YES];
-    [self.tabBarController setTabBarHidden:on animated:YES];       
+    [self.tabBarController setTabBarHidden:on animated:YES]; 
+    
+    scaleFactor = 1;
+    translateFactor = CGPointZero;
     _imageView.transform = CGAffineTransformIdentity;
+}
+
+- (void) applyTransform
+{
+    _imageView.transform = CGAffineTransformConcat(CGAffineTransformMakeTranslation(translateFactor.x, translateFactor.y), 
+                                                   CGAffineTransformMakeScale(scaleFactor, scaleFactor));
+
+}
+
+- (void) resetDownload: (NSError *) error
+{
+    scaleFactor = 1;
+    translateFactor = CGPointZero;    
+    _imageView.transform = CGAffineTransformIdentity;
+    
+    [_activityIndicatorView stopAnimating];  
+    self.title = @"";
+}
+
+- (void)setImageWithURL:(NSURL *)url 
+{
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url 
+                                                           cachePolicy:NSURLRequestUseProtocolCachePolicy 
+                                                       timeoutInterval:30.0];
+    [request setHTTPShouldHandleCookies:NO];
+    [request setHTTPShouldUsePipelining:YES];
+    
+    [_activityIndicatorView startAnimating];
+    
+    KX_WEAK UrlImageViewController *this = self;
+    self.title = locString(@"Loading...");
+
+    [_imageView setImageWithURLRequest:request 
+                      placeholderImage:nil 
+                               success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+                                   
+                                   UrlImageViewController *p = this;
+                                   if (p) [p resetDownload: nil];
+                                                                  
+                               }
+                               failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
+
+                                   UrlImageViewController *p = this;
+                                   if (p) [p resetDownload: error];
+                                   
+                               }];
 }
 
 @end
