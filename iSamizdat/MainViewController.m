@@ -387,10 +387,10 @@ typedef enum {
         static UIColor *commonFillColor = nil;
         
         if (!updatedFillColor)        
-            updatedFillColor = [UIColor colorWithRed:1.0 green:1.0 blue:0.8 alpha:1.0];  
+            updatedFillColor = [UIColor colorWithRed:1.0 green:0.972 blue:0.8 alpha:1.0];  
         
         if (!commonFillColor)        
-            commonFillColor = [UIColor colorWithRed:0.95 green:0.95 blue:1.0 alpha:1.0];  
+            commonFillColor = [UIColor colorWithRed:0.968 green:0.972 blue:0.98 alpha:1.0];  
         
         
         id obj = [self.content objectAtIndex:indexPath.row]; 

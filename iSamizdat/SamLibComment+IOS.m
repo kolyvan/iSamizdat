@@ -154,8 +154,14 @@ static char gKey;
         return [UIColor redColor];
     if ([color isEqualToString:@"brown"]) 
         return [UIColor brownColor];    
-    if (self.link.nonEmpty)
-        return [UIColor blueColor]; 
+    if (self.link.nonEmpty) {
+        
+        static UIColor *customBlue;
+        if (!customBlue)
+            customBlue = [UIColor colorWithRed:0.192 green:0.376 blue:0.749 alpha:1];
+        //return [UIColor blueColor]; 
+        return customBlue; 
+    }   
     
     return [UIColor darkTextColor];
 }
