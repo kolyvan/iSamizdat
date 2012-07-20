@@ -12,6 +12,7 @@
 
 #import <Foundation/Foundation.h>
 #import "KxArc.h"
+#import "KxTuple2.h"
 #import "SamLib.h"
 #import "SamLibAgent.h"
 
@@ -182,6 +183,8 @@ typedef enum {
 - (void) removeTextFiles: (BOOL) texts 
              andComments: (BOOL) comments;
 
-- (NSString *) makeKey: (NSString *) sep;
+- (void) saveComments;
+
++ (KxTuple2 *) splitKey: (NSString *) key;
 
 @end

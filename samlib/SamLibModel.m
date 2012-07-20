@@ -11,6 +11,7 @@
 
 #import "KxMacros.h"
 #import "KxUtils.h"
+#import "KxTuple2.h"
 #import "NSArray+Kolyvan.h"
 #import "NSDictionary+Kolyvan.h"
 #import "NSString+Kolyvan.h"
@@ -85,13 +86,8 @@ extern int ddLogLevel;
             [author save: SamLibStorage.authorsPath()];
             DDLogInfo(@"save author: %@", author.path);
         }
-        for (SamLibText *text in author.texts) {
-            SamLibComments *comments = [text commentsObject:NO];
-            if (comments && comments.isDirty) {
-                [comments save: SamLibStorage.commentsPath()];
-                DDLogInfo(@"save comments: %@", text.key);
-            }
-        }
+        for (SamLibText *text in author.texts)
+            [text saveComments];
     }
 }
 
@@ -140,14 +136,12 @@ extern int ddLogLevel;
 
 - (SamLibText *) findTextByKey: (NSString *)key
 {
-    NSArray *a = [key split:@"."];
-    
-    if (a.count == 2) {
+    KxTuple2 *t = [SamLibText splitKey:key];
+    if (t) {
         
-        NSString *path = [a objectAtIndex:0];        
-        SamLibAuthor *author = [self findAuthor: path];        
+        SamLibAuthor *author = [self findAuthor: t.first];        
         if (author) {
-            //return [author findText:path];            
+            //return [author findText:t.second];            
             return [author.texts find: ^(id elem) { 
                 SamLibText *text = elem;        
                 return [text.key isEqualToString:key];
@@ -157,7 +151,6 @@ extern int ddLogLevel;
     
     return nil;
 }
-
 
 + (NSArray*) loadAuthors
 {    

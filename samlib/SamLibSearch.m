@@ -82,6 +82,8 @@ static NSArray * fuzzySearch(NSString * pattern,
                               NSString * key,
                               NSArray * array)
 {
+    BOOL ignorecase = pattern.isLowercase;
+    
     NSInteger patternLengtn = pattern.length;
     unichar patternChars[patternLengtn];
     [pattern getCharacters:patternChars 
@@ -93,6 +95,9 @@ static NSArray * fuzzySearch(NSString * pattern,
         
         NSString *value = [dict get:key];
         if (value.nonEmpty) {
+            
+            if (ignorecase)
+                value = value.lowercaseString;
             
             float distance = levenshteinDistanceNS(value, patternChars, patternLengtn);
             distance = 1.0 - (distance / MAX(value.length, patternLengtn));
@@ -253,10 +258,19 @@ static NSString * mkPathFromName(NSString *name)
     NSString *s = KxUtils.format(@"%%%@%%", pattern);
 
     NSArray *like; // LIKE %name% 
-    if ([key isEqualToString: @"name"])
+    if ([key isEqualToString: @"name"]) {
         like = [_cacheNames selectByName:s];    
-    else
+        
+        // find more by capitalized name
+        if (pattern.isLowercase) {
+                
+           NSArray *like2 = [_cacheNames selectByName:KxUtils.format(@"%%%@%%", pattern.capitalizedString)];   
+           like = [self->isa unionArray:like2 withArray: like];
+        }
+    }
+    else {
         like = [_cacheNames selectByPath:s];    
+    }
         
     NSArray *section = [_cacheNames selectBySection:sectionChar];
     NSArray *result = [self->isa unionArray:section withArray: like]; 

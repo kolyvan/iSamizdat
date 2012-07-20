@@ -227,9 +227,9 @@ static NSString * prettyHtml (NSMutableArray *diffs)
     return [_author.relativeUrl stringByAppendingPathComponent:_path];
 }
 
-- (NSString *) key
+- (NSString *) key 
 {
-    return [self makeKey:@"."];
+    return KxUtils.format(@"%@/%@", _author.path, [_path stringByDeletingPathExtension]);    
 }
 
  - (NSInteger) sizeInt
@@ -719,6 +719,9 @@ static NSString * prettyHtml (NSMutableArray *diffs)
     
     NSError *error;
     
+    NSString *folder = [SamLibStorage.textsPath() stringByAppendingPathComponent:_author.path];
+    KxUtils.ensureDirectory(folder);
+    
     NSFileManager *fm = [[NSFileManager alloc] init];
     
     BOOL diffExists = [fm fileExistsAtPath:self.diffPath];
@@ -810,6 +813,9 @@ static NSString * prettyHtml (NSMutableArray *diffs)
     _cachedFileSize = 0;
     
     NSError *error;
+    
+    NSString *folder = [SamLibStorage.textsPath() stringByAppendingPathComponent:_author.path];
+    KxUtils.ensureDirectory(folder);
     
     NSFileManager *fm = [[NSFileManager alloc] init];
 
@@ -983,9 +989,33 @@ static NSString * prettyHtml (NSMutableArray *diffs)
     KX_RELEASE(fm);    
 }
 
+- (void) saveComments
+{
+    if (_commentsObject && 
+        _commentsObject.isDirty) {
+                
+        NSString *folder = [SamLibStorage.commentsPath() stringByAppendingPathComponent:_author.path];
+        KxUtils.ensureDirectory(folder);
+        
+        if (SamLibStorage.saveDictionary(_commentsObject.toDictionary, self.commentsPath)) {
+
+            [_commentsObject clearDirtyFlag];            
+            DDLogInfo(@"save comments: %@", self.key);
+        }
+    }
+}
+
 - (NSString *) makeKey: (NSString *) sep;
 {
     return KxUtils.format(@"%@%@%@", _author.path, sep, [_path stringByDeletingPathExtension]);    
+}
+
++ (KxTuple2 *) splitKey: (NSString *) key
+{
+    NSArray *a = [key split:@"/"];    
+    if (a.count != 2) 
+        return nil;        
+    return [KxTuple2 first: [a objectAtIndex:0] second: [a objectAtIndex:1]];
 }
 
 @end

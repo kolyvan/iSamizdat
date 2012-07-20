@@ -40,9 +40,15 @@ static void enumerateFolder(NSString *folder, EnumerateFolderBlock block)
                 NSString * fullpath = [folder stringByAppendingPathComponent:filename];
                 NSDictionary *attr = [fm attributesOfItemAtPath:fullpath error:nil];
                 
-                if ([[attr get:NSFileType] isEqual: NSFileTypeRegular]) {
+                id fileType = [attr get:NSFileType];
+                
+                if ([fileType isEqual: NSFileTypeRegular]) {
                     
                     block(fm, fullpath, attr);                    
+                    
+                } else  if ([fileType isEqual: NSFileTypeDirectory]) {
+                    
+                    enumerateFolder(fullpath, block);                    
                 }
             }
         }        
@@ -174,8 +180,6 @@ static NSString * historyPath()
     
     return path;
 }
-
-
 
 static unsigned long long sizeOfTexts()
 { 

@@ -77,9 +77,6 @@ typedef void (^UpdateCommentsBlock)(SamLibComments *comments,
 - (void) deleteComment: (NSString *) msgid
                  block: (UpdateCommentsBlock) block;
 
-
-- (void) save: (NSString *)folder;
-
 - (void) post: (NSString *) message 
         block: (UpdateCommentsBlock) block;
 
@@ -96,5 +93,6 @@ typedef void (^UpdateCommentsBlock)(SamLibComments *comments,
 + (NSUInteger) maxComments;
 + (void) setMaxComments: (NSUInteger) value;
 
+- (void) clearDirtyFlag;
 
 @end

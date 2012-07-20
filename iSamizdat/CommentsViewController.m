@@ -255,7 +255,7 @@
         }            
     });
     
-    NSString *path = [_comments.text makeKey:@"/"]; 
+    NSString *path = _comments.text.key; 
     for (SamLibComment *comment in _comments.all) { 
         
         if (comment.isNew && comment.msgid.nonEmpty) {

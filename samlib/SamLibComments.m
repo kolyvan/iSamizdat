@@ -197,11 +197,6 @@ static NSDate* mkDateFromComment(NSString *dt)
     return [s stringByAppendingPathComponent: _path];
 }
 
-- (NSString *) filename
-{
-    return [_text.key stringByAppendingPathExtension:@"comments"];
-}
-
 - (BOOL) changed
 {
     return _numberOfNew > 0;
@@ -470,14 +465,6 @@ static NSDate* mkDateFromComment(NSString *dt)
     return nil;
 }
 
-- (void) save: (NSString *)folder
-{
-    if (SamLibStorage.saveDictionary([self toDictionary], 
-                                     [folder stringByAppendingPathComponent: self.filename])) {
-        _isDirty = NO;
-    }
-}
-
 - (void) post:(NSString *)message
         block: (UpdateCommentsBlock) block
 {
@@ -596,6 +583,11 @@ static NSDate* mkDateFromComment(NSString *dt)
 {
     gMaxCommens = value;
     SamLibAgent.setSettingsInt(@"comments.maxsize", value, 100);
+}
+
+- (void) clearDirtyFlag
+{
+    _isDirty = NO;    
 }
 
 @end
