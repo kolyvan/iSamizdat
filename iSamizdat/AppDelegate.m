@@ -73,9 +73,10 @@ int ddLogLevel = LOG_LEVEL_WARN;
     }
     
     DDLogInfo(@"logged as %@", [SamLibUser loggedUserName]);
-
-    [self checkFirstRun];
     
+    [self checkFirstRun];
+    [self checkVersion];
+            
     //[[UINavigationBar appearance] setBarStyle: UIBarStyleBlack];
     
     NSArray * controllers = KxUtils.array([[MainViewController alloc] init],                                          
@@ -384,6 +385,55 @@ int ddLogLevel = LOG_LEVEL_WARN;
     }
     
     [SamLibAgent.settings() update:@"ui.tabbar" value:ma];
+}
+
+- (void) checkVersion
+{
+    NSInteger currentVersion = [[[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleVersion"] integerValue];
+    NSInteger storedVersion = SamLibAgent.settingsInt(@"app.version", 0);
+    
+    if (storedVersion != currentVersion) {
+                        
+        SamLibAgent.setSettingsInt(@"app.version", currentVersion, 0);
+        
+        DDLogInfo(@"upgrade %d -> %d", storedVersion, currentVersion);
+        
+        if (storedVersion == 0) {    
+        
+            DDLogInfo(@"migrate texts and comments");
+            [self migrateFolder: SamLibStorage.textsPath()];
+            [self migrateFolder: SamLibStorage.commentsPath()];
+            
+            DDLogInfo(@"clean history");            
+            [[SamLibHistory shared] clearAll];            
+        }
+    }
+}
+
+- (void) migrateFolder: (NSString *) baseFolder
+{    
+    SamLibStorage.enumerateFolder(baseFolder, ^(NSFileManager *fm, NSString *fullpath, NSDictionary *attr){
+
+        NSString *folder = [fullpath stringByDeletingLastPathComponent];
+        if ([baseFolder isEqualToString:folder]) {
+            
+            // move            
+            NSString *key = [fullpath lastPathComponent];
+            
+            NSRange r = [key rangeOfString:@"."];
+            if (r.location != NSNotFound) {
+            
+                KxTuple2 *t = [key splitAt:r.location];                
+                folder = [folder stringByAppendingPathComponent:t.first];
+                KxUtils.ensureDirectory(folder);            
+                NSString *fn = t.second;
+                NSString *to = [folder stringByAppendingPathComponent: [fn drop:1]];
+                [fm moveItemAtPath:fullpath toPath:to error:nil];                            
+                //DDLogInfo(@"%@ -> %@", fullpath, to);
+            }                      
+        }         
+
+    });
 }
 
 #pragma mark - SSO Facebook support
