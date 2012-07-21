@@ -911,6 +911,7 @@ typedef struct {
     char * path;
 } IndexEntry;
 
+#ifndef __IPHONE_OS_VERSION_MAX_ALLOWED 
 static locale_t locale_ru() {
     
     static locale_t loc;    
@@ -920,6 +921,25 @@ static locale_t locale_ru() {
     });
     
     return loc;
+}
+#endif
+
+static unichar toUpper(unichar chr) {
+    
+#ifndef __IPHONE_OS_VERSION_MAX_ALLOWED 
+    
+    locale_t loc = locale_ru();
+    return towupper_l(first, loc);
+    
+#else
+    
+    // there is not ru locale on iphone?
+    // newlocale(LC_CTYPE_MASK , "ru_RU", NULL) always returns null
+    
+    NSString *s = [NSString stringWithFormat:@"%C", chr];
+    return [s.uppercaseString characterAtIndex:0];
+    
+#endif        
 }
 
 static NSString * cyrillicToLatin(unichar first)
@@ -959,8 +979,8 @@ static NSString * cyrillicToLatin(unichar first)
         { 1070, "ju" }, // Ю
         { 1071, "ja" }, // Я
     };    
-    
-    first = towupper_l(first, locale_ru());
+
+    first = toUpper(first);
     
     for (int i = 0; i < 33; ++i) {
         if (cyrillic[i].letter == first)
@@ -1015,8 +1035,8 @@ static NSString * capitalToPath(unichar first)
         first = towlower(first);
         return KxUtils.format(@"%c/index_%c.shtml", first, first);        
     }
-    
-    first = towupper_l(first, locale_ru());
+
+    first = toUpper(first);
     
     for (int i = 0; i < 33; ++i) {
         if (cyrillic[i].letter == first)
