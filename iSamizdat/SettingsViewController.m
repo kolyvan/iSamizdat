@@ -19,8 +19,9 @@
 #import "SamLibAgent.h"
 #import "SamLibModerator.h"
 #import "SamLibComments.h"
-//#import "SelectFontViewController.h"
+#import "AppDelegate.h"
 #import "KxUtils.h"
+#import "DropboxViewController.h"
 #import "DDLog.h"
 
 extern int ddLogLevel;
@@ -29,7 +30,8 @@ enum {
     
     SettingsViewSection0AboutRow,    
     SettingsViewSection0UserRow,
-    SettingsViewSection0CacheRow,    
+    SettingsViewSection0CacheRow,  
+    SettingsViewSection0Dropbox,      
     
     SettingsViewSection0NumberOfRows,
 };
@@ -64,12 +66,13 @@ enum {
 @property (nonatomic, strong) UserViewController *userViewController;
 @property (nonatomic, strong) CacheViewController *cacheViewController;
 @property (nonatomic, strong) AboutViewController *aboutViewController;
+@property (nonatomic, strong) DropboxViewController *dropboxViewController;
 //@property (nonatomic, strong) SelectFontViewController *selectFontViewController;
 @end
 
 @implementation SettingsViewController
 
-@synthesize userViewController, cacheViewController, aboutViewController;
+@synthesize userViewController, cacheViewController, aboutViewController, dropboxViewController;
 
 - (id) init
 {
@@ -86,7 +89,6 @@ enum {
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    //self.navigationController.navigationBarHidden = YES;    
 }
 
 - (void)viewDidUnload
@@ -96,13 +98,12 @@ enum {
     self.userViewController = nil;
     self.cacheViewController = nil;
     self.aboutViewController = nil;
-//    self.selectFontViewController = nil;
+    self.dropboxViewController = nil;
 }
 
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    //[self.navigationController setNavigationBarHidden:YES animated:YES];
 }
 
 - (void) didReceiveMemoryWarning
@@ -111,7 +112,7 @@ enum {
     self.userViewController = nil;
     self.cacheViewController = nil;  
     self.aboutViewController = nil;  
-//    self.selectFontViewController = nil;
+    self.dropboxViewController = nil;    
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -264,7 +265,13 @@ enum {
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;            
             cell.textLabel.text = locString(@"About");
             
+        } else if (SettingsViewSection0Dropbox == indexPath.row) {
+            
+            cell = [self mkCell: @"Cell" withStyle:UITableViewCellStyleDefault]; 
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;            
+            cell.textLabel.text = locString(@"Dropbox");
         } 
+        
         
     } else if (1 == indexPath.section) {
         
@@ -348,7 +355,17 @@ enum {
             }
             [self.navigationController pushViewController:self.cacheViewController 
                                                  animated:YES]; 
-        } 
+            
+        } else if (SettingsViewSection0Dropbox == indexPath.row) {
+
+            if (!self.dropboxViewController) {
+                self.dropboxViewController = [[DropboxViewController alloc] init];        
+            }
+            [self.navigationController pushViewController:self.dropboxViewController 
+                                                 animated:YES];
+
+        }
+        
     }
     
     if (2 == indexPath.section) {

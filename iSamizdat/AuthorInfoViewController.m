@@ -94,6 +94,9 @@ enum {
     SHKItem *item = [SHKItem URL:[NSURL URLWithString: [@"http://" stringByAppendingString: _author.url]] 
                            title:KxUtils.format(@"%@. %@.", _author.name, _author.title) 
                      contentType:(SHKURLContentTypeWebpage)];
+    
+    item.filename = _author.path;
+    
     SHKActionSheet *actionSheet = [SHKActionSheet actionSheetForItem:item];
     [SHK setRootViewController:self];
     [actionSheet showFromBarButtonItem:self.navigationItem.rightBarButtonItem 

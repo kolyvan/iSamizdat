@@ -30,4 +30,6 @@
 
 - (void) checkLogin;
 
+- (void) dropbox;
+
 @end

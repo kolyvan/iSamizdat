@@ -11,6 +11,7 @@
 		<string>SHKSafari</string>
 		<string>SHKTextMessage</string>
 		<string>SHKLogout</string>
+		<string>SHKDropbox</string>
 	</array>
 	<key>services</key>
 	<array>

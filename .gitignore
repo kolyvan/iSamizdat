@@ -23,3 +23,5 @@ project.xcworkspace
 ##
 tmp/*
 plan
+iSamizdat/dropbox.secret
+

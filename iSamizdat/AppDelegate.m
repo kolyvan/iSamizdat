@@ -38,6 +38,8 @@
 #import "SHKFacebook.h"
 #import "SHKConfiguration.h"
 #import "SHKConfig.h"
+#import <DropboxSDK/DropboxSDK.h>
+#import "DropboxService.h"
 
 
 #if DEBUG
@@ -46,7 +48,8 @@ int ddLogLevel = LOG_LEVEL_INFO;
 int ddLogLevel = LOG_LEVEL_WARN;
 #endif
 
-@interface AppDelegate()
+@interface AppDelegate() {
+}
 
 @property (strong, nonatomic) WBErrorNoticeView * errorNotice;
 @property (strong, nonatomic) WBSuccessNoticeView * successNotice;
@@ -57,6 +60,7 @@ int ddLogLevel = LOG_LEVEL_WARN;
 @synthesize window = _window;
 @synthesize errorNotice;
 @synthesize successNotice;
+
 
 + (AppDelegate *) shared
 {
@@ -99,7 +103,9 @@ int ddLogLevel = LOG_LEVEL_WARN;
 
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];    
     self.window.rootViewController = tabBarContrller;    
-    //self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:vc0];    
+    //self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:vc0];        
+    //self.window.rootViewController = [[DropboxViewController alloc] init];    
+    
     [self.window makeKeyAndVisible];
     
     DefaultSHKConfigurator *configurator = [[SHKConfig alloc] init];
@@ -115,6 +121,8 @@ int ddLogLevel = LOG_LEVEL_WARN;
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
+    [[DropboxService shared] cancelAll];
+    
     [[SamLibModel shared] save]; 
     [[SamLibModerator shared] save];
     [[SamLibHistory shared] save]; 
@@ -436,15 +444,20 @@ int ddLogLevel = LOG_LEVEL_WARN;
     });
 }
 
-#pragma mark - SSO Facebook support
-
 - (BOOL)handleOpenURL:(NSURL*)url
-{
+{   
 	NSString* scheme = [url scheme];
+    
     if ([scheme hasPrefix:[NSString stringWithFormat:@"fb%@", SHKCONFIG(facebookAppId)]])
         return [SHKFacebook handleOpenURL:url];
+    
+    if ([scheme hasPrefix:@"db-8jr6tpiiyvlr8jg"]) 
+        return [[DropboxService shared] handleOpenURL: url];
+    
     return YES;
 }
+
+#pragma mark - SSO Facebook support
 
 - (BOOL)application:(UIApplication *)application 
             openURL:(NSURL *)url 
@@ -459,5 +472,21 @@ int ddLogLevel = LOG_LEVEL_WARN;
 {
     return [self handleOpenURL:url];  
 }
+
+#pragma mark - dropbox
+
+- (void) dropbox
+{
+    //if (!_dropboxService) {
+    //    _dropboxService = [[DropboxService alloc] init];
+    //}
+    
+    //[_dropboxService link];
+    
+    //DropboxViewController * vc = [[DropboxViewController alloc] init];                
+    //[self.window.rootViewController presentViewController:vc animated:YES completion:nil];
+
+}
+
 
 @end

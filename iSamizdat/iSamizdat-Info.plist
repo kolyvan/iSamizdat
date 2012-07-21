@@ -39,6 +39,7 @@
 			<string></string>
 			<key>CFBundleURLSchemes</key>
 			<array>
+				<string>db-8jr6tpiiyvlr8jg</string>
 				<string>fb425193604200052</string>
 				<string>app://flickr</string>
 			</array>
