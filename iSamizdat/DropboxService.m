@@ -462,9 +462,27 @@ static int outstandingRequests;
     }
 }
 
-- (void)restClient:(DBRestClient*)client loadMetadataFailedWithError:(NSError*)error 
+- (void)restClient:(DBRestClient*)client metadataUnchangedAtPath:(NSString*)path
 {
-    [self complete: nil failure:error];    
+    DDLogInfo(@"dropbox metadataUnchangedAtPath %@", path);        
+}
+- (void)restClient:(DBRestClient*)client loadMetadataFailedWithError:(NSError*)error 
+{   
+    if ([error.domain isEqualToString:@"dropbox.com"] && 
+        error.code == 404) { // not found
+        
+        DDLogInfo(@"dropbox notfound %@", [error.userInfo get:@"path"]);        
+        
+        if (_tasks.nonEmpty) {
+            DropboxTaskImpl *task = _tasks.first;
+            task.metadata = [[DBMetadata alloc] init];
+            task.mode = DropboxTaskModeUpload;
+            [self process];
+            return;
+        }
+    } 
+    
+    [self complete:nil failure:error];    
 }
 
 - (void)restClient:(DBRestClient*)client 

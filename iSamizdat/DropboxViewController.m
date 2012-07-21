@@ -10,6 +10,7 @@
 #import <DropboxSDK/DropboxSDK.h>
 #import "DropboxService.h"
 #import "KxUtils.h"
+#import "NSArray+Kolyvan.h"
 #import "SamLibStorage.h"
 #import "SamLibModel.h"
 #import "AppDelegate.h"
@@ -17,10 +18,12 @@
 
 extern int ddLogLevel;
 
+typedef void(^DropboxSyncResultBlock)(NSInteger downloads, NSInteger uploads, NSInteger errors, NSError *error);
+
 @interface DropboxViewController () {
     IBOutlet UIButton *_buttonLink;
     IBOutlet UIButton *_buttonSync;    
-    IBOutlet UIProgressView *_progressView;        
+    IBOutlet UIActivityIndicatorView *_activityIndicatorView;        
     IBOutlet UILabel *_label;
 }
 @end
@@ -83,6 +86,7 @@ extern int ddLogLevel;
                  forState:UIControlStateNormal];
     
     _buttonSync.enabled = isLinked;    
+    _label.text = @"";
 }
 
 - (IBAction) linkDropbox:(id)sender
@@ -94,102 +98,185 @@ extern int ddLogLevel;
 {
     DropboxService *dS = [DropboxService shared];
     if (dS.isLinked) {
-        
-        [self syncAuthors];        
+
+        _label.text = @"sync ...";
+        [_activityIndicatorView startAnimating];
+                              
+        [self syncAuthors: ^(NSInteger authorsDown, NSInteger authorsUp, NSInteger authorsErrs, NSError *authorError){
+                    
+            if (authorsDown)
+                 [[SamLibModel shared] reload];
+            
+            [self syncTexts:  ^(NSInteger textsDown, NSInteger textsUp, NSInteger texstErrs, NSError *textError){
+                
+                
+                _label.text = KxUtils.format(@"Authors loaded: %d upload: %d errors: %d\n"
+                                             @"Texts   loaded: %d upload: %d errors: %d"
+                                             ,authorsDown, authorsUp, authorsErrs,
+                                             textsDown, textsUp, texstErrs);    
+                
+                NSError *error = authorError ? authorError : textError;
+                if (error) {                    
+                    [[AppDelegate shared] errorNoticeInView:self.view 
+                                                      title:@"Dropbox failure" 
+                                                    message:KxUtils.completeErrorMessage(error)];
+                } 
+
+                [_activityIndicatorView stopAnimating];
+                
+            }];
+        }];
         
     } else {
     
-        DDLogWarn(@"dropbox is not linked!!!");
+        NSAssert(false, @"dropbox is not linked");
     }
 }
 
-- (void) syncAuthors
+- (void) syncAuthors: (DropboxSyncResultBlock) block
 {
-    _label.hidden = NO;
-    _progressView.hidden = NO;
-    _label.text = @"sync authors";
-    _progressView.progress = 0;
-    
     [[SamLibModel shared] save];
     
+    [self syncFolder:SamLibStorage.authorsPath()
+              remote:@"/authors" 
+               block:block];
+}
+
+- (void) syncTexts: (DropboxSyncResultBlock) block
+{
+    NSFileManager *fm = KxUtils.fileManager();
+            
     DropboxService *dS = [DropboxService shared];
     
     [dS loadMetadata:@"" 
-              remote:@"/authors" 
-          completion:^(id<DropboxTask> task, NSError *error) {
+              remote:@"/texts" 
+          completion:^(id<DropboxTask> task, NSError *lastError) {
               
-              if (error) {
-                  
-                  [[AppDelegate shared] errorNoticeInView:self.view 
-                                                      title:@"Dropbox failure" 
-                                                  message:KxUtils.completeErrorMessage(error)];
-
-                  
+              if (lastError) {                                    
+                  block(0, 0, 1, lastError); 
                   return;
               }
-                            
-              __block NSInteger counter = task.metadata.contents.count;
-              __block NSInteger download = 0, upload = 0;
-              CGFloat deltaProgress = 1.0 / counter;             
               
-              //DDLogInfo(@"dropbox finished %@ =%d", task, counter);              
+              NSArray *contents = [task.metadata.contents filter:^BOOL(DBMetadata *md) {
+                  return md.isDirectory && !md.isDeleted;
+              }];              
               
-              for (DBMetadata *md in task.metadata.contents) {
+              if (contents.isEmpty) {                      
+                  block(0, 0, 0, nil); 
+                  return;
+              }
+              
+              __block NSInteger counter = contents.count;
+              __block NSInteger numd = 0, numu = 0, nume = 0;              
+              
+              for (DBMetadata *md in contents) {
                   
-                  //DDLogInfo(@"dropbox sync %@ (%@)", md.path, md.rev);
+                  NSString *localFolder = [SamLibStorage.textsPath() stringByAppendingPathComponent:md.filename];
                   
-                  [dS sync:md.filename
-                     local:SamLibStorage.authorsPath()
-                    remote:@"/authors"  
+                  BOOL isDirectory;
+                  BOOL isExists = [fm fileExistsAtPath:localFolder isDirectory:&isDirectory];
+                  
+                  if (isExists && !isDirectory) { // skip files
+                      
+                      if (0 == --counter)                         
+                          block(numd, numu, nume, nil);
+                      
+                  } else {
+                      
+                      [self syncFolder: localFolder
+                                remote: md.path 
+                                 block:^(NSInteger downloads, NSInteger uploads, NSInteger errors, NSError *error) {
+                                     
+                                     numd += downloads;
+                                     numu += uploads;
+                                     nume += errors;
+                                     
+                                     if (0 == --counter)
+                                         block(numd, numu, nume, nil);
+                                 }];
+                  }
+              }
+          }];
+}
+
+- (void) syncFolder: (NSString *) localFolder 
+             remote: (NSString *) remoteFolder 
+              block: (DropboxSyncResultBlock) block
+{    
+    DropboxService *dS = [DropboxService shared];
+    
+    [dS loadMetadata:@"" 
+              remote:remoteFolder
+          completion:^(id<DropboxTask> task, NSError *error) {
+              
+              if (error) {   
+                  if (block)
+                      block(0,0,1,error);                  
+                  return;
+              }
+              
+              NSArray *contents = [task.metadata.contents filterNot:^BOOL(DBMetadata *md) {
+                  return md.isDirectory || md.isDeleted;
+              }];              
+              
+              if (contents.isEmpty) {
+                  if (block)
+                      block(0,0,0,nil); 
+                  return;
+              }
+              
+              __block NSInteger counter = contents.count;
+              __block NSInteger downloads = 0, uploads = 0, errors = 0;
+              
+              KxUtils.ensureDirectory(localFolder);
+              
+              for (DBMetadata *md in contents) {
+                  
+                  [dS sync:md.path.lastPathComponent
+                     local:localFolder
+                    remote:remoteFolder
                 completion:^(id<DropboxTask> task, NSError *error){
                     
                     --counter;
                     
-                    if (error)
-                        return;
+                    if (error) {
+                        
+                        ++errors;
+                        
+                    } else {
+                        
+                        if (task.mode == DropboxTaskModeDownload)
+                            ++downloads;
+                        else if (task.mode == DropboxTaskModeUpload)
+                            ++uploads;
+                        
+                    }
                     
-                    if (task.mode == DropboxTaskModeDownload)
-                        ++download;
-                    else if (task.mode == DropboxTaskModeUpload)
-                        ++upload;
-                    
-                    _label.text = [self messageForTask: task];
-                    _progressView.progress += deltaProgress;
-                    
+                  _label.text = [self messageForTask: task];                    
+                                    
                     if (0 == counter) {
                         
-                        if (download)                            
-                            [[SamLibModel shared] reload];
-                                                
-                        if (download || upload) {
-                            
-                            NSString *msg = KxUtils.format(@"Dropbox synced %d/%d", download, upload);
-                            [[AppDelegate shared] successNoticeInView:self.view 
-                                                                title:msg];                            
-                        }
-                        
-                        _progressView.hidden = YES;
-                        _label.hidden = YES;
+                        if (block)
+                            block(downloads,uploads,errors,nil);  
                     }
                 }];
               }              
           }];
 }
 
-
 - (NSString *) messageForTask: (id<DropboxTask>) task
 {
     NSString *mode;
     
     switch (task.mode) {
-        case DropboxTaskModeDownload:   mode = @"download"; break;
-        case DropboxTaskModeUpload:     mode = @"upload"; break;
-        case DropboxTaskModeSync:       mode = @"synced"; break;
-        case DropboxTaskModeCanceled:   mode = @"canceled"; break;
-        case DropboxTaskModeMetadata:   mode = @"query"; break;                        
+        case DropboxTaskModeDownload:   mode = @"<<<"; break;
+        case DropboxTaskModeUpload:     mode = @">>>"; break;
+        case DropboxTaskModeSync:       mode = @"<->"; break;
+        case DropboxTaskModeCanceled:   mode = @">-< "; break;
+        case DropboxTaskModeMetadata:   mode = @" ? "; break;                        
     }
     
-    return KxUtils.format(@"%@ %@", mode, task.filename);
+    return KxUtils.format(@"%@ %@ %@", task.filename, mode,  task.remoteFolder);
 }
 
 @end
