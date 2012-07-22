@@ -12,9 +12,9 @@
 #import "UIImageView+AFNetworking.h"
 #import "UITabBarController+Kolyvan.h"
 
-#define VELOCITY_FACTOR 0.02
+#define VELOCITY_FACTOR 0.014
 
-@interface UrlImageViewController () {
+@interface UrlImageViewController () <UIGestureRecognizerDelegate> {
     UIImageView *_imageView;
     UITapGestureRecognizer *_tapGestureRecognizer;  
     UISwipeGestureRecognizer *_swipeGestureRecognizer;
@@ -56,14 +56,19 @@
     _tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self 
                                                                     action:@selector(handleTap:)];   
     
+    _tapGestureRecognizer.delegate = self;
+    
+    
     _swipeGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self 
                                                                   action:@selector(handleSwipe:)]; 
     _swipeGestureRecognizer.direction = UISwipeGestureRecognizerDirectionRight;
-    
+    _swipeGestureRecognizer.delegate = self;
+     
     _pinchGestureRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self
                                                                         action:@selector(handlePinch:)]; 
     
     _panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
+    _panGestureRecognizer.delegate = self;
     
     _imageView.userInteractionEnabled = YES;
     
@@ -90,6 +95,10 @@
     [_imageView removeGestureRecognizer:_pinchGestureRecognizer];
     [_imageView removeGestureRecognizer:_panGestureRecognizer];    
     
+    _tapGestureRecognizer.delegate = nil;
+    _swipeGestureRecognizer.delegate = nil;
+    _panGestureRecognizer.delegate = nil;
+    
     _tapGestureRecognizer = nil;
     _swipeGestureRecognizer = nil;
     _pinchGestureRecognizer = nil;
@@ -112,9 +121,40 @@
     return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
 }
 
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer 
+       shouldReceiveTouch:(UITouch *)touch
+{
+    if (gestureRecognizer != _tapGestureRecognizer) 
+        return YES;
+    
+    CGPoint pt = [touch locationInView:self.view];
+    CGRect bounds = self.view.bounds;
+    CGFloat w = bounds.size.width;
+    CGFloat l = bounds.origin.x + w * .33;
+    CGFloat r = bounds.origin.x + w * .66;    
+    
+    if ((pt.x > l) && (pt.x < r)) {    
+        return YES;        
+    }    
+    return NO;
+}
+
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
+{
+    if (gestureRecognizer == _swipeGestureRecognizer) 
+        return scaleFactor == 1.0;
+    
+    if (gestureRecognizer == _panGestureRecognizer) 
+        return scaleFactor != 1.0;
+    
+    return YES;
+}
+
 - (void) handleTap: (UITapGestureRecognizer *) sender
 {   
     if (sender.state == UIGestureRecognizerStateEnded) {
+        
+        NSLog(@"handleTap number %d", sender.numberOfTouches);
         
         [self fullscreenMode:!_fullscreen];        
     } 
@@ -127,6 +167,7 @@
         [self.navigationController popViewControllerAnimated:YES];        
     } 
 }
+
 
 - (void)handlePinch:(UIPinchGestureRecognizer *)sender 
 {
