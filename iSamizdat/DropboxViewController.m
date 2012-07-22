@@ -22,8 +22,6 @@
 
 extern int ddLogLevel;
 
-typedef void(^DropboxSyncResultBlock)();
-
 @interface DropboxViewController () <DropboxServiceDelegate> {
     IBOutlet UIButton *_buttonLink;
     IBOutlet UIButton *_buttonSync;     
@@ -31,6 +29,7 @@ typedef void(^DropboxSyncResultBlock)();
     IBOutlet UIActivityIndicatorView *_activityIndicatorView;        
     IBOutlet UIProgressView *_progressView;
     IBOutlet UILabel *_progressLabel;
+    IBOutlet UILabel *_countLabel;
     IBOutlet UITextView *_reportView;
     NSMutableArray *_report;
     BOOL _syncPressed; 
@@ -131,6 +130,7 @@ typedef void(^DropboxSyncResultBlock)();
         if (_syncPressed) {
                     
             [dS cancelAll];  
+           
             [self refreshProgress: YES task: nil tasksCount:0];
             
         } else {
@@ -144,13 +144,18 @@ typedef void(^DropboxSyncResultBlock)();
             } else {
                 
                 [self syncAuthors];
-                [self syncTexts];
+                
+                [self syncTexts: ^(DBMetadata *md) {
+                    // only if text exists
+                    return (BOOL)([self findObject:md.path] != nil); 
+                }];
             }
+            
+            _syncPressed = !_syncPressed;
+            [_buttonSync setTitle:_syncPressed ? locString(@"Cancel") : locString(@"Sync") 
+                         forState:UIControlStateNormal];
         }    
         
-        _syncPressed = !_syncPressed;
-        [_buttonSync setTitle:_syncPressed ? locString(@"Cancel") : locString(@"Sync") 
-                     forState:UIControlStateNormal];
         
     } else {
     
@@ -160,8 +165,9 @@ typedef void(^DropboxSyncResultBlock)();
 
 - (void) syncAll
 {
-    
     DropboxService *dS = [DropboxService shared];
+    
+    NSMutableArray *exclude = [NSMutableArray array];
     
     for (SamLibAuthor * author in [SamLibModel shared].authors) {
     
@@ -172,26 +178,41 @@ typedef void(^DropboxSyncResultBlock)();
         
         for (SamLibText *text in author.texts) {
          
-            NSString *filename = [[text.path stringByDeletingPathExtension] stringByAppendingPathExtension:@"html"];            
-            NSString *localFolder = [SamLibStorage.textsPath() stringByAppendingPathComponent:author.path];
-            NSString *remoteFolder = [@"/texts" stringByAppendingPathComponent:author.path];
-           
-            [dS sync:filename
+            if (text.htmlFile.nonEmpty) {
+                
+                NSString *filename = [[text.path stringByDeletingPathExtension] stringByAppendingPathExtension:@"html"];            
+                NSString *localFolder = [SamLibStorage.textsPath() stringByAppendingPathComponent:author.path];
+                NSString *remoteFolder = [@"/texts" stringByAppendingPathComponent:author.path];
+                
+                [exclude addObject:[remoteFolder stringByAppendingPathComponent: filename]];
+                
+                [dS sync:filename
                    local:localFolder
                   remote:remoteFolder
               completion:nil];
+            }
         }
     }
+    
+    [self syncTexts: ^(DBMetadata *md) {
+        
+        // exclude already synced
+        if ([exclude containsObject:md.path])
+            return NO;
+
+        // only if text exists        
+        return (BOOL)([self findObject:md.path] != nil); 
+    }];
 }
 
 - (void) syncAuthors
 {
     [self syncFolder:SamLibStorage.authorsPath()
               remote:@"/authors" 
-              exists:NO];
+          allowBlock:nil];
 }
 
-- (void) syncTexts
+- (void) syncTexts: (BOOL(^)(DBMetadata *md)) allowBlock
 {
     NSFileManager *fm = KxUtils.fileManager();
             
@@ -226,7 +247,7 @@ typedef void(^DropboxSyncResultBlock)();
                                                
                           [self syncFolder: localFolder
                                     remote: md.path 
-                                    exists: YES]; // only if text exists
+                                allowBlock: allowBlock]; 
                       }
                   }
               }
@@ -235,7 +256,7 @@ typedef void(^DropboxSyncResultBlock)();
 
 - (void) syncFolder: (NSString *) localFolder 
              remote: (NSString *) remoteFolder 
-             exists: (BOOL) exists
+         allowBlock: (BOOL(^)(DBMetadata *md)) allowBlock
 {    
     DropboxService *dS = [DropboxService shared];
     
@@ -256,8 +277,8 @@ typedef void(^DropboxSyncResultBlock)();
               KxUtils.ensureDirectory(localFolder);
               
               for (DBMetadata *md in contents) {
-                  
-                  if (!exists || [self findObject:md.path]) {
+
+                  if (!allowBlock || allowBlock(md)) {
                   
                       [dS sync:md.path.lastPathComponent
                          local:localFolder
@@ -295,11 +316,14 @@ typedef void(^DropboxSyncResultBlock)();
        
     if (count) {
         
+        _countLabel.text = KxUtils.format(@"%d", count);
+        
         if (!_activityIndicatorView.isAnimating)
             [_activityIndicatorView startAnimating];
         
     } else {
 
+        _countLabel.text = @"";        
         [_activityIndicatorView stopAnimating];
         
         _syncPressed = NO;
