@@ -134,8 +134,7 @@ enum {
                                                                                target:self 
                                                                                action:@selector(goShare)];
 
-    self.navigationItem.rightBarButtonItem = goButton;    
-   
+    self.navigationItem.rightBarButtonItem = goButton;
 }
 
 - (void) viewWillAppear:(BOOL)animated 
@@ -145,8 +144,6 @@ enum {
         _needReload = NO;          
         [self prepareData];       
         [self.tableView reloadData];
-        
-        //[self clearChangedFlag];
     }    
 }
 

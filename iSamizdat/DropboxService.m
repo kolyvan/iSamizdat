@@ -128,7 +128,7 @@ static DropboxService *gShared = nil;
                           cancelButtonTitle:locString(@"Ok")
                           otherButtonTitles:nil] show]; 
                 
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"DropboxLinkChangeChanged" object:nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"DropboxLinkChanged" object:nil];
         
         return YES;
     }    

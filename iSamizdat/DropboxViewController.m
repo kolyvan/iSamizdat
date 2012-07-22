@@ -26,15 +26,14 @@ typedef void(^DropboxSyncResultBlock)();
 
 @interface DropboxViewController () <DropboxServiceDelegate> {
     IBOutlet UIButton *_buttonLink;
-    IBOutlet UIButton *_buttonSync; 
-    //IBOutlet UIButton *_buttonReport;     
+    IBOutlet UIButton *_buttonSync;     
     IBOutlet UISwitch *_switchSyncAll;         
     IBOutlet UIActivityIndicatorView *_activityIndicatorView;        
     IBOutlet UIProgressView *_progressView;
     IBOutlet UILabel *_progressLabel;
     IBOutlet UITextView *_reportView;
     NSMutableArray *_report;
-    BOOL _syncPressed;
+    BOOL _syncPressed; 
 }
 @end
 
@@ -59,8 +58,8 @@ typedef void(^DropboxSyncResultBlock)();
     [super viewDidLoad];
         
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(dropboxLinkChangeChanged:)
-                                                 name:@"DropboxLinkChangeChanged" 
+                                             selector:@selector(dropboxLinkChanged:)
+                                                 name:@"DropboxLinkChanged" 
                                                object:nil];
 }
 
@@ -100,9 +99,10 @@ typedef void(^DropboxSyncResultBlock)();
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
-- (void) dropboxLinkChangeChanged: (NSNotification *)notification
+- (void) dropboxLinkChanged: (NSNotification *)notification
 {
-    [self refreshUI];
+    if ([DropboxService shared].delegate == self)
+        [self refreshUI];
 }
 
 - (void) refreshUI
