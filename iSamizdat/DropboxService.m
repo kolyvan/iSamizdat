@@ -7,13 +7,14 @@
 //
 
 #import "DropboxService.h"
-#import "AppDelegate.h"
-#import <DropboxSDK/DropboxSDK.h>
+#import "KxMacros.h"
+#import "KxUtils.h"
 #import "NSArray+Kolyvan.h"
 #import "NSDictionary+Kolyvan.h"
 #import "NSDate+Kolyvan.h"
-#import "KxUtils.h"
 #import "NSString+Kolyvan.h"
+#import "AppDelegate.h"
+#import <DropboxSDK/DropboxSDK.h>
 #import "DDLog.h"
 
 extern int ddLogLevel;
@@ -69,18 +70,22 @@ static DropboxService *gShared = nil;
 }
 
 - (NSString *) description
-{
-    NSString *smode;
-    if      (_mode == DropboxTaskModeUpload)    smode = @"->";
-    else if (_mode == DropboxTaskModeDownload)  smode = @"<-";    
-    else if (_mode == DropboxTaskModeMetadata)  smode = @"##";        
-    else                                        smode = @"<->";
-    
+{    
     if (_metadata)    
-        return KxUtils.format(@"<DT %@%@%@ (%@) %@>", 
-                              _filename, smode, _remoteFolder, _metadata.rev, _metadata.humanReadableSize);
+        return KxUtils.format(@"<DT %@ %@ %@ (%@)>", 
+                              self.modeAsString, _filename, _remoteFolder, _metadata.humanReadableSize);
+    return KxUtils.format(@"<DT %@ %@ %@>", self.modeAsString,  _filename, _remoteFolder);
+}
 
-    return KxUtils.format(@"<DT %@%@%@>", _filename, smode, _remoteFolder);
+- (NSString *) modeAsString
+{
+    switch (_mode) {
+        case DropboxTaskModeCanceled:   return @"canceled";            
+        case DropboxTaskModeUpload:     return @"upload";            
+        case DropboxTaskModeDownload:   return @"download";
+        case DropboxTaskModeSync:       return @"synced";
+        case DropboxTaskModeMetadata:   return @"query";
+    }    
 }
 
 @end
@@ -96,6 +101,8 @@ static DropboxService *gShared = nil;
 @end
 
 @implementation DropboxService
+
+@synthesize delegate;
 
 + (DropboxService *) shared
 {    
@@ -116,7 +123,10 @@ static DropboxService *gShared = nil;
     if ([session handleOpenURL:url]) {
         
         [[[UIAlertView alloc] initWithTitle:@"Dropbox"
-                                    message:session.isLinked ? @"App linked!" : @"App unlinked!"                                                                   delegate:nil                                                           cancelButtonTitle:@"Ok"                                                           otherButtonTitles:nil] show]; 
+                                    message:session.isLinked ? locString(@"App linked") : locString(@"App unlinked")
+                                   delegate:nil
+                          cancelButtonTitle:locString(@"Ok")
+                          otherButtonTitles:nil] show]; 
                 
         [[NSNotificationCenter defaultCenter] postNotificationName:@"DropboxLinkChangeChanged" object:nil];
         
@@ -128,6 +138,11 @@ static DropboxService *gShared = nil;
 - (BOOL) isLinked
 {
     return [[DBSession sharedSession] isLinked];
+}
+
+- (NSUInteger) tasksCount
+{
+    return _tasks.count;
 }
 
 - (id) init
@@ -176,6 +191,8 @@ static DropboxService *gShared = nil;
         [_restClient cancelAllRequests];
         _restClient = nil;
     }
+    
+    [_tasks removeAllObjects];
 }
 
 - (DBRestClient *)restClient 
@@ -272,7 +289,7 @@ static DropboxService *gShared = nil;
                                                     remote: remoteFolder
                                                 completion: completion];
     
-    DDLogInfo(@"dropbox added %@", task); 
+    DDLogVerbose(@"dropbox added %@", task); 
     
     [_tasks addObject:task];    
     if (_tasks.count == 1)
@@ -285,7 +302,10 @@ static DropboxService *gShared = nil;
     
         DropboxTaskImpl *task = _tasks.first;
         
-        DDLogInfo(@"dropbox process %@", task);          
+        DDLogVerbose(@"dropbox process %@", task);  
+        
+        if (self.delegate)
+            [self.delegate willProcessTask:task tasksCount:_tasks.count];
         
         if (task.metadata) {
             
@@ -322,14 +342,20 @@ static DropboxService *gShared = nil;
                 }
                 
                 if (task.mode == DropboxTaskModeSync) {
-                    
-                    //task.mode = DropboxTaskModeCanceled;                    
+
                     [self complete:nil failure:nil];
                     return;
                 }
             }
             
             if (task.mode == DropboxTaskModeUpload) {
+                
+                if (!KxUtils.fileExists(task.localPath)) {
+                    
+                    task.mode = DropboxTaskModeCanceled;  
+                    [self complete:nil failure:nil];
+                    return;                
+                }
                 
                 [self.restClient uploadFile:task.filename
                                      toPath:task.remoteFolder
@@ -369,11 +395,14 @@ static DropboxService *gShared = nil;
         if (metadata)
             task.metadata = metadata;
         
-        DDLogInfo(@"dropbox complete %@", task); 
+        DDLogVerbose(@"dropbox complete %@", task); 
         
         if (task.completion)
             task.completion(task, error);
                 
+        if (self.delegate)
+            [self.delegate didCompleteTask:task tasksCount:_tasks.count - 1 error:error];
+        
         [_tasks removeObjectAtIndex:0];  
         [self process];
     }
@@ -381,8 +410,7 @@ static DropboxService *gShared = nil;
 
 - (void) syncTime: (DBMetadata *) metadata forPath: (NSString *) localPath 
 {   
-    DDLogInfo(@"dropbox syncTime %@ %@", 
-              localPath, metadata.lastModifiedDate);     
+    //DDLogVerbose(@"dropbox syncTime %@ %@", localPath, metadata.lastModifiedDate);     
     
     NSDictionary *attr = [NSDictionary dictionaryWithObject:metadata.lastModifiedDate
                                                      forKey:NSFileModificationDate];
@@ -391,23 +419,21 @@ static DropboxService *gShared = nil;
                                    error:nil];
 }
 
-#pragma mark -
-#pragma mark DBSessionDelegate methods
+#pragma mark - DBSessionDelegate methods
 
 - (void)sessionDidReceiveAuthorizationFailure:(DBSession*)session userId:(NSString *)userId 
 {    
 	_relinkUserId = userId;
     
-	[[[UIAlertView alloc] initWithTitle:@"Dropbox Session Ended" 
-                                message:@"Do you want to relink?" 
+	[[[UIAlertView alloc] initWithTitle:locString(@"Dropbox Session Ended") 
+                                message:locString(@"Do you want to relink?") 
                                delegate:self 
-                      cancelButtonTitle:@"Cancel" 
-                      otherButtonTitles:@"Relink", nil] show];
+                      cancelButtonTitle:locString(@"Cancel") 
+                      otherButtonTitles:locString(@"Relink"), nil] show];
 }
 
 
-#pragma mark -
-#pragma mark UIAlertViewDelegate methods
+#pragma mark - UIAlertViewDelegate methods
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)index 
 {
@@ -419,9 +445,7 @@ static DropboxService *gShared = nil;
 	_relinkUserId = nil;
 }
 
-
-#pragma mark -
-#pragma mark DBNetworkRequestDelegate methods
+#pragma mark - DBNetworkRequestDelegate methods
 
 static int outstandingRequests;
 
@@ -439,7 +463,6 @@ static int outstandingRequests;
 	}
 }
 
-
 #pragma mark DBRestClientDelegate methods
 
 - (void)restClient:(DBRestClient*)client loadedMetadata:(DBMetadata*)metadata 
@@ -448,7 +471,7 @@ static int outstandingRequests;
         
         DropboxTaskImpl *task = _tasks.first;
         
-        DDLogInfo(@"dropbox loadedMetadata %@ (%@ %@)", task, metadata.path, metadata.rev);        
+        DDLogVerbose(@"dropbox loadedMetadata %@ (%@ %@)", task, metadata.path, metadata.rev);        
         
         if (task.mode == DropboxTaskModeMetadata) {
             
@@ -462,21 +485,30 @@ static int outstandingRequests;
     }
 }
 
-- (void)restClient:(DBRestClient*)client metadataUnchangedAtPath:(NSString*)path
-{
-    DDLogInfo(@"dropbox metadataUnchangedAtPath %@", path);        
-}
 - (void)restClient:(DBRestClient*)client loadMetadataFailedWithError:(NSError*)error 
 {   
     if ([error.domain isEqualToString:@"dropbox.com"] && 
         error.code == 404) { // not found
         
-        DDLogInfo(@"dropbox notfound %@", [error.userInfo get:@"path"]);        
+        DDLogVerbose(@"dropbox notfound %@", [error.userInfo get:@"path"]);        
         
         if (_tasks.nonEmpty) {
+            
             DropboxTaskImpl *task = _tasks.first;
+
+            if (task.mode == DropboxTaskModeDownload) { 
+                
+                task.mode = DropboxTaskModeCanceled;  
+                [self complete:nil failure:nil];
+                return;                
+            }
+
+            if (task.mode == DropboxTaskModeSync) {
+                
+                task.mode = DropboxTaskModeUpload; 
+            }
+            
             task.metadata = [[DBMetadata alloc] init];
-            task.mode = DropboxTaskModeUpload;
             [self process];
             return;
         }
@@ -513,5 +545,24 @@ static int outstandingRequests;
 {
     [self complete: nil failure:error];
 }
+
+- (void)restClient:(DBRestClient*)client loadProgress:(CGFloat)progress forFile:(NSString*)destPath
+{
+    if (_tasks.nonEmpty) {        
+        DropboxTaskImpl *task = _tasks.first;
+        if (self.delegate)
+            [self.delegate processTask:task progress: progress];
+    }
+}
+
+- (void)restClient:(DBRestClient*)client uploadProgress:(CGFloat)progress forFile:(NSString*)destPath from:(NSString*)srcPath
+{
+    if (_tasks.nonEmpty) {        
+        DropboxTaskImpl *task = _tasks.first;
+        if (self.delegate)
+            [self.delegate processTask:task progress: progress];
+    }    
+}
+
 
 @end

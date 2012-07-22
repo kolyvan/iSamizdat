@@ -26,17 +26,27 @@ typedef enum {
 @property (readonly, strong) NSString *localFolder;
 @property (readonly, strong) NSString *remoteFolder;
 @property (readonly, strong) DBMetadata *metadata;
+
+- (NSString *) modeAsString;
 @end
 
 typedef void(^DropboxServiceBlock)(id<DropboxTask> task, NSError *error);
 
+@protocol DropboxServiceDelegate <NSObject>
+- (void) willProcessTask: (id<DropboxTask>) task tasksCount: (NSInteger) count;
+- (void) didCompleteTask: (id<DropboxTask>) task tasksCount: (NSInteger) count error: (NSError *) error;
+- (void) processTask: (id<DropboxTask>) task progress: (CGFloat)progress; 
+@end
+
 @interface DropboxService : NSObject
+
+@property (readonly, nonatomic) BOOL isLinked;
+@property (readonly, nonatomic) NSUInteger tasksCount;
+@property (readwrite, nonatomic) id<DropboxServiceDelegate> delegate;
 
 + (DropboxService *) shared;
 
 - (BOOL)handleOpenURL:(NSURL*)url;
-
-@property (readonly, nonatomic) BOOL isLinked;
 
 - (void) toggleLink: (UIViewController *) vc;
 - (void) link: (UIViewController *) vc;

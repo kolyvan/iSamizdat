@@ -76,7 +76,7 @@
 
 // Performs the action
 - (BOOL)send
-{	
+{	       
 	// Make sure that the item has minimum requirements
 	if (![self validateItem])
 		return NO;
@@ -97,6 +97,11 @@
         
     if ([item.filename contains:@"/"]) {
         
+        //NSString *fullpath = [SamLibStorage.textsPath() stringByAppendingPathComponent:item.filename];
+        //fullpath = [fullpath stringByAppendingPathExtension:@"html"];        
+        //if (!KxUtils.fileExists(fullpath))
+        //    return NO;
+        
         NSArray *a = [item.filename split:@"/"];
         if (a.count != 2)
             return NO;
@@ -106,7 +111,7 @@
         filename = KxUtils.format(@"%@.html", [a objectAtIndex:1]);        
         remoteFolder = KxUtils.format(@"/texts/%@", author);
         localFolder = KxUtils.format(@"/%@/%@", SamLibStorage.textsPath(), author); 
-
+        
     } else {
     
         filename = item.filename;
@@ -127,7 +132,11 @@
                                
                            } else if (task.mode == DropboxTaskModeCanceled) {
                                
-                               [self sendDidCancel];
+                                // see SHKSharerDelegate
+                               
+                                [[SHKActivityIndicator currentIndicator] hide];
+                                [self sendDidCancel];
+                               //[self sendDidFinish];
                                
                            } else  {  
                                
