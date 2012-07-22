@@ -21,3 +21,4 @@
 
 
 extern NSString * mkHTMLPage(SamLibText * text, NSString * html);
+extern void ensureTextCSSInCacheFolder(BOOL force);

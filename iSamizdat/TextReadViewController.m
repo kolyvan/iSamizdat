@@ -52,12 +52,26 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
     template = [template stringByReplacingOccurrencesOfString:@"<!-- TEXT_NAME -->" 
                                                    withString:text.title];    
 
-    NSString * date = [[NSDate date] formattedDatePattern:@"d MMM yyyy HH:mm Z" 
-                                                 timeZone:nil 
-                                                   locale:[[NSLocale alloc] initWithLocaleIdentifier:@"ru_RU"]];
+    NSString * date;
     
-    template = [template stringByReplacingOccurrencesOfString:@"<!-- TEXT_DATE -->" 
+    date = [[NSDate date] formattedDatePattern:@"d MMM yyyy HH:mm Z" 
+                                      timeZone:nil 
+                                        locale:[[NSLocale alloc] initWithLocaleIdentifier:@"ru_RU"]];
+    
+    template = [template stringByReplacingOccurrencesOfString:@"<!-- TEXT_DATE_LOADED -->"
                                                    withString:date];
+    
+    if (text.dateModified.nonEmpty) {
+        
+        template = [template stringByReplacingOccurrencesOfString:@"<!-- TEXT_DATE_MODIFIED -->" 
+                                                       withString:text.dateModified];
+    }
+    
+    if (text.size.nonEmpty) {
+    
+        template = [template stringByReplacingOccurrencesOfString:@"<!-- TEXT_SIZE -->" 
+                                                       withString:text.size];
+    }
     
     if (text.note.nonEmpty)
         template = [template stringByReplacingOccurrencesOfString:@"<!-- TEXT_NOTE -->" 
@@ -65,6 +79,20 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
     
     return [template stringByReplacingOccurrencesOfString:@"<!-- DOWNLOADED_TEXT -->" 
                                                withString:html];
+}
+
+void ensureTextCSSInCacheFolder(BOOL force)
+{    
+    NSFileManager *fm = KxUtils.fileManager();
+    
+    NSString *cssPath = [KxUtils.cacheDataPath() stringByAppendingPathComponent:@"text.css"];
+    
+    if (force || ![fm isReadableFileAtPath:cssPath]) {
+        
+        [fm copyItemAtPath:KxUtils.pathForResource(@"text.css")
+                    toPath:cssPath
+                     error:nil];
+}
 }
 
 /////
@@ -162,7 +190,7 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
 {
     [super viewWillAppear:animated];
     
-    [self ensureTextCSS];
+    ensureTextCSSInCacheFolder(NO);
     
     if (_needReload) {        
         _needReload = NO;
@@ -489,19 +517,6 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
                                          animated:YES];
 }
 
-- (void) ensureTextCSS
-{    
-    NSFileManager *fm = KxUtils.fileManager();
-    
-    NSString *cssPath = [KxUtils.cacheDataPath() stringByAppendingPathComponent:@"text.css"];
-    
-    if (![fm isReadableFileAtPath:cssPath]) {
-    
-        [fm copyItemAtPath:KxUtils.pathForResource(@"text.css")
-                    toPath:cssPath
-                     error:nil];
-    }
-}
 
 #pragma mark - UIWebView delegate
 

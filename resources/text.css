@@ -33,28 +33,15 @@
 }
 
 .info .subinfo {
-	font-size: 0.8em;
-	color:black;
-	margin: 1em 1em 1em 1em;
-	padding: 1em 0em 1em 0em;    
-    border-top: 1px solid #555;
-    border-bottom: 1px solid #555;    
+	font-size: 0.6em;
+	color:gray;
+	margin: 1em 1em 1em 1em;    
 }
 
-.info .subinfo div span {
-	color:#00008B;
-}
-
-.info .subinfo .rating {
-
-}
-
-.info .subinfo .date {
-
-}
-
-.info .subinfo .note {
-    padding: 1em 0em 1em 0em;		
+.info .note {
+    font-size: 0.8em;
+	margin: 1em 1em 1em 1em;    
+    color:#00008B;	
 }
 
 .info .actions {

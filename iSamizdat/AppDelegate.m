@@ -18,6 +18,7 @@
 #import "SearchViewController.h"
 #import "SettingsViewController.h"
 #import "HistoryViewController.h"
+#import "TextReadViewController.h"
 #import "SamLibAgent.h"
 #import "SamLibModel.h"
 #import "SamLibHistory.h"
@@ -404,6 +405,9 @@ int ddLogLevel = LOG_LEVEL_WARN;
         SamLibAgent.setSettingsInt(@"app.version", currentVersion, 0);
         
         DDLogInfo(@"upgrade %d -> %d", storedVersion, currentVersion);
+        
+        ensureTextCSSInCacheFolder(YES);
+        
 #if 0
         if (storedVersion == 0) {    
 
