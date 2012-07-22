@@ -17,6 +17,7 @@
 #import "NSArray+Kolyvan.h"
 #import "SamLibText.h"
 #import "SamLibText+IOS.h"
+#import "SamLibStorage.h"
 
 @implementation SamLibAuthor (IOS)
 
@@ -64,6 +65,11 @@ static char gKey;
 - (NSString *) shortName
 {
     return [self.name split].first;
+}
+
+- (NSString *) filePath
+{
+    return [SamLibStorage.authorsPath() stringByAppendingPathComponent:self.path];
 }
 
 @end

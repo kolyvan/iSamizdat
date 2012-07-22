@@ -19,4 +19,6 @@
 @property (readonly, nonatomic) BOOL hasUpdatedText;
 @property (readonly, nonatomic) NSString * shortName;
 
+@property (readonly, nonatomic) NSString * filePath;
+
 @end

@@ -126,6 +126,11 @@ enum {
     return self;
 }
 
+- (void) dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (void)viewDidLoad
 {    
     [super viewDidLoad];
@@ -135,6 +140,11 @@ enum {
                                                                                action:@selector(goShare)];
 
     self.navigationItem.rightBarButtonItem = goButton;
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(dropboxDownloadCompleted:)
+                                                 name:@"DropboxDownloadCompleted" 
+                                               object:nil];
 }
 
 - (void) viewWillAppear:(BOOL)animated 
@@ -160,6 +170,8 @@ enum {
     self.navigationItem.rightBarButtonItem = nil;
     self.voteViewController = nil;
     self.authorViewController = nil;
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void) didReceiveMemoryWarning
@@ -167,6 +179,21 @@ enum {
     [super didReceiveMemoryWarning];            
     self.voteViewController = nil;    
     self.authorViewController = nil;
+}
+
+- (void) dropboxDownloadCompleted: (NSNotification *)notification
+{
+    NSString *path = [notification.userInfo get:@"path"];
+     
+    if ([path isEqualToString:_text.htmlFile]) {
+        
+        if (self.isViewLoaded && self.view.window) {
+            [self prepareData];       
+            [self.tableView reloadData];
+        } else  {
+            _needReload = YES;
+        }
+    }
 }
 
 #pragma mark - private

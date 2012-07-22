@@ -66,6 +66,11 @@ extern int ddLogLevel;
     return self;
 }
 
+- (void) dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -83,7 +88,12 @@ extern int ddLogLevel;
     label.backgroundColor = [UIColor clearColor];
     //label.shadowColor = [UIColor blackColor];
     //label.shadowOffset = CGSizeMake(0,-1);
-    self.navigationItem.titleView = label;     
+    self.navigationItem.titleView = label;  
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(dropboxDownloadCompleted:)
+                                                 name:@"DropboxDownloadCompleted" 
+                                               object:nil];
     
 }
 
@@ -147,6 +157,8 @@ extern int ddLogLevel;
     self.textContainerController = nil;
     self.textGroupViewController = nil;
     self.authorInfoViewController = nil;
+    
+     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void) didReceiveMemoryWarning
@@ -155,6 +167,16 @@ extern int ddLogLevel;
     self.textContainerController = nil;
     self.textGroupViewController = nil;
     self.authorInfoViewController = nil;    
+}
+
+- (void) dropboxDownloadCompleted: (NSNotification *)notification
+{
+    NSString *path = [notification.userInfo get:@"path"];
+    
+    if ([path isEqualToString:_author.filePath]) {
+        
+        _needReload = YES;      
+    }
 }
 
 #pragma mark - private

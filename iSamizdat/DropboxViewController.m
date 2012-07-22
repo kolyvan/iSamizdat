@@ -334,7 +334,6 @@ typedef void(^DropboxSyncResultBlock)();
     }
 
     return found;
-    
 }
 
 #pragma mark - dropbox service

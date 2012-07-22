@@ -221,6 +221,11 @@ NSDictionary * determineTextFileMetaInfo (NSString *path)
                                              selector:@selector(samLibTextSettingsChanged:)
                                                  name:@"SamLibTextSettingsChanged" 
                                                object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(dropboxDownloadCompleted:)
+                                                 name:@"DropboxDownloadCompleted" 
+                                               object:nil];
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -307,6 +312,16 @@ NSDictionary * determineTextFileMetaInfo (NSString *path)
 - (void) samLibTextSettingsChanged:(NSNotification *)notification
 {
     _needReload = YES;
+}
+
+- (void) dropboxDownloadCompleted: (NSNotification *)notification
+{
+    NSString *path = [notification.userInfo get:@"path"];
+    
+    if ([path isEqualToString:_text.htmlFile]) {
+        
+        _needReload = YES;        
+    }
 }
 
 #pragma mark - pull to refresh

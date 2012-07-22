@@ -403,6 +403,15 @@ static DropboxService *gShared = nil;
         if (self.delegate)
             [self.delegate didCompleteTask:task tasksCount:_tasks.count - 1 error:error];
         
+        if (task.mode == DropboxTaskModeDownload) {
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"DropboxDownloadCompleted" 
+                                                                object:nil
+                                                              userInfo:KxUtils.dictionary(task.localPath, 
+                                                                                          @"path",
+                                                                                          nil)];
+        }
+        
         [_tasks removeObjectAtIndex:0];  
         [self process];
     }
