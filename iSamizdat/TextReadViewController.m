@@ -54,24 +54,18 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
 
     NSString * date;
     
-    date = [[NSDate date] formattedDatePattern:@"d MMM yyyy HH:mm Z" 
+    date = [[NSDate date] formattedDatePattern:@"d/MM/yyyy HH:mm Z" 
                                       timeZone:nil 
                                         locale:[[NSLocale alloc] initWithLocaleIdentifier:@"ru_RU"]];
     
     template = [template stringByReplacingOccurrencesOfString:@"<!-- TEXT_DATE_LOADED -->"
                                                    withString:date];
     
-    if (text.dateModified.nonEmpty) {
-        
-        template = [template stringByReplacingOccurrencesOfString:@"<!-- TEXT_DATE_MODIFIED -->" 
-                                                       withString:text.dateModified];
-    }
+    template = [template stringByReplacingOccurrencesOfString:@"<!-- TEXT_DATE_MODIFIED -->" 
+                                                   withString:text.dateModified.nonEmpty ? text.dateModified : @""];
     
-    if (text.size.nonEmpty) {
-    
-        template = [template stringByReplacingOccurrencesOfString:@"<!-- TEXT_SIZE -->" 
-                                                       withString:text.size];
-    }
+    template = [template stringByReplacingOccurrencesOfString:@"<!-- TEXT_SIZE -->" 
+                                                   withString:text.size.nonEmpty ? text.size : @""];
     
     if (text.note.nonEmpty)
         template = [template stringByReplacingOccurrencesOfString:@"<!-- TEXT_NOTE -->" 
@@ -93,6 +87,49 @@ void ensureTextCSSInCacheFolder(BOOL force)
                     toPath:cssPath
                      error:nil];
 }
+}
+
+NSDictionary * determineTextFileMetaInfo (NSString *path)
+{
+    NSFileHandle *fileHandle = [NSFileHandle fileHandleForReadingAtPath: path];   
+    
+    if (!fileHandle)
+        return nil;
+    
+    NSData *data = [fileHandle readDataOfLength:2048];
+    [fileHandle closeFile];    
+    
+    if (data.length == 0)
+        return nil;
+
+    // if try to create a string via stringFromUtf8Bytes
+    // it may break since there is a partial utf8 stream    
+    NSString *s = [NSString stringFromAsciiBytes:data];
+    if (!s.nonEmpty)
+        return nil;
+    
+    NSScanner *scanner = [NSScanner scannerWithString:s];
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    NSArray *keys = KxUtils.array(@"textLoaded", @"textModifed", @"textSize", nil);    
+    
+    for (NSString *key in keys) {
+    
+        if (scanner.isAtEnd)
+            break;
+        
+        NSString *tag = KxUtils.format(@"<span id='%@'>", key);
+        
+        NSString *value;
+        
+        if ([scanner scanUpToString:tag intoString:nil] &&
+            [scanner scanString:tag intoString:nil] &&
+            [scanner scanUpToString:@"</span>" intoString:&value]) {
+            
+            [dict update:key value:value];
+        }        
+    }
+    
+    return dict;
 }
 
 /////

@@ -399,7 +399,7 @@ int ddLogLevel = LOG_LEVEL_WARN;
 {
     NSInteger currentVersion = [[[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleVersion"] integerValue];
     NSInteger storedVersion = SamLibAgent.settingsInt(@"app.version", 0);
-    
+            
     if (storedVersion != currentVersion) {
                         
         SamLibAgent.setSettingsInt(@"app.version", currentVersion, 0);

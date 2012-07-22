@@ -72,10 +72,10 @@ typedef enum {
     NSString * _type;
     NSString * _rating;        
     NSString * _flagNew;
-    NSString * _lastModified;
+    NSString * _lastModified;       // http response field, unfortunately samlib server sometimes retuns wrong time
     NSString * _diffResult;
-    NSDate * _filetime;
-    NSString *_dateModified;
+    NSDate * _filetime;             // a time when text.html was saved last time
+    NSString *_dateModified;        // it's editing time of text from samlib server(can be null or wrong)
     BOOL _favorited;    
     SamLibTextVote _myVote;        
     unsigned long long _position;

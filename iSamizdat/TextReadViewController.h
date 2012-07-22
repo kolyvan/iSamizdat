@@ -19,6 +19,6 @@
 @property (nonatomic, strong) SamLibText *text;
 @end
 
-
 extern NSString * mkHTMLPage(SamLibText * text, NSString * html);
 extern void ensureTextCSSInCacheFolder(BOOL force);
+extern NSDictionary * determineTextFileMetaInfo (NSString *path);

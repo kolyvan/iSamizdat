@@ -23,6 +23,7 @@
 #import "NSString+Kolyvan.h"
 #import "NSArray+Kolyvan.h"
 #import "NSDate+Kolyvan.h"
+#import "NSDictionary+Kolyvan.h"
 #import "FastCell.h"
 #import "TextReadViewController.h"
 #import "AuthorViewController.h"
@@ -91,6 +92,7 @@ enum {
     BOOL _needReload;
     id _version;
     NSArray *_rows;
+    NSDictionary *_textMeta;
 }
 
 @property (nonatomic, strong) VoteViewController *voteViewController;
@@ -112,6 +114,7 @@ enum {
         _version = text.version;
         _text = text;
         _needReload = YES;
+        _textMeta = nil;
     }
 }
 
@@ -139,7 +142,7 @@ enum {
 {    
     [super viewWillAppear:animated];
     if (_needReload) {
-        _needReload = NO;  
+        _needReload = NO;          
         [self prepareData];       
         [self.tableView reloadData];
         
@@ -187,19 +190,29 @@ enum {
     [ma push: $int(RowComments)];
      
     // fixme: below is most likely wrong code
-    if (_text.htmlFile.nonEmpty) {
+    
+    NSString *htmlPath = _text.htmlFile;
+    if (htmlPath.nonEmpty) {
 
-        if (_text.changedSize && _text.canUpdate)
-            [ma push: $int(RowUpdate)];
+        _textMeta = determineTextFileMetaInfo(htmlPath);
+        
+        //if (_text.changedSize && _text.canUpdate)
+        //    [ma push: $int(RowUpdate)];
+        
+        NSString *textModifed = [_textMeta get:@"textModifed"];
+        NSString *textSize = [_textMeta get:@"textSize"];        
+        
+        if ((textSize && _text.size && ![textSize isEqualToString:_text.size]) ||
+            (textModifed && _text.dateModified && ![textModifed isEqualToString:_text.dateModified])) {
+            
+            [ma push: _text.changedSize ? $int(RowUpdate) : $int(RowDownload)];                        
+        }
         
         [ma push: $int(RowRead)];
         
     } else {
     
-        if (_text.changedSize)
-            [ma push: $int(RowUpdate)];
-        else    
-            [ma push: $int(RowDownload)];
+        [ma push: _text.changedSize ? $int(RowUpdate) : $int(RowDownload)];    
     }
    
     if (_text.note.nonEmpty)
@@ -211,7 +224,7 @@ enum {
     [ma push: $int(RowMyVote)];  
     
     if ([_text commentsObject:NO] != nil ||
-        _text.htmlFile.nonEmpty ||         
+        htmlPath.nonEmpty ||         
         _text.commentsFile.nonEmpty) {
         
         [ma push: $int(RowCleanup)];
@@ -411,7 +424,15 @@ enum {
         
         UITableViewCell *cell = [self mkCell: @"ReadCell" withStyle:UITableViewCellStyleValue1];                    
         cell.textLabel.text = locString(@"The text from");
-        cell.detailTextLabel.text = _text.dateModified.nonEmpty ? _text.dateModified : @"?";          
+        //cell.detailTextLabel.text = _text.dateModified.nonEmpty ? _text.dateModified : @"?";          
+        
+        NSString *data = [_textMeta get:@"textModifed"];
+        if (!data)
+            data = [_textMeta get:@"textLoaded" orElse:@"?"];
+        NSString *textSize = [_textMeta get:@"textSize"];
+        
+        cell.detailTextLabel.text = textSize ? KxUtils.format(@"%@ (%@)", data, textSize) : data;
+        
         return cell;
         
     } else if (RowUpdate == row) {
