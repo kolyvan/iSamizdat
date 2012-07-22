@@ -20,7 +20,7 @@
 #import "SamLibAuthor.h"
 #import "SamLibText.h"
 #import "AuthorViewController.h"
-#import "TextViewController.h"
+#import "TextContainerController.h"
 #import "DDLog.h"
 
 extern int ddLogLevel;
@@ -41,7 +41,7 @@ enum {
 @property (nonatomic, strong) IBOutlet UISearchBar *searchBar;
 @property (nonatomic, strong) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (nonatomic, strong) AuthorViewController* authorViewController;
-@property (nonatomic, strong) TextViewController* textViewController;
+@property (nonatomic, strong) TextContainerController* textContainerController;
 
 @end
 
@@ -49,7 +49,7 @@ enum {
 
 @synthesize tableView, searchBar, activityIndicator;
 @synthesize authorViewController;
-@synthesize textViewController;
+@synthesize textContainerController;
 
 
 - (id) init
@@ -116,14 +116,14 @@ enum {
     self.tableView.dataSource = nil;
     self.searchBar.delegate = nil;
     self.authorViewController = nil;
-    self.textViewController = nil;
+    self.textContainerController = nil;
 }
 
 - (void) didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];  
     self.authorViewController = nil;
-    self.textViewController = nil;
+    self.textContainerController = nil;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -142,10 +142,11 @@ enum {
                                              animated:YES];
     } else if ([found isKindOfClass:[SamLibText class]]) {
             
-        if (!self.textViewController)
-            self.textViewController = [[TextViewController alloc] init];        
-        self.textViewController.text = found;
-        [self.navigationController pushViewController:self.textViewController 
+        if (!self.textContainerController)
+            self.textContainerController = [[TextContainerController alloc] init];        
+        self.textContainerController.text = found;
+        self.textContainerController.selected = TextInfoViewSelected;
+        [self.navigationController pushViewController:self.textContainerController 
                                              animated:YES];
     }
 }
