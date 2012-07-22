@@ -10,6 +10,7 @@
 #import <DropboxSDK/DropboxSDK.h>
 #import "DropboxService.h"
 #import "SamLibStorage.h"
+#import "KxMacros.h"
 #import "KxUtils.h"
 #import "NSString+Kolyvan.h"
 
@@ -96,12 +97,7 @@
     NSString *filename;
         
     if ([item.filename contains:@"/"]) {
-        
-        //NSString *fullpath = [SamLibStorage.textsPath() stringByAppendingPathComponent:item.filename];
-        //fullpath = [fullpath stringByAppendingPathExtension:@"html"];        
-        //if (!KxUtils.fileExists(fullpath))
-        //    return NO;
-        
+                
         NSArray *a = [item.filename split:@"/"];
         if (a.count != 2)
             return NO;
@@ -131,18 +127,13 @@
                                [self sendDidFailWithError:error shouldRelogin:NO];                           
                                
                            } else if (task.mode == DropboxTaskModeCanceled) {
-                               
-                                // see SHKSharerDelegate
-                               
+                                                                                             
                                 [[SHKActivityIndicator currentIndicator] hide];
                                 [self sendDidCancel];
-                               //[self sendDidFinish];
                                
                            } else  {  
                                
-                               [self sendDidFinish];
-                               
-                               // todo: refresh text info
+                               [self sendDidFinish: task.modeAsString];
                            }
                        }];
     
@@ -150,5 +141,18 @@
 	return YES; // return YES if the action has started or completed
 }
 
+- (void) sendDidStart
+{
+    if (!self.quiet)
+		[[SHKActivityIndicator currentIndicator] displayActivity:locString(@"Sync with Dropbox")];
+}
+
+- (void) sendDidFinish: (NSString *) result
+{
+    if (!self.quiet)        
+		[[SHKActivityIndicator currentIndicator] displayCompleted:result.capitalizedString];    
+}
+
+ 
 
 @end
