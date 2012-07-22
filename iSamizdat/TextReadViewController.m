@@ -43,7 +43,8 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
     
     // replase css link from relative to absolute         
     template = [template stringByReplacingOccurrencesOfString:@"text.css" 
-                                                   withString:KxUtils.pathForResource(@"text.css")];
+                                                   //withString:KxUtils.pathForResource(@"text.css")];
+                                                   withString:@"../../text.css"];
     
     template = [template stringByReplacingOccurrencesOfString:@"<!-- TEXT_AUTHOR -->" 
                                                    withString:text.author.name];   
@@ -160,6 +161,8 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    [self ensureTextCSS];
     
     if (_needReload) {        
         _needReload = NO;
@@ -484,6 +487,20 @@ NSString * mkHTMLPage(SamLibText * text, NSString * html)
     self.urlImageViewController.fullscreen = _fullScreen;
     [self.navigationController pushViewController:self.urlImageViewController 
                                          animated:YES];
+}
+
+- (void) ensureTextCSS
+{    
+    NSFileManager *fm = KxUtils.fileManager();
+    
+    NSString *cssPath = [KxUtils.cacheDataPath() stringByAppendingPathComponent:@"text.css"];
+    
+    if (![fm isReadableFileAtPath:cssPath]) {
+    
+        [fm copyItemAtPath:KxUtils.pathForResource(@"text.css")
+                    toPath:cssPath
+                     error:nil];
+    }
 }
 
 #pragma mark - UIWebView delegate

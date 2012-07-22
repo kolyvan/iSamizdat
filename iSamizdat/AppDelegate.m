@@ -80,7 +80,7 @@ int ddLogLevel = LOG_LEVEL_WARN;
     
     [self checkFirstRun];
     [self checkVersion];
-            
+                
     //[[UINavigationBar appearance] setBarStyle: UIBarStyleBlack];
     
     NSArray * controllers = KxUtils.array([[MainViewController alloc] init],                                          
@@ -180,7 +180,6 @@ int ddLogLevel = LOG_LEVEL_WARN;
     
     DDLogInfo(@"%@ started", [NSBundle mainBundle].bundleIdentifier);
 }
-
 
 - (void) errorNoticeInView:(UIView *) view
                      title:(NSString *) title
@@ -405,9 +404,9 @@ int ddLogLevel = LOG_LEVEL_WARN;
         SamLibAgent.setSettingsInt(@"app.version", currentVersion, 0);
         
         DDLogInfo(@"upgrade %d -> %d", storedVersion, currentVersion);
-        
+#if 0
         if (storedVersion == 0) {    
-        
+
             DDLogInfo(@"migrate texts and comments");
             [self migrateFolder: SamLibStorage.textsPath()];
             [self migrateFolder: SamLibStorage.commentsPath()];
@@ -415,6 +414,7 @@ int ddLogLevel = LOG_LEVEL_WARN;
             DDLogInfo(@"clean history");            
             [[SamLibHistory shared] clearAll];            
         }
+#endif
     }
 }
 
