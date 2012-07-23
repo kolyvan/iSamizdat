@@ -157,10 +157,13 @@ enum {
     }    
 }
 
-- (void) viewWillDisappear:(BOOL)animated
+- (void) viewDidAppear:(BOOL)animated
 {
     [self clearChangedFlag];
-    
+}
+
+- (void) viewWillDisappear:(BOOL)animated
+{   
     [super viewWillDisappear:animated];    
 }
 

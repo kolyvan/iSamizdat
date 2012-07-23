@@ -19,7 +19,8 @@
 
 - (BOOL) hasUpdates
 {
-    return self.changedSize || (self.isNew && self.flagNew != nil);
+    return self.changedSize || 
+    (self.isNew && self.flagNew && [self.flagNew isEqualToString:@"red"]);
 }
 
 - (UIImage *) favoritedImage

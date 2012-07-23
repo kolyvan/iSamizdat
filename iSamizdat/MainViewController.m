@@ -65,6 +65,7 @@ typedef enum {
 @interface MainViewController () {
     NSInteger _modelVersion;
     BOOL _tableLoaded;
+    NSDate *_lastUpdated;
 }
 
 @property (nonatomic, strong) NSMutableArray *content;
@@ -295,6 +296,8 @@ typedef enum {
                     errors = nil; 
                 }
                 
+                _lastUpdated = [NSDate date];
+                
                 block(status, message);
             }
         }];
@@ -303,14 +306,20 @@ typedef enum {
  
 - (NSDate *) lastUpdateDate
 {
-    NSDate *date = nil;
-    if (self.authors.nonEmpty) {
-        date = [self.authors fold:nil with:^(id acc, id elem) {
-            NSDate *l = acc, *r = ((SamLibAuthor *)elem).timestamp;
-            return [r earlierDate: l];
-        }];
+    if (!_lastUpdated) {
+        
+        if (self.authors.nonEmpty) {
+            _lastUpdated = [self.authors fold:nil with:^(id acc, id elem) {
+                NSDate *l = acc, *r = ((SamLibAuthor *)elem).timestamp;
+                return [r laterDate: l];
+            }];
+            
+        } else {
+            
+            _lastUpdated = [NSDate date];
+        }
     }
-    return date;
+    return _lastUpdated;
 }
 
 #pragma mark - Table View
@@ -342,17 +351,18 @@ typedef enum {
     return 0;
 }
 
-
 - (MainTableViewCell *) mkMainCell
 {
     static NSString *CellIdentifier = @"MainCell";
     
     MainTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];    
     if (cell == nil) {
-        cell = [[MainTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault 
+        cell = [[MainTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle 
                                         reuseIdentifier:CellIdentifier];                
         cell.textLabel.backgroundColor = [UIColor clearColor];
         cell.textLabel.opaque = NO;    
+        cell.detailTextLabel.backgroundColor = [UIColor clearColor];
+        cell.detailTextLabel.opaque = NO;            
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;       
     }    
     return cell;
@@ -415,6 +425,7 @@ typedef enum {
             MainTableViewCell *cell = [self mkMainCell];        
             SamLibAuthor *author = obj;
             cell.textLabel.text = author.name.nonEmpty ? author.name : author.path;
+            cell.detailTextLabel.text = author.title ? author.title : @"";
             cell.textLabel.textColor = [UIColor darkTextColor];                        
                     
             UIColor *p  = cell.fillColor;
