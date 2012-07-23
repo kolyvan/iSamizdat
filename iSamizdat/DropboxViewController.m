@@ -76,12 +76,17 @@ extern int ddLogLevel;
     
     [DropboxService shared].delegate = nil;
         
+    BOOL needReloadModel = NO;
     for (id<DropboxTask> task in _report) {
         if (task.mode == DropboxTaskModeDownload && 
-            [task.remoteFolder isEqualToString:@"/authors"]) {
-            [[SamLibModel shared] reload];
+            [task.remoteFolder isEqualToString:@"/authors"]) {         
+            needReloadModel = YES;
+            break;
         }
     }
+    
+    if (needReloadModel)
+        [[SamLibModel shared] reload];
     
     [_report removeAllObjects];    
 }
@@ -143,8 +148,7 @@ extern int ddLogLevel;
                 
             } else {
                 
-                [self syncAuthors];
-                
+                [self syncAuthors: nil];                
                 [self syncTexts: ^(DBMetadata *md) {
                     // only if text exists
                     return (BOOL)([self findObject:md.path] != nil); 
@@ -169,7 +173,9 @@ extern int ddLogLevel;
     
     NSMutableArray *exclude = [NSMutableArray array];
     
-    for (SamLibAuthor * author in [SamLibModel shared].authors) {
+    SamLibModel *model = [SamLibModel shared];
+    
+    for (SamLibAuthor * author in model.authors) {
     
         [dS sync:author.path
            local:SamLibStorage.authorsPath()
@@ -193,6 +199,11 @@ extern int ddLogLevel;
             }
         }
     }
+
+    [self syncAuthors:^BOOL(DBMetadata *md) {       
+         // exclude already synced
+        return (nil == [model findAuthor:md.filename]);
+    }];
     
     [self syncTexts: ^(DBMetadata *md) {
         
@@ -205,11 +216,11 @@ extern int ddLogLevel;
     }];
 }
 
-- (void) syncAuthors
+- (void) syncAuthors: (BOOL(^)(DBMetadata *md)) allowBlock
 {
     [self syncFolder:SamLibStorage.authorsPath()
               remote:@"/authors" 
-          allowBlock:nil];
+          allowBlock:allowBlock];
 }
 
 - (void) syncTexts: (BOOL(^)(DBMetadata *md)) allowBlock
@@ -329,7 +340,6 @@ extern int ddLogLevel;
         _syncPressed = NO;
         [_buttonSync setTitle:_syncPressed ? locString(@"Cancel") : locString(@"Sync") 
                      forState:UIControlStateNormal];
-
     }
 }
 
