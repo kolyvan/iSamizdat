@@ -28,7 +28,6 @@ extern int ddLogLevel;
     IBOutlet UISwitch *_switchSyncAll;         
     IBOutlet UIActivityIndicatorView *_activityIndicatorView;        
     IBOutlet UIProgressView *_progressView;
-    IBOutlet UILabel *_progressLabel;
     IBOutlet UILabel *_countLabel;
     IBOutlet UITextView *_reportView;
     NSMutableArray *_report;
@@ -159,7 +158,6 @@ extern int ddLogLevel;
             [_buttonSync setTitle:_syncPressed ? locString(@"Cancel") : locString(@"Sync") 
                          forState:UIControlStateNormal];
         }    
-        
         
     } else {
     
@@ -313,15 +311,26 @@ extern int ddLogLevel;
         }
     }
     
-    _progressLabel.text = complete ? @"" : 
-        KxUtils.format(@"%@ %@ > %@", task.modeAsString, task.filename, task.remoteFolder);
+    NSString* (^mkLine)(id) = ^(id<DropboxTask> task) {
+        
+        NSString *path;
+        if ([task.remoteFolder hasSuffix:@"/authors"])
+            path = task.filename;
+        else
+            path = [task.remoteFolder.lastPathComponent stringByAppendingPathComponent:task.filename];
+        
+        return KxUtils.format(@"%@ %@\n", task.modeAsString, path);
+    };
     
-    NSMutableString *ms = [NSMutableString  string];    
+    NSMutableString *ms = [NSMutableString  string];     
+    [ms appendString: complete ? @"" : mkLine(task)];
+    
     NSArray *tasks = _report.reverse;    
     for (id<DropboxTask> task in tasks)
-        [ms appendFormat:@"%@ %@ > %@\n", task.modeAsString, task.filename, task.remoteFolder];  
+        [ms appendString: mkLine(task)];
 
     _reportView.text = ms;
+    _reportView.hidden = ms.isEmpty;    
     _progressView.progress = 0;
     _progressView.hidden = complete;    
        

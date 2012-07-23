@@ -83,7 +83,7 @@ static DropboxService *gShared = nil;
         case DropboxTaskModeCanceled:   return @"canceled";            
         case DropboxTaskModeUpload:     return @"upload";            
         case DropboxTaskModeDownload:   return @"download";
-        case DropboxTaskModeSync:       return @"synced";
+        case DropboxTaskModeSync:       return @"sync";
         case DropboxTaskModeMetadata:   return @"query";
     }    
 }
