@@ -259,7 +259,7 @@ extern int ddLogLevel;
         else { 
             SamLibText *new = [SamLibText fromDictionary:d 
                                               withAuthor:self];
-            [new flagAsNew];
+            t.changedFlag = SamLibTextChangedNew;
             [newTexts push: new];
         }
     }
@@ -277,7 +277,7 @@ extern int ddLogLevel;
         }
         
         if(!found) {
-            [t flagAsRemoved];
+            t.changedFlag = SamLibTextChangedRemoved;
         }
     }
     
@@ -310,7 +310,7 @@ extern int ddLogLevel;
 - (void) clearTextChanged
 {
     for (SamLibText *t in self.texts) 
-        [t flagAsChangedNone];
+        t.changedFlag = SamLibTextChangedNone;
 }
 
 - (void) update: (UpdateAuthorBlock) block

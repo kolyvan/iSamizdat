@@ -111,7 +111,7 @@ typedef enum {
 @property (readonly, nonatomic) NSInteger deltaComments;
 @property (readonly, nonatomic) float deltaRating;
 
-@property (readonly, nonatomic) SamLibTextChanged changedFlag;
+@property (readwrite, nonatomic) SamLibTextChanged changedFlag;
 @property (readonly) BOOL changedSize;
 @property (readonly) BOOL changedNote;
 @property (readonly) BOOL changedComments;
@@ -155,10 +155,6 @@ typedef enum {
 - (void) updateFromDictionary: (NSDictionary *) dict;
 
 - (NSDictionary *) toDictionary;
-
-- (void) flagAsRemoved;
-- (void) flagAsNew;
-- (void) flagAsChangedNone;
 
 - (void) update: (UpdateTextBlock) block 
        progress: (AsyncProgressBlock) progress

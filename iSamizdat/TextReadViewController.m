@@ -277,7 +277,10 @@ NSDictionary * determineTextFileMetaInfo (NSString *path)
     
     if (_text.htmlFile.nonEmpty)
         [[SamLibHistory shared] addText:_text];
-    
+        
+    if (_text.hasUpdates)
+        _text.hasUpdates = NO;
+        
     //self.navigationController.navigationBar.translucent = _prevNavBarTranslucent;
     
     [self.activityIndicator stopAnimating];  

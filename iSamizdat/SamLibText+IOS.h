@@ -15,7 +15,7 @@
 
 @interface SamLibText (IOS)
 
-@property (nonatomic, readonly) BOOL hasUpdates;
+@property (nonatomic, readwrite) BOOL hasUpdates;
 
 @property (nonatomic, readonly) UIImage * favoritedImage;
 @property (nonatomic, readonly) UIImage * imageFlagNew;

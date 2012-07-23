@@ -24,6 +24,19 @@
         (self.isNew && self.flagNew && [self.flagNew isEqualToString:@"red"]);
 }
 
+- (void) setHasUpdates:(BOOL)hasUpdates
+{
+    if (self.hasUpdates != hasUpdates) {
+     
+        if (hasUpdates)
+            self.changedFlag |= SamLibTextChangedSize;
+        else
+            self.changedFlag &= ~(SamLibTextChangedSize|SamLibTextChangedNote|SamLibTextChangedNew);
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SamLibAuthorChanged" object:nil];
+    }
+}
+
 - (UIImage *) favoritedImage
 {
     return [UIImage imageNamed: self.favorited ? @"favorite.png" : @"favorite-off.png"];        

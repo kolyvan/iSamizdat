@@ -509,21 +509,6 @@ static NSString * prettyHtml (NSMutableArray *diffs)
     [self updateFromDictionary: dict setChanged: YES allowNil:NO];
 }
 
-- (void) flagAsRemoved
-{
-    self.changedFlag = SamLibTextChangedRemoved;
-}
-
-- (void) flagAsNew
-{
-    self.changedFlag = SamLibTextChangedNew;
-}
-
-- (void) flagAsChangedNone
-{
-    self.changedFlag = SamLibTextChangedNone;
-}
-
 - (NSDictionary *) toDictionary
 {
     NSMutableDictionary * dict = [NSMutableDictionary dictionaryWithCapacity:19];
@@ -936,8 +921,8 @@ static NSString * prettyHtml (NSMutableArray *diffs)
 - (NSString *) ratingWithDelta: (NSString *)sep
 {
     float f = self.ratingFloat;
-    if (self.changedRating && _deltaRating > 0)
-        return KxUtils.format(@"%.2f%@%+.2f", f, sep, _deltaComments);    
+    if (self.changedRating && _deltaRating > 0.009)
+        return KxUtils.format(@"%.2f%@%+.2f", f, sep, _deltaRating);    
     if (f > 0)
         return KxUtils.format(@"%.2f", f);
     return @"";

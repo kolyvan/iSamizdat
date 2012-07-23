@@ -80,6 +80,7 @@ extern int ddLogLevel;
 enum {
     RowTitle,
     RowAuthor,
+    //RowClearChangedFlag,    
     RowSize,
     RowUpdate,    
     RowDownload,  
@@ -163,7 +164,7 @@ enum {
 
 - (void) viewDidAppear:(BOOL)animated
 {
-    [self clearChangedFlag];
+   // [self clearChangedFlag];
 }
 
 - (void) viewWillDisappear:(BOOL)animated
@@ -215,11 +216,10 @@ enum {
     UIViewController *backView =[controllers objectAtIndex: controllers.count - 2];
     if (![backView isKindOfClass:[AuthorViewController class]])
         [ma push: $int(RowAuthor)];
+    
+    if (_text.hasUpdates) {
+    }
             
-    [ma push: $int(RowSize)];
-      
-    [ma push: $int(RowComments)];
-     
     // fixme: below is most likely wrong code
     
     NSString *htmlPath = _text.htmlFile;
@@ -245,7 +245,10 @@ enum {
     
         [ma push: _text.changedSize ? $int(RowUpdate) : $int(RowDownload)];    
     }
-   
+    
+    [ma push: $int(RowSize)];    
+    [ma push: $int(RowComments)];    
+    
     if (_text.note.nonEmpty)
         [ma push: $int(RowNote)];
         
@@ -338,13 +341,6 @@ enum {
     
     actionSheet.tag = 1;
     [actionSheet showFromTabBar:self.tabBarController.tabBar];
-}
-
-- (void) clearChangedFlag
-{
-    if (_text.hasUpdates)
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"SamLibAuthorChanged" object:nil];
-    [_text flagAsChangedNone];
 }
 
 #pragma mark - Table view data source
@@ -586,6 +582,12 @@ enum {
             [container setSelected:RowRead == row ? TextReadViewSelected  : TextCommentsViewSelected
                           animated:YES];
         }
+        
+    } else if (RowSize == row) {
+        
+        _text.hasUpdates = !_text.hasUpdates;
+         UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+        cell.imageView.image = _text.hasUpdates ? [UIImage imageNamed:@"changed"] : _text.imageFlagNew;
     } 
     
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];

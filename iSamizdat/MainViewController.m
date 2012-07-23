@@ -97,7 +97,7 @@ typedef enum {
 {
     [super viewDidLoad];
    
-    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:locString(@"Authors list")
+    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:locString(@"List")
                                                                              style:UIBarButtonItemStylePlain
                                                                             target:nil
                                                                             action:nil];
@@ -107,12 +107,6 @@ typedef enum {
                                              selector:@selector(changedNotification:)
                                                  name:@"SamLibAuthorChanged" 
                                                object:nil];
-        
-    //[[NSNotificationCenter defaultCenter] addObserver:self
-    //                                         selector:@selector(changedNotification:)
-    //                                             name:@"SamLibTextChanged" 
-    //                                           object:nil];      
-    
 }
 
 - (void)viewDidUnload
@@ -226,7 +220,14 @@ typedef enum {
 
 - (void) changedNotification:(NSNotification *)notification
 {
-    self.authors = nil;
+    if (self.isViewLoaded && self.view.window) {
+        
+        // nothing to do
+        
+    } else {
+        
+        self.authors = nil;
+    }
 }
 
 - (void) toggleEdit
@@ -435,12 +436,10 @@ typedef enum {
                 cell.imageView.image = [UIImage imageNamed:@"failure.png"];
                 cell.fillColor = nil;        
                 
-            } else if (author.hasUpdatedText) {             
-                
-                cell.imageView.image = nil;    
-                cell.fillColor = nil;                                    
-                cell.fillColor = updatedFillColor;    
-                
+           // } else if (author.hasUpdatedText) {             
+           //     cell.imageView.image = nil;    
+           //     cell.fillColor = nil;                                    
+           //     cell.fillColor = updatedFillColor;                    
             } else {
                 
                 cell.imageView.image = nil;            
@@ -539,10 +538,10 @@ typedef enum {
 - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView 
            editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    id obj = [self.content objectAtIndex:indexPath.row]; 
-    if ([obj isKindOfClass:[SamLibAuthor class]]) 
+    //id obj = [self.content objectAtIndex:indexPath.row]; 
+    //if ([obj isKindOfClass:[SamLibAuthor class]]) 
         return UITableViewCellEditingStyleDelete;
-    return UITableViewCellEditingStyleNone;
+    //return UITableViewCellEditingStyleNone;
 }
 
 - (void)tableView:(UITableView *)tableView 
@@ -575,6 +574,16 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
         [tableView deleteRowsAtIndexPaths:indexArray 
                          withRowAnimation:UITableViewRowAnimationAutomatic];        
         [[SamLibModel shared] deleteAuthor: author];        
+        
+    } else if ([obj isKindOfClass:[SamLibText class]]) {
+        
+        // remove         
+        SamLibText *text = obj;
+        text.hasUpdates = NO;
+        [self.content removeObjectAtIndex:indexPath.row];
+        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] 
+                         withRowAnimation:UITableViewRowAnimationAutomatic]; 
+        [self refreshBadgeValue];        
     }
 }
 

@@ -108,6 +108,10 @@
     
     if (_comments.all.count > 0)
         [[SamLibHistory shared] addComments:_comments];
+    
+    if (_comments.text.changedComments) {
+        _comments.text.changedFlag &= ~SamLibTextChangedComments;
+    }
 }
 
 - (void)viewDidUnload
