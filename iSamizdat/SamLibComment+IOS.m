@@ -17,6 +17,7 @@
 #import "NSArray+Kolyvan.h"
 #import "KxUtils.h"
 #import "TextLine.h"
+#import "UIColor+Kolyvan.h"
 
 @implementation SamLibComment (IOS)
 
@@ -156,11 +157,11 @@ static char gKey;
         return [UIColor brownColor];    
     if (self.link.nonEmpty) {
         
-        static UIColor *customBlue;
-        if (!customBlue)
-            customBlue = [UIColor colorWithRed:0.192 green:0.376 blue:0.749 alpha:1];
-        //return [UIColor blueColor]; 
-        return customBlue; 
+        //static UIColor *customBlue;
+        //if (!customBlue)
+        //    customBlue = [UIColor colorWithRed:0.192 green:0.376 blue:0.749 alpha:1];        
+        //return customBlue; 
+        return [UIColor altBlueColor];
     }   
     
     return [UIColor darkTextColor];

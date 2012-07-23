@@ -11,5 +11,6 @@
 @interface UIColor (Kolyvan)
 
 + (UIColor *) secondaryTextColor; 
++ (UIColor *) altBlueColor;
 
 @end

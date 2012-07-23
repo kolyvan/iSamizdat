@@ -18,4 +18,14 @@
     return [UIColor colorWithRed:R green:G blue:B alpha:1];
 }
 
++ (UIColor *) altBlueColor
+{
+    // 0054a4
+    const float R = 0; 
+    const float G = 0.329;
+    const float B = 0.643;
+    return [UIColor colorWithRed:R green:G blue:B alpha:1];
+}
+
+
 @end

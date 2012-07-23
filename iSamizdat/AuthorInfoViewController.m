@@ -17,6 +17,7 @@
 #import "SamLibModel.h"
 #import "SamLibAuthor.h"
 #import "SamLibAuthor+IOS.h"
+#import "UIColor+Kolyvan.h"
 #import "SHK.h"
 
 enum {
@@ -226,7 +227,7 @@ enum {
                 
                 cell.imageView.image = [UIImage imageNamed:@"success.png"];                
                 cell.textLabel.text = locString(@"Updated");
-                cell.textLabel.textColor = [UIColor blueColor];
+                cell.textLabel.textColor = [UIColor altBlueColor];
                 
             } else {
                 cell.imageView.image = nil;

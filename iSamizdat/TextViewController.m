@@ -30,6 +30,7 @@
 #import "TextContainerController.h"
 #import "UIFont+Kolyvan.h"
 #import "DDLog.h"
+#import "UIColor+Kolyvan.h"
 #import "SHK.h"
 
 extern int ddLogLevel;
@@ -465,7 +466,7 @@ enum {
     } else if (RowUpdate == row) {
         
         UITableViewCell *cell = [self mkDownloadCell];
-        cell.textLabel.textColor = [UIColor blueColor];
+        cell.textLabel.textColor = [UIColor altBlueColor];
         cell.textLabel.text = locString(@"Update is available");
         return cell; 
        

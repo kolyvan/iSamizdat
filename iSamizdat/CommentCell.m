@@ -24,6 +24,7 @@
 #import "CommentsViewController.h"
 #import "TextLine.h"
 #import "UIFont+Kolyvan.h"
+#import "UIColor+Kolyvan.h"
 #import <objc/runtime.h>
 
 ////
@@ -413,7 +414,7 @@ static void drawLine(CGPoint from, CGPoint to, UIColor *color, CGFloat width)
     // render number
     
     if (_comment.isNew)
-        [[UIColor blueColor] set];
+        [[UIColor altBlueColor] set];
     else        
         [[UIColor blackColor] set];
     
@@ -497,7 +498,7 @@ static void drawLine(CGPoint from, CGPoint to, UIColor *color, CGFloat width)
                 
                 y += [line drawInRect:CGRectMake(x, y, w, rect.size.height - y)  
                              withFont:[UIFont systemFont14] 
-                             andColor:line.link.nonEmpty ? [UIColor blueColor] : [UIColor blackColor]].height;
+                             andColor:line.link.nonEmpty ? [UIColor altBlueColor] : [UIColor blackColor]].height;
             }
 
         }
