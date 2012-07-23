@@ -134,9 +134,18 @@ NSDictionary * determineTextFileMetaInfo (NSString *path)
 
 /////
 
+@interface UIActionSheetOpenSafari : UIActionSheet
+@property (readwrite, strong, nonatomic) NSURL *url;
+@end 
+@implementation UIActionSheetOpenSafari
+@synthesize url;
+@end
+
+/////
+
 #define SLIDER_FATE_TIME 3
 
-@interface TextReadViewController () {
+@interface TextReadViewController () <UIActionSheetDelegate> {
     BOOL _needReload;
     id _version;
     BOOL _fullScreen;
@@ -638,14 +647,35 @@ shouldStartLoadWithRequest:(NSURLRequest *)request
             [self showRemoteImage: request.URL];
             return NO;
         }
+        
+        UIActionSheetOpenSafari *actionSheet;
+        actionSheet = [[UIActionSheetOpenSafari alloc] initWithTitle:locString(@"Open in Safari?")
+                                                           delegate:self
+                                                  cancelButtonTitle:locString(@"Cancel") 
+                                             destructiveButtonTitle:nil
+                                                  otherButtonTitles:locString(@"Open"), nil];
+        actionSheet.url = request.URL;
+        [actionSheet showFromTabBar:self.tabBarController.tabBar];
+
+        return NO;
+        
     }
     
     if (navigationType == UIWebViewNavigationTypeReload) {
         
         return NO;
     }
-    
+       
     return YES;
+}
+
+- (void)actionSheet:(UIActionSheetOpenSafari *)actionSheet 
+didDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex != actionSheet.cancelButtonIndex) {
+                
+        [UIApplication.sharedApplication openURL: actionSheet.url];  
+    }
 }
 
 @end
