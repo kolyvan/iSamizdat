@@ -42,6 +42,7 @@ extern int ddLogLevel;
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         _report = [[NSMutableArray alloc] init];
+        self.title = @"Dropbox";
     }
     return self;
 }
