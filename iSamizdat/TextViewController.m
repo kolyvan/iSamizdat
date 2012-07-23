@@ -414,7 +414,7 @@ enum {
         UITableViewCell *cell = [self mkCell: @"SizeCell" withStyle:UITableViewCellStyleValue1];            
         cell.textLabel.text = locString(@"Size");
         cell.detailTextLabel.text = [_text sizeWithDelta: @" "];
-        cell.imageView.image = _text.changedSize ? [UIImage imageNamed:@"success"] : _text.imageFlagNew;
+        cell.imageView.image = _text.changedSize ? [UIImage imageNamed:@"changed"] : _text.imageFlagNew;
         return cell;    
     
     } else if (RowGenre == row) {

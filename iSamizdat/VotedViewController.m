@@ -21,9 +21,9 @@
 UIImage * mkVoteImage(NSInteger number, BOOL selected)
 {
     if (selected)
-        return [UIImage imageNamed:KxUtils.format(@"mark_%02d_28", number)];
+        return [UIImage imageNamed:KxUtils.format(@"mark_bl_%02d_29", number)];
     else
-        return [UIImage imageNamed:KxUtils.format(@"mark_%02d_32", number)];
+        return [UIImage imageNamed:KxUtils.format(@"mark_gr_%02d_29", number)];
 }
 
 @interface VotedViewController () {

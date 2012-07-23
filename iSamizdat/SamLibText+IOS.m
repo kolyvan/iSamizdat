@@ -48,7 +48,7 @@
         return [UIImage imageNamed:@"trash.png"];     
     
     if (self.changedSize)
-        return [UIImage imageNamed:@"success.png"];
+        return [UIImage imageNamed:@"changed.png"];
         
     if (self.changedComments)        
         return [UIImage imageNamed:@"comment.png"];     

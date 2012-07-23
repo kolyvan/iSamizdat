@@ -25,7 +25,12 @@
     self = [super initWithNibName:nil bundle:nil];
     if (self) {
         self.title = locString(@"Favorites");
-        self.tabBarItem = [[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemBookmarks tag: 0]; 
+        //self.tabBarItem = [[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemBookmarks tag: 0]; 
+        
+        self.tabBarItem = [[UITabBarItem alloc] initWithTitle:locString(@"Favorites")
+                                                        image:[UIImage imageNamed:@"favorites"] 
+                                                          tag:0];
+        
     }
     return self;
 }
