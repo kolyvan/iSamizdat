@@ -21,7 +21,7 @@
 #import "SamLibAuthor.h"
 #import "TextContainerController.h"
 
-@interface HistoryViewController ()
+@interface HistoryViewController () <UIActionSheetDelegate>
 @property (nonatomic, strong) TextContainerController *textContainerController;
 @end
 
@@ -78,8 +78,23 @@
 
 - (void) goClear
 {
-    [[SamLibHistory shared] clearAll];
-    [self.tableView reloadData];
+    UIActionSheet *actionSheet;
+    actionSheet = [[UIActionSheet alloc] initWithTitle:locString(@"Are you sure?")
+                                              delegate:self
+                                     cancelButtonTitle:locString(@"Cancel") 
+                                destructiveButtonTitle:locString(@"Clear") 
+                                     otherButtonTitles:nil];
+    
+    [actionSheet showFromTabBar:self.tabBarController.tabBar];
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex != actionSheet.cancelButtonIndex) {
+
+        [[SamLibHistory shared] clearAll];
+        [self.tableView reloadData];
+    }
 }
 
 #pragma mark - Table view data source
