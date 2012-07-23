@@ -186,6 +186,7 @@
         [self.view addSubview: toVC.view];        
         [toVC didMoveToParentViewController:self];        
         [fromVC removeFromParentViewController];
+        [fromVC.view removeFromSuperview];
     }
     
     _activeVC = toVC;    

@@ -185,6 +185,7 @@ typedef enum {
 
 - (void) saveComments;
 
++ (NSString *) keyAuthor: (NSString *) author text: (NSString *) text;  
 + (KxTuple2 *) splitKey: (NSString *) key;
 
 @end

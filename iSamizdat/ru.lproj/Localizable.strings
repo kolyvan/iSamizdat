@@ -96,8 +96,9 @@
 "by author" = "по автору";
 "by vote" = "по оценке";
 "Clear" = "Очистить";
-"Open in Safari?" = "Открыть в Safari?";
-"Open" = "Открыть";
+"Open in Safari" = "Открыть в Safari";
+"Open in App" = "Открыть в приложении";
+"Open URL" = "Открыть URL";
 
 /* obsolete, keep it for just in case */
 

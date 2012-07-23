@@ -106,7 +106,7 @@ extern int ddLogLevel;
         
         self.title = _author.name;
                 
-        CGRect rc;
+        CGRect rc = {0,0,0,0};
         UILabel *label = (UILabel *)self.navigationItem.titleView;
         rc.size = self.navigationController.navigationBar.bounds.size;            
         rc.size = [_author.name sizeWithFont:[UIFont boldSystemFont16] 

@@ -24,6 +24,7 @@
 - (void) editPost: (SamLibComment *) comment;
 - (void) goAuthor: (NSString *) path;
 - (void) toggleCommentCell: (CommentCell *)cell;
+- (void) handleLink: (NSString *) path;
 
 @end
 

@@ -63,6 +63,15 @@ extern int ddLogLevel;
                               nil);
 }
 
+- (NSString *) description
+{
+    return KxUtils.format(@"<%@: %p %@ %@>", 
+                          [self class], 
+                          self, 
+                          self.key, 
+                          self.category == SamLibHistoryCategoryText ? @"text" : @"comm"
+                          );
+}
 
 @end
 

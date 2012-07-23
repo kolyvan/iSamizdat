@@ -122,6 +122,7 @@
 
     NSArray *content = [SamLibHistory shared].history;    
     SamLibHistoryEntry *p = [content objectAtIndex:content.count - indexPath.row - 1];     
+    //SamLibHistoryEntry *p = [content objectAtIndex:indexPath.row];     
     BOOL isText = p.category == SamLibHistoryCategoryText;
     
     cell.textLabel.text = p.title;
@@ -137,6 +138,7 @@
 {
     NSArray *content = [SamLibHistory shared].history;    
     SamLibHistoryEntry *p = [content objectAtIndex:content.count - indexPath.row - 1];   
+    //SamLibHistoryEntry *p = [content objectAtIndex:indexPath.row];     
     SamLibText *text = [[SamLibModel shared] findTextByKey:p.key];
     
     if (text) {

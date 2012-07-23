@@ -11,6 +11,7 @@
 // 
 
 #import "TextReadViewController.h"
+#import "SamLibModel.h"
 #import "SamLibText.h"
 #import "SamLibText+IOS.h"
 #import "SamLibAuthor.h"
@@ -24,6 +25,9 @@
 #import "AppDelegate.h"
 #import "KxMacros.h"
 #import "UrlImageViewController.h"
+#import "AuthorViewController.h"
+#import "TextContainerController.h"
+#import "OpenLinkHandler.h"
 #import "DDLog.h"
 
 extern int ddLogLevel;
@@ -134,15 +138,6 @@ NSDictionary * determineTextFileMetaInfo (NSString *path)
 
 /////
 
-@interface UIActionSheetOpenSafari : UIActionSheet
-@property (readwrite, strong, nonatomic) NSURL *url;
-@end 
-@implementation UIActionSheetOpenSafari
-@synthesize url;
-@end
-
-/////
-
 #define SLIDER_FATE_TIME 3
 
 @interface TextReadViewController () <UIActionSheetDelegate> {
@@ -163,6 +158,8 @@ NSDictionary * determineTextFileMetaInfo (NSString *path)
 @property (nonatomic, strong) UIBarButtonItem *stopButton;
 @property (nonatomic, strong) UrlImageViewController *urlImageViewController;
 @property (nonatomic, strong) UIBarButtonItem *goSlideButton;
+@property (nonatomic, strong) AuthorViewController *authorViewController;
+@property (nonatomic, strong) TextContainerController *textContainerController;
 @end
 
 @implementation TextReadViewController
@@ -173,6 +170,8 @@ NSDictionary * determineTextFileMetaInfo (NSString *path)
 @synthesize urlImageViewController;
 @synthesize activityIndicator;
 @synthesize goSlideButton;
+@synthesize authorViewController;
+@synthesize textContainerController;
 
 - (void) setText:(SamLibText *)text 
 {
@@ -254,7 +253,7 @@ NSDictionary * determineTextFileMetaInfo (NSString *path)
 }
 
 - (void) viewDidAppear:(BOOL)animated
-{
+{   
     [super viewDidAppear:animated];
     
     //[self performSelector:@selector(fullscreenMode:) 
@@ -300,6 +299,8 @@ NSDictionary * determineTextFileMetaInfo (NSString *path)
     self.pullToRefreshView = nil;
     self.stopButton = nil;
     self.urlImageViewController = nil;
+    self.authorViewController = nil;
+    self.textContainerController = nil;    
     self.goSlideButton = nil;
     self.navigationItem.rightBarButtonItem = nil;
     
@@ -310,6 +311,8 @@ NSDictionary * determineTextFileMetaInfo (NSString *path)
 {
     [super didReceiveMemoryWarning]; 
     self.urlImageViewController = nil;
+    self.authorViewController = nil;
+    self.textContainerController = nil;    
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -578,6 +581,32 @@ NSDictionary * determineTextFileMetaInfo (NSString *path)
                                          animated:YES];
 }
 
+- (void) handleLink: (NSString *) link
+{
+    [OpenLinkHandler handleOpenLink:link 
+                     fromController:self 
+                              block:^(SamLibAuthor *author, SamLibText *text) {
+                                  
+                                  if (text) {
+                                      
+                                      if (!self.textContainerController) {
+                                          self.textContainerController = [[TextContainerController alloc] init];
+                                      }                                          
+                                      self.textContainerController.text = text;
+                                      self.textContainerController.selected = TextInfoViewSelected;
+                                      [self.navigationController pushViewController:self.textContainerController 
+                                                                           animated:YES];
+                                  } else {
+                                      
+                                      if (!self.authorViewController) {
+                                          self.authorViewController = [[AuthorViewController alloc] init];
+                                      }
+                                      self.authorViewController.author = author;
+                                      [self.navigationController pushViewController:self.authorViewController 
+                                                                           animated:YES];
+                                  }
+                              }];
+}
 
 #pragma mark - UIWebView delegate
 
@@ -648,14 +677,7 @@ shouldStartLoadWithRequest:(NSURLRequest *)request
             return NO;
         }
         
-        UIActionSheetOpenSafari *actionSheet;
-        actionSheet = [[UIActionSheetOpenSafari alloc] initWithTitle:locString(@"Open in Safari?")
-                                                           delegate:self
-                                                  cancelButtonTitle:locString(@"Cancel") 
-                                             destructiveButtonTitle:nil
-                                                  otherButtonTitles:locString(@"Open"), nil];
-        actionSheet.url = request.URL;
-        [actionSheet showFromTabBar:self.tabBarController.tabBar];
+        [self handleLink: request.URL.absoluteString];
 
         return NO;
         
@@ -667,15 +689,6 @@ shouldStartLoadWithRequest:(NSURLRequest *)request
     }
        
     return YES;
-}
-
-- (void)actionSheet:(UIActionSheetOpenSafari *)actionSheet 
-didDismissWithButtonIndex:(NSInteger)buttonIndex
-{
-    if (buttonIndex != actionSheet.cancelButtonIndex) {
-                
-        [UIApplication.sharedApplication openURL: actionSheet.url];  
-    }
 }
 
 @end

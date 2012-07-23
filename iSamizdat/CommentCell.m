@@ -530,7 +530,8 @@ static void drawLine(CGPoint from, CGPoint to, UIColor *color, CGFloat width)
                 
                 if (CGRectContainsPoint(line.bounds, loc)) {
                     
-                    [self openUrl:line.link];
+                    //[self openUrl:line.link];
+                    [self.delegate handleLink: line.link];
                     break;
                     
                 }
@@ -538,5 +539,7 @@ static void drawLine(CGPoint from, CGPoint to, UIColor *color, CGFloat width)
         }   
     }
 }
+
+
 
 @end

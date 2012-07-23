@@ -98,6 +98,7 @@
 		871A52B115BD3C08005CE363 /* mark_gr_09_29@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 871A528515BD3C08005CE363 /* mark_gr_09_29@2x.png */; };
 		871A52B215BD3C08005CE363 /* mark_gr_10_29.png in Resources */ = {isa = PBXBuildFile; fileRef = 871A528615BD3C08005CE363 /* mark_gr_10_29.png */; };
 		871A52B315BD3C08005CE363 /* mark_gr_10_29@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 871A528715BD3C08005CE363 /* mark_gr_10_29@2x.png */; };
+		871A52B915BD583E005CE363 /* OpenLinkHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 871A52B815BD583D005CE363 /* OpenLinkHandler.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		8722160015B2B32900A50602 /* UITabBarController+Kolyvan.m in Sources */ = {isa = PBXBuildFile; fileRef = 872215FF15B2B32900A50602 /* UITabBarController+Kolyvan.m */; };
 		8724332A15B522C500F8C6D3 /* author_add@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8724331515B522C500F8C6D3 /* author_add@2x.png */; };
 		8724332B15B522C500F8C6D3 /* author_go@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8724331615B522C500F8C6D3 /* author_go@2x.png */; };
@@ -404,6 +405,8 @@
 		871A528515BD3C08005CE363 /* mark_gr_09_29@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mark_gr_09_29@2x.png"; sourceTree = "<group>"; };
 		871A528615BD3C08005CE363 /* mark_gr_10_29.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mark_gr_10_29.png; sourceTree = "<group>"; };
 		871A528715BD3C08005CE363 /* mark_gr_10_29@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mark_gr_10_29@2x.png"; sourceTree = "<group>"; };
+		871A52B715BD583D005CE363 /* OpenLinkHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenLinkHandler.h; sourceTree = "<group>"; };
+		871A52B815BD583D005CE363 /* OpenLinkHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenLinkHandler.m; sourceTree = "<group>"; };
 		872215FE15B2B32900A50602 /* UITabBarController+Kolyvan.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITabBarController+Kolyvan.h"; sourceTree = "<group>"; };
 		872215FF15B2B32900A50602 /* UITabBarController+Kolyvan.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITabBarController+Kolyvan.m"; sourceTree = "<group>"; };
 		8724331515B522C500F8C6D3 /* author_add@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "author_add@2x.png"; path = "resources/author_add@2x.png"; sourceTree = "<group>"; };
@@ -877,6 +880,8 @@
 				87BD1C8B15B970F500F50369 /* DropboxViewController.m */,
 				87F977FC15BA94ED008EDE66 /* SHKDropbox.h */,
 				87F977FD15BA94ED008EDE66 /* SHKDropbox.m */,
+				871A52B715BD583D005CE363 /* OpenLinkHandler.h */,
+				871A52B815BD583D005CE363 /* OpenLinkHandler.m */,
 			);
 			path = iSamizdat;
 			sourceTree = "<group>";
@@ -1473,6 +1478,7 @@
 				87BD1C8915B9701E00F50369 /* DropboxService.m in Sources */,
 				87BD1C8D15B970F500F50369 /* DropboxViewController.m in Sources */,
 				87F977FE15BA94ED008EDE66 /* SHKDropbox.m in Sources */,
+				871A52B915BD583E005CE363 /* OpenLinkHandler.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

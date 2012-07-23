@@ -229,7 +229,8 @@ static NSString * prettyHtml (NSMutableArray *diffs)
 
 - (NSString *) key 
 {
-    return KxUtils.format(@"%@/%@", _author.path, [_path stringByDeletingPathExtension]);    
+//    return KxUtils.format(@"%@/%@", _author.path, [_path stringByDeletingPathExtension]);    
+    return [self->isa keyAuthor:_author.path text:_path];
 }
 
  - (NSInteger) sizeInt
@@ -1005,9 +1006,9 @@ static NSString * prettyHtml (NSMutableArray *diffs)
     }
 }
 
-- (NSString *) makeKey: (NSString *) sep;
++ (NSString *) keyAuthor: (NSString *) author text: (NSString *) text;  
 {
-    return KxUtils.format(@"%@%@%@", _author.path, sep, [_path stringByDeletingPathExtension]);    
+    return KxUtils.format(@"%@/%@", author, [text stringByDeletingPathExtension]);    
 }
 
 + (KxTuple2 *) splitKey: (NSString *) key

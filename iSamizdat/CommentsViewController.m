@@ -13,10 +13,12 @@
 #import "CommentsViewController.h"
 #import "KxMacros.h"
 #import "KxUtils.h"
+#import "KxTuple2.h"
 #import "NSString+Kolyvan.h"
 #import "NSArray+Kolyvan.h"
 #import "NSDictionary+Kolyvan.h"
 #import "NSData+Kolyvan.h"
+#import "SamLib.h"
 #import "SamLibComments.h"
 #import "SamLibComment+IOS.h"
 #import "SamLibAuthor+IOS.h"
@@ -27,11 +29,12 @@
 #import "CommentCell.h"
 #import "PostViewController.h"
 #import "AuthorViewController.h"
+#import "TextContainerController.h"
+#import "OpenLinkHandler.h"
 
 @interface ActionSheetWithComment : UIActionSheet
-@property (readwrite, strong) SamLibComment * comment;
+@property (readwrite, strong, nonatomic) SamLibComment * comment;
 @end
-
 @implementation ActionSheetWithComment
 @synthesize comment;
 @end
@@ -48,13 +51,13 @@
 
 @property (nonatomic, strong) PostViewController *postViewController;
 @property (nonatomic, strong) AuthorViewController *authorViewController;
-
+@property (nonatomic, strong) TextContainerController *textContainerController;
 @end
 
 @implementation CommentsViewController
 
 @synthesize comments = _comments;
-@synthesize postViewController, authorViewController;
+@synthesize postViewController, authorViewController,textContainerController;
 
 - (void) setComments:(SamLibComments *)comments
 {
@@ -90,7 +93,7 @@
 }
 
 - (void) viewWillAppear:(BOOL)animated 
-{    
+{
     [super viewWillAppear:animated];
     if (_needReload) {
         _needReload = NO; 
@@ -99,7 +102,7 @@
 }
 
 - (void) viewWillDisappear:(BOOL)animated
-{
+{   
     [super viewWillDisappear:animated];
     [self cancelSwipeAnimated: NO];
     
@@ -114,6 +117,7 @@
     self.navigationItem.rightBarButtonItem = nil;    
     self.postViewController = nil;
     self.authorViewController = nil;
+    self.textContainerController = nil;
     
     [self.tableView removeGestureRecognizer:_gestureRecognizer];
     _gestureRecognizer = nil;   
@@ -124,6 +128,7 @@
     [super didReceiveMemoryWarning];
     self.postViewController = nil; 
     self.authorViewController = nil;
+    self.textContainerController = nil;    
 }
 
 - (void)handleSwipe:(UISwipeGestureRecognizer *)sender 
@@ -329,21 +334,7 @@
 - (void) sendPost: (PostData *) post
 {   
     _postData = post;        
-    //[self.pullToRefreshView startLoadingAndForceExpand];      
     [self forceRefresh];
-}
-
-- (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex
-{
-    if (buttonIndex != actionSheet.cancelButtonIndex) {
-        
-        SamLibComment *comment = ((ActionSheetWithComment *)actionSheet).comment;
-        
-        _postData = [[PostData alloc] init];
-        _postData.msgid = comment.msgid;
-        //[self.pullToRefreshView startLoadingAndForceExpand];          
-        [self forceRefresh];
-    }
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView 
@@ -360,6 +351,48 @@
     [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
                           withRowAnimation:YES];
 
+}
+
+- (void) handleLink: (NSString *) link
+{
+    [OpenLinkHandler handleOpenLink:link 
+                     fromController:self 
+                              block:^(SamLibAuthor *author, SamLibText *text) {
+                                  
+                                  if (text) {
+                                      
+                                      if (!self.textContainerController) {
+                                          self.textContainerController = [[TextContainerController alloc] init];
+                                      }                                          
+                                      self.textContainerController.text = text;
+                                      self.textContainerController.selected = TextInfoViewSelected;
+                                      [self.navigationController pushViewController:self.textContainerController 
+                                                                           animated:YES];
+                                  } else {
+                                      
+                                      if (!self.authorViewController) {
+                                          self.authorViewController = [[AuthorViewController alloc] init];
+                                      }
+                                      self.authorViewController.author = author;
+                                      [self.navigationController pushViewController:self.authorViewController 
+                                                                           animated:YES];
+                                  }
+                              }];
+    
+}
+
+#pragma mark - action sheet delegate
+
+- (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex
+{ 
+    if (buttonIndex != actionSheet.cancelButtonIndex) {
+        
+        SamLibComment *comment = ((ActionSheetWithComment *)actionSheet).comment;
+        
+        _postData = [[PostData alloc] init];
+        _postData.msgid = comment.msgid;         
+        [self forceRefresh];
+    }
 }
 
 #pragma mark - Table view data source

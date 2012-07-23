@@ -9,6 +9,8 @@
 #import "KxArc.h"
 #import "KxMacros.h"
 #import "KxUtils.h"
+#import "KxTuple2.h"
+#import "SamLibText.h"
 #import "NSDictionary+Kolyvan.h"
 #import "NSDate+Kolyvan.h"
 #import "NSString+Kolyvan.h"
@@ -163,6 +165,57 @@ int levenshteinDistanceNS2(NSString* s1, NSString *s2)
                 range:NSMakeRange(0, n)];
     
     return levenshteinDistanceNS(s1, buffer2, n);
+}
+
+KxTuple2 * isLinkToSamlibAuthorOrText(NSString * link)
+{   
+    if ([link hasPrefix:@"http://samlib.ru/"])
+        link = [link drop:@"http://samlib.ru/".length];
+    
+    else if ([link hasPrefix:@"http://zhurnal.lib.ru/"])
+        link = [link drop:@"http://zhurnal.lib.ru/".length];
+    
+    else
+        return nil;
+    
+    if ([link hasSuffix:@"/indexdate.shtml"])
+        link = [link take: link.length - @"/indexdate.shtml".length];
+    
+    if ([link hasPrefix:@"editors/"])
+        link = [link drop:@"editors/".length];
+    
+    if (link.length > 2) //&& 
+        //[link characterAtIndex:1] == '/' &&
+        //link.first == [link characterAtIndex:2]) 
+        
+        link = [link drop:2];
+    
+    if (link.nonEmpty && 
+        link.last == '/') {
+        
+        link = link.butlast;        
+    }
+            
+    NSArray *components = [link pathComponents];
+     NSString *first = components.first;    
+        
+    if (components.count == 2) {
+        
+        NSString *last = components.last;
+        
+        if (![last.pathExtension isEqualToString:@"shtml"])
+            return nil;
+        
+        return [KxTuple2 first: first second: last];
+        
+    } else if (components.count == 1) {
+        
+        return [KxTuple2 first: first second: nil];
+        
+    } else {
+        
+        return nil;
+    }
 }
 
 /////

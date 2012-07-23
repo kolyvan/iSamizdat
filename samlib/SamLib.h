@@ -26,7 +26,7 @@ typedef enum {
 
 @class SamLibAuthor;
 @class SamLibText;
-
+@class KxTuple2;
 ////
 
 extern NSString * getStringFromDict(NSDictionary *dict, NSString *name, NSString *path);
@@ -39,6 +39,7 @@ extern void restoreSamLibSessionCookies();
 extern int levenshteinDistance(unichar* s1, int n, unichar *s2, int m);
 extern int levenshteinDistanceNS(NSString* s1, unichar *s2, int m);
 extern int levenshteinDistanceNS2(NSString* s1, NSString *s2);
+extern KxTuple2 * isLinkToSamlibAuthorOrText(NSString * link);
 
 ////
 
