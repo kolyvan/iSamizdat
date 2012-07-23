@@ -38,6 +38,7 @@ extern int ddLogLevel;
 @interface NoteCell : FastCell
 
 @property (nonatomic, strong) NSString *note;
+@property (nonatomic) BOOL changed;
 
 + (CGFloat) computeHeight: (NSString *) note 
                  forWidth: (CGFloat) width;
@@ -46,7 +47,7 @@ extern int ddLogLevel;
 
 @implementation NoteCell
 
-@synthesize note = _note;
+@synthesize note = _note, changed = _changed;
 
 
 + (CGFloat) computeHeight: (NSString *) note 
@@ -63,8 +64,10 @@ extern int ddLogLevel;
 	
 	[[UIColor whiteColor] set];
 	CGContextFillRect(context, rect);
+
+    UIColor *textColor = _changed ? [UIColor altBlueColor] : [UIColor darkTextColor];
+    [textColor set];
     
-    [[UIColor darkTextColor] set];
     [_note drawInRect: CGRectInset(rect, 10, 10)
               withFont:[UIFont systemFont14]  
          lineBreakMode:UILineBreakModeTailTruncation];    
@@ -397,7 +400,8 @@ enum {
             cell = [[NoteCell alloc] initWithStyle:UITableViewCellStyleDefault 
                                    reuseIdentifier:CellIdentifier];
         }
-        cell.note = _text.note;        
+        cell.note = _text.note;    
+        cell.changed = _text.changedNote;
         return cell;
         
     } else  if (RowTitle == row) { 
