@@ -16,6 +16,7 @@
 #import "SamLibText+IOS.h"
 #import "UIFont+Kolyvan.h"
 #import "VotedViewController.h"
+#import "UIColor+Kolyvan.h"
 
 @interface VoteViewController () {
     //BOOL _needReload;
@@ -88,15 +89,21 @@
     
     indexPath = [NSIndexPath indexPathForRow:newVote inSection:0];
     cell = [self.tableView cellForRowAtIndexPath:indexPath];
-    
-    ((UIImageView *)cell.accessoryView).image = mkVoteImage(newVote, YES);
-    [cell.accessoryView sizeToFit];
-    
+
+    //((UIImageView *)cell.accessoryView).image = mkVoteImage(newVote, YES);
+    //[cell.accessoryView sizeToFit];    
+    cell.textLabel.textColor = [UIColor altBlueColor];    
+    cell.imageView.image = mkVoteImage(indexPath.row, YES);
+    cell.accessoryType = UITableViewCellAccessoryCheckmark;
+
     indexPath = [NSIndexPath indexPathForRow:self.myVote inSection:0];
     cell = [self.tableView cellForRowAtIndexPath:indexPath];
-    
-    ((UIImageView *)cell.accessoryView).image = mkVoteImage(self.myVote, NO);
-    [cell.accessoryView sizeToFit];
+
+    //((UIImageView *)cell.accessoryView).image = mkVoteImage(self.myVote, NO);
+    //[cell.accessoryView sizeToFit];
+    cell.textLabel.textColor = [UIColor darkTextColor];        
+    cell.imageView.image = mkVoteImage(indexPath.row, NO);
+    cell.accessoryType = UITableViewCellAccessoryNone;        
 }
 
 #pragma mark - Table view data source
@@ -118,14 +125,24 @@
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
                                       reuseIdentifier:CellIdentifier];                        
-        cell.accessoryView = [[UIImageView alloc] initWithFrame:CGRectZero];
+        //cell.accessoryView = [[UIImageView alloc] initWithFrame:CGRectZero];
     }
     
+    BOOL selected = indexPath.row == _myVote;
+    
     cell.textLabel.text = [[SamLibText class] stringForVote:indexPath.row];    
-    ((UIImageView *)cell.accessoryView).image = mkVoteImage(indexPath.row, indexPath.row == _myVote);
-    [cell.accessoryView sizeToFit];
+    cell.textLabel.textColor = selected ? [UIColor altBlueColor] : [UIColor darkTextColor];
+    cell.imageView.image = mkVoteImage(indexPath.row, selected);
+    cell.accessoryType = selected ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+    //((UIImageView *)cell.accessoryView).image = mkVoteImage(indexPath.row, indexPath.row == _myVote);    
+    //[cell.accessoryView sizeToFit];
     
     return cell;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView indentationLevelForRowAtIndexPath:(NSIndexPath *)indexPath
+{ 
+    return 5;
 }
 
 #pragma mark - Table view delegate
