@@ -232,6 +232,14 @@ NSDictionary * determineTextFileMetaInfo (NSString *path)
                                              selector:@selector(dropboxDownloadCompleted:)
                                                  name:@"DropboxDownloadCompleted" 
                                                object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(deviceOrientationDidChangeNotification:)
+                                                 name:UIDeviceOrientationDidChangeNotification 
+                                               object:[UIDevice currentDevice]];
+
+    
+    
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -334,6 +342,15 @@ NSDictionary * determineTextFileMetaInfo (NSString *path)
     if ([path isEqualToString:_text.htmlFile]) {
         
         _needReload = YES;        
+    }
+}
+
+- (void) deviceOrientationDidChangeNotification: (NSNotification *)notification
+{
+    if (_slider) {
+     
+        [_slider removeFromSuperview];
+        _slider = nil;
     }
 }
 
@@ -453,11 +470,24 @@ NSDictionary * determineTextFileMetaInfo (NSString *path)
     if (!_slider) {
         
         CGSize size = self.view.bounds.size;
+        CGFloat width = size.width;
+        CGFloat height = size.height;   
+        
         CGRect frame;
-        frame.origin.x = -size.width / 2;
-        frame.origin.y = size.height / 2 - 20;        
-        frame.size.width = size.height - 20;
+                     
+        frame.size.width = height - 20;
         frame.size.height = 30; 
+        
+        if (UIDeviceOrientationIsLandscape([UIDevice currentDevice].orientation)) {
+            
+            frame.origin.x = width - 30 - 90;  // 90 is the magic number, i have no idea why this works
+            frame.origin.y = height / 2 - 20;      
+            
+        } else {
+            
+            frame.origin.x = width / 2 - 30;        
+            frame.origin.y = height / 2 - 20;  
+        }  
         
         _slider = [[UISlider alloc] initWithFrame:frame];        
         [self.view addSubview:_slider];
@@ -470,7 +500,8 @@ NSDictionary * determineTextFileMetaInfo (NSString *path)
                     action:@selector(sliderValueChanged:) 
           forControlEvents:UIControlEventValueChanged]; 
     }
-    
+
+    //_webView.scrollView.showsVerticalScrollIndicator = _slider.hidden;    
     _slider.hidden = !_slider.hidden;
         
     if (_sliderTimer) {
@@ -507,6 +538,8 @@ NSDictionary * determineTextFileMetaInfo (NSString *path)
         [UIView beginAnimations:nil context:NULL];
         _slider.hidden = YES;
         [UIView commitAnimations];
+
+       // _webView.scrollView.showsVerticalScrollIndicator = YES;
     }
 }
 
