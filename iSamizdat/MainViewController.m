@@ -548,42 +548,55 @@ typedef enum {
 commitEditingStyle:(UITableViewCellEditingStyle)editingStyle 
 forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    id obj = [self.content objectAtIndex:indexPath.row];    
-    if ([obj isKindOfClass:[SamLibAuthor class]]) {    
-        
-        // build lists
-        NSMutableIndexSet *indexSet = [NSMutableIndexSet indexSet];
-        NSMutableArray *indexArray = [NSMutableArray array];
-        
-        [indexSet addIndex:indexPath.row];
-        [indexArray addObject:indexPath];
-        
-        SamLibAuthor *author = obj;        
-        for (NSInteger n = indexPath.row + 1; n < self.content.count; ++n) {
+    if (AuthorSectionNumber == indexPath.section) {
+    
+        id obj = [self.content objectAtIndex:indexPath.row];    
+        if ([obj isKindOfClass:[SamLibAuthor class]]) {    
             
-            id p = [self.content objectAtIndex:n];
-            if ([p isKindOfClass:[SamLibAuthor class]]) 
-                break;
+            // build lists
+            NSMutableIndexSet *indexSet = [NSMutableIndexSet indexSet];
+            NSMutableArray *indexArray = [NSMutableArray array];
             
-            [indexSet addIndex:n];
-            [indexArray addObject:[NSIndexPath indexPathForRow:n inSection:indexPath.section]];            
+            [indexSet addIndex:indexPath.row];
+            [indexArray addObject:indexPath];
+            
+            SamLibAuthor *author = obj;        
+            for (NSInteger n = indexPath.row + 1; n < self.content.count; ++n) {
+                
+                id p = [self.content objectAtIndex:n];
+                if ([p isKindOfClass:[SamLibAuthor class]]) 
+                    break;
+                
+                [indexSet addIndex:n];
+                [indexArray addObject:[NSIndexPath indexPathForRow:n inSection:indexPath.section]];            
+            }
+            
+            // remove         
+            [self.content removeObjectsAtIndexes:indexSet];
+            [tableView deleteRowsAtIndexPaths:indexArray 
+                             withRowAnimation:UITableViewRowAnimationAutomatic];        
+            [[SamLibModel shared] deleteAuthor: author];        
+            
+        } else if ([obj isKindOfClass:[SamLibText class]]) {
+            
+            // remove         
+            SamLibText *text = obj;
+            text.hasUpdates = NO;
+            [self.content removeObjectAtIndex:indexPath.row];
+            [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] 
+                             withRowAnimation:UITableViewRowAnimationAutomatic]; 
+            [self refreshBadgeValue];        
         }
         
-        // remove         
-        [self.content removeObjectsAtIndexes:indexSet];
-        [tableView deleteRowsAtIndexPaths:indexArray 
-                         withRowAnimation:UITableViewRowAnimationAutomatic];        
-        [[SamLibModel shared] deleteAuthor: author];        
+    } else if (IgnoredSectionNumber == indexPath.section) {
         
-    } else if ([obj isKindOfClass:[SamLibText class]]) {
+        SamLibAuthor *author = [self.ignored objectAtIndex:indexPath.row];   
+        //[self.ignored removeObjectAtIndex:indexPath.row];                
+        self.ignored = [self.ignored filter:^BOOL(id elem) { return elem != author; }];
         
-        // remove         
-        SamLibText *text = obj;
-        text.hasUpdates = NO;
-        [self.content removeObjectAtIndex:indexPath.row];
         [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] 
                          withRowAnimation:UITableViewRowAnimationAutomatic]; 
-        [self refreshBadgeValue];        
+        [[SamLibModel shared] deleteAuthor: author];   
     }
 }
 
