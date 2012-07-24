@@ -476,16 +476,16 @@ NSDictionary * determineTextFileMetaInfo (NSString *path)
         CGRect frame;
                      
         frame.size.width = height - 20;
-        frame.size.height = 30; 
+        frame.size.height = 35; 
         
         if (UIDeviceOrientationIsLandscape([UIDevice currentDevice].orientation)) {
             
-            frame.origin.x = width - 30 - 90;  // 90 is the magic number, i have no idea why this works
+            frame.origin.x = width - 35 - 85;  // 85 is the magic number, i have no idea why this works
             frame.origin.y = height / 2 - 20;      
             
         } else {
             
-            frame.origin.x = width / 2 - 30;        
+            frame.origin.x = width / 2 - 35;        
             frame.origin.y = height / 2 - 20;  
         }  
         
@@ -501,7 +501,7 @@ NSDictionary * determineTextFileMetaInfo (NSString *path)
           forControlEvents:UIControlEventValueChanged]; 
     }
 
-    //_webView.scrollView.showsVerticalScrollIndicator = _slider.hidden;    
+    _webView.scrollView.showsVerticalScrollIndicator = _slider.hidden;    
     _slider.hidden = !_slider.hidden;
         
     if (_sliderTimer) {
@@ -515,7 +515,7 @@ NSDictionary * determineTextFileMetaInfo (NSString *path)
         
         _sliderTimestamp = [NSDate date];
         
-        _sliderTimer = [NSTimer timerWithTimeInterval:1 
+        _sliderTimer = [NSTimer timerWithTimeInterval:0.5 
                                                target:self 
                                              selector:@selector(checkSliderVisibility) 
                                              userInfo:nil 
@@ -539,7 +539,7 @@ NSDictionary * determineTextFileMetaInfo (NSString *path)
         _slider.hidden = YES;
         [UIView commitAnimations];
 
-       // _webView.scrollView.showsVerticalScrollIndicator = YES;
+        _webView.scrollView.showsVerticalScrollIndicator = YES;
     }
 }
 
