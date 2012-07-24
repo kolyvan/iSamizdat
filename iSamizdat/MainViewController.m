@@ -538,10 +538,7 @@ typedef enum {
 - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView 
            editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    //id obj = [self.content objectAtIndex:indexPath.row]; 
-    //if ([obj isKindOfClass:[SamLibAuthor class]]) 
-        return UITableViewCellEditingStyleDelete;
-    //return UITableViewCellEditingStyleNone;
+    return UITableViewCellEditingStyleDelete;
 }
 
 - (void)tableView:(UITableView *)tableView 
@@ -590,13 +587,25 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
         
     } else if (IgnoredSectionNumber == indexPath.section) {
         
-        SamLibAuthor *author = [self.ignored objectAtIndex:indexPath.row];   
-        //[self.ignored removeObjectAtIndex:indexPath.row];                
+        NSUInteger row = indexPath.row;
+        SamLibAuthor *author = [self.ignored objectAtIndex:row];   
+        
         self.ignored = [self.ignored filter:^BOOL(id elem) { return elem != author; }];
         
-        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] 
-                         withRowAnimation:UITableViewRowAnimationAutomatic]; 
-        [[SamLibModel shared] deleteAuthor: author];   
+        if (self.ignored.nonEmpty) {        
+            [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] 
+                             withRowAnimation:UITableViewRowAnimationAutomatic]; // 
+        
+            [[SamLibModel shared] deleteAuthor: author];   
+            
+        } else {
+            
+            // there is a mystical assertion in deleteRowsAtIndexPaths          
+            // if try to delete a last row in last section
+            
+            [self.tableView reloadData]; 
+            [[SamLibModel shared] deleteAuthor: author];   
+        }
     }
 }
 
