@@ -1770,7 +1770,7 @@
 					"-all_load",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "976CABFE-21DF-4EE4-A807-912A00690D69";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "3AF6AB74-E4D9-4ADB-BAC7-CBDD6980DA1C";
 				USER_HEADER_SEARCH_PATHS = "vendors/sharekit/** vendors/dropbox/**";
 				WRAPPER_EXTENSION = app;
 			};

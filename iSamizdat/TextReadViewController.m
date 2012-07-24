@@ -140,12 +140,12 @@ NSDictionary * determineTextFileMetaInfo (NSString *path)
 
 #define SLIDER_FATE_TIME 3
 
-@interface TextReadViewController () <UIActionSheetDelegate> {
+@interface TextReadViewController () <UIActionSheetDelegate, UIGestureRecognizerDelegate> {
     BOOL _needReload;
     id _version;
     BOOL _fullScreen;
     BOOL _prevNavBarTranslucent;
-    UISwipeGestureRecognizer *gestureRecognizer;     
+    UITapGestureRecognizer *_tapGestureRecognizer;
     CGFloat _prevScale;
     BOOL _resetingWebView;
     UISlider *_slider;
@@ -202,13 +202,11 @@ NSDictionary * determineTextFileMetaInfo (NSString *path)
 {
     [super viewDidLoad];
     self.webView.delegate = self;
-        
-    gestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self 
-                                                                  action:@selector(handleSwipe:)];    
-
-    gestureRecognizer.direction = UISwipeGestureRecognizerDirectionRight  | UISwipeGestureRecognizerDirectionLeft; 
-    //gestureRecognizer.delegate = self;    
-    [self.webView addGestureRecognizer:gestureRecognizer];
+    
+    _tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];    
+    _tapGestureRecognizer.numberOfTapsRequired = 2;    
+    _tapGestureRecognizer.delegate = self;
+    [self.webView addGestureRecognizer:_tapGestureRecognizer];
     
     self.pullToRefreshView = [[SSPullToRefreshView alloc] initWithScrollView:self.webView.scrollView
                                                                     delegate:self];
@@ -296,8 +294,8 @@ NSDictionary * determineTextFileMetaInfo (NSString *path)
     [super viewDidUnload];
     _webView.delegate = nil;
     
-    [self.webView removeGestureRecognizer:gestureRecognizer];
-    gestureRecognizer = nil;
+    [self.webView removeGestureRecognizer:_tapGestureRecognizer];
+    _tapGestureRecognizer = nil;
     
     self.pullToRefreshView = nil;
     self.stopButton = nil;
@@ -423,10 +421,9 @@ NSDictionary * determineTextFileMetaInfo (NSString *path)
 
 #pragma mark - private
 
-- (void)handleSwipe:(UISwipeGestureRecognizer *)sender 
-{   
+- (void) handleTap:(UITapGestureRecognizer *)sender 
+{        
     if (sender.state == UIGestureRecognizerStateEnded) {
-
         [self fullscreenMode: !_fullScreen];        
     } 
 }
@@ -611,12 +608,35 @@ NSDictionary * determineTextFileMetaInfo (NSString *path)
                               }];
 }
 
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
+{   
+    CGPoint pt = [touch locationInView:self.view];
+    CGRect bounds = self.view.bounds;
+    CGFloat w = bounds.size.width;
+    CGFloat l = bounds.origin.x + w * .33;
+    CGFloat r = bounds.origin.x + w * .66;    
+    
+    if ((pt.x > l) && (pt.x < r)) {            
+        return YES;        
+    }    
+    return NO;    
+}
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer 
+shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
+{    
+    return YES;
+}
+
 #pragma mark - UIWebView delegate
 
 - (void)webViewDidFinishLoadDeferred
 {
-    //DDLogInfo(@"webViewDidFinishLoadDeferred %@", _text.path);    
+    //DDLogInfo(@"webViewDidFinishLoadDeferred %@", _text.path); 
     
+    //UIScrollView *scrollView = _webView.scrollView;
+    //scrollView.showsHorizontalScrollIndicator = NO;
+        
     [self prepareHTML];    
     [self restoreOffset];
     
