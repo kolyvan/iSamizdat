@@ -96,6 +96,8 @@ static NSString * prepareText(NSString * text, NSString* format) {
         
         if ([s hasPrefix:@"<dd>&nbsp;&nbsp;"])
             return [[s substringFromIndex:16] stringByAppendingString:@"<br />"];
+        if ([s hasPrefix:@"<dd>"])
+            return [[s substringFromIndex:4] stringByAppendingString:@"<br />"];        
         return s;
     }] mkString: @"\n"];
 }
