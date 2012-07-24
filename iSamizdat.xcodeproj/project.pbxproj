@@ -224,6 +224,10 @@
 		87F5A90E15B94E79000F351E /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 87F5A90D15B94E79000F351E /* Icon@2x.png */; };
 		87F5A91115B94F41000F351E /* Icon-Small.png in Resources */ = {isa = PBXBuildFile; fileRef = 87F5A90F15B94F41000F351E /* Icon-Small.png */; };
 		87F5A9EE15B965F8000F351E /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87F5A9EC15B965F1000F351E /* QuartzCore.framework */; };
+		87F6F6FA15BE94E700D8D224 /* sync-down.png in Resources */ = {isa = PBXBuildFile; fileRef = 87F6F6F815BE94E700D8D224 /* sync-down.png */; };
+		87F6F6FB15BE94E700D8D224 /* sync-up.png in Resources */ = {isa = PBXBuildFile; fileRef = 87F6F6F915BE94E700D8D224 /* sync-up.png */; };
+		87F6F6FE15BE95A100D8D224 /* sync-down@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 87F6F6FC15BE95A100D8D224 /* sync-down@2x.png */; };
+		87F6F6FF15BE95A100D8D224 /* sync-up@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 87F6F6FD15BE95A100D8D224 /* sync-up@2x.png */; };
 		87F70BB615AD482400B202C7 /* TextContainerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F70BB515AD482400B202C7 /* TextContainerController.m */; };
 		87F70BD715AD7BA000B202C7 /* safari.png in Resources */ = {isa = PBXBuildFile; fileRef = 87F70BD615AD7BA000B202C7 /* safari.png */; };
 		87F75CFB15919AB90046DA46 /* GoogleSearch.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F75CF615919AB90046DA46 /* GoogleSearch.m */; };
@@ -605,6 +609,10 @@
 		87F5A9EC15B965F1000F351E /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		87F5A9EF15B96639000F351E /* DropboxService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DropboxService.h; sourceTree = "<group>"; };
 		87F5A9F015B96639000F351E /* DropboxService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DropboxService.m; sourceTree = "<group>"; };
+		87F6F6F815BE94E700D8D224 /* sync-down.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "sync-down.png"; path = "resources/sync-down.png"; sourceTree = "<group>"; };
+		87F6F6F915BE94E700D8D224 /* sync-up.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "sync-up.png"; path = "resources/sync-up.png"; sourceTree = "<group>"; };
+		87F6F6FC15BE95A100D8D224 /* sync-down@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "sync-down@2x.png"; path = "resources/sync-down@2x.png"; sourceTree = "<group>"; };
+		87F6F6FD15BE95A100D8D224 /* sync-up@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "sync-up@2x.png"; path = "resources/sync-up@2x.png"; sourceTree = "<group>"; };
 		87F70BB415AD482400B202C7 /* TextContainerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextContainerController.h; sourceTree = "<group>"; };
 		87F70BB515AD482400B202C7 /* TextContainerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextContainerController.m; sourceTree = "<group>"; };
 		87F70BD615AD7BA000B202C7 /* safari.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = safari.png; path = resources/safari.png; sourceTree = "<group>"; };
@@ -1061,6 +1069,10 @@
 				871A525B15BD3C08005CE363 /* votes */,
 				87F9780D15BAAAE5008EDE66 /* dropbox-logo.png */,
 				87F9780E15BAAAE5008EDE66 /* dropbox-logo@2x.png */,
+				87F6F6FC15BE95A100D8D224 /* sync-down@2x.png */,
+				87F6F6FD15BE95A100D8D224 /* sync-up@2x.png */,
+				87F6F6F815BE94E700D8D224 /* sync-down.png */,
+				87F6F6F915BE94E700D8D224 /* sync-up.png */,
 				871A520015BD399F005CE363 /* image_link.png */,
 				871A51F815BD37F3005CE363 /* changed.png */,
 				871A51F915BD37F3005CE363 /* changed@2x.png */,
@@ -1382,6 +1394,10 @@
 				871A52B115BD3C08005CE363 /* mark_gr_09_29@2x.png in Resources */,
 				871A52B215BD3C08005CE363 /* mark_gr_10_29.png in Resources */,
 				871A52B315BD3C08005CE363 /* mark_gr_10_29@2x.png in Resources */,
+				87F6F6FA15BE94E700D8D224 /* sync-down.png in Resources */,
+				87F6F6FB15BE94E700D8D224 /* sync-up.png in Resources */,
+				87F6F6FE15BE95A100D8D224 /* sync-down@2x.png in Resources */,
+				87F6F6FF15BE95A100D8D224 /* sync-up@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

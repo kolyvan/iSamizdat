@@ -25,11 +25,12 @@ extern int ddLogLevel;
 @interface DropboxViewController () <DropboxServiceDelegate> {
     IBOutlet UIButton *_buttonLink;
     IBOutlet UIButton *_buttonSync;     
-    IBOutlet UISwitch *_switchSyncAll;         
+//    IBOutlet UISwitch *_switchSyncAll;         
     IBOutlet UIActivityIndicatorView *_activityIndicatorView;        
     IBOutlet UIProgressView *_progressView;
     IBOutlet UILabel *_countLabel;
     IBOutlet UITextView *_reportView;
+    IBOutlet UISegmentedControl *_segmentedControl;
     NSMutableArray *_report;
     BOOL _syncPressed; 
 }
@@ -142,22 +143,18 @@ extern int ddLogLevel;
                     
             [[SamLibModel shared] save];
             
-            if (_switchSyncAll.on) {
+            if (_segmentedControl.selectedSegmentIndex == 0) {
+                
+                 [self syncFromLocal];
+                
+            } else if (_segmentedControl.selectedSegmentIndex == 1) {                
                 
                 [self syncAll];
                 
             } else {
                 
-                [self syncAuthors: nil];                
-                [self syncTexts: ^(DBMetadata *md) {
-                    // only if text exists
-                    return (BOOL)([self findObject:md.path] != nil); 
-                }];
+                [self syncFromDropbox];
             }
-            
-            _syncPressed = !_syncPressed;
-            [_buttonSync setTitle:_syncPressed ? locString(@"Cancel") : locString(@"Sync") 
-                         forState:UIControlStateNormal];
         }    
         
     } else {
@@ -211,6 +208,44 @@ extern int ddLogLevel;
             return NO;
 
         // only if text exists        
+        return (BOOL)([self findObject:md.path] != nil); 
+    }];
+}
+
+- (void) syncFromLocal
+{
+    DropboxService *dS = [DropboxService shared];
+    SamLibModel *model = [SamLibModel shared];
+    
+    for (SamLibAuthor * author in model.authors) {
+        
+        [dS sync:author.path
+           local:SamLibStorage.authorsPath()
+          remote:@"/authors"
+      completion:nil];
+        
+        for (SamLibText *text in author.texts) {
+            
+            if (text.htmlFile.nonEmpty) {
+                
+                NSString *filename = [[text.path stringByDeletingPathExtension] stringByAppendingPathExtension:@"html"];            
+                NSString *localFolder = [SamLibStorage.textsPath() stringByAppendingPathComponent:author.path];
+                NSString *remoteFolder = [@"/texts" stringByAppendingPathComponent:author.path];
+                                
+                [dS sync:filename
+                   local:localFolder
+                  remote:remoteFolder
+              completion:nil];
+            }
+        }
+    }
+}
+
+- (void) syncFromDropbox
+{
+    [self syncAuthors: nil];                
+    [self syncTexts: ^(DBMetadata *md) {
+        // only if text exists
         return (BOOL)([self findObject:md.path] != nil); 
     }];
 }
@@ -333,9 +368,15 @@ extern int ddLogLevel;
     _reportView.text = ms;
     _reportView.hidden = ms.isEmpty;    
     _progressView.progress = 0;
-    _progressView.hidden = complete;    
+    _progressView.hidden = complete;  
        
     if (count) {
+        
+        if (!_syncPressed) {
+            _syncPressed = YES;
+            [_buttonSync setTitle:_syncPressed ? locString(@"Cancel") : locString(@"Sync") 
+                         forState:UIControlStateNormal];
+        }
         
         _countLabel.text = KxUtils.format(@"%d", count);
         
