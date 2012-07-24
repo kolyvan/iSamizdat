@@ -101,6 +101,8 @@
 "Open URL" = "Открыть URL";
 "Authors" = "Авторы";
 "List" = "Список";
+"required" = "необходимо";
+"optional" = "необязательно";
 
 /* obsolete, keep it for just in case */
 

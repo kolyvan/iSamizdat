@@ -246,7 +246,8 @@ titleForHeaderInSection:(NSInteger)section
         UITableViewCell *cell = [self mkSwitchCell];        
         cell.textLabel.text = locString(@"Enable");
         BOOL f = SamLibAgent.settingsBool(@"user.enableAccount", NO);
-        ((UISwitch *)cell.accessoryView).on = f;        
+        ((UISwitch *)cell.accessoryView).on = f;   
+         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         return cell;
     }
     
@@ -304,12 +305,18 @@ titleForHeaderInSection:(NSInteger)section
         textField.placeholder = @"";
     }
     
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-     [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
+    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+    if ([cell.accessoryView isKindOfClass:[UITextField class]]) {
+        
+        UITextField *textField = (UITextField *)cell.accessoryView;
+        [textField becomeFirstResponder];
+    }
 }
 
 @end
