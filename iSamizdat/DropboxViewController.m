@@ -106,7 +106,7 @@ extern int ddLogLevel;
 
 - (void) dropboxLinkChanged: (NSNotification *)notification
 {
-    if ([DropboxService shared].delegate == self)
+    if (self.isViewLoaded && self.view.window)
         [self refreshUI];
 }
 
@@ -125,7 +125,8 @@ extern int ddLogLevel;
 
 - (IBAction) linkDropbox:(id)sender
 {   
-    [[DropboxService shared] toggleLink: self];        
+    [[DropboxService shared] toggleLink: self];  
+    [self refreshUI];
 }
 
 - (IBAction) syncDropbox:(id)sender
