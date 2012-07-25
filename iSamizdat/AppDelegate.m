@@ -348,7 +348,10 @@ int ddLogLevel = LOG_LEVEL_WARN;
             dict = KxUtils.dictionary(@"Смирнов Артур", @"name",nil);            
             author = [SamLibAuthor fromDictionary:dict withPath:@"smirnow_artur_sergeewich"];
             [model addAuthor:author];     
-
+            
+            dict = KxUtils.dictionary(@"Корнев Павел Николаевич", @"name",nil);            
+            author = [SamLibAuthor fromDictionary:dict withPath:@"kornew_p_n"];
+            [model addAuthor:author];     
         }
     }
 }
