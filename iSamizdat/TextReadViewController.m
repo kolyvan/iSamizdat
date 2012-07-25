@@ -237,9 +237,6 @@ NSDictionary * determineTextFileMetaInfo (NSString *path)
                                              selector:@selector(deviceOrientationDidChangeNotification:)
                                                  name:UIDeviceOrientationDidChangeNotification 
                                                object:[UIDevice currentDevice]];
-
-    
-    
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -284,8 +281,8 @@ NSDictionary * determineTextFileMetaInfo (NSString *path)
     if (_text.htmlFile.nonEmpty)
         [[SamLibHistory shared] addText:_text];
         
-    if (_text.hasUpdates)
-        _text.hasUpdates = NO;
+    //if (_text.hasUpdates)
+    //    _text.hasUpdates = NO;
         
     //self.navigationController.navigationBar.translucent = _prevNavBarTranslucent;
     
@@ -418,6 +415,8 @@ NSDictionary * determineTextFileMetaInfo (NSString *path)
         
     [self.pullToRefreshView startLoading];  
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+    
+    BOOL hasUpdates = _text.hasUpdates;    
            
     [_text update:^(SamLibText *text, SamLibStatus status, NSString *error) {
                         
@@ -425,6 +424,10 @@ NSDictionary * determineTextFileMetaInfo (NSString *path)
         [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;        
         self.navigationItem.rightBarButtonItem = nil;
         self.navigationItem.rightBarButtonItem = self.goSlideButton;
+        
+        if (_text.hasUpdates != hasUpdates) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"SamLibAuthorChanged" object:nil];
+        }
         
         NSString *message = (status == SamLibStatusFailure) ? error : nil;
         [self handleStatus: status withMessage:message];        

@@ -61,7 +61,7 @@
     if (self.isRemoved) 
         return [UIImage imageNamed:@"trash.png"];     
     
-    if (self.changedSize)
+    if (self.changedSize || self.changedNote)
         return [UIImage imageNamed:@"changed.png"];
         
     if (self.changedComments)        

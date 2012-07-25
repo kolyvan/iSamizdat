@@ -280,10 +280,17 @@ enum {
 
 - (void) refresh: (void(^)(SamLibStatus status, NSString *error)) block
 {
+    BOOL hasUpdates = _text.hasUpdates;
+    
     [_text update:^(SamLibText *text, SamLibStatus status, NSString *error) {
         
         NSString *message = (status == SamLibStatusFailure) ? error : nil;
         block(status, message);        
+        
+        if (_text.hasUpdates != hasUpdates) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"SamLibAuthorChanged" object:nil];
+        }
+        
     }
          progress: nil
         formatter: ^(SamLibText *text, NSString * html) { 
@@ -414,7 +421,7 @@ enum {
         UITableViewCell *cell = [self mkCell: @"SizeCell" withStyle:UITableViewCellStyleValue1];            
         cell.textLabel.text = locString(@"Size");
         cell.detailTextLabel.text = [_text sizeWithDelta: @" "];
-        cell.imageView.image = _text.changedSize ? [UIImage imageNamed:@"changed"] : _text.imageFlagNew;
+        cell.imageView.image = _text.hasUpdates ? [UIImage imageNamed:@"changed"] : _text.imageFlagNew;
         return cell;    
     
     } else if (RowGenre == row) {
