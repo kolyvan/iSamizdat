@@ -117,17 +117,20 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle 
                                       reuseIdentifier:CellIdentifier]; 
         
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        //cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
 
     NSArray *content = [SamLibHistory shared].history;    
     SamLibHistoryEntry *p = [content objectAtIndex:content.count - indexPath.row - 1];     
     //SamLibHistoryEntry *p = [content objectAtIndex:indexPath.row];     
+    BOOL found = nil != [[SamLibModel shared] findTextByKey:p.key];    
     BOOL isText = p.category == SamLibHistoryCategoryText;
     
     cell.textLabel.text = p.title;
     cell.detailTextLabel.text = p.name;    
     cell.imageView.image = [UIImage imageNamed: isText ? @"book" : @"comments"];
+    cell.textLabel.textColor = found ? [UIColor darkTextColor] : [UIColor grayColor];
+    cell.accessoryType = found ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
     
     return cell;
 }
