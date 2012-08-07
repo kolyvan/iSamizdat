@@ -1,16 +1,13 @@
 iSamizdat Software for Apple iOS
 ==============================
 
-(early beta)
-
 iSamizdat is an application for keep track of changes on [Самиздат](http://samlib.ru) site. It tracks an author's pages, texts and comments.
 
-This beta version requires iOS 5
+This version requires iOS 5
+
+See in [AppStore](http://itunes.apple.com/ru/app/samizdat/id547576204) 
 
 Visit the [forum](http://samlib.ru/comment/k/kolywan/samizdat_ios) for feedback.
-
-Want to beta test for iSamizdat?
-Join at [testflightapp.com](http://tflig.ht/NnV9SA)
 
 Screenshots:
 
